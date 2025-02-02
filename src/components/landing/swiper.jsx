@@ -14,9 +14,6 @@ import example      from '../../../public/svg/example.svg';
 import description  from '../../../public/img/description.png';
 import qr     from '../../../public/img/QR.png';
 import dana   from '../../../public/img/dana.png';
-import inter  from '../../../public/img/interface.png';
-import pod    from '../../../public/img/podium.png';
-import earth  from '../../../public/img/earth.png';
 
 export default function SwiperComponent() {
   const t = useTranslations('Landing');

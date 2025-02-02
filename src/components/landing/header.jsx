@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Logo from "../ui/logo";
 import { useTranslations } from 'next-intl';
 
@@ -10,14 +11,14 @@ export default function Header() {
         <Logo />{" "}
       </div>
       <div className="flex flex-row sm:mt-0 mt-4">
-        <div className="mr-4 bg-transparent border w-fit h-fit text-2xl
+        <Link href="/pages/auth/login" className="mr-4 bg-transparent border w-fit h-fit text-3xl tracking-tight font-caveat font-extrabold pr-3
          border-white text-white rounded-2xl p-2 cursor-pointer hover:bg-blue-600 hover:text-white transition duration-200">
           {t('auth.login')}
-        </div>
-        <div className="bg-transparent border w-fit text-2xl
+        </Link>
+        <Link href="/pages/auth/signup" className="bg-transparent border w-fit text-3xl tracking-tight font-caveat font-extrabold pr-3
          border-white text-white rounded-2xl p-2 cursor-pointer hover:bg-blue-600 hover:text-white transition duration-200">
           {t('auth.signup')}
-        </div>
+        </Link>
       </div>
     </header>
   );

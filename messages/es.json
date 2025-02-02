@@ -28,5 +28,27 @@
       "subtitle": "Por desgracia, las catástrofes pueden ser a veces inadvertidas. Por ello Pinpoint existe para poder coordinar la ayuda ciudadana en casos donde la ayuda estatal no es suficiente. Un anuncio de recogida de alimentos o una petición de ayuda son publicaciones que Pinpoint se enorgullece de mostrar.",
       "bolden": "son publicaciones que Pinpoint se enorgullece de mostrar."
     }
+  },
+  "Login" : {
+    "title": "Inicia Sesión",
+    "email": "Correo electrónico:",
+    "password": "Contraseña:",
+    "forgot": "¿No tienes una cuenta todavía?",
+    "register" : " ¡Regístrate!",
+    "remember": "Recuérdame",
+    "enter": "Entrar",
+    "loading": "Cargando..."
+  },
+  "Signup" : {
+    "user": "Usuario:",
+    "userWarn": "Este nombre es público y será visible para otros usuarios",
+    "title": "Crea tu Cuenta",
+    "email": "Correo electrónico:",
+    "password": "Contraseña:",
+    "passwordConfirm": "Confirma la contraseña:",
+    "forgot": "¿Ya tienes una cuenta?",
+    "register" : " ¡Inicia Sesión!",
+    "enter": "Entrar",
+    "loading": "Cargando..."
   }
 }

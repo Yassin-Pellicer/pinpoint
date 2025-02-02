@@ -18,12 +18,12 @@ export default function Landing() {
     </div>
 
     {/* Title */}
-    <div className="flex h-[1200px]">
+    <div className="flex h-[1000px]">
       <video
         autoPlay
         loop
         muted
-        className="absolute top-0 left-0 w-full h-[1200px] object-cover z-0"
+        className="absolute top-0 left-0 w-full h-[1000px] object-cover z-0"
       >
         <source src="/videos/landing.mp4" type="video/mp4" />
       </video>
@@ -48,8 +48,8 @@ export default function Landing() {
     </div>
 
     {/* Features */}
-    <div className="flex p-20 flex-col justify-center items-center z-10" 
-      style={{ backgroundImage: "url('/img/barcelona.jpg')", backgroundSize: 'cover', backgroundPosition: 'bottom' }}>
+    <div className="flex p-20 flex-col justify-center items-center z-10 w-screen" 
+      style={{ backgroundImage: "url('/img/barcelona.jpg')", backgroundSize: 'cover', backgroundPosition: 'bottom', width: '100vw' }}>
       <Swiper />
     </div>
     </main>
