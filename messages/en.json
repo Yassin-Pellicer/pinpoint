@@ -1,0 +1,6 @@
+{
+  "Landing": {
+    "title": "Pinpoint",
+    "greeting": "Hello, {username}."
+  }
+}

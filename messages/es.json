@@ -1,0 +1,32 @@
+{
+  "Landing": {
+    "title": "Deja tu marca en el mundo",
+    "subtitle": "Explora el mundo mediante checkpoints. Descubre nuevos lugares y anúnciate. Encuentra nuevas aventuras.",
+    "launch": "Lanzar Aplicación",
+    "auth": {
+      "login": "Iniciar sesión",
+      "signup": "Registrarse"
+    },
+    "cardOne": {
+      "title": "¿Qué es Pinpoint?",
+      "subtitle": "Pinpoint es una aplicación que te permite marcar ubicaciones en un mapa y compartirlas con el resto de usuarios para que puedan descubrir nuevos lugares y anunciar sus actividades ¡Una premisa tan sencilla puede dar lugar a infinitas posibilidades!"
+    },
+
+    "cardTwo": {
+      "title": "Crea tus actividades con facilidad",
+      "subtitle": "Crea tus actividades con facilidad y compártelas con el mundo. Agrega una descripción, imagen y ubicación para que los demás puedan encontrarlas fácilmente. Anuncios, gincanas, peticiones, recomendaciones, juegos, eventos... si puedes imaginarlo, tu mejor amigo es Pinpoint.",
+      "bolden":" si puedes imaginarlo, tu mejor amigo es Pinpoint."
+    },
+
+    "cardThree": {
+      "title": "Actividades interactivas con ayuda de la tecnología",
+      "subtitle": "La aplicación permite que los usuarios interactúen con las actividades creadas también por medio de códigos QR que mejoran la experiencia de las mismas. Estos QRs pueden proporcionar información adicional útil en, por ejemplo gincanas, carreras o competiciones por alcanzar el último checkpoint de una ruta."
+    },
+
+    "cardFour": {
+      "title": "Tecnología al servicio de las personas",
+      "subtitle": "Por desgracia, las catástrofes pueden ser a veces inadvertidas. Por ello Pinpoint existe para poder coordinar la ayuda ciudadana en casos donde la ayuda estatal no es suficiente. Un anuncio de recogida de alimentos o una petición de ayuda son publicaciones que Pinpoint se enorgullece de mostrar.",
+      "bolden": "son publicaciones que Pinpoint se enorgullece de mostrar."
+    }
+  }
+}
