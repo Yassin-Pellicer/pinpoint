@@ -4,7 +4,7 @@ import Link from "next/link";
 import Logo from "../../../../components/ui/logo";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { loginHook } from "../../../../hooks/auth/login/login";
+import { loginHook } from "../../../../hooks/auth/login/loginHook";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -76,6 +76,13 @@ export default function Login() {
               />
               {t("remember")}
             </label>
+          </div>
+
+          <div className="bg-white p-3 mb-8 rounded-lg">
+            <div className="flex items-center font-bold text-red-700 tracking-tight">
+              <i className="material-icons mr-4 text-4xl">warning</i>
+              <p>El usuario o la contraseña son inválidos. Asegúrate de haber iniciado sesión previamente</p>
+            </div>
           </div>
 
           <button
