@@ -5,19 +5,19 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
 export async function POST(request) {
+
   const { email, password, remember } = await request.json();
 
   try {
     const query = await sql`SELECT * FROM "user" WHERE "email" = ${email}`;
 
-    if (query.rows.length === 0) {
-      return NextResponse.json({ result: "wrong" });
+    const username = query.rows[0];
+
+    if (username === undefined) {
+      return NextResponse.json({ result: "user_not_found" });
     }
-
-    const user = query.rows[0];
-    const hashedPassword = user.password;
-    const username = user.username;
-
+    
+    const hashedPassword = username.password;
     const match = await bcrypt.compare(password, hashedPassword);
 
     if (match) {
@@ -38,15 +38,15 @@ export async function POST(request) {
         path: "/",
       });
 
-      const res = NextResponse.json({ result: "ok" });
+      const res = NextResponse.json({ result: "user_found" });
       res.headers.set('Set-Cookie', serializedCookie);
       return res;
     }
-
-    return NextResponse.json({ result: "wrong" });
-
+    else {
+      return NextResponse.json({result: "wrong_password"})
+    }
   } catch (error) {
     console.error('Login Error:', error);
-    return NextResponse.json({ result: "ko" });
+    return NextResponse.json({ result: "exception" });
   }
 }

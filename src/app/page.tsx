@@ -33,7 +33,7 @@ export default function Landing() {
           <Logo />
         </div>
         <p className="text-6xl font-extrabold mt-20 w-[800px] text-center 
-          text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+          text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] tracking-tight"> 
           {t('title')}
         </p>
         <p className="text-5xl  font-caveat font-extrabold mt-16 w-[800px] text-center 
@@ -52,6 +52,7 @@ export default function Landing() {
       style={{ backgroundImage: "url('/img/barcelona.jpg')", backgroundSize: 'cover', backgroundPosition: 'bottom', width: '100vw' }}>
       <Swiper />
     </div>
+    
     </main>
   );
 }

@@ -37,7 +37,11 @@
     "register" : " ¡Regístrate!",
     "remember": "Recuérdame",
     "enter": "Entrar",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "noUser": "No se ha encontrado ningún usuario con este correo. Asegúrate de haberte registrado correctamente.",
+    "wrongPassword": "La contraseña introducida es incorrecta. Por favor, inténtalo de nuevo.",
+    "exception": "Se ha producido un error inesperado. Por favor, inténtalo más tarde.",
+    "blank": "Se han de rellenar todos los campos."
   },
   "Signup" : {
     "user": "Usuario:",
@@ -49,6 +53,12 @@
     "forgot": "¿Ya tienes una cuenta?",
     "register" : " ¡Inicia Sesión!",
     "enter": "Entrar",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "exception": "Se ha producido un error inesperado. Por favor, inténtalo más tarde.",
+    "blank": "Se han de rellenar todos los campos.",
+    "passwordNoMatch": "Las contraseñas no coinciden. Por favor, compruébalas.",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
+    "userExists": "Ya existe un usuario con ese correo.",
+    "emailFormat": "Comprueba el formato del correo."
   }
 }

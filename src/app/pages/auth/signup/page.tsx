@@ -14,20 +14,50 @@ export default function Signup() {
   const [password, setPassword]           = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [loading, setLoading]             = useState(false);
-  const router                            = useRouter();
+  const [errorMessage, setErrorMessage]   = useState("");
 
+  const router = useRouter();
   const t = useTranslations("Signup");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setLoading(true);
-    const result = await signupHook({ email, username, password, passwordCheck });
-    if (result.result !== "error") {
-      router.push("/pages/auth/login");
+
+    if (!username || !email || !password || !passwordCheck) {
+      setErrorMessage(t("blank"));
+      setLoading(false);
+      return;
     }
-    setLoading(false);
-  };
+    if (password !== passwordCheck) {
+      setErrorMessage(t("passwordNoMatch"));
+      setLoading(false);
+      return;
+    }
+    if (password.length < 8) {
+      setErrorMessage(t("passwordTooShort"))
+      setLoading(false);
+      return;
+    }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setErrorMessage(t("emailFormat"));
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const result = await signupHook({ email,username, password, passwordCheck});
+      if (result.result === "user_exists") {
+        setErrorMessage(t("userExists"));
+      } else {
+        router.push("/pages/auth/login");
+      }
+    } catch (error) {
+      setErrorMessage(t("exception"));
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <main className="flex flex-row">
@@ -44,6 +74,15 @@ export default function Signup() {
             {t("title")}
           </h1>
 
+          {errorMessage !== "" && (
+            <div className="bg-white p-3 mb-6 rounded-lg">
+              <div className="flex items-center font-bold text-red-500 tracking-tight">
+                <i className="material-icons mr-4 text-4xl">warning</i>
+                <p>{errorMessage}</p>
+              </div>
+            </div>
+          )}
+          
           <label className="font-semibold flex text-white">
             <i className="material-icons mr-1">person</i>
             {t("user")}
@@ -53,6 +92,7 @@ export default function Signup() {
           </label>
           <input
             type="text"
+            maxLength={25}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="rounded p-2 mt-1 mb-4 w-full"
@@ -65,7 +105,7 @@ export default function Signup() {
           <input
             type="text"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => { setErrorMessage(""); setEmail(e.target.value)} }
             className="rounded p-2 mt-1 mb-4 w-full"
           />
 
@@ -75,8 +115,8 @@ export default function Signup() {
           </label>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={password}            
+            onChange={(e) =>{ setErrorMessage(""); setPassword(e.target.value)} }
             className="rounded p-2 mt-1 mb-4 w-full"
           />
 
@@ -87,7 +127,7 @@ export default function Signup() {
           <input
             type="password"
             value={passwordCheck}
-            onChange={(e) => setPasswordCheck(e.target.value)}
+            onChange={(e) => { setErrorMessage(""); setPasswordCheck(e.target.value)} }
             className="rounded p-2 mt-1 mb-10 w-full"
           />
 
