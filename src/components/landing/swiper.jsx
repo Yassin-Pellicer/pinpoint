@@ -114,6 +114,9 @@ export default function SwiperComponent() {
         navigation={true}
         modules={[Navigation]}
         className="mySwiper"
+        pagination={{
+          dynamicBullets: true,
+        }}
         style={{
           "--swiper-navigation-color": "#FFF",
           "--swiper-navigation-size": "75px",
