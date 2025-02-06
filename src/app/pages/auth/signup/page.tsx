@@ -46,7 +46,7 @@ export default function Signup() {
     }
 
     try {
-      const result = await signupHook({ email,username, password, passwordCheck});
+      const result = await signupHook({ email, username, password, passwordCheck});
       if (result.result === "user_exists") {
         setErrorMessage(t("userExists"));
       } else {
@@ -94,6 +94,7 @@ export default function Signup() {
             type="text"
             maxLength={25}
             value={username}
+            onClick={() => setErrorMessage("")}
             onChange={(e) => setUsername(e.target.value)}
             className="rounded p-2 mt-1 mb-4 w-full"
           />
@@ -105,6 +106,7 @@ export default function Signup() {
           <input
             type="text"
             value={email}
+            onClick={() => setErrorMessage("")}
             onChange={(e) => { setErrorMessage(""); setEmail(e.target.value)} }
             className="rounded p-2 mt-1 mb-4 w-full"
           />
@@ -116,6 +118,7 @@ export default function Signup() {
           <input
             type="password"
             value={password}            
+            onClick={() => setErrorMessage("")}
             onChange={(e) =>{ setErrorMessage(""); setPassword(e.target.value)} }
             className="rounded p-2 mt-1 mb-4 w-full"
           />
@@ -127,6 +130,7 @@ export default function Signup() {
           <input
             type="password"
             value={passwordCheck}
+            onClick={() => setErrorMessage("")}
             onChange={(e) => { setErrorMessage(""); setPasswordCheck(e.target.value)} }
             className="rounded p-2 mt-1 mb-10 w-full"
           />

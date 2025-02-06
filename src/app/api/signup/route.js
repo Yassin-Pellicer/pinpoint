@@ -17,6 +17,6 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Signup Error:', error);
-    return NextResponse.json({ result: "error" }, { status: 500 });
+    return NextResponse.json({ result: "user_exists" });
   }
 }

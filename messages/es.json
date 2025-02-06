@@ -58,7 +58,14 @@
     "blank": "Se han de rellenar todos los campos.",
     "passwordNoMatch": "Las contraseñas no coinciden. Por favor, compruébalas.",
     "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
-    "userExists": "Ya existe un usuario con ese correo.",
+    "userExists": "Ya existe una cuenta con ese correo o nombre de usuario.",
     "emailFormat": "Comprueba el formato del correo."
+  },
+  "Menu": {
+    "home": "Inicio",
+    "createHunts": "Crear Evento",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión",
+    "aboutUs": "Acerca de"
   }
 }

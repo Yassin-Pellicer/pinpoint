@@ -62,7 +62,7 @@ export default function Login() {
           <h1 className="text-5xl font-extrabold tracking-tighter mb-6 text-white">
             {t("title")}
           </h1>
-          
+
           {errorMessage !== "" && (
             <div className="bg-white p-3 mb-6 rounded-lg">
               <div className="flex items-center font-bold text-red-500 tracking-tight">
@@ -80,7 +80,11 @@ export default function Login() {
             type="text"
             className="rounded p-2 mt-1 mb-4 w-full"
             value={email}
-            onChange={(e) => { setErrorMessage(""); setEmail(e.target.value)} }
+            onClick={() => setErrorMessage("")}
+            onChange={(e) => {
+              setErrorMessage("");
+              setEmail(e.target.value);
+            }}
           />
 
           <label className="font-semibold flex items-center text-white">
@@ -91,7 +95,11 @@ export default function Login() {
             type="password"
             className="rounded p-2 mt-1 mb-4 w-full"
             value={password}
-            onChange={(e) =>{ setErrorMessage(""); setPassword(e.target.value)} }
+            onClick={() => setErrorMessage("")}
+            onChange={(e) => {
+              setErrorMessage("");
+              setPassword(e.target.value);
+            }}
           />
 
           <div className="flex items-center mb-6">
