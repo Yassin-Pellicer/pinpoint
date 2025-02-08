@@ -67,5 +67,45 @@
     "profile": "Perfil",
     "logout": "Cerrar Sesión",
     "aboutUs": "Acerca de"
+  },
+  "Create": {
+    "title": "Crear Evento",
+    "description": "Los eventos <b>pueden ser de dos tipos: Pueden ser un evento simple, sin puntos de control, o pueden contener puntos de control.</b> Elige el tipo de evento para empezar a crearlo.",
+    "simple": "Evento Simple",
+    "course": "Evento con Checkpoints",
+    "type": "Elige el tipo de evento",
+    "name": "Nombre:",
+    "image": "Imagen:",
+    "location": "Ubicación:",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "Details": {
+      "creation": "Crea tu Evento",
+      "internet": "Los eventos con puntos de control requieren acceso a la red y datos móviles para ser fácilmente accesibles, y proporcionar la mejor experiencia para los buscadores. Las actividades de este tipo <b>sólo pueden ser progresadas por usuarios conectados a internet, o por usuarios que pre-carguen su búsqueda.</b>",
+      "internetSimple": "Los eventos simples requieren acceso a la red y datos móviles para ser fácilmente accesibles, y proporcionar la mejor experiencia para los buscadores. Las actividades de este tipo <b>sólo pueden ser progresadas por usuarios conectados a internet, o por usuarios que pre-carguen su búsqueda.</b>",
+      "title": "Título del evento:",
+      "description": "Descripción del evento:",
+      "difficulty": "Dificultad: ",
+      "checkpoints": "Ver Checkpoints",
+      "upload": "Subir Evento",
+      "qr": {
+        "title": "Evento con QRs",
+        "description": "Estos eventos <b> crean un código QR para cada checkpoint que los cazadores pueden escanear para obtener pistas para el siguiente checkpoint. Esto oculta todos los puntos de control excepto el primero</b>."
+      },
+      "tour": {
+        "title": "Tour",
+        "description": "<b>Los tours muestran todos los puntos de control que comprenden el evento.</b> Esta modalidad es útil para destacar los lugares emblemáticos de una ubicación y ofrecer una experiencia más relajada a los usuarios."
+      },
+      "public": {
+        "title": "Pública",
+        "description": "Los eventos públicos son para que todos los vean. No requieren un código de invitación para unirse."
+      },
+      "private": {
+        "title": "Privada",
+        "description": "Los eventos privados sólo son para las personas a las que les proporcionas el acceso. Requieren un código de invitación para unirse."
+      }
+    },
+    "blank": "Se han de rellenar todos los campos."
   }
 }

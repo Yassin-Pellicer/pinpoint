@@ -14,7 +14,7 @@ export default function Landing() {
   const router = useRouter();
 
   const handleLaunch = () => {
-    router.push('/pages/home');
+    router.push('/pages/main');
   }
 
   const t = useTranslations('Landing');

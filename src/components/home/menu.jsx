@@ -57,7 +57,13 @@ const Menu = ({ open, setOpen }) => {
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
         PaperProps={{
-          className: "w-full max-w-[500px] h-full bg-blue-500 z-20",
+          style: {
+            width: "100%",
+            maxWidth: "500px",
+            height: "100%",
+            backgroundColor: "rgb(59, 130, 246)",
+            zIndex: 20,
+          },
         }}
       >
         <div className="px-5">{content}</div>
