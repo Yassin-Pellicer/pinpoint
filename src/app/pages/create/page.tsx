@@ -1,15 +1,19 @@
 "use client";
 
 import Layout from "../home/layout";
-import 'react-quill/dist/quill.snow.css';
+import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import CheckpointEvent from "../../../components/create/checkpoint_event";
-import SimpleEvent from "../../../components/create/simple_event";
-import MapComponent from "../../../components/create/map";
+import CheckpointEvent from "../../../components/create/cpEv/cpEvent";
+import SimpleEvent from "../../../components/create/simpleEv/simpleEvent";
+import MapComponent from "../../../components/create/cpEv/map";
+import {
+  useCheckpoints,
+} from "../../../utils/context/cpContext";
 
 export default function Create() {
+  const { checkpoints, setCheckpoints } = useCheckpoints();
 
   const [selectedButton, setSelectedButton] = useState("simple");
   const t = useTranslations("Create");
@@ -21,7 +25,8 @@ export default function Create() {
 
   return (
     <Layout>
-      <div className="flex flex-col overflow-auto bg-blue-500 w-[600px] h-screen px-6">
+      <div className="flex flex-col overflow-auto bg-blue-500 max-w-[500px] h-screen px-6">
+
         {/* Event type */}
         <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
           <h1 className="font-bold text-4xl mb-2 tracking-tight font-caveat">
@@ -34,7 +39,10 @@ export default function Create() {
                   ? "bg-blue-500 border-blue-500 text-white "
                   : "bg-transparent text-black"
               }`}
-              onClick={() => setSelectedButton("simple")}
+              onClick={() => {
+                setSelectedButton("simple");
+                setCheckpoints([]);
+              }}
             >
               {t("simple")}
             </button>
@@ -44,7 +52,10 @@ export default function Create() {
                   ? " bg-blue-500 border-blue-500 text-white "
                   : "bg-transparent text-black"
               }`}
-              onClick={() => setSelectedButton("course")}
+              onClick={() => {
+                setSelectedButton("course");
+                setCheckpoints([]);
+              }}
             >
               {t("course")}
             </button>
@@ -58,11 +69,11 @@ export default function Create() {
 
         {/* Event Creation */}
         {selectedButton === "course" ? <CheckpointEvent /> : <SimpleEvent />}
-
-        {/* Map */}
       </div>
+
+      {/* Map */}
       <MapComponent />
+
     </Layout>
   );
 }
-

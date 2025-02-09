@@ -1,18 +1,18 @@
 import { Slider, FormControl, FormControlLabel, Switch } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import CpList from "./cpList";
 
 import dynamic from "next/dynamic";
 import Quill from "quill";
 
 const CheckpointEvent = () => {
-  const [qr, setQr] = useState(false);
-  const [name, setName] = useState("");
-  const [open, setOpen] = useState(false);
-  const [expand, setExpand] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [isPublic, setIsPublic] = useState(false);
-  const [difficulty, setDifficulty] = useState(50);
+  const [qr, setQr]                       = useState(false);
+  const [name, setName]                   = useState("");
+  const [open, setOpen]                   = useState(false);
+  const [loading, setLoading]             = useState(false);
+  const [isPublic, setIsPublic]           = useState(false);
+  const [difficulty, setDifficulty]       = useState(50);
   const [editorContent, setEditorContent] = useState("");
 
   const t = useTranslations("Create");
@@ -155,6 +155,9 @@ const CheckpointEvent = () => {
           <h1 className="text-center"></h1>
         </div>
       </form>
+
+      <CpList open={open} setOpen={setOpen} />
+
     </div>
   );
 };

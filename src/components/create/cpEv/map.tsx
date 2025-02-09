@@ -1,17 +1,30 @@
-"use client"; // Only needed in Next.js
+"use client"; 
 
-import { MapContainer, TileLayer, Marker, Popup, LayersControl } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  LayersControl,
+} from "react-leaflet";
+
+import "react-quill/dist/quill.snow.css";
+import "leaflet-geosearch/dist/geosearch.css";
+import "leaflet/dist/leaflet.css";
+
+import { SearchControl } from "../../../utils/funcs/searchControl";
+import CreateEvents from "./cpEvPlace";
+
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-const center: [number, number] = [51.505, -0.09]; // London example
+const center: [number, number] = [51.505, -0.09]; 
 
 export default function MapComponent() {
   return (
     <MapContainer
-      center={center}
-      zoom={13}
+      zoom={13}    
       maxZoom={18}
+      center={center}
+      doubleClickZoom={false}
       className="h-screen w-full z-10"
     >
       <LayersControl position="bottomright">
@@ -31,20 +44,11 @@ export default function MapComponent() {
           <TileLayer url="https://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}" />
         </LayersControl.BaseLayer>
       </LayersControl>
-      <Marker
-        position={center}
-        icon={L.icon({
-          iconUrl: "/marker-icon.png",
-          iconSize: [50, 50],
-          iconAnchor: [25, 50],
-        })}
-      >
-        <Popup>
-          <div className="bg-white p-2 rounded-md shadow-md">
-            Customized Popup Content
-          </div>
-        </Popup>
-      </Marker>
+
+      <SearchControl />
+
+      <CreateEvents />
+
     </MapContainer>
   );
 }
