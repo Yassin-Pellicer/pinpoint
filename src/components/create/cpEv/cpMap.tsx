@@ -27,7 +27,7 @@ export default function MapComponent() {
       doubleClickZoom={false}
       className="h-screen w-full z-10"
     >
-      <LayersControl position="bottomright">
+      <LayersControl position="bottomleft">
         <LayersControl.BaseLayer name="CartoDB Positron" checked>
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"

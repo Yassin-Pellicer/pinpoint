@@ -107,5 +107,14 @@
       }
     },
     "blank": "Se han de rellenar todos los campos."
+  },
+  "CPdetails": {
+    "title": "Ver Checkpoints",
+    "description": "Descripción:",
+    "image": "Imagen:",
+    "location": "Ubicación:",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "empty": "No hay checkpoints todavía. Recuerda que puedes añadir un checkpoint al evento haciendo doble click sobre cualquier sitio del mapa."
   }
 }

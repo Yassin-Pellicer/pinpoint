@@ -5,9 +5,9 @@ import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import CheckpointEvent from "../../../components/create/cpEv/cpEvent";
-import SimpleEvent from "../../../components/create/simpleEv/simpleEvent";
-import MapComponent from "../../../components/create/cpEv/map";
+import CheckpointEvent from "../../../components/create/cpEv/cpEv";
+import SimpleEvent from "../../../components/create/simpleEv/simpleEv";
+import MapComponent from "../../../components/create/cpEv/cpMap";
 import {
   useCheckpoints,
 } from "../../../utils/context/cpContext";

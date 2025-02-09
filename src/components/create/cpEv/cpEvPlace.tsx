@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { Checkpoint } from "../../../utils/classes/cpClass";
 import { useCheckpoints } from "../../../utils/context/cpContext"; 
 
-const CreateEvents = () => {
+const PlaceCP = () => {
   const map = useMap();
   const {checkpoints, setCheckpoints} = useCheckpoints();
   const [count, setCount] = useState(0);
@@ -144,4 +144,4 @@ const CreateEvents = () => {
   );
 };
 
-export default CreateEvents;
+export default PlaceCP;

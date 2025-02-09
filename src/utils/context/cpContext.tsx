@@ -11,6 +11,7 @@ const CheckpointsContext = createContext<CheckpointsContextType | undefined>(
   undefined
 );
 
+
 export const CheckpointsProvider = ({ children }: { children: React.ReactNode }) => {
   const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
   return (
