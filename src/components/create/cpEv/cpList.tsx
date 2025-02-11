@@ -109,10 +109,10 @@ const BottomSheet = ({ open, setOpen }) => {
           height: "100%",
           marginRight: "auto",
           marginLeft: "1px",
-          zIndex: "100",
-          overflowY: "hidden",
+          zIndex: 100,
+          overflowY: "scroll",
           backgroundColor: "#3F7DEA",
-        },
+        }
       }}
     >
       <div style={{ paddingLeft: 20, paddingRight: 20 }}>
@@ -121,19 +121,19 @@ const BottomSheet = ({ open, setOpen }) => {
           onClick={() => setOpen(false)}
           className="cursor-pointer flex justify-center"
         >
-          <img src="/svg/arrow.svg" alt="Close Drawer" className="cursor-pointer scale-[1] p-2" />
+          <img src="/svg/arrow.svg" alt="Close Drawer" className="cursor-pointer scale-[1] p-2 mb-4" />
         </div>
       </div>
 
       {checkpoints.length === 0 ? (
-        <div className="absolute inset-x-0 top-16 bg-white p-6 mx-6 rounded-2xl">
+        <div className="bg-white p-6 mx-6 mb-6 rounded-2xl">
           <h3 className="text-2xl font-bold mb-4">{t("title")}</h3>
           <div className="flex justify-center">{t("empty")}</div>
         </div>
       ) : (
-        <div className="absolute inset-x-0 bottom-6 top-16 bg-white p-6 mx-6 rounded-2xl">
+        <div className="bg-white p-6 mx-6 mb-6 rounded-2xl">
           <h3 className="text-2xl font-bold mb-4">{t("title")}</h3>
-          <div className="mt-4 flex flex-col overflow-y-auto h-[80vh] max-h-screen">
+          <div className="relative mt-4 flex flex-col overflow-y-auto">
             <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={checkpoints} strategy={verticalListSortingStrategy}>
                 <div className="flex flex-col">
