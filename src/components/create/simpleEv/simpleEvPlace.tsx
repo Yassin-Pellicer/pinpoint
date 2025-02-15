@@ -5,6 +5,7 @@ import L from "leaflet";
 import dynamic from "next/dynamic";
 import { Checkpoint } from "../../../utils/classes/cpClass";
 import { useCheckpoints } from "../../../utils/context/cpContext"; 
+import ReactDOMServer from "react-dom/server";
 
 const PlaceCP = () => {
   const map = useMap();
@@ -12,31 +13,32 @@ const PlaceCP = () => {
   const [count, setCount] = useState(0);
   const [expanded, setExpandedToggle] = useState(false);
 
+  const hunt_marker_design = (hunt_name) => (
+    <div
+      className="transform translate-x-[-50%] translate-y-[-125%] flex-col items-center justify-center"
+      key={hunt_name}
+    >
+      <div className="overflow-hidden h-[60px] rounded-2xl bg-[#e6e6e6] border border-gray-400 px-2">
+        <div className="marquee">
+          <span className="marquee-text">{hunt_name}</span>
+        </div>
+      </div>
+      <div className="rounded-b-2xl m-auto bg-[#e6e6e6] w-[150px] px-2">
+        <p className="text-center text-xs font-bold ">
+          Click to toggle details.
+        </p>
+      </div>
+    </div>
+  );
+  
   const createCustomIcon = (number: number) =>
     L.divIcon({
-      className: "custom-div-icon",
-      html: `
-        <div style="
-          position: relative;
-          width: 60px;
-          height: 72px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-image: url('/svg/pin.svg');
-          background-size: contain;
-          background-position: center;
-          background-repeat: no-repeat;
-          font-size: 14px;
-          font-weight: bold;
-          color: black;
-        ">
-          <div style="margin-bottom: 10px">${number}</div>
-        </div>
-      `,
-      iconSize: [30, 42],
-      iconAnchor: [20, 50],
+      html: ReactDOMServer.renderToString(hunt_marker_design("hunt")),
+      className: "custom-hunt-icon",
+      iconSize: [250, 40],
+      iconAnchor: [15, 42],
     });
+
   
   const Quill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
