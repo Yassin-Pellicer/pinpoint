@@ -14,7 +14,7 @@ import CheckpointInfo from "./cpInfo";
 import { useEffect, useState } from "react";
 
 const BottomSheet = ({ open, setOpen }) => {
-  const { checkpoints, setCheckpoints } = useCheckpoints();
+  const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint } = useCheckpoints();
   const t = useTranslations("CPdetails");
   const [expandedCheckpoints, setExpandedCheckpoints] = useState({});
 
@@ -61,6 +61,7 @@ const BottomSheet = ({ open, setOpen }) => {
     return (
       <div
         ref={setNodeRef}
+        onClick={() => setFocusedCheckpoint(checkpoints[index])}
         style={{
           transform: transform
             ? `translate3d(0, ${transform.y}px, 0)`
@@ -83,7 +84,6 @@ const BottomSheet = ({ open, setOpen }) => {
           isExpanded={expandedCheckpoints[id] || false}
           toggleExpand={() => toggleCheckpointDetails(id)}
         />
-
         <div className="flex justify-center">
           <img
             {...listeners}

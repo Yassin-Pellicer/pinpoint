@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Quill from "react-quill";
 import { useCheckpoints } from "../../../utils/context/cpContext";
+import { FormControl, FormControlLabel, Switch } from "@mui/material";
 
 const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
   const { checkpoints, setCheckpoints } = useCheckpoints();
@@ -48,11 +49,11 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
         />
       </div>
       <button
-      onClick={(e) => {
-        modifyInfo(e);
-        toggleExpand(id);
-      }}
-      className="font-bold bg-transparent border-2 text-sm border-black 
+        onClick={(e) => {
+          modifyInfo(e);
+          toggleExpand(id);
+        }}
+        className="font-bold bg-transparent border-2 text-sm border-black 
       text-black rounded-xl p-2 hover:bg-green-600
       hover:border-green-600 hover:text-white 
       transition duration-150 mb-4"

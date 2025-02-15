@@ -7,7 +7,9 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import CheckpointEvent from "../../../components/create/cpEv/cpEv";
 import SimpleEvent from "../../../components/create/simpleEv/simpleEv";
-import MapComponent from "../../../components/create/cpEv/cpMap";
+import MapComponentCP from "../../../components/create/cpEv/cpMap";
+import MapComponentSimple from "../../../components/create/simpleEv/simpleMap";
+
 import {
   useCheckpoints,
 } from "../../../utils/context/cpContext";
@@ -26,7 +28,6 @@ export default function Create() {
   return (
     <Layout>
       <div className="flex flex-col overflow-auto bg-blue-500 max-w-[500px] h-screen px-6">
-
         {/* Event type */}
         <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
           <h1 className="font-bold text-4xl mb-2 tracking-tight font-caveat">
@@ -72,8 +73,8 @@ export default function Create() {
       </div>
 
       {/* Map */}
-      <MapComponent />
-
+      {selectedButton === "course" ? <MapComponentCP /> : <MapComponentSimple />}
+      
     </Layout>
   );
 }
