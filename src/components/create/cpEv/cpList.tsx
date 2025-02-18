@@ -1,7 +1,7 @@
 "use client";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { useCheckpoints } from "../../../utils/context/cpContext";
-import { closestCenter, DndContext } from "@dnd-kit/core";
+import { closestCenter, closestCorners, DndContext, pointerWithin, rectIntersection } from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
@@ -57,11 +57,9 @@ const BottomSheet = ({ open, setOpen }) => {
   const DraggableCheckpoint = ({ id, index }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id });
-
     return (
       <div
         ref={setNodeRef}
-        onClick={() => setFocusedCheckpoint(checkpoints[index])}
         style={{
           transform: transform
             ? `translate3d(0, ${transform.y}px, 0)`
@@ -134,7 +132,7 @@ const BottomSheet = ({ open, setOpen }) => {
         <div className="bg-white p-6 mx-6 mb-6 rounded-2xl">
           <h3 className="text-2xl font-bold mb-4">{t("title")}</h3>
           <div className="relative mt-4 flex flex-col overflow-y-auto">
-            <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <DndContext collisionDetection={pointerWithin || rectIntersection} onDragEnd={handleDragEnd}>
               <SortableContext items={checkpoints} strategy={verticalListSortingStrategy}>
                 <div className="flex flex-col">
                   {checkpoints.map((checkpoint, index) => (

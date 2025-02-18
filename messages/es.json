@@ -116,5 +116,8 @@
     "create": "Crear",
     "cancel": "Cancelar",
     "empty": "No hay checkpoints todavía. Recuerda que puedes añadir un checkpoint al evento haciendo doble click sobre cualquier sitio del mapa."
+  },
+  "CPpopup": {
+    "title": "Detalles del Checkpoint"
   }
 }

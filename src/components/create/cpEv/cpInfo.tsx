@@ -5,7 +5,7 @@ import { useCheckpoints } from "../../../utils/context/cpContext";
 import { FormControl, FormControlLabel, Switch } from "@mui/material";
 
 const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
-  const { checkpoints, setCheckpoints } = useCheckpoints();
+  const { checkpoints, setCheckpoints, setFocusedCheckpoint } = useCheckpoints();
 
   const [name, setName] = useState(checkpoints[index]?.name || "");
   const [description, setDescription] = useState(checkpoints[index]?.description || "");
@@ -74,10 +74,10 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
       <div
         className="flex flex-row items-center"
       >
-        <div className="flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full">
+        <div onClick={() => setFocusedCheckpoint(checkpoints[index])} className=" cursor-pointer flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full">
           <h1 className="flex text-xl font-extrabold">{index + 1}</h1>
         </div>
-        <div className="max-w-[300px]">
+        <div onClick={() => setFocusedCheckpoint(checkpoints[index])}  className=" cursor-pointer max-w-[300px]">
           <h1 className="font-bold break-words">{checkpoints[index].name}</h1>
           <p className="text-xs">
             {checkpoints[index].marker.position[0]}, {checkpoints[index].marker.position[1]}
@@ -92,6 +92,7 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
             />
           ) : (
             <img
+              onClick={() => setFocusedCheckpoint(checkpoints[index])}
               src="/svg/arrow.svg"
               alt="Description of image"
               className="cursor-pointer scale-[1] ml-auto p-2 mr-0"

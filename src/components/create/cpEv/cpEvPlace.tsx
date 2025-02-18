@@ -5,12 +5,15 @@ import L from "leaflet";
 import dynamic from "next/dynamic";
 import { Checkpoint } from "../../../utils/classes/cpClass";
 import { useCheckpoints } from "../../../utils/context/cpContext"; 
+import { useTranslations } from "next-intl";
 
 const PlaceCP = () => {
   const map = useMap();
   const {checkpoints, setCheckpoints, focusedCheckpoint} = useCheckpoints();
   const [count, setCount] = useState(0);
   const [expanded, setExpandedToggle] = useState(false);
+
+  const t = useTranslations("CPpopup");
 
   const createCustomIcon = (number: number) =>
     L.divIcon({
@@ -88,29 +91,19 @@ const PlaceCP = () => {
             dragend: (e) => handleMarkerDragEnd(index, e),
           }}
         >
-          <Popup offset={[0, -40]} maxWidth={600}>
+          <Popup offset={[10, -40]} className="custom-popup" maxWidth={600}>
             <div
-              className={`overflow-auto w-[600px] h-[380px] rounded-2xl bg-[#e6e6e6] px-2 pt-6 ${
-                expanded ? "h-auto" : "max-h-[380px]"
+              className={`px-6 overflow-auto w-[400px] h-[380px] rounded-l-xl m-4 bg-[#ffffff] pt-6 ${
+                !expanded ? "h-auto" : "max-h-[380px]"
               }`}
             >
-              <div className="flex flex-col justify-center items-center mb-4">
-                <h1 className="font-caveat font-bold text-3xl text-left px-6 mb-6">
-                  Details of the Checkpoint
+              <div className="flex flex-col mb-4">
+                <h1 className="font-caveat tracking-tight font-bold text-4xl text-left mb-6">
+                  {t("title")}
                 </h1>
-                <div className="cursor-pointer hover:bg-[#b6b6b6] bg-[#d6d6d6] rounded-full p-20 mb-2">
-                  <img
-                    src="/add.svg"
-                    alt="Description of image"
-                    className="scale-[3]"
-                  />
-                </div>
-                <p className="text-xs mb-2">Click to add a banner!</p>
-                <div className="flex flex-col items-center max-w-[80%]">
-                  <h1 className="font-caveat text-center text-5xl bold">
-                    {cp.name}
-                  </h1>
-                </div>
+                <h1 className="tracking-tight text-3xl font-bold">
+                  {cp.name}
+                </h1>
               </div>
               <Quill
                 readOnly={true}
@@ -118,7 +111,7 @@ const PlaceCP = () => {
                 style={{
                   maxHeight: "fit-content",
                   overflowY: "auto",
-                  margin: "20px",
+                  border: "none",
                 }}
                 value={cp.description}
               ></Quill>
@@ -130,13 +123,13 @@ const PlaceCP = () => {
               >
                 {!expanded ? (
                   <img
-                    src="/arrow.svg"
+                    src="/svg/arrow.svg"
                     alt="Description of image"
                     className="cursor-pointer scale-[1] p-2"
                   />
                 ) : (
                   <img
-                    src="/arrow.svg"
+                    src="/svg/arrow.svg"
                     alt="Description of image"
                     className="rotate-180 cursor-pointer scale-[1] p-2"
                   />
