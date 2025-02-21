@@ -103,19 +103,15 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
 
       {isExpanded && (
         <div className="mt-4 w-full h-fit rounded-2xl bg-[#e6e6e6] m-auto px-2 pt-4">
-          <div className="overflow-auto mb-5">
-            <div className="flex flex-col justify-center items-center mb-4">
-              <h1 className="font-bold text-3xl font-caveat text-left px-6 mb-6">
+          <div className="overflow-auto mb-5 px-3">
+            <div className="flex flex-col justify-center items-center">
+              <h1 className="font-bold text-3xl font-caveat text-left px-6 mb-2">
                 Checkpoint Details
               </h1>
-              <div className="cursor-pointer hover:bg-[#c6c6c6] bg-[#d6d6d6] rounded-full p-20 mb-2">
-                <img
-                  src="/svg/add.svg"
-                  alt="Description of image"
-                  className="scale-[3]"
-                />
-              </div>
-              <p className="text-xs mb-2">Click to add a picture!</p>
+                <div className= "flex justify-center items-center w-full h-10 mb-2 rounded-2xl p-20 bg-[#e6e6e6] border border-gray-400">
+                  <i className="text-gray-400 material-icons mr-1 text-8xl">image</i>
+                </div>
+              <p className="text-xs">Click to add a picture!</p>
             </div>
           </div>
           {cpInfo}
