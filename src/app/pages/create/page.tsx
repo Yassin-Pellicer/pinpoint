@@ -10,9 +10,7 @@ import SimpleEvent from "../../../components/create/simpleEv/simpleEv";
 import MapComponentCP from "../../../components/create/cpEv/cpMap";
 import MapComponentSimple from "../../../components/create/simpleEv/simpleMap";
 
-import {
-  useCheckpoints,
-} from "../../../utils/context/cpContext";
+import { useCheckpoints } from "../../../utils/context/cpContext";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
@@ -27,7 +25,7 @@ export default function Create() {
 
   return (
     <Layout>
-      <div className="flex flex-col overflow-auto bg-blue-500 max-w-[500px] h-screen px-6">
+      <div className="flex flex-col overflow-auto bg-blue-500 max-w-[35rem] h-screen px-6">
         {/* Event type */}
         <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
           <h1 className="font-bold text-4xl mb-2 tracking-tight font-caveat">
@@ -35,7 +33,8 @@ export default function Create() {
           </h1>
           <div className="flex justify-between mt-6 flex-row">
             <button
-              className={` border border-black  rounded-2xl p-2 hover:bg-blue-500 hover:border-blue-500 hover:text-white transition-colors duration-100 font-caveat tracking-tight text-2xl ${
+              className={` border border-black  rounded-2xl p-2 hover:bg-blue-500
+                 hover:border-blue-500 hover:text-white transition-colors duration-100 font-caveat tracking-tight text-2xl ${
                 selectedButton === "simple"
                   ? "bg-blue-500 border-blue-500 text-white "
                   : "bg-transparent text-black"
@@ -48,7 +47,8 @@ export default function Create() {
               {t("simple")}
             </button>
             <button
-              className={`border border-black rounded-2xl p-2 hover:bg-blue-500 hover:border-blue-500 hover:text-white transition-colors duration-100 font-caveat tracking-tight text-2xl ${
+              className={`border border-black rounded-2xl p-2 hover:bg-blue-500
+                 hover:border-blue-500 hover:text-white transition-colors duration-100 font-caveat tracking-tight text-2xl ${
                 selectedButton === "course"
                   ? " bg-blue-500 border-blue-500 text-white "
                   : "bg-transparent text-black"
@@ -73,8 +73,11 @@ export default function Create() {
       </div>
 
       {/* Map */}
-      {selectedButton === "course" ? <MapComponentCP /> : <MapComponentSimple />}
-      
+      {selectedButton === "course" ? (
+        <MapComponentCP />
+      ) : (
+        <MapComponentSimple />
+      )}
     </Layout>
   );
 }

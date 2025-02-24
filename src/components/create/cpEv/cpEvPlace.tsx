@@ -11,7 +11,6 @@ const PlaceCP = () => {
   const map = useMap();
   const {checkpoints, setCheckpoints, focusedCheckpoint} = useCheckpoints();
   const [count, setCount] = useState(0);
-  const [expanded, setExpandedToggle] = useState(false);
 
   const t = useTranslations("CPpopup");
 
@@ -39,7 +38,8 @@ const PlaceCP = () => {
       `,
       iconSize: [30, 42],
       iconAnchor: [20, 50],
-    });
+    }
+  );
   
   const Quill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
@@ -55,8 +55,10 @@ const PlaceCP = () => {
         newMarker,
         count,
         "",
+        "",
         checkpoints.length + 1,
-        "Checkpoint"
+        "Checkpoint",
+        "",
       );
       setCount(count + 1);
       setCheckpoints([...checkpoints, newCheckpoint]); 
@@ -75,7 +77,7 @@ const PlaceCP = () => {
 
   useEffect(() => {
     if (focusedCheckpoint && map) {
-      map.flyTo(focusedCheckpoint.marker.position, 15);
+      map.flyTo(focusedCheckpoint.marker.position, 18);
     }
   }, [focusedCheckpoint, map]);
   
@@ -91,16 +93,27 @@ const PlaceCP = () => {
             dragend: (e) => handleMarkerDragEnd(index, e),
           }}
         >
-          <Popup offset={[10, -40]} className="custom-popup" maxWidth={600}>
+          <Popup offset={[10, -40]} className="custom-popup" maxWidth={500}>
             <div
-              className={`px-6 overflow-auto w-[400px] h-[380px] rounded-l-xl m-4 bg-[#ffffff] pt-6 ${
-                !expanded ? "h-auto" : "max-h-[380px]"
-              }`}
+              className="px-6 w-[450px] rounded-l-xl m-4 bg-[#ffffff] pt-6 h-auto"
             >
               <div className="flex flex-col mb-4">
                 <h1 className="font-caveat tracking-tight font-bold text-4xl text-left mb-6">
                   {t("title")}
                 </h1>
+                {checkpoints[index].banner ? (
+                  <img
+                    src={checkpoints[index].banner}
+                    className="w-full h-15 rounded-2xl object-cover border border-gray-400 mb-6"
+                    alt="banner"
+                  />
+                ) : (
+                  <div className="w-full h-15 p-20 flex justify-center items-center rounded-2xl bg-[#e6e6e6] mb-6 border border-gray-400">
+                    <i className="text-gray-400 material-icons text-8xl">
+                      image
+                    </i>
+                  </div>
+                )}
                 <h1 className="tracking-tight text-3xl font-bold">
                   {cp.name}
                 </h1>
@@ -115,26 +128,7 @@ const PlaceCP = () => {
                 }}
                 value={cp.description}
               ></Quill>
-              <button
-                className="flex justify-center mx-auto mb-5 sticky bottom-2"
-                onClick={() => {
-                  setExpandedToggle(!expanded);
-                }}
-              >
-                {!expanded ? (
-                  <img
-                    src="/svg/arrow.svg"
-                    alt="Description of image"
-                    className="cursor-pointer scale-[1] p-2"
-                  />
-                ) : (
-                  <img
-                    src="/svg/arrow.svg"
-                    alt="Description of image"
-                    className="rotate-180 cursor-pointer scale-[1] p-2"
-                  />
-                )}
-              </button>
+              <div className = "pb-6"></div>
             </div>
           </Popup>
         </Marker>

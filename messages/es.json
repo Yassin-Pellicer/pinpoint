@@ -70,6 +70,7 @@
   },
   "Create": {
     "title": "Crear Evento",
+    "pic": "Haz click para añadir una imagen",
     "description": "Los eventos <b>pueden ser de dos tipos: Pueden ser un evento simple, sin puntos de control, o pueden contener puntos de control.</b> Elige el tipo de evento para empezar a crearlo.",
     "simple": "Evento Simple",
     "course": "Evento con Checkpoints",
@@ -119,5 +120,42 @@
   },
   "CPpopup": {
     "title": "Detalles del Checkpoint"
+  },
+  "SimplePopup": {
+    "title": "Detalles del Evento"
+  },
+  "Tags": {
+    "buy": "Compras",
+    "sell": "Ventas",
+    "hunts": "Cazas del tesoro",
+    "ads": "Anuncios",
+    "requests": "Peticiones",
+    "routes": "Rutas",
+    "travel": "Turismo",
+    "secrets": "Secretos",
+    "art": "Arte",
+    "solo": "Solo",
+    "friends": "Con amigos",
+    "family": "Familia",
+    "education": "Educación",
+    "food": "Comida",
+    "nature": "Naturaleza",
+    "hiking": "Senderismo",
+    "music": "Música",
+    "sport": "Deportes",
+    "movies": "Películas",
+    "books": "Libros",
+    "literature": "Literatura",
+    "games": "Juegos",
+    "politics": "Politica",
+    "health": "Salud",
+    "science": "Ciencia",
+    "fashion": "Moda",
+    "qr": "QRs",
+    "tour": "Tours",
+    "public": "Publico",
+    "private": "Privado",
+    "tech": "Tecnología"
   }
+  
 }

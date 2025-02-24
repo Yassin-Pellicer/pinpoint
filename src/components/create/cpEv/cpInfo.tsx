@@ -1,20 +1,43 @@
 "use client";
 import { useState, useEffect } from "react";
-import Quill from "react-quill";
+import dynamic from "next/dynamic";
 import { useCheckpoints } from "../../../utils/context/cpContext";
-import { FormControl, FormControlLabel, Switch } from "@mui/material";
+import fileURL from "../../../utils/funcs/createUrlImage";
+
+const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
 const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
-  const { checkpoints, setCheckpoints, setFocusedCheckpoint } = useCheckpoints();
+  const {
+    checkpoints,
+    setCheckpoints,
+    focusedCheckpoint,
+    setFocusedCheckpoint,
+  } = useCheckpoints();
 
   const [name, setName] = useState(checkpoints[index]?.name || "");
-  const [description, setDescription] = useState(checkpoints[index]?.description || "");
+  const [description, setDescription] = useState(
+    checkpoints[index]?.description || ""
+  );
+  const [banner, setBanner] = useState(checkpoints[index]?.banner || "");
+
+  // Log changes for debugging
+  useEffect(() => {
+    console.log("CheckpointInfo banner state:", banner);
+  }, [banner]);
+
+  const imageInputId = `checkpoint-image-${id}-${index}`;
+
+  const handleImageUpload = (e) => {
+    fileURL(e, (url) => {
+      setBanner(url);
+    });
+  };
 
   const modifyInfo = (e) => {
     e.preventDefault();
     setCheckpoints((prevCheckpoints) =>
       prevCheckpoints.map((checkpoint, i) =>
-        i === index ? { ...checkpoint, name, description } : checkpoint
+        i === index ? { ...checkpoint, name, description, banner } : checkpoint
       )
     );
   };
@@ -54,9 +77,9 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
           toggleExpand(id);
         }}
         className="font-bold bg-transparent border-2 text-sm border-black 
-      text-black rounded-xl p-2 hover:bg-green-600
-      hover:border-green-600 hover:text-white 
-      transition duration-150 mb-4"
+          text-black rounded-xl p-2 hover:bg-green-600
+          hover:border-green-600 hover:text-white 
+          transition duration-150 mb-4"
       >
         Apply Changes
       </button>
@@ -71,19 +94,28 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
 
   return (
     <div className="flex flex-col">
-      <div
-        className="flex flex-row items-center"
-      >
-        <div onClick={() => setFocusedCheckpoint(checkpoints[index])} className=" cursor-pointer flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full">
-          <h1 className="flex text-xl font-extrabold">{index + 1}</h1>
+      <div className="flex flex-row items-center">
+        <div
+          onClick={() => setFocusedCheckpoint(checkpoints[index])}
+          className="flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full cursor-pointer"
+        >
+          <h1 className="flex text-xl font-extrabold cursor-pointer">
+            {index + 1}
+          </h1>
         </div>
-        <div onClick={() => setFocusedCheckpoint(checkpoints[index])}  className=" cursor-pointer max-w-[300px]">
-          <h1 className="font-bold break-words">{checkpoints[index].name}</h1>
+        <div className="max-w-[300px] cursor-pointer">
+          <h1
+            onClick={() => setFocusedCheckpoint(checkpoints[index])}
+            className="font-bold break-words"
+          >
+            {checkpoints[index].name}
+          </h1>
           <p className="text-xs">
-            {checkpoints[index].marker.position[0]}, {checkpoints[index].marker.position[1]}
+            {checkpoints[index].marker.position[0]},{" "}
+            {checkpoints[index].marker.position[1]}
           </p>
         </div>
-        <button onClick={() => toggleExpand((prev) => !prev)} className="ml-auto">
+        <button onClick={() => toggleExpand(id)} className="ml-auto">
           {isExpanded ? (
             <img
               src="/svg/arrow.svg"
@@ -103,15 +135,33 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
 
       {isExpanded && (
         <div className="mt-4 w-full h-fit rounded-2xl bg-[#e6e6e6] m-auto px-2 pt-4">
-          <div className="overflow-auto mb-5 px-3">
+          <div className="overflow-auto flex flex-col px-3 w-full">
             <div className="flex flex-col justify-center items-center">
               <h1 className="font-bold text-3xl font-caveat text-left px-6 mb-2">
                 Checkpoint Details
               </h1>
-                <div className= "flex justify-center items-center w-full h-10 mb-2 rounded-2xl p-20 bg-[#e6e6e6] border border-gray-400">
-                  <i className="text-gray-400 material-icons mr-1 text-8xl">image</i>
-                </div>
-              <p className="text-xs">Click to add a picture!</p>
+              <input
+                accept="image/*"
+                id={imageInputId}
+                type="file"
+                hidden
+                onChange={handleImageUpload}
+              />
+              <label htmlFor={imageInputId} className="w-full mb-8">
+                {banner ? (
+                  <img
+                    src={banner}
+                    className="w-full h-15 rounded-2xl object-cover border border-gray-400"
+                    alt="banner"
+                  />
+                ) : (
+                  <div className="w-full h-15 p-20 flex justify-center items-center rounded-2xl bg-[#e6e6e6] border border-gray-400">
+                    <i className="text-gray-400 material-icons text-8xl">
+                      image
+                    </i>
+                  </div>
+                )}
+              </label>
             </div>
           </div>
           {cpInfo}

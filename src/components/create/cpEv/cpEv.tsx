@@ -1,32 +1,71 @@
 import { Slider, FormControl, FormControlLabel, Switch } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CpList from "./cpList";
 
 import dynamic from "next/dynamic";
 import Quill from "quill";
+import { useEvent } from "../../../utils/context/eventContext";
+import fileURL from "../../../utils/funcs/createUrlImage";
 
 const CheckpointEvent = () => {
-  const [qr, setQr]                       = useState(false);
-  const [name, setName]                   = useState("");
-  const [open, setOpen]                   = useState(false);
-  const [loading, setLoading]             = useState(false);
-  const [isPublic, setIsPublic]           = useState(false);
-  const [difficulty, setDifficulty]       = useState(50);
-  const [editorContent, setEditorContent] = useState("");
+  const {
+    name,
+    setName,
+    description,
+    setDescription,
+    isPublic,
+    setIsPublic,
+    marker,
+    setMarker,
+    banner,
+    setBanner,
+    tags,
+    setTags,
+    qr,
+    setQr,
+  } = useEvent();
 
   const t = useTranslations("Create");
+
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const Quill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
   );
+
+  useEffect(() => {
+    console.log("status changed banner", banner);
+  }, [banner]);
+
   return (
     <div className="mb-6 rounded-2xl bg-[#ffffff] px-2 pt-6">
       <form className="flex flex-col px-3 w-full">
         <h1 className="text-4xl mb-2 tracking-tight font-caveat font-bold">
           {t("Details.creation")}
         </h1>
+
+        <input accept="image/*" id="image" type="file" hidden onChange={(e) => fileURL(e, (url) => setBanner(url))}/>
+        <label htmlFor="image">
+          <div className="flex flex-col justify-center items-center mt-4 mb-4">
+            {banner ? (
+              <img
+                src={banner}
+                className="flex justify-center items-center w-full h-15 mb-2 rounded-2xl"
+                alt="banner"
+              />
+            ) : (
+              <div className="flex justify-center items-center w-full h-15 mb-2 rounded-2xl p-20 bg-[#e6e6e6] border border-gray-400">
+                <i className="text-gray-400 material-icons mr-1 text-8xl">
+                  image
+                </i>
+              </div>
+            )}
+            <p className="font-caveat text-2xl tracking-tighter">{t("pic")}</p>
+          </div>
+        </label>
 
         <p className="text-sm mt-1 mb-4">
           {t.rich("Details.internet", {
@@ -45,22 +84,9 @@ const CheckpointEvent = () => {
         />
         <label className="mb-1">{t("Details.description")}</label>
         <Quill
-          value={editorContent}
-          onChange={setEditorContent}
-          style={{ height: "200px" }}
-        />
-
-        {/* Difficulty slider */}
-        <label className="mt-16 text-lg">
-          {t("Details.difficulty")}
-          <span className="font-bold">{difficulty}</span>
-        </label>
-        <Slider
-          value={difficulty}
-          min={1}
-          max={100}
-          step={1}
-          onChange={(e, value) => setDifficulty(value as number)}
+          value={description}
+          onChange={setDescription}
+          style={{ height: "200px", marginBottom: "40px" }}
         />
 
         <div className="flex justify-between mt-4 flex-row">
@@ -78,13 +104,8 @@ const CheckpointEvent = () => {
             />
           </FormControl>
 
-          <FormControl className="ml-4">
+          <FormControl>
             <FormControlLabel
-              label={
-                isPublic
-                  ? t("Details.public.title")
-                  : t("Details.private.title")
-              }
               control={
                 <Switch
                   checked={isPublic}
@@ -92,6 +113,11 @@ const CheckpointEvent = () => {
                   name="isPublic"
                   color="primary"
                 />
+              }
+              label={
+                isPublic
+                  ? t("Details.public.title")
+                  : t("Details.private.title")
               }
             />
           </FormControl>
@@ -157,7 +183,6 @@ const CheckpointEvent = () => {
       </form>
 
       <CpList open={open} setOpen={setOpen} />
-
     </div>
   );
 };

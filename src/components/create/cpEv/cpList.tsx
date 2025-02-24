@@ -14,7 +14,7 @@ import CheckpointInfo from "./cpInfo";
 import { useEffect, useState } from "react";
 
 const BottomSheet = ({ open, setOpen }) => {
-  const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint } = useCheckpoints();
+  const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint, } = useCheckpoints();
   const t = useTranslations("CPdetails");
   const [expandedCheckpoints, setExpandedCheckpoints] = useState({});
 
@@ -103,7 +103,7 @@ const BottomSheet = ({ open, setOpen }) => {
       variant="persistent"
       PaperProps={{
         style: {
-          maxWidth: "499px",
+          maxWidth: "35rem",
           height: "100%",
           marginRight: "auto",
           marginLeft: "1px",

@@ -1,10 +1,13 @@
 import { Checkpoint } from "./cpClass";
+import { Tag } from "./Tag"
 
-export class cpEvent {
+export class Event {
   constructor(
     public name: string,
+    public description: string,
     public checkpoints: Checkpoint[],
-    public id: number,
-    public description: string
+    public location: number[],
+    public banner: Blob,
+    public tags: Tag[]
   ) {}
 }

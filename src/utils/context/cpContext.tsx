@@ -4,26 +4,96 @@ import { Checkpoint } from "../classes/cpClass";
 
 interface CheckpointsContextType {
   checkpoints: Checkpoint[];
-  setCheckpoints: React.Dispatch<React.SetStateAction<Checkpoint[]>>;
   focusedCheckpoint: Checkpoint | null;
+  
+  setCheckpoints: React.Dispatch<React.SetStateAction<Checkpoint[]>>;
   setFocusedCheckpoint: React.Dispatch<React.SetStateAction<Checkpoint | null>>;
+  setId: (id: number, checkpointId: number) => void;
+  setDescription: (description: string, checkpointId: number) => void;
+  setOrder: (order: number, checkpointId: number) => void;
+  setName: (name: string, checkpointId: number) => void;
+  setMarker: (marker: any, checkpointId: number) => void;
+  setImg: (img: any, checkpointId: number) => void;
 }
 
-const CheckpointsContext = createContext<CheckpointsContextType | undefined>(
-  undefined
-);
+const CheckpointsContext = createContext<CheckpointsContextType | undefined>(undefined);
 
 export const CheckpointsProvider = ({ children }: { children: React.ReactNode }) => {
   const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
   const [focusedCheckpoint, setFocusedCheckpoint] = useState<Checkpoint | null>(null);
 
+  const setId = (id: number, checkpointId: number) => {
+    setCheckpoints((prev) =>
+      prev.map((checkpoint) =>
+        checkpoint.id === checkpointId ? { ...checkpoint, id } : checkpoint
+      )
+    );
+  };
+
+  const setDescription = (description: string, checkpointId: number) => {
+    setCheckpoints((prev) =>
+      prev.map((checkpoint) =>
+        checkpoint.id === checkpointId ? { ...checkpoint, description } : checkpoint
+      )
+    );
+  };
+
+  const setOrder = (order: number, checkpointId: number) => {
+    setCheckpoints((prev) =>
+      prev.map((checkpoint) =>
+        checkpoint.id === checkpointId ? { ...checkpoint, order } : checkpoint
+      )
+    );
+  };
+
+  const setName = (name: string, checkpointId: number) => {
+    setCheckpoints((prev) =>
+      prev.map((checkpoint) =>
+        checkpoint.id === checkpointId ? { ...checkpoint, name } : checkpoint
+      )
+    );
+  };
+
+  const setMarker = (marker: any, checkpointId: number) => {
+    setCheckpoints((prev) =>
+      prev.map((checkpoint) =>
+        checkpoint.id === checkpointId ? { ...checkpoint, marker } : checkpoint
+      )
+    );
+  };
+
+  const setImg = (img: any, checkpointId: number) => {
+    setCheckpoints((prev) =>
+      prev.map((checkpoint) =>
+        checkpoint.id === checkpointId ? { ...checkpoint, img } : checkpoint
+      )
+    );
+  };
+
   return (
-    <CheckpointsContext.Provider value={{ checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint }}>
+    <CheckpointsContext.Provider
+      value={{
+        checkpoints,
+        focusedCheckpoint,
+        setCheckpoints,
+        setFocusedCheckpoint,
+        setId,
+        setDescription,
+        setOrder,
+        setName,
+        setMarker,
+        setImg,
+      }}
+    >
       {children}
     </CheckpointsContext.Provider>
   );
 };
 
 export const useCheckpoints = () => {
-  return useContext(CheckpointsContext);
+  const context = useContext(CheckpointsContext);
+  if (!context) {
+    throw new Error("useCheckpoints must be used within a CheckpointsProvider");
+  }
+  return context;
 };
