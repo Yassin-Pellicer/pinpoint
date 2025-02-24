@@ -131,9 +131,19 @@ const PlaceCP = () => {
                 <h1 className="font-caveat tracking-tight font-bold text-4xl text-left mb-6">
                   {t("title")}
                 </h1>
-                <div className= "flex justify-center items-center w-full h-10 mb-4 rounded-2xl p-20 bg-[#e6e6e6] border border-gray-400">
-                  <i className="text-gray-400 material-icons mr-1 text-8xl">image</i>
-                </div>
+                {event.banner ? (
+                  <img
+                    src={event.banner}
+                    className="w-full h-15 rounded-2xl object-cover border border-gray-400 mb-6"
+                    alt="banner"
+                  />
+                ) : (
+                  <div className="w-full h-15 p-20 flex justify-center items-center rounded-2xl bg-[#e6e6e6] mb-6 border border-gray-400">
+                    <i className="text-gray-400 material-icons text-8xl">
+                      image
+                    </i>
+                  </div>
+                )}
                 <h1 className="tracking-tight text-3xl font-bold">
                   {event.name}
                 </h1>
