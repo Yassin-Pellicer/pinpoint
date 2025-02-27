@@ -88,7 +88,7 @@
       "title": "Título del evento:",
       "description": "Descripción del evento:",
       "difficulty": "Dificultad: ",
-      "checkpoints": "Ver Checkpoints",
+      "checkpoints": "Editar y Reordenar Checkpoints",
       "upload": "Subir Evento",
       "qr": {
         "title": "Evento con QRs",

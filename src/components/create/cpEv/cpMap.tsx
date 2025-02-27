@@ -26,6 +26,9 @@ export default function MapComponent() {
       center={center}
       doubleClickZoom={false}
       className="h-screen w-full z-10"
+      style={{ outline: "none" }}
+      worldCopyJump={true}
+      maxBoundsViscosity={0}
     >
       <LayersControl position="bottomleft">
         <LayersControl.BaseLayer name="CartoDB Positron" checked>

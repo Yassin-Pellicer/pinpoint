@@ -25,6 +25,8 @@ export default function MapComponent() {
       maxZoom={18}
       center={center}
       doubleClickZoom={false}
+      worldCopyJump={true}
+      maxBoundsViscosity={0}
       className="h-screen w-full z-10"
     >
       <LayersControl position="bottomleft">

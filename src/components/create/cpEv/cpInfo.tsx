@@ -1,35 +1,47 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import dynamic from "next/dynamic";
 import { useCheckpoints } from "../../../utils/context/cpContext";
 import fileURL from "../../../utils/funcs/createUrlImage";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
-const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
+const CheckpointInfo = ({ id, index, mode, closeMap}) => {
   const {
     checkpoints,
     setCheckpoints,
     focusedCheckpoint,
     setFocusedCheckpoint,
+    setBanner,
   } = useCheckpoints();
 
   const [name, setName] = useState(checkpoints[index]?.name || "");
-  const [description, setDescription] = useState(
-    checkpoints[index]?.description || ""
-  );
-  const [banner, setBanner] = useState(checkpoints[index]?.banner || "");
-
-  // Log changes for debugging
-  useEffect(() => {
-    console.log("CheckpointInfo banner state:", banner);
-  }, [banner]);
+  const [description, setDescription] = useState(checkpoints[index]?.description || "");
+  const [isFocused, setIsFocused] = useState(false);
 
   const imageInputId = `checkpoint-image-${id}-${index}`;
 
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  useEffect(() => {
+    setName(checkpoints[index]?.name || "");
+    setDescription(checkpoints[index]?.description || "");
+  }, [checkpoints, index]); 
+    
+  const handleBlur = (e) => {
+    // Check if the new target is still within the div
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsFocused(false);
+      modifyInfo(e);
+    }
+  };
+
   const handleImageUpload = (e) => {
     fileURL(e, (url) => {
-      setBanner(url);
+      console.log(url)
+      setBanner(url, id);
     });
   };
 
@@ -37,12 +49,13 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
     e.preventDefault();
     setCheckpoints((prevCheckpoints) =>
       prevCheckpoints.map((checkpoint, i) =>
-        i === index ? { ...checkpoint, name, description, banner } : checkpoint
+        i === index ? { ...checkpoint, name, description, banner: checkpoints[index].banner } : checkpoint
       )
     );
   };
 
   const removeCheckpoints = (index) => {
+    event.preventDefault();
     let newCheckpoints = [...checkpoints];
     newCheckpoints.splice(index, 1);
     newCheckpoints.forEach((element, i) => {
@@ -51,10 +64,15 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
       }
     });
     setCheckpoints(newCheckpoints);
+    closeMap();
   };
 
   const cpInfo = (
-    <form className="flex flex-col px-3 w-full">
+    <form className="flex flex-col px-3 w-full"
+    tabIndex={-1}
+    onFocus={handleFocus}
+    onBlur={handleBlur}
+    >
       <label className="font-bold">Name of the Checkpoint:</label>
       <input
         type="text"
@@ -62,7 +80,7 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
         onChange={(e) => setName(e.target.value)}
         className="border border-black rounded p-1 mb-3"
       />
-      <div className="flex flex-col mb-24">
+      <div className="flex flex-col mb-16">
         <label className="text-md mb-1">Checkpoint info</label>
         <Quill
           key={index}
@@ -71,18 +89,6 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
           onChange={(value) => setDescription(value)}
         />
       </div>
-      <button
-        onClick={(e) => {
-          modifyInfo(e);
-          toggleExpand(id);
-        }}
-        className="font-bold bg-transparent border-2 text-sm border-black 
-          text-black rounded-xl p-2 hover:bg-green-600
-          hover:border-green-600 hover:text-white 
-          transition duration-150 mb-4"
-      >
-        Apply Changes
-      </button>
       <button
         onClick={() => removeCheckpoints(index)}
         className="font-bold bg-transparent border-2 text-sm border-black text-black rounded-xl p-2 hover:bg-red-600 hover:border-red-600 hover:text-white transition duration-150 mb-4"
@@ -115,25 +121,28 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
             {checkpoints[index].marker.position[1]}
           </p>
         </div>
-        <button onClick={() => toggleExpand(id)} className="ml-auto">
-          {isExpanded ? (
-            <img
-              src="/svg/arrow.svg"
-              alt="Description of image"
-              className="cursor-pointer scale-[1] ml-auto p-2 mr-0 rotate-180"
-            />
-          ) : (
-            <img
+        <button className="ml-auto">
+          {mode == "edit" && (
+            <p
               onClick={() => setFocusedCheckpoint(checkpoints[index])}
-              src="/svg/arrow.svg"
-              alt="Description of image"
-              className="cursor-pointer scale-[1] ml-auto p-2 mr-0"
-            />
+              className="material-icons text-2xl"
+            >
+              edit
+            </p>
+          )}
+
+          {mode == "list" && (
+            <p
+              onClick={() => setFocusedCheckpoint(checkpoints[index])}
+              className="material-icons text-2xl"
+            >
+              edit
+            </p>
           )}
         </button>
       </div>
 
-      {isExpanded && (
+      {mode == "edit" && (
         <div className="mt-4 w-full h-fit rounded-2xl bg-[#e6e6e6] m-auto px-2 pt-4">
           <div className="overflow-auto flex flex-col px-3 w-full">
             <div className="flex flex-col justify-center items-center">
@@ -148,9 +157,9 @@ const CheckpointInfo = ({ id, index, isExpanded, toggleExpand }) => {
                 onChange={handleImageUpload}
               />
               <label htmlFor={imageInputId} className="w-full mb-8">
-                {banner ? (
+                {checkpoints[index].banner ? (
                   <img
-                    src={banner}
+                    src={checkpoints[index].banner}
                     className="w-full h-15 rounded-2xl object-cover border border-gray-400"
                     alt="banner"
                   />

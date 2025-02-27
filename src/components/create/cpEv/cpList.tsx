@@ -51,6 +51,7 @@ const BottomSheet = ({ open, setOpen }) => {
       });
 
       setCheckpoints(newCheckpoints);
+      setFocusedCheckpoint(newCheckpoints[newIndex]);
     }
   };
 
@@ -79,8 +80,7 @@ const BottomSheet = ({ open, setOpen }) => {
           key={index}
           id={id}
           index={index}
-          isExpanded={expandedCheckpoints[id] || false}
-          toggleExpand={() => toggleCheckpointDetails(id)}
+          mode="list"
         />
         <div className="flex justify-center">
           <img
