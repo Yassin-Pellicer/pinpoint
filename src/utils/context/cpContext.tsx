@@ -13,7 +13,7 @@ interface CheckpointsContextType {
   setOrder: (order: number, checkpointId: number) => void;
   setName: (name: string, checkpointId: number) => void;
   setMarker: (marker: any, checkpointId: number) => void;
-  setImg: (img: any, checkpointId: number) => void;
+  setBanner: (banner: any, checkpointId: number) => void;
 }
 
 const CheckpointsContext = createContext<CheckpointsContextType | undefined>(undefined);
@@ -62,10 +62,10 @@ export const CheckpointsProvider = ({ children }: { children: React.ReactNode })
     );
   };
 
-  const setImg = (img: any, checkpointId: number) => {
+  const setBanner = (banner: any, checkpointId: number) => {
     setCheckpoints((prev) =>
       prev.map((checkpoint) =>
-        checkpoint.id === checkpointId ? { ...checkpoint, img } : checkpoint
+        checkpoint.id === checkpointId ? { ...checkpoint, banner } : checkpoint
       )
     );
   };
@@ -82,7 +82,7 @@ export const CheckpointsProvider = ({ children }: { children: React.ReactNode })
         setOrder,
         setName,
         setMarker,
-        setImg,
+        setBanner,
       }}
     >
       {children}

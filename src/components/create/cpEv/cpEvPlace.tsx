@@ -58,7 +58,6 @@ const PlaceCP = () => {
         "",
         checkpoints.length + 1,
         "Checkpoint",
-        "",
       );
       setCount(count + 1);
       setCheckpoints([...checkpoints, newCheckpoint]); 

@@ -5,7 +5,6 @@ export class Checkpoint {
   order: number;
   name: string;
   marker: any;
-  img: any;
 
   constructor(
     marker: any,
@@ -14,7 +13,6 @@ export class Checkpoint {
     description: string,
     order: number,
     name: string,
-    img: any
   ) {
     this.id = id;
     this.banner = banner;
@@ -22,6 +20,5 @@ export class Checkpoint {
     this.order = order;
     this.name = name;
     this.marker = marker;
-    this.img = img;
   }
 }
