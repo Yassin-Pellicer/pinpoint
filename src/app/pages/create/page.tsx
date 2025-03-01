@@ -11,9 +11,11 @@ import MapComponentCP from "../../../components/create/cpEv/cpMap";
 import MapComponentSimple from "../../../components/create/simpleEv/simpleMap";
 
 import { useCheckpoints } from "../../../utils/context/cpContext";
+import { useEvent } from "../../../utils/context/eventContext";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
+  const { event } = useEvent();
 
   const [selectedButton, setSelectedButton] = useState("simple");
   const t = useTranslations("Create");
@@ -22,6 +24,10 @@ export default function Create() {
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
   );
+
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
 
   return (
     <Layout>
@@ -34,7 +40,7 @@ export default function Create() {
           <div className="flex justify-between mt-6 flex-row">
             <button
               className={` border border-black  rounded-2xl p-2 hover:bg-blue-500
-                 hover:border-blue-500 hover:text-white transition-colors duration-100 font-caveat tracking-tight text-2xl ${
+                 hover:border-blue-500 hover:text-white transition-colors duration-100 font-bold tracking-tighter text-md ${
                 selectedButton === "simple"
                   ? "bg-blue-500 border-blue-500 text-white "
                   : "bg-transparent text-black"
@@ -48,7 +54,7 @@ export default function Create() {
             </button>
             <button
               className={`border border-black rounded-2xl p-2 hover:bg-blue-500
-                 hover:border-blue-500 hover:text-white transition-colors duration-100 font-caveat tracking-tight text-2xl ${
+                 hover:border-blue-500 hover:text-white transition-colors duration-100 font-bold tracking-tighter text-md ${
                 selectedButton === "course"
                   ? " bg-blue-500 border-blue-500 text-white "
                   : "bg-transparent text-black"

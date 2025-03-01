@@ -70,7 +70,7 @@
   },
   "Create": {
     "title": "Crear Evento",
-    "pic": "Haz click para añadir una imagen",
+    "pic": "Haz click para añadir o cambiar una imagen",
     "description": "Los eventos <b>pueden ser de dos tipos: Pueden ser un evento simple, sin puntos de control, o pueden contener puntos de control.</b> Elige el tipo de evento para empezar a crearlo.",
     "simple": "Evento Simple",
     "course": "Evento con Checkpoints",
@@ -92,7 +92,7 @@
       "upload": "Subir Evento",
       "qr": {
         "title": "Evento con QRs",
-        "description": "Estos eventos <b> crean un código QR para cada checkpoint que los cazadores pueden escanear para obtener pistas para el siguiente checkpoint. Esto oculta todos los puntos de control excepto el primero</b>."
+        "description": "Estos eventos <b> crean un código QR para cada checkpoint que los jugadores pueden escanear para obtener pistas para el siguiente checkpoint. Esto oculta todos los puntos de control excepto el primero</b>."
       },
       "tour": {
         "title": "Tour",
@@ -105,11 +105,13 @@
       "private": {
         "title": "Privada",
         "description": "Los eventos privados sólo son para las personas a las que les proporcionas el acceso. Requieren un código de invitación para unirse."
-      }
+      },
+      "tags": "Tags:",
+      "setTags": "Añadir Tags"
     },
     "blank": "Se han de rellenar todos los campos."
   },
-  "CPdetails": {
+  "CpList": {
     "title": "Ver Checkpoints",
     "description": "Descripción:",
     "image": "Imagen:",
@@ -118,13 +120,19 @@
     "cancel": "Cancelar",
     "empty": "No hay checkpoints todavía. Recuerda que puedes añadir un checkpoint al evento haciendo doble click sobre cualquier sitio del mapa."
   },
-  "CPpopup": {
-    "title": "Detalles del Checkpoint"
+  "CpInfo": {
+    "pic": "Haz click para añadir o cambiar una imagen",
+    "title": "Detalles del Checkpoint",
+    "description": "Descripción:",
+    "name": "Nombre del Checkpoint:",
+    "remove": "Eliminar Checkpoint"
   },
   "SimplePopup": {
     "title": "Detalles del Evento"
   },
   "Tags": {
+    "title": "Añadir Tags",
+    "description": "Añade tags para que los usuarios puedan encontrar tu evento más fácilmente. Haz click en cualquier tag para añadirlo",
     "buy": "Compras",
     "sell": "Ventas",
     "hunts": "Cazas del tesoro",
@@ -153,7 +161,7 @@
     "fashion": "Moda",
     "qr": "QRs",
     "tour": "Tours",
-    "public": "Publico",
+    "public": "Público",
     "private": "Privado",
     "tech": "Tecnología"
   }

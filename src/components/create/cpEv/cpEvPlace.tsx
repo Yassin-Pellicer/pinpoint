@@ -16,7 +16,7 @@ const PlaceCP = () => {
   const {checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint} = useCheckpoints();
   const [count, setCount] = useState(0);
 
-  const t = useTranslations("CPpopup");
+  const t = useTranslations("CpInfo");
 
   const createCustomIcon = (number: number) =>
     L.divIcon({

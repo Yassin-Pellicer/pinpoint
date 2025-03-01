@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 
 const BottomSheet = ({ open, setOpen }) => {
   const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint, } = useCheckpoints();
-  const t = useTranslations("CPdetails");
+  const t = useTranslations("CpList");
   const [expandedCheckpoints, setExpandedCheckpoints] = useState({});
 
   useEffect(() => {
@@ -80,7 +80,8 @@ const BottomSheet = ({ open, setOpen }) => {
           key={index}
           id={id}
           index={index}
-          mode="list"
+          mode="list" 
+          closeMap={undefined}        
         />
         <div className="flex justify-center">
           <img

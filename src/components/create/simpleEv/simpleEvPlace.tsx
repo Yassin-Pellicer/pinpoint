@@ -57,11 +57,10 @@ const PlaceCP = () => {
         ">
           <div style="
             width: 300px;
-            font-family: 'Caveat';
             font-style: normal;
             font-variant: normal;
             font-weight: 400;
-            font-size: 3rem;
+            font-size: 2rem;
             line-height: 1.2;
             tracking: tighter;
             text-transform: none;
@@ -101,7 +100,14 @@ const PlaceCP = () => {
       const newMarker = { position: [lat, lng], draggable: true };
       setMarker(newMarker);
 
-      map.flyTo(newMarker.position as [number, number], 18);
+      map.flyTo(
+        [
+          lat + 0.0010,
+          lng
+        ],
+        18,
+        { animate: true, duration: 0.5 }
+      );
     },
   });
 
@@ -125,10 +131,10 @@ const PlaceCP = () => {
       >
         <Popup offset={[0, -100]} className="custom-popup" maxWidth={500}>
             <div
-              className="px-6 w-[450px] rounded-l-xl m-4 bg-[#ffffff] pt-6 h-auto"
+              className="px-6 w-[450px] rounded-l-xl m-2 bg-[#ffffff] pt-6 h-auto"
             >
               <div className="flex flex-col mb-4">
-                <h1 className="font-caveat tracking-tight font-bold text-4xl text-left mb-6">
+                <h1 className="font-caveat tracking-tight font-bold text-4xl text-left mb-4">
                   {t("title")}
                 </h1>
                 {event.banner ? (

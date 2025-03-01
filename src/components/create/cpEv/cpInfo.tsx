@@ -2,6 +2,7 @@
 import { useState, useEffect, use } from "react";
 import dynamic from "next/dynamic";
 import { useCheckpoints } from "../../../utils/context/cpContext";
+import { useTranslations } from "next-intl";
 import fileURL from "../../../utils/funcs/createUrlImage";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
@@ -18,6 +19,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
   const [name, setName] = useState(checkpoints[index]?.name || "");
   const [description, setDescription] = useState(checkpoints[index]?.description || "");
   const [isFocused, setIsFocused] = useState(false);
+  const t = useTranslations("CpInfo");
 
   const imageInputId = `checkpoint-image-${id}-${index}`;
 
@@ -31,7 +33,6 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
   }, [checkpoints, index]); 
     
   const handleBlur = (e) => {
-    // Check if the new target is still within the div
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setIsFocused(false);
       modifyInfo(e);
@@ -73,7 +74,9 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
     onFocus={handleFocus}
     onBlur={handleBlur}
     >
-      <label className="font-bold">Name of the Checkpoint:</label>
+      <label className="font-bold">
+        {t("name")}
+      </label>
       <input
         type="text"
         value={name}
@@ -81,7 +84,9 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
         className="border border-black rounded p-1 mb-3"
       />
       <div className="flex flex-col mb-16">
-        <label className="text-md mb-1">Checkpoint info</label>
+        <label className="text-md mb-1 font-bold"> 
+          {t("description")}
+        </label>
         <Quill
           key={index}
           style={{ height: "125px" }}
@@ -145,10 +150,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
       {mode == "edit" && (
         <div className="mt-4 w-full h-fit rounded-2xl bg-[#e6e6e6] m-auto px-2 pt-4">
           <div className="overflow-auto flex flex-col px-3 w-full">
-            <div className="flex flex-col justify-center items-center">
-              <h1 className="font-bold text-3xl font-caveat text-left px-6 mb-2">
-                Checkpoint Details
-              </h1>
+            <div className="flex flex-col justify-center">
               <input
                 accept="image/*"
                 id={imageInputId}
@@ -156,18 +158,30 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
                 hidden
                 onChange={handleImageUpload}
               />
-              <label htmlFor={imageInputId} className="w-full mb-8">
+              <label htmlFor={imageInputId} className="w-full mt-2 mb-4">
                 {checkpoints[index].banner ? (
-                  <img
-                    src={checkpoints[index].banner}
-                    className="w-full h-15 rounded-2xl object-cover border border-gray-400"
-                    alt="banner"
-                  />
+                  <div className="cursor-pointer relative flex justify-end items-center w-full h-15 mb-2 rounded-2xl overflow-hidden">
+                    <img
+                      src={checkpoints[index].banner}
+                      className="w-full h-full object-cover rounded-xl"
+                      alt="banner"
+                    />
+                    <p
+                      className="absolute bottom-8 w-full text-center font-caveat text-white text-2xl tracking-tighter select-none"
+                      style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)" }}
+                    >
+                      {t("pic")}
+                    </p>
+                  </div>
                 ) : (
-                  <div className="w-full h-15 p-20 flex justify-center items-center rounded-2xl bg-[#e6e6e6] border border-gray-400">
-                    <i className="text-gray-400 material-icons text-8xl">
-                      image
+                  <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 
+                    mb-2 rounded-2xl p-14 bg-[#e6e6e6] border border-gray-400 hover:bg-[#d6d6d6] transition duration-200">
+                    <i className="text-gray-400 material-icons mr-1 text-[150px] select-none">
+                      add_photo_alternate
                     </i>
+                    <p className="font-caveat text-gray-500 text-xl tracking-tighter select-none">
+                      {t("pic")}
+                    </p>
                   </div>
                 )}
               </label>
