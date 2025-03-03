@@ -1,5 +1,4 @@
 "use client"; 
-
 import {
   MapContainer,
   TileLayer,
@@ -12,16 +11,21 @@ import "leaflet/dist/leaflet.css";
 
 import { SearchControl } from "../../../utils/funcs/searchControl";
 import CreateEvents from "./cpEvPlace";
+import { useEffect, useState } from "react";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-const center: [number, number] = [51.505, -0.09]; 
-
 export default function MapComponent() {
+
+  const [center, setCenter] = useState<[number, number] | null>(() => {
+    const savedCenter = sessionStorage.getItem("map-center");
+    return savedCenter ? JSON.parse(savedCenter) : null;
+  });
+
   return (
     <MapContainer
-      zoom={13}    
+      zoom={13}
       maxZoom={18}
       center={center}
       doubleClickZoom={false}

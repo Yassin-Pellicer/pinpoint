@@ -68,6 +68,12 @@ const PlaceCP = () => {
     },
   });
 
+  map.on('dragend', () => {
+    const center = map.getCenter(); // Get the map center (LatLng object)
+    const { lat, lng } = center; // Destructure to get lat and lng values
+    sessionStorage.setItem("map-center", JSON.stringify({ lat, lng }));
+  });
+
   const handleMarkerDragEnd = (index: number, e: L.DragEndEvent) => {
     map.closePopup();
     const newCheckpoints = [...checkpoints];

@@ -15,10 +15,17 @@ import CreateEvents from "./simpleEvPlace";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useEffect, useState } from "react";
 
 const center: [number, number] = [51.505, -0.09]; 
 
 export default function MapComponent() {
+
+  const [center, setCenter] = useState<[number, number] | null>(() => {
+    const savedCenter = sessionStorage.getItem("map-center");
+    return savedCenter ? JSON.parse(savedCenter) : null;
+  });
+
   return (
     <MapContainer
       zoom={13}    

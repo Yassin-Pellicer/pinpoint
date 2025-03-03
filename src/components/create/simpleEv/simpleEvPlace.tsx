@@ -111,6 +111,12 @@ const PlaceCP = () => {
     },
   });
 
+  map.on('dragend', () => {
+    const center = map.getCenter(); // Get the map center (LatLng object)
+    const { lat, lng } = center; // Destructure to get lat and lng values
+    sessionStorage.setItem("map-center", JSON.stringify({ lat, lng }));
+  });
+
   const handleMarkerDragEnd = (e : L.DragEndEvent) => {
     map.closePopup();
     let location = [e.target.getLatLng().lat, e.target.getLatLng().lng];
