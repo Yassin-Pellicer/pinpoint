@@ -38,10 +38,6 @@ const Menu = ({ open, setOpen }) => {
           key={index}
           onClick={() => {
             router.push(routes[index]);
-            if (routes[index] === "/pages/create") {
-              const original = sessionStorage.getItem("original-center")
-              sessionStorage.setItem("map-center", original);
-            }
             setOpen(false);
           }}
         >

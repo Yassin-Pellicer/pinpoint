@@ -5,6 +5,7 @@ import L from "leaflet";
 import dynamic from "next/dynamic";
 import { Checkpoint } from "../../../utils/classes/cpClass";
 import { useCheckpoints } from "../../../utils/context/cpContext"; 
+import { useMapContext } from "../../../utils/context/mapContext"; 
 import { useTranslations } from "next-intl";
 import CheckpointInfo from "./cpInfo";
 
@@ -13,8 +14,9 @@ import fileURL from "../../../utils/funcs/createUrlImage";
 
 const PlaceCP = () => {
   const map = useMap();
-  const {checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint} = useCheckpoints();
+  const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint } = useCheckpoints();
   const [count, setCount] = useState(0);
+  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
 
   const t = useTranslations("CpInfo");
 
@@ -69,9 +71,14 @@ const PlaceCP = () => {
   });
 
   map.on('dragend', () => {
-    const center = map.getCenter(); // Get the map center (LatLng object)
-    const { lat, lng } = center; // Destructure to get lat and lng values
-    sessionStorage.setItem("map-center", JSON.stringify({ lat, lng }));
+    const center = map.getCenter(); 
+    const { lat, lng } = center;
+    setLocation([lat, lng]);
+  });
+
+  map.on('zoomend', () => {
+    const zoom = map.getZoom();
+    setZoom(zoom);
   });
 
   const handleMarkerDragEnd = (index: number, e: L.DragEndEvent) => {
@@ -100,6 +107,8 @@ const PlaceCP = () => {
         }
       });
     }
+    const zoom = map.getZoom();
+    setZoom(zoom);
     setFocusedCheckpoint(null);
   }, [focusedCheckpoint, map]);
   

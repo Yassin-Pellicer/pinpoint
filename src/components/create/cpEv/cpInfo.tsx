@@ -95,10 +95,13 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
         />
       </div>
       <button
-        onClick={() => removeCheckpoints(index)}
+        onClick={(e) => {
+          e.preventDefault();
+          removeCheckpoints(index);
+        }}
         className="font-bold bg-transparent border-2 text-sm border-black text-black rounded-xl p-2 hover:bg-red-600 hover:border-red-600 hover:text-white transition duration-150 mb-4"
       >
-        Remove Checkpoint
+         {t("remove")}
       </button>
     </form>
   );

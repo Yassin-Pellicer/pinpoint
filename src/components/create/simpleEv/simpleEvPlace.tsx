@@ -5,6 +5,7 @@ import L from "leaflet";
 import dynamic from "next/dynamic";
 import { useEvent } from "../../../utils/context/eventContext";
 import { useTranslations } from "next-intl";
+import { useMapContext } from "../../../utils/context/mapContext";
 
 const PlaceCP = () => {
   const map = useMap();
@@ -27,6 +28,8 @@ const PlaceCP = () => {
     tags,
     setTags,
   } = useEvent();
+
+  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
 
   const createCustomIcon = (name: string) =>
     L.divIcon({
@@ -108,13 +111,20 @@ const PlaceCP = () => {
         18,
         { animate: true, duration: 0.5 }
       );
+      const zoom = map.getZoom();
+      setZoom(zoom);
     },
   });
 
   map.on('dragend', () => {
-    const center = map.getCenter(); // Get the map center (LatLng object)
-    const { lat, lng } = center; // Destructure to get lat and lng values
-    sessionStorage.setItem("map-center", JSON.stringify({ lat, lng }));
+    const center = map.getCenter();
+    const { lat, lng } = center;
+    setLocation([lat, lng]);
+  });
+
+  map.on('zoomend', () => {
+    const zoom = map.getZoom();
+    setZoom(zoom);
   });
 
   const handleMarkerDragEnd = (e : L.DragEndEvent) => {

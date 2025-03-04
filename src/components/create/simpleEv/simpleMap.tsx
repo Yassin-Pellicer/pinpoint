@@ -16,11 +16,14 @@ import CreateEvents from "./simpleEvPlace";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useEffect, useState } from "react";
+import { useMapContext } from "../../../utils/context/mapContext";
 
 const center: [number, number] = [51.505, -0.09]; 
 
 export default function MapComponent() {
 
+  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
+  
   const [center, setCenter] = useState<[number, number] | null>(() => {
     const savedCenter = sessionStorage.getItem("map-center");
     return savedCenter ? JSON.parse(savedCenter) : null;
@@ -28,9 +31,9 @@ export default function MapComponent() {
 
   return (
     <MapContainer
-      zoom={13}    
+      zoom={zoom}    
       maxZoom={18}
-      center={center}
+      center={location}
       doubleClickZoom={false}
       worldCopyJump={true}
       maxBoundsViscosity={0}

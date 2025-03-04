@@ -13,10 +13,12 @@ import MapComponentSimple from "../../../components/create/simpleEv/simpleMap";
 import { useCheckpoints } from "../../../utils/context/cpContext";
 import { useEvent } from "../../../utils/context/eventContext";
 import Logo from "../../../components/ui/logo";
+import { useMapContext } from "../../../utils/context/mapContext";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { event } = useEvent();
+  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
 
   const [selectedButton, setSelectedButton] = useState("simple");
   const t = useTranslations("Create");
@@ -26,38 +28,7 @@ export default function Create() {
     []
   );
 
-  useEffect(() => {
-    console.log(event);
-  }, [event]);
-
-  const [center, setCenter] = useState<[number, number] | null>(() => {
-    const savedCenter = sessionStorage.getItem("map-center");
-    sessionStorage.getItem("original-center");
-    return savedCenter ? JSON.parse(savedCenter) : null;
-  });
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        console.log("Got location:", latitude, longitude);
-        setCenter([latitude, longitude]);
-        sessionStorage.setItem(
-          "map-center",
-          JSON.stringify([latitude, longitude])
-        );
-        sessionStorage.setItem("map-reloaded", "true");
-      },
-      (error) => {
-        console.error("Error getting location. Make sure to allow location access:", error.message);
-        setCenter([48.8566, 2.3522]); // Default fallback location to Paris
-        sessionStorage.setItem("map-center", JSON.stringify([48.8566, 2.3522]));
-        sessionStorage.setItem("map-reloaded", "true");
-      }
-    );
-  }, []);
-
-  if (!center) {
+  if (!location) {
     return (
     <div className="fixed top-0 left-0 right-0 bottom-0 bg-blue-500 z-50 flex justify-center items-center">
       <div className="animate-spin rounded-full h-[400px] w-[400px] border-b-8 border-white m-auto" />

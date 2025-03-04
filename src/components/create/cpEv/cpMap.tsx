@@ -15,8 +15,11 @@ import { useEffect, useState } from "react";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useMapContext } from "../../../utils/context/mapContext";
 
 export default function MapComponent() {
+
+  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
 
   const [center, setCenter] = useState<[number, number] | null>(() => {
     const savedCenter = sessionStorage.getItem("map-center");
@@ -25,9 +28,9 @@ export default function MapComponent() {
 
   return (
     <MapContainer
-      zoom={13}
+      zoom={zoom}
       maxZoom={18}
-      center={center}
+      center={location}
       doubleClickZoom={false}
       className="h-screen w-full z-10"
       style={{ outline: "none" }}
