@@ -17,7 +17,7 @@ import { useMapContext } from "../../../utils/context/mapContext";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { event } = useEvent();
+  const { event, setEvent, name, setName, description, setDescription, marker, setMarker} = useEvent();
   const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
 
   const [selectedButton, setSelectedButton] = useState("simple");
@@ -58,8 +58,8 @@ export default function Create() {
                   : "bg-transparent text-black"
               }`}
               onClick={() => {
+                if (selectedButton === "simple") return;
                 setSelectedButton("simple");
-                setCheckpoints([]);
               }}
             >
               {t("simple")}
@@ -72,8 +72,8 @@ export default function Create() {
                   : "bg-transparent text-black"
               }`}
               onClick={() => {
+                if (selectedButton === "course") return;
                 setSelectedButton("course");
-                setCheckpoints([]);
               }}
             >
               {t("course")}

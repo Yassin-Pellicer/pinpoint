@@ -11,6 +11,7 @@ const PlaceCP = () => {
   const map = useMap();
 
   const t = useTranslations("SimplePopup");
+  const tagsTrans = useTranslations("Tags");
 
   const {
     event,
@@ -136,19 +137,17 @@ const PlaceCP = () => {
 
   return (
     <>
-    {event.marker != null && (
-      <Marker
-        position={event.marker.position}
-        icon={createCustomIcon(event.name)}
-        draggable={true}
-        eventHandlers={{
-          dragend: (e) => handleMarkerDragEnd(e),
-        }}
-      >
-        <Popup offset={[0, -100]} className="custom-popup" maxWidth={500}>
-            <div
-              className="px-6 w-[450px] rounded-l-xl m-2 bg-[#ffffff] pt-6 h-auto"
-            >
+      {event.marker != null && (
+        <Marker
+          position={event.marker.position}
+          icon={createCustomIcon(event.name)}
+          draggable={true}
+          eventHandlers={{
+            dragend: (e) => handleMarkerDragEnd(e),
+          }}
+        >
+          <Popup offset={[0, -100]} className="custom-popup" maxWidth={500}>
+            <div className="px-6 w-[450px] rounded-l-xl m-2 bg-[#ffffff] pt-6 h-auto">
               <div className="flex flex-col mb-4">
                 <h1 className="font-caveat tracking-tight font-bold text-4xl text-left mb-4">
                   {t("title")}
@@ -180,12 +179,24 @@ const PlaceCP = () => {
                 }}
                 value={event.description}
               ></Quill>
-              <div className = "pb-6"></div>
+              <div className="flex flex-wrap w-full mt-4 gap-2">
+                {tags.map((tag) => (
+                  <div
+                    key={tag.name}
+                    className={`rounded-md w-fit p-[10px] py-2 text-center
+                 text-white bg-[#3F7DEA] font-bold tracking-tight text-white"
+              }`}
+                  >
+                    {tagsTrans(`${tag.name}`)}
+                  </div>
+                ))}
+              </div>
+              <div className="pb-6"></div>
             </div>
           </Popup>
-      </Marker>
-    )}
-  </>
+        </Marker>
+      )}
+    </>
   );
 };
 

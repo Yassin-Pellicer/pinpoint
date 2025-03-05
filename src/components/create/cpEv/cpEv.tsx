@@ -49,10 +49,16 @@ const CheckpointEvent = () => {
           {t("Details.creation")}
         </h1>
 
-        <input accept="image/*" id="image" type="file" hidden onChange={(e) => fileURL(e, (url) => setBanner(url))}/>
+        <input
+          accept="image/*"
+          id="image"
+          type="file"
+          hidden
+          onChange={(e) => fileURL(e, (url) => setBanner(url))}
+        />
         <label htmlFor="image">
           <div className="flex flex-col justify-center items-center mt-4 mb-4">
-          {banner ? (
+            {banner ? (
               <div className="cursor-pointer relative flex justify-end items-center w-full h-15 mb-2 rounded-2xl overflow-hidden border border-gray-400">
                 <img
                   src={banner}
@@ -158,16 +164,16 @@ const CheckpointEvent = () => {
         )}
 
         <div className="flex flex-wrap w-full mb-4 gap-2">
-        {tags.map((tag) => (
-            <button
+          {tags.map((tag) => (
+            <div
               key={tag.name}
               className={`rounded-md w-fit p-[10px] py-2 text-center
                  text-white bg-[#3F7DEA] font-bold tracking-tight text-white"
               }`}
             >
               {tagsTrans(`${tag.name}`)}
-            </button>
-        ))}
+            </div>
+          ))}
         </div>
 
         <button
@@ -182,7 +188,7 @@ const CheckpointEvent = () => {
         >
           {t("Details.setTags")}
         </button>
-          
+
         <button
           onClick={(e) => {
             setOpenCp(true);
@@ -213,7 +219,7 @@ const CheckpointEvent = () => {
           <h1 className="text-center"></h1>
         </div>
       </form>
-            
+
       <Tags open={openTags} setOpen={setOpenTags} />
       <CpList open={openCp} setOpen={setOpenCp} />
     </div>

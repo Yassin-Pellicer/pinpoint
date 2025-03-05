@@ -133,7 +133,7 @@ const BottomSheet = ({ open, setOpen }) => {
         <div className="bg-white p-6 mx-6 mb-6 rounded-2xl">
           <h3 className="text-2xl font-bold mb-4">{t("title")}</h3>
           <div className="relative mt-4 flex flex-col overflow-y-auto">
-            <DndContext collisionDetection={pointerWithin || rectIntersection} onDragEnd={handleDragEnd}>
+            <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={checkpoints} strategy={verticalListSortingStrategy}>
                 <div className="flex flex-col">
                   {checkpoints.map((checkpoint, index) => (
