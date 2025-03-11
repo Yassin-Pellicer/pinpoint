@@ -45,7 +45,6 @@ const SimpleEvent = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     setAuthor("admin");
     e.preventDefault();
-    console.log(tags);
     try {
       const result = await createEventHook(event);
       await addTagsHook({ eventId: result.id, data: tags });

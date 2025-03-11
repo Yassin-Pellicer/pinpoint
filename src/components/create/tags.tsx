@@ -35,7 +35,6 @@ const BottomSheet = ({ open, setOpen }) => {
         return acc;
       }, {});
       
-      console.log("Updated selectedTags:", updatedSelectedTags);
       setSelectedTags(updatedSelectedTags);
     }
   }, [event, tags, open]);

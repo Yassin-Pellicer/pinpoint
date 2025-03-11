@@ -9,6 +9,8 @@ import { useEvent } from "../../../utils/context/eventContext";
 import fileURL from "../../../utils/funcs/createUrlImage";
 import { createEventHook } from "../../../hooks/create/createEventHook";
 import { addTagsHook } from "../../../hooks/create/addTagsHook";
+import { useCheckpoints } from "../../../utils/context/cpContext";
+import { addCheckpointsHook } from "../../../hooks/create/addCheckpointsHook";
 
 const CheckpointEvent = () => {
   const {
@@ -38,6 +40,8 @@ const CheckpointEvent = () => {
   const [openCp, setOpenCp] = useState(false);
   const [openTags, setOpenTags] = useState(false);
 
+  const { checkpoints, setCheckpoints } = useCheckpoints();
+
   const Quill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
@@ -46,10 +50,11 @@ const CheckpointEvent = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     setAuthor("admin");
     e.preventDefault();
-    console.log(tags);
     try {
+      setMarker(checkpoints[0].marker);
       const result = await createEventHook(event);
-      await addTagsHook({ eventId: result, data: tags });
+      await addTagsHook({ eventId: result.id, data: tags });
+      await addCheckpointsHook({ eventId: result.id, data: checkpoints });
     } 
     catch (error) {
 

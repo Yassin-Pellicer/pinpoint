@@ -14,7 +14,6 @@ export async function GET(request) {
     const user = verify(cookie, "secret"); 
     return NextResponse.json({ auth: true, user: user });
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ auth: false });
   }
 }

@@ -22,7 +22,6 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        console.log("Got location:", latitude, longitude);
         setLocation([latitude, longitude]);
         setOriginalLocation([latitude, longitude]);
         sessionStorage.setItem(

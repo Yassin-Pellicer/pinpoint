@@ -41,7 +41,6 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
 
   const handleImageUpload = (e) => {
     fileURL(e, (url) => {
-      console.log(url)
       setBanner(url, id);
     });
   };

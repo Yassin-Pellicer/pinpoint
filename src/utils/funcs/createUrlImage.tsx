@@ -16,7 +16,6 @@ const fileURL = (
   reader.onload = () => {
     const result = reader.result;
     if (typeof result === 'string') {
-      console.log(result);
       callback(result);
     }
   };

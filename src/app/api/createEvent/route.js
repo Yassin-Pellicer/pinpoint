@@ -12,8 +12,6 @@ export async function POST(request) {
     return NextResponse.json({ result: "error", message: "marker" }, 400);
   }
 
-  console.log(isPublic)
-
   try {
     const insertUserQuery = await sql`
         INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author)
