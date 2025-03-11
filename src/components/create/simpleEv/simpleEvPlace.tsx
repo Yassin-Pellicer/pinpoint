@@ -103,7 +103,7 @@ const PlaceCP = () => {
       const { lat, lng } = e.latlng;
       const newMarker = { position: [lat, lng], draggable: true };
       setMarker(newMarker);
-
+      setLocation([lat, lng]);
       map.flyTo(
         [
           lat + 0.0010,

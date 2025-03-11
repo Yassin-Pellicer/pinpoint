@@ -67,6 +67,8 @@ const PlaceCP = () => {
       );
       setCount(count + 1);
       setCheckpoints([...checkpoints, newCheckpoint]); 
+      const zoom = map.getZoom();
+      setZoom(zoom);
     },
   });
 

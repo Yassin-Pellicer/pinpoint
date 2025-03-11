@@ -7,9 +7,12 @@ import dynamic from "next/dynamic";
 import Quill from "quill";
 import { useEvent } from "../../../utils/context/eventContext";
 import fileURL from "../../../utils/funcs/createUrlImage";
+import { createEventHook } from "../../../hooks/create/createEventHook";
+import { addTagsHook } from "../../../hooks/create/addTagsHook";
 
 const CheckpointEvent = () => {
   const {
+    event,
     name,
     setName,
     description,
@@ -24,6 +27,8 @@ const CheckpointEvent = () => {
     setTags,
     qr,
     setQr,
+    author,
+    setAuthor,
   } = useEvent();
 
   const t = useTranslations("Create");
@@ -38,13 +43,24 @@ const CheckpointEvent = () => {
     []
   );
 
-  useEffect(() => {
-    console.log("status changed banner", banner);
-  }, [banner]);
+  const handleSubmit = async (e: React.FormEvent) => {
+    setAuthor("admin");
+    e.preventDefault();
+    console.log(tags);
+    try {
+      const result = await createEventHook(event);
+      await addTagsHook({ eventId: result, data: tags });
+    } 
+    catch (error) {
+
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="mb-6 rounded-2xl bg-[#ffffff] px-2 pt-6">
-      <form className="flex flex-col px-3 w-full">
+      <form className="flex flex-col px-3 w-full" onSubmit={handleSubmit}>
         <h1 className="text-4xl mb-2 tracking-tight font-caveat font-bold">
           {t("Details.creation")}
         </h1>
@@ -204,6 +220,7 @@ const CheckpointEvent = () => {
 
         <div className="flex justify-center mt-5">
           <button
+            type="submit"
             className={
               "flex justify-center font-caveat font-bold " +
               "align-center w-full items-center text-3xl " +

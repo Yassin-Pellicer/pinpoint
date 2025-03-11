@@ -20,6 +20,8 @@ interface EventContextType {
   setQr: (qr: boolean) => void;
   isPublic: boolean;
   setIsPublic: (isPublic: boolean) => void;
+  author: string;
+  setAuthor: (author: string) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -55,6 +57,10 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, isPublic }));
   };
 
+  const setAuthor = (author: string) => {
+    setEvent((prev) => ({ ...prev, author }));
+  };
+
   return (
     <EventContext.Provider
       value={{
@@ -74,6 +80,8 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         setQr,
         isPublic: event.isPublic,
         setIsPublic,
+        author: event.author,
+        setAuthor
       }}
     >
       {children}

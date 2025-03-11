@@ -6,9 +6,12 @@ import dynamic from "next/dynamic";
 import Quill from "quill";
 import { useEvent } from "../../../utils/context/eventContext";
 import fileURL from "../../../utils/funcs/createUrlImage";
+import { createEventHook } from "../../../hooks/create/createEventHook";
+import { addTagsHook } from "../../../hooks/create/addTagsHook";
 
 const SimpleEvent = () => {
   const {
+    event,
     name,
     setName,
     description,
@@ -23,6 +26,8 @@ const SimpleEvent = () => {
     setTags,
     qr,
     setQr,
+    author,
+    setAuthor,
   } = useEvent();
 
   const [loading, setLoading] = useState(false);
@@ -37,9 +42,24 @@ const SimpleEvent = () => {
     []
   );
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    setAuthor("admin");
+    e.preventDefault();
+    console.log(tags);
+    try {
+      const result = await createEventHook(event);
+      await addTagsHook({ eventId: result.id, data: tags });
+    } 
+    catch (error) {
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="mb-6 rounded-2xl bg-[#ffffff] px-2 pt-6">
-      <form className="flex flex-col px-3 w-full">
+    <div className="mb-6 rounded-2xl bg-[#ffffff] px-2 pt-6">      
+      <form className="flex flex-col px-3 w-full" onSubmit={handleSubmit}>
         <h1 className="text-4xl mb-2 tracking-tight font-caveat font-bold">
           {t("Details.creation")}
         </h1>
@@ -165,6 +185,7 @@ const SimpleEvent = () => {
               "hover:bg-blue-600 focus:outline-none " +
               "focus:ring-opacity-50"
             }
+            type="submit"
           >
             {loading ? t("Details.loading") : t("Details.upload")}
           </button>
