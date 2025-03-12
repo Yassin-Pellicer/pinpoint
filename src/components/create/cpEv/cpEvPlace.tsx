@@ -71,6 +71,8 @@ const PlaceCP = () => {
       setCheckpoints([...checkpoints, newCheckpoint]); 
       const zoom = map.getZoom();
       setZoom(zoom);
+      if (checkpoints.length === 0) setMarker(newCheckpoint.marker);
+      console.log(newCheckpoint.marker);
     },
   });
 
@@ -114,7 +116,6 @@ const PlaceCP = () => {
     const zoom = map.getZoom();
     setZoom(zoom);
     setFocusedCheckpoint(null);
-    setMarker(checkpoints[0].marker);
   }, [focusedCheckpoint, map]);
   
   return (
