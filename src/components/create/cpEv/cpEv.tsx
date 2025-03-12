@@ -1,4 +1,4 @@
-import { Slider, FormControl, FormControlLabel, Switch } from "@mui/material";
+import { Slider, FormControl, FormControlLabel, Switch, Snackbar, Alert, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import CpList from "./cpList";
@@ -11,6 +11,9 @@ import { createEventHook } from "../../../hooks/create/createEventHook";
 import { addTagsHook } from "../../../hooks/create/addTagsHook";
 import { useCheckpoints } from "../../../utils/context/cpContext";
 import { addCheckpointsHook } from "../../../hooks/create/addCheckpointsHook";
+import SnackbarContent from '@mui/material/SnackbarContent';
+import { useRouter } from 'next/navigation';
+import Logo from "../../ui/logo";
 
 const CheckpointEvent = () => {
   const {
@@ -40,6 +43,12 @@ const CheckpointEvent = () => {
   const [openCp, setOpenCp] = useState(false);
   const [openTags, setOpenTags] = useState(false);
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
+
+  const router = useRouter();
+
   const { checkpoints, setCheckpoints } = useCheckpoints();
 
   const Quill = useMemo(
@@ -48,22 +57,68 @@ const CheckpointEvent = () => {
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
-    setAuthor("admin");
+    setLoading(true);
     e.preventDefault();
     try {
       const result = await createEventHook(event);
-      await addTagsHook({ eventId: result.id, data: tags });
-      await addCheckpointsHook({ eventId: result, data: checkpoints });
-    } 
-    catch (error) {
+      if (result.status === 400) {
+        if (result.message === "name") {
+          setSnackbarMessage(t("nameNotif"));
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
+        } else if (result.message === "marker") {
+          setSnackbarMessage(t("locationNotif"));
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
+        }
+      } else {
+        await addTagsHook({ eventId: result.id, data: tags });
+        await addCheckpointsHook({ eventId: result, data: checkpoints });
 
-    } finally {
-      setLoading(false);
+        setSnackbarMessage(t("successNotif"));
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+        
+        router.push("/pages/main");
+      }
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage("errorNotif");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+    setLoading(false);
   };
 
   return (
     <div className="mb-6 rounded-2xl bg-[#ffffff] px-2 pt-6">
+      {loading && (
+        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+          <div className="animate-spin rounded-full h-[400px] w-[400px] border-b-8 border-white m-auto" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="mb-5">
+              <Logo />
+            </div>
+          </div>
+        </div>
+      )}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity={
+            snackbarSeverity as "error" | "success" | "info" | "warning"
+          }
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+
       <form className="flex flex-col px-3 w-full" onSubmit={handleSubmit}>
         <h1 className="text-4xl mb-2 tracking-tight font-caveat font-bold">
           {t("Details.creation")}
@@ -233,7 +288,7 @@ const CheckpointEvent = () => {
               "focus:ring-opacity-50"
             }
           >
-            {loading ? t("Details.loading") : t("Details.upload")}
+            {loading ? t("loading") : t("upload")}
           </button>
         </div>
         <div className="flex justify-center mt-5">

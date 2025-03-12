@@ -14,10 +14,11 @@ import { useCheckpoints } from "../../../utils/context/cpContext";
 import { useEvent } from "../../../utils/context/eventContext";
 import Logo from "../../../components/ui/logo";
 import { useMapContext } from "../../../utils/context/mapContext";
+import { Event } from "../../../utils/classes/EventClass";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { event, setEvent, name, setName, description, setDescription, marker, setMarker} = useEvent();
+  const { event, setEvent, name, setName, description, setDescription, marker, setMarker, banner, setBanner, tags, setTags, qr, setQr, isPublic, setIsPublic, author, setAuthor} = useEvent();
   const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
 
   const [selectedButton, setSelectedButton] = useState("simple");
@@ -27,6 +28,11 @@ export default function Create() {
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
   );
+
+  useEffect(() => {
+    setCheckpoints([]);
+    setEvent(new Event());
+  }, []);
 
   if (!location) {
     return (
@@ -60,6 +66,8 @@ export default function Create() {
               onClick={() => {
                 if (selectedButton === "simple") return;
                 setSelectedButton("simple");
+                setMarker(null);
+                setCheckpoints([]);
               }}
             >
               {t("simple")}

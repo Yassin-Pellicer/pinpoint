@@ -81,6 +81,7 @@
     "create": "Crear",
     "cancel": "Cancelar",
     "loading": "Cargando...",
+    "upload": "Subir Evento",
     "Details": {
       "creation": "Crea tu Evento",
       "internet": "Los eventos con puntos de control requieren acceso a la red y datos móviles para ser fácilmente accesibles, y proporcionar la mejor experiencia para los buscadores. Las actividades de este tipo <b>sólo pueden ser progresadas por usuarios conectados a internet, o por usuarios que pre-carguen su búsqueda.</b>",
@@ -89,7 +90,6 @@
       "description": "Descripción del evento:",
       "difficulty": "Dificultad: ",
       "checkpoints": "Editar y Reordenar Checkpoints",
-      "upload": "Subir Evento",
       "qr": {
         "title": "Evento con QRs",
         "description": "Estos eventos <b> crean un código QR para cada checkpoint que los jugadores pueden escanear para obtener pistas para el siguiente checkpoint. Esto oculta todos los puntos de control excepto el primero</b>."
@@ -109,7 +109,10 @@
       "tags": "Tags:",
       "setTags": "Añadir Tags"
     },
-    "blank": "Se han de rellenar todos los campos."
+    "nameNotif": "Se debe asignar un nombre al evento",
+    "locationNotif": "Se debe asignar una ubicación al evento",
+    "errorNotif": "Se ha producido un error inesperado. Por favor inténtelo de nuevo.",
+    "successNotif": "El evento se ha creado satisfactoriamente."
   },
   "CpList": {
     "title": "Ver Checkpoints",

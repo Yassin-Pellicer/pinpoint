@@ -5,11 +5,11 @@ export async function POST(request) {
   const { name, description, marker, banner, qr, isPublic, author } = await request.json()
 
   if (!name) {
-    return NextResponse.json({ result: "error", message: "name" }, 400);
+    return NextResponse.json({ result: "error", message: "name", status: 400 });
   }
 
   if (!marker) {
-    return NextResponse.json({ result: "error", message: "marker" }, 400);
+    return NextResponse.json({ result: "error", message: "marker", status: 400 });
   }
 
   try {
