@@ -11,12 +11,14 @@ import CheckpointInfo from "./cpInfo";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import fileURL from "../../../utils/funcs/createUrlImage";
+import { useEvent }  from "../../../utils/context/eventContext";
 
 const PlaceCP = () => {
   const map = useMap();
   const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint } = useCheckpoints();
   const [count, setCount] = useState(0);
   const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
+  const { event, setEvent, setMarker} = useEvent();
 
   const t = useTranslations("CpInfo");
 
@@ -112,6 +114,7 @@ const PlaceCP = () => {
     const zoom = map.getZoom();
     setZoom(zoom);
     setFocusedCheckpoint(null);
+    setMarker(checkpoints[0].marker);
   }, [focusedCheckpoint, map]);
   
   return (

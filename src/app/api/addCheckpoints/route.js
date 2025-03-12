@@ -8,7 +8,7 @@ export async function POST(request) {
     for (const checkpoint of data) {
       const insertUserQuery = await sql`
       INSERT INTO checkpoint (name, event, position_lat, position_lng, description, banner, "order")
-      VALUES (${checkpoint.name}, ${eventId}, ${checkpoint.marker.position[0]}, ${checkpoint.marker.position[1]}, ${checkpoint.description}, ${checkpoint.banner}, ${checkpoint.order})
+      VALUES (${checkpoint.name}, ${eventId.id}, ${checkpoint.marker.position[0]}, ${checkpoint.marker.position[1]}, ${checkpoint.description}, ${checkpoint.banner}, ${checkpoint.order})
     `;
     }
     return NextResponse.json({ result: "ok" })

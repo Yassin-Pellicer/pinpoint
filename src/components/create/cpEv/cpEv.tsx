@@ -51,10 +51,9 @@ const CheckpointEvent = () => {
     setAuthor("admin");
     e.preventDefault();
     try {
-      setMarker(checkpoints[0].marker);
       const result = await createEventHook(event);
       await addTagsHook({ eventId: result.id, data: tags });
-      await addCheckpointsHook({ eventId: result.id, data: checkpoints });
+      await addCheckpointsHook({ eventId: result, data: checkpoints });
     } 
     catch (error) {
 
