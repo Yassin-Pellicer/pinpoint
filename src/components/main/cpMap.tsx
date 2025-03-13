@@ -9,13 +9,12 @@ import "react-quill/dist/quill.snow.css";
 import "leaflet-geosearch/dist/geosearch.css";
 import "leaflet/dist/leaflet.css";
 
-import { SearchControl } from "../../../utils/funcs/searchControl";
-import CreateEvents from "./cpEvPlace";
+import { SearchControl } from "../../utils/funcs/searchControl";
 import { useEffect, useState } from "react";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useMapContext } from "../../../utils/context/mapContext";
+import { useMapContext } from "../../utils/context/mapContext";
 
 export default function MapComponent() {
 
@@ -56,9 +55,7 @@ export default function MapComponent() {
       </LayersControl>
 
       <SearchControl />
-
-      <CreateEvents />
-
+      
     </MapContainer>
   );
 }

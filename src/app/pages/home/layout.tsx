@@ -1,7 +1,9 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Menu from "../../../components/home/menu";
 import { useState } from "react";
+import { useSessionContext } from "../../../utils/context/sessionContext";
+import { useRouter } from 'next/navigation';
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,6 +11,31 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [open, setOpen] = useState(false);
+  const {username, setUsername} = useSessionContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchSessionFromCookies = async () => {
+      const response = await fetch('/api/session', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'cookie': document.cookie
+        }
+      });
+      const data = await response.json();
+
+      if (data.auth) {
+        setUsername(data.user.username.username);
+      }
+      else {
+        router.push("/pages/auth/login")
+      }
+    };
+
+    fetchSessionFromCookies();
+
+  }, [])
 
   return (
     <main className="flex flex-row">

@@ -4,6 +4,7 @@ import './globals.css';
 import { CheckpointsProvider } from '../utils/context/cpContext';
 import { EventProvider } from '../utils/context/eventContext';
 import { MapProvider } from '../utils/context/mapContext';
+import { SessionProvider } from '../utils/context/sessionContext';
 
 export default async function RootLayout({
   children
@@ -18,7 +19,9 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <EventProvider>
             <CheckpointsProvider>
-              <MapProvider>{children}</MapProvider>
+              <SessionProvider>
+                <MapProvider>{children}</MapProvider>
+              </SessionProvider>
             </CheckpointsProvider>
           </EventProvider>
         </NextIntlClientProvider>

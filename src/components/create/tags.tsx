@@ -6,7 +6,7 @@ import { Tag } from "../../utils/classes/Tag";
 import { useEffect, useState } from "react";
 import { useEvent } from "../../utils/context/eventContext";
 
-const BottomSheet = ({ open, setOpen }) => {
+const BottomSheet = ({ open, setOpen, parentTags, setParentTags }) => {
   const t = useTranslations("Tags");
   const [selectedTags, setSelectedTags] = useState({});
 
@@ -29,13 +29,16 @@ const BottomSheet = ({ open, setOpen }) => {
   } = useEvent();
 
   useEffect(() => {
-    if (tags) {
+    if (tags && !setParentTags) {
       const updatedSelectedTags = Tag.tags.reduce((acc, tag) => {
         acc[tag.name] = tags.some((t) => t.name === tag.name);
         return acc;
       }, {});
       
       setSelectedTags(updatedSelectedTags);
+    }
+    else {
+      setParentTags(Tag.tags.filter((tag) => selectedTags[tag.name] === true));
     }
   }, [event, tags, open]);
   
