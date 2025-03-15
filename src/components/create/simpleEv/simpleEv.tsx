@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Quill from "quill";
 import { useEvent } from "../../../utils/context/eventContext";
 import fileURL from "../../../utils/funcs/createUrlImage";
-import { createEventHook } from "../../../hooks/create/createEventHook";
+import { createEventHook } from "../../../hooks/create/addEventHook";
 import { addTagsHook } from "../../../hooks/create/addTagsHook";
 import SnackbarContent from '@mui/material/SnackbarContent';
 import { addCheckpointsHook } from "../../../hooks/create/addCheckpointsHook";

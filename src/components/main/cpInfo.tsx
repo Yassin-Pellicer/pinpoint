@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect, use } from "react";
 import dynamic from "next/dynamic";
-import { useCheckpoints } from "../../../utils/context/cpContext";
+import { useCheckpoints } from "../../utils/context/cpContext";
 import { useTranslations } from "next-intl";
-import fileURL from "../../../utils/funcs/createUrlImage";
+import fileURL from "../../utils/funcs/createUrlImage";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -32,46 +32,11 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
     setDescription(checkpoints[index]?.description || "");
   }, [checkpoints, index]); 
     
-  const handleBlur = (e) => {
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      setIsFocused(false);
-      modifyInfo(e);
-    }
-  };
-
-  const handleImageUpload = (e) => {
-    fileURL(e, (url) => {
-      setBanner(url, id);
-    });
-  };
-
-  const modifyInfo = (e) => {
-    e.preventDefault();
-    setCheckpoints((prevCheckpoints) =>
-      prevCheckpoints.map((checkpoint, i) =>
-        i === index ? { ...checkpoint, name, description, banner: checkpoints[index].banner } : checkpoint
-      )
-    );
-  };
-
-  const removeCheckpoints = (index) => {
-    event.preventDefault();
-    let newCheckpoints = [...checkpoints];
-    newCheckpoints.splice(index, 1);
-    newCheckpoints.forEach((element, i) => {
-      if (element.order >= index + 1) {
-        element.order = i + 1;
-      }
-    });
-    setCheckpoints(newCheckpoints);
-    closeMap();
-  };
 
   const cpInfo = (
     <form className="flex flex-col px-3 w-full"
     tabIndex={-1}
     onFocus={handleFocus}
-    onBlur={handleBlur}
     >
       <label className="font-bold">
         {t("name")}
@@ -96,7 +61,6 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
       <button
         onClick={(e) => {
           e.preventDefault();
-          removeCheckpoints(index);
         }}
         className="font-bold bg-transparent border-2 text-sm border-black text-black rounded-xl p-2 hover:bg-red-600 hover:border-red-600 hover:text-white transition duration-150 mb-4"
       >
@@ -158,7 +122,6 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
                 id={imageInputId}
                 type="file"
                 hidden
-                onChange={handleImageUpload}
               />
               <label htmlFor={imageInputId} className="w-full mt-2 mb-4">
                 {checkpoints[index].banner ? (

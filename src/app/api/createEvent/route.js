@@ -15,7 +15,7 @@ export async function POST(request) {
   try {
     const insertUserQuery = await sql`
         INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author)
-        VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[0]}, ${banner}, ${qr}, ${isPublic}, ${author})
+        VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author})
         RETURNING id
       `;
     const insertedId = insertUserQuery.rows[0].id;

@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import MapMain from "../../../components/main/cpMap";
+import MapMain from "../../../components/main/mainMap";
 
 import { useCheckpoints } from "../../../utils/context/cpContext";
 import { useEvent } from "../../../utils/context/eventContext";
@@ -14,10 +14,12 @@ import { useMapContext } from "../../../utils/context/mapContext";
 import { Event } from "../../../utils/classes/EventClass";
 import Tags from "../../../components/create/tags";
 import { Tag } from "../../../utils/classes/Tag";
+import { getEventsHook } from "../../../hooks/main/getEventsHook";
+import { getTagsHook } from "../../../hooks/main/getTagsHook";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { event, setEvent, setMarker, setAuthor} = useEvent();
+  const { event, setEvent, setEvents, setMarker, setAuthor} = useEvent();
   const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
 
@@ -33,7 +35,26 @@ export default function Create() {
   useEffect(() => {
     setCheckpoints([]);
     setEvent(new Event());
+  
+    getEventsHook().then(async (events) => {
+    
+      const updatedEvents = await Promise.all(
+        events.events.map(async (event) => {
+          const response = await getTagsHook(event.id);
+          const newTags = response.tags.map(tag => {
+            const foundTag = Tag.tags.find(aux => aux?.id === tag.tag_id);
+            return foundTag || tag; 
+          });
+          return { ...event, tags: newTags };
+        })
+      );
+      console.log(updatedEvents)
+      setEvents(updatedEvents);
+    });
+    
+  
   }, []);
+  
 
   if (!location) {
     return (
@@ -95,7 +116,7 @@ export default function Create() {
           {tags.length > 0 && <div className="flex flex-wrap w-full mt-4 gap-2">
             {tags.map((tag) => (
               <div
-                key={tag.name}
+                key={tag.id}
                 className={`rounded-md w-fit p-[10px] py-2 text-center
                  text-white bg-[#3F7DEA] font-bold tracking-tight text-white"
               }`}

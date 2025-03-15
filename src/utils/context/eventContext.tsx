@@ -4,6 +4,10 @@ import { Event } from "../classes/EventClass";
 import { Tag } from "../classes/Tag";
 
 interface EventContextType {
+  events: Event[];
+  setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+  selectedEvent: Event | null;
+  setSelectedEvent: React.Dispatch<React.SetStateAction<Event | null>>;
   event: Event;
   setEvent: React.Dispatch<React.SetStateAction<Event>>;
   name: string;
@@ -28,6 +32,8 @@ const EventContext = createContext<EventContextType | undefined>(undefined);
 
 export const EventProvider = ({ children }: { children: React.ReactNode }) => {
   const [event, setEvent] = useState<Event>(new Event());
+  const [events, setEvents] = useState<Event[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const setName = (name: string) => {
     setEvent((prev) => ({ ...prev, name }));
@@ -64,6 +70,10 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <EventContext.Provider
       value={{
+        events,
+        setEvents,
+        selectedEvent,
+        setSelectedEvent,
         event,
         setEvent,
         name: event.name,

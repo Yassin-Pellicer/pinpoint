@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useMapContext } from "../../utils/context/mapContext";
+import EventsMap from "./simpleEvView";
+import CheckpointMap from "./cpEvView";
 
 export default function MapComponent() {
 
@@ -55,6 +57,9 @@ export default function MapComponent() {
       </LayersControl>
 
       <SearchControl />
+      
+      <EventsMap />
+      <CheckpointMap />
       
     </MapContainer>
   );

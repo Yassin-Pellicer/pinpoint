@@ -1,6 +1,6 @@
 "use client";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { useCheckpoints } from "../../../utils/context/cpContext";
+import { useCheckpoints } from "../../utils/context/cpContext";
 import { closestCenter, closestCorners, DndContext, pointerWithin, rectIntersection } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -8,7 +8,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useSortable } from "@dnd-kit/sortable";
-import { Checkpoint } from "../../../utils/classes/cpClass";
+import { Checkpoint } from "../../utils/classes/cpClass";
 import { useTranslations } from "next-intl";
 import CheckpointInfo from "./cpInfo";
 import { useEffect, useState } from "react";
