@@ -7,7 +7,6 @@ import { Checkpoint } from "../../utils/classes/cpClass";
 import { useCheckpoints } from "../../utils/context/cpContext"; 
 import { useMapContext } from "../../utils/context/mapContext"; 
 import { useTranslations } from "next-intl";
-import CheckpointInfo from "./cpInfo";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import fileURL from "../../utils/funcs/createUrlImage";
@@ -49,11 +48,6 @@ const PlaceCP = () => {
       iconAnchor: [20, 50],
     }
   );
-  
-  const Quill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
-    []
-  );
 
   useEffect(() => {
     getCheckpointsHook(selectedEvent?.id).then((res) => {
@@ -76,25 +70,47 @@ const PlaceCP = () => {
   return (
     <>
     {selectedEvent && Array.isArray(checkpoints) && checkpoints.map((cp, index) => (
-        <Marker
-          key={index}
-          position={cp.marker.position}
-          icon={createCustomIcon(cp.order)}
-        >
-          <Popup offset={[10, -40]} className="custom-popup" maxWidth={600}>
-            <div
-              className="px-6 w-[500px] rounded-l-xl m-2 p-2 pt-4 pb-6 bg-[#ffffff] h-auto"
-            >
-             <CheckpointInfo
-                key={index}
-                id={cp.id}
-                index={index}
-                closeMap={() => map.closePopup()}
-                mode={"edit"}
-              />
-              </div>
-          </Popup>
-        </Marker>
+         <Marker
+         position={cp.marker.position}
+         icon={createCustomIcon(cp.order)}
+         eventHandlers={{
+           mouseover: (e) => e.target.openPopup(),
+           mouseout: (e) => e.target.closePopup(),
+         }}
+       >
+         <Popup offset={[10, -30]} className="custom-popup" maxWidth={300}>
+           <div className="flex flex-col">
+             {cp.banner ? (
+               <img
+                 src={cp.banner}
+                 className="w-full h-15 rounded-t-xl object-cover "
+                 alt="banner"
+               />
+             ) : (
+               <div className="w-full h-15 p-20 flex justify-center items-center rounded-xl bg-[#e6e6e6] border border-gray-400">
+                 <i className="text-gray-400 material-icons text-8xl">
+                   image
+                 </i>
+               </div>
+             )}
+             <div className="flex flex-col px-2 pb-2 pt-2">
+               <h1 className="tracking-tighter text-lg leading-none text-white font-bold">
+                 {cp.name}
+               </h1>
+               <div className="flex justify-between items-center">
+                 <p className="text-white text-sm tracking-tighter font-bold">
+                   Click for more details
+                 </p>
+                 <div className="flex space-x-2 ml-10 mt-2 text-white">
+                   {/* <i className="material-icons">lock</i> */}
+                   <i className="material-icons">qr_code</i>
+                   <i className="material-icons">tour</i>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </Popup>
+       </Marker>
       ))}
     </>
   );

@@ -19,7 +19,7 @@ import { getTagsHook } from "../../../hooks/main/getTagsHook";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { event, setEvent, setEvents, setMarker, setAuthor} = useEvent();
+  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent} = useEvent();
   const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
 
@@ -71,6 +71,16 @@ export default function Create() {
 
   return (
     <Layout>
+    {(selectedEvent && !checkpoints) && (
+        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+          <div className="animate-spin rounded-full h-[400px] w-[400px] border-b-8 border-white m-auto" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-1000">
+            <div className="mb-5">
+              <Logo />
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col overflow-auto bg-blue-500 h-screen px-6 min-w-[560px] max-w-[560px]">
         {/* Event type */}
         <div className="mb-6 mt-6 rounded-2xl bg-white p-6">

@@ -148,12 +148,6 @@ const SimpleEvent = () => {
           </div>
         </label>
 
-        <p className="text-sm mt-1 mb-4">
-          {t.rich("Details.internetSimple", {
-            b: (chunks) => <b>{chunks}</b>,
-          })}
-        </p>
-
         <label className="font-bold">{t("Details.title")}</label>
         <input
           type="text"
@@ -191,31 +185,55 @@ const SimpleEvent = () => {
         </div>
 
         {isPublic ? (
-          <p className="text-sm mt-1 mb-4">
+          <p className="text-sm mt-1 mb-2">
             {t.rich("Details.public.description", {
               b: (chunks) => <b>{chunks}</b>,
             })}
           </p>
         ) : (
-          <p className="text-sm mt-1 mb-4">
+          <p className="text-sm mt-1 mb-2">
             {t.rich("Details.private.description", {
               b: (chunks) => <b>{chunks}</b>,
             })}
           </p>
         )}
 
-        <div className="flex flex-wrap w-full mb-4 gap-2">
-          {tags.map((tag) => (
-            <div
-              key={tag.name}
-              className={`rounded-md w-fit p-[10px] py-2 text-center
+        <div className="flex flex-row mt-2 mb-4 text-black">
+          {/* <i className="material-icons">lock</i> */}
+          {isPublic && <i className="material-icons">public</i>}
+          {!isPublic && <i className="material-icons">lock</i>}
+        </div>
+
+        
+
+        <div className="flex flex-row items-center mb-2">
+          <i className="material-icons mr-2">language</i>
+          <label className="font-bold"> Enable Web Result</label>
+        </div>
+        <p className="text-sm text-gray-700 mb-2 tracking-tight">
+          Rellene el campo para mostrar estos resultados de búsqueda en la
+          selección del punto de control.
+        </p>
+        <input
+          type="text"
+          placeholder="Vídeos de gatitos..."
+          className="border border-black rounded p-1 mt-2 mb-4"
+        />
+
+{tags.length > 0 && (
+          <div className="flex flex-wrap w-full mb-4 gap-2">
+            {tags.map((tag) => (
+              <div
+                key={tag.name}
+                className={`rounded-md w-fit p-[10px] py-2 text-center
                  text-white bg-[#3F7DEA] font-bold tracking-tight text-white"
               }`}
-            >
-              {tagsTrans(`${tag.name}`)}
-            </div>
-          ))}
-        </div>
+              >
+                {tagsTrans(`${tag.name}`)}
+              </div>
+            ))}
+          </div>
+        )}
 
         <button
           onClick={(e) => {

@@ -130,9 +130,9 @@ const PlaceCP = () => {
             dragend: (e) => handleMarkerDragEnd(index, e),
           }}
         >
-          <Popup offset={[10, -40]} className="custom-popup" maxWidth={600}>
+          <Popup offset={[10, -40]} className="custom-popup" maxWidth={550}>
             <div
-              className="px-6 w-[500px] rounded-l-xl m-2 p-2 pt-4 pb-6 bg-[#ffffff] h-auto"
+              className="px-6 w-[500px] rounded-l-xl m-2 p-2 pt-4 pb-6 bg-[#ffffff] h-fit"
             >
              <CheckpointInfo
                 key={index}

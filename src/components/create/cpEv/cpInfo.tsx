@@ -82,7 +82,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
         onChange={(e) => setName(e.target.value)}
         className="border border-black rounded p-1 mb-3"
       />
-      <div className="flex flex-col mb-16">
+      <div className="flex flex-col mb-14">
         <label className="text-md mb-1 font-bold"> 
           {t("description")}
         </label>
@@ -93,6 +93,16 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
           onChange={(value) => setDescription(value)}
         />
       </div>
+      <div className="flex flex-row items-center mb-2">
+        <i className="material-icons mr-2">language</i> 
+        <label className="font-bold"> Enable Web Result</label>
+      </div>
+      <p className="text-sm text-gray-700 mb-2 tracking-tighter">Rellene el campo para mostrar estos resultados de búsqueda en la selección del punto de control.</p>
+      <input
+        type="text"
+        placeholder="Vídeos de gatitos..."
+        className="border border-black rounded p-1 mt-2 mb-3"
+      />
       <button
         onClick={(e) => {
           e.preventDefault();
@@ -129,23 +139,12 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
           </p>
         </div>
         <button className="ml-auto">
-          {mode == "edit" && (
-            <p
-              onClick={() => setFocusedCheckpoint(checkpoints[index])}
-              className="material-icons text-2xl"
-            >
-              edit
-            </p>
-          )}
-
-          {mode == "list" && (
-            <p
-              onClick={() => setFocusedCheckpoint(checkpoints[index])}
-              className="material-icons text-2xl"
-            >
-              edit
-            </p>
-          )}
+          <p
+            onClick={() => setFocusedCheckpoint(checkpoints[index])}
+            className="material-icons text-2xl"
+          >
+            edit
+          </p>
         </button>
       </div>
 
@@ -176,9 +175,11 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
                     </p>
                   </div>
                 ) : (
-                  <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 
-                    mb-2 rounded-2xl p-14 bg-[#e6e6e6] border border-gray-400 hover:bg-[#d6d6d6] transition duration-200">
-                    <i className="text-gray-400 material-icons mr-1 text-[150px] select-none">
+                  <div
+                    className="flex flex-col cursor-pointer justify-center items-center w-full h-fit
+                    mb-2 rounded-2xl px-14 py-12 bg-[#e6e6e6] border border-gray-400 hover:bg-[#d6d6d6] transition duration-200"
+                  >
+                    <i className="text-gray-400 material-icons mr-1 text-[120px] select-none">
                       add_photo_alternate
                     </i>
                     <p className="font-caveat text-gray-500 text-xl tracking-tighter select-none">

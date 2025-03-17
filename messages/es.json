@@ -131,7 +131,9 @@
     "remove": "Eliminar Checkpoint"
   },
   "SimplePopup": {
-    "title": "Detalles del Evento"
+    "title": "Detalles del Evento",
+    "select": "Seleccionar Evento",
+    "deselect": "Deseleccionar Evento"
   },
   "Tags": {
     "title": "Añadir Tags",
@@ -177,5 +179,4 @@
     "tagsDescription": "Añade tags para cribar tu búsqueda. <b> Los tags se aplican al buscador. </b>",
     "setTags": "Filtrar por tags"
   }
-  
 }
