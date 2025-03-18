@@ -50,6 +50,28 @@ const PlaceCP = () => {
   );
 
   useEffect(() => {
+    if (focusedCheckpoint && map) {
+      map.flyTo(
+        [
+          focusedCheckpoint.marker.position[0] + 0.0007,
+          focusedCheckpoint.marker.position[1],
+        ],
+        18,
+        { animate: true, duration: 0.5 }
+      );
+      map.eachLayer((layer) => {
+        if (layer instanceof L.Marker && layer.getLatLng().equals(focusedCheckpoint.marker.position)) {
+          layer.openPopup();
+        }
+      });
+    }
+    const zoom = map.getZoom();
+    setZoom(zoom);
+    setFocusedCheckpoint(null);
+  }, [focusedCheckpoint, map]);
+
+
+  useEffect(() => {
     getCheckpointsHook(selectedEvent?.id).then((res) => {
       console.log(res)
       setCheckpoints(res.checkpoints);

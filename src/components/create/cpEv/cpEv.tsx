@@ -120,9 +120,18 @@ const CheckpointEvent = () => {
       </Snackbar>
 
       <form className="flex flex-col px-3 w-full" onSubmit={handleSubmit}>
-        <h1 className="text-4xl mb-2 tracking-tight font-caveat font-bold">
-          {t("Details.creation")}
-        </h1>
+        <div className="flex flex-row items-center justify-between text-black">
+          <h1 className="text-4xl tracking-tight font-caveat font-bold">
+            {t("Details.creation")}
+          </h1>
+          {/* <i className="material-icons">lock</i> */}
+          <div className="flex gap-2">
+            {isPublic && <i className="material-icons">public</i>}
+            {!isPublic && <i className="material-icons">lock</i>}
+            {qr && <i className="material-icons">qr_code</i>}
+            {!qr && <i className="material-icons">tour</i>}
+          </div>
+        </div>
 
         <input
           accept="image/*"
@@ -232,31 +241,7 @@ const CheckpointEvent = () => {
           </p>
         )}
 
-        <div className="flex flex-row mt-2 mb-4 gap-2 text-black">
-          {/* <i className="material-icons">lock</i> */}
-          {qr && <i className="material-icons">qr_code</i>}
-          {!qr && <i className="material-icons">tour</i>}
-          {isPublic && <i className="material-icons">public</i>}
-          {!isPublic && <i className="material-icons">lock</i>}
-        </div>
-
-       
-
-        <div className="flex flex-row items-center mb-2">
-          <i className="material-icons mr-2">language</i>
-          <label className="font-bold"> Enable Web Result</label>
-        </div>
-        <p className="text-sm font- text-gray-700 mb-2 tracking-tight">
-          Rellene el campo para mostrar estos resultados de búsqueda en la
-          selección del punto de control.
-        </p>
-        <input
-          type="text"
-          placeholder="Vídeos de gatitos..."
-          className="border border-black rounded p-1 mt-2 mb-4"
-        />
-
-{tags.length > 0 && (
+        {tags.length > 0 && (
           <div className="flex flex-wrap w-full mb-4 gap-2">
             {tags.map((tag) => (
               <div

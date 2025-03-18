@@ -93,16 +93,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
           onChange={(value) => setDescription(value)}
         />
       </div>
-      <div className="flex flex-row items-center mb-2">
-        <i className="material-icons mr-2">language</i> 
-        <label className="font-bold"> Enable Web Result</label>
-      </div>
-      <p className="text-sm text-gray-700 mb-2 tracking-tighter">Rellene el campo para mostrar estos resultados de búsqueda en la selección del punto de control.</p>
-      <input
-        type="text"
-        placeholder="Vídeos de gatitos..."
-        className="border border-black rounded p-1 mt-2 mb-3"
-      />
+      
       <button
         onClick={(e) => {
           e.preventDefault();
