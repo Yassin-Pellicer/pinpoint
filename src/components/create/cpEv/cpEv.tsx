@@ -179,7 +179,7 @@ const CheckpointEvent = () => {
           style={{ height: "200px", marginBottom: "40px" }}
         />
 
-        <div className="flex justify-between mt-4 flex-row">
+        <div className="flex justify-between mt-8 flex-row">
           <FormControl>
             <FormControlLabel
               control={
@@ -227,19 +227,48 @@ const CheckpointEvent = () => {
           </p>
         )}
 
-        {isPublic ? (
+        {!isPublic ? (
+          <>
+            <label className="text-sm font-bold mb-1">
+              Introduce tu código de invitación:
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              className="border border-black rounded p-1 mb-1"
+            />
+            <p className="text-sm mt-1 mb-2">
+              {t.rich("Details.private.description", {
+                b: (chunks) => <b>{chunks}</b>,
+              })}
+            </p>
+          </>
+        ) : (
           <p className="text-sm mt-1 mb-2">
             {t.rich("Details.public.description", {
               b: (chunks) => <b>{chunks}</b>,
             })}
           </p>
-        ) : (
-          <p className="text-sm mt-1 mb-2">
-            {t.rich("Details.private.description", {
-              b: (chunks) => <b>{chunks}</b>,
-            })}
-          </p>
         )}
+
+        <div className="flex justify-between">
+          <FormControl>
+            <FormControlLabel
+              control={<Switch name="isPublic" color="primary" />}
+              label={"Permitir Comentarios"}
+            />
+          </FormControl>
+
+          <FormControl>
+            <FormControlLabel
+              control={<Switch name="isPublic" color="primary" />}
+              label={"Permitir Valoraciones"}
+            />
+          </FormControl>
+        </div>
 
         {tags.length > 0 && (
           <div className="flex flex-wrap w-full mb-4 gap-2">
@@ -264,7 +293,7 @@ const CheckpointEvent = () => {
           className="font-bold bg-transparent border-2 text-sm border-black 
             text-black rounded-xl p-2 hover:bg-blue-500
             hover:border-blue-500 hover:text-white 
-            transition duration-300 mb-4"
+            transition duration-300 mb-4 mt-4"
         >
           {t("Details.setTags")}
         </button>

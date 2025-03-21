@@ -81,6 +81,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         className="border border-black rounded p-1 mb-3"
+        placeholder="Checkpoint"
       />
       <div className="flex flex-col mb-14">
         <label className="text-md mb-1 font-bold"> 
@@ -99,7 +100,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
           e.preventDefault();
           removeCheckpoints(index);
         }}
-        className="font-bold bg-transparent border-2 text-sm border-black text-black rounded-xl p-2 hover:bg-red-600 hover:border-red-600 hover:text-white transition duration-150 mb-4"
+        className="font-bold mt-4 bg-transparent border-2 text-sm border-black text-black rounded-xl p-2 hover:bg-red-600 hover:border-red-600 hover:text-white transition duration-150 mb-4"
       >
          {t("remove")}
       </button>

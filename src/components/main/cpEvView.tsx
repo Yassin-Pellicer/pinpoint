@@ -101,7 +101,7 @@ const PlaceCP = () => {
          }}
        >
          <Popup offset={[10, -30]} className="custom-popup" maxWidth={300}>
-           <div className="flex flex-col">
+           <div className="flex flex-col w-[275px]">
              {cp.banner ? (
                <img
                  src={cp.banner}
@@ -120,10 +120,7 @@ const PlaceCP = () => {
                  {cp.name}
                </h1>
                <div className="flex justify-between items-center">
-                 <p className="text-white text-sm tracking-tighter font-bold">
-                   Click for more details
-                 </p>
-                 <div className="flex space-x-2 ml-10 mt-2 text-white">
+                 <div className="flex space-x-2 mt-2 text-white">
                    {/* <i className="material-icons">lock</i> */}
                    <i className="material-icons">qr_code</i>
                    <i className="material-icons">tour</i>

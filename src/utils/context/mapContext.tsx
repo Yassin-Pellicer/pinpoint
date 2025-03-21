@@ -14,7 +14,7 @@ interface MapContextType {
 const MapContext = createContext<MapContextType | undefined>(undefined);
 
 export const MapProvider = ({ children }: { children: React.ReactNode }) => {
-  const [originalLocation, setOriginalLocation] = useState<[number, number]>([48.8566, 2.3522]);
+  const [originalLocation, setOriginalLocation] = useState<[number, number]>([39.4699, -0.3763]);
   const [location, setLocation] = useState<[number, number]>(null);
   const [zoom, setZoom] = useState<number>(14);
 
@@ -32,9 +32,9 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       },
       (error) => {
         console.error("Error getting location. Make sure to allow location access:", error.message);
-        setLocation([48.8566, 2.3522]); 
-        setOriginalLocation([48.8566, 2.3522]); 
-        sessionStorage.setItem("map-center", JSON.stringify([48.8566, 2.3522]));
+        setLocation([39.4699, -0.3763]);
+        setOriginalLocation([39.4699, -0.3763]);
+        sessionStorage.setItem("map-center", JSON.stringify([39.4699, -0.3763]));
         sessionStorage.setItem("map-reloaded", "true");
       }
     );

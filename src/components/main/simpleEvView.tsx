@@ -58,6 +58,10 @@ const PlaceCP = () => {
     []
   );
 
+  useEffect(() => {
+    map.setView(originalLocation, 14);
+  }, [])
+
   map.on("dragend", () => {
     const center = map.getCenter();
     const { lat, lng } = center;
