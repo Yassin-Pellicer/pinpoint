@@ -77,7 +77,6 @@ const BottomSheet = () => {
             </div>
             </div>
           </div>
-
           <p className="text-sm tracking-tighter">{comment.comment}</p>
         </div>
       ))}

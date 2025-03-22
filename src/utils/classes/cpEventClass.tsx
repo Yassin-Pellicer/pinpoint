@@ -1,6 +1,7 @@
 import { Checkpoint } from "./cpClass";
 import { Tag } from "./Tag";
 import { Event as EventClass } from "./EventClass";
+import { Comment } from "./Comment";
 
 export class Event extends EventClass {
   constructor(
@@ -13,6 +14,8 @@ export class Event extends EventClass {
     public qr: boolean,
     public isPublic: boolean,
     public author: string,
+    public comments: Comment[],
+    public rating: number,
     public checkpoints: Checkpoint[] = [] // Only checkpoints remain optional
   ) {
     super(); // Ensure the parent class is initialized properly

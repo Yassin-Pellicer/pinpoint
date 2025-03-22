@@ -11,7 +11,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [open, setOpen] = useState(false);
-  const {username, setUsername} = useSessionContext();
+  const {username, setUsername, setId} = useSessionContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -24,9 +24,9 @@ export default function Layout({ children }: LayoutProps) {
         }
       });
       const data = await response.json();
-
       if (data.auth) {
         setUsername(data.user.username.username);
+        setId(data.user.username.id);
       }
       else {
         router.push("/pages/auth/login")

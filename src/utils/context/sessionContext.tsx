@@ -3,6 +3,8 @@
 import { createContext, useContext, useState } from "react";
 
 interface SessionContextType {
+  id: number | null;
+  setId: (id: number | null) => void;
   username: string | null;
   setUsername: (username: string | null) => void;
 }
@@ -11,10 +13,13 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
   const [username, setUsername] = useState<string | null>(null);
+  const [id, setId] = useState<number | null>(null);
 
   return (
     <SessionContext.Provider
       value={{
+        id,
+        setId,
         username,
         setUsername,
       }}

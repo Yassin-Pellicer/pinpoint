@@ -26,6 +26,8 @@ interface EventContextType {
   setIsPublic: (isPublic: boolean) => void;
   author: string;
   setAuthor: (author: string) => void;
+  comments: any[];
+  setComments: (comments: any[]) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -67,6 +69,10 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, author }));
   };
 
+  const setComments = (comments: any[]) => {
+    setEvent((prev) => ({ ...prev, comments }));
+  };
+
   return (
     <EventContext.Provider
       value={{
@@ -91,7 +97,9 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         isPublic: event.isPublic,
         setIsPublic,
         author: event.author,
-        setAuthor
+        setAuthor,
+        comments: event.comments,
+        setComments
       }}
     >
       {children}

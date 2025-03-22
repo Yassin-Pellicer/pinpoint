@@ -11,43 +11,45 @@ import CpList from "./cpList";
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
 const eventInfo = () => {
-  const { selectedEvent, setSelectedEvent, tags} = useEvent();
+  const { selectedEvent, setSelectedEvent, tags } = useEvent();
   const { checkpoints } = useCheckpoints();
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
- 
+
   return (
     <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
-<div className="relative w-full">
-<div
-  className="absolute top-3 left-3 flex align-center items-center bg-black bg-opacity-50 text-white text-lg px-3 py-2 rounded-xl cursor-pointer z-10 group"
-  onClick={() => setSelectedEvent(null)}
->
-  <i className="flex material-icons justify-center items-center text-white text-2xl">arrow_back_ios</i>
-  <span className="font-medium opacity-0 h-0 w-0 group-hover:w-fit group-hover:opacity-100 group-hover:h-5 group-hover:px-2 overflow-hidden mb-1 whitespace-nowrap">Deselect Event</span>
+      <div className="relative w-full">
+        <div
+          className="absolute top-3 left-3 flex align-center items-center bg-black bg-opacity-50 text-white text-lg px-3 py-2 rounded-xl cursor-pointer z-10 group"
+          onClick={() => setSelectedEvent(null)}
+        >
+          <i className="flex material-icons justify-center items-center text-white text-2xl">
+            arrow_back_ios
+          </i>
+          <span className="text-md opacity-0 h-0 w-0 group-hover:w-fit group-hover:opacity-100 group-hover:h-6 group-hover:px-2 overflow-hidden mb-1 whitespace-nowrap">
+            Deselect Event
+          </span>
+        </div>
 
-</div>
-
-  {selectedEvent.banner ? (
-    <div className="relative flex justify-end items-center w-full h-15 mb-4 rounded-2xl overflow-hidden border border-gray-400">
-      <img
-        src={selectedEvent.banner}
-        className="w-full h-full object-cover rounded-2xl"
-        alt="banner"
-      />
-    </div>
-  ) : (
-    <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 mb-4 rounded-2xl p-14 bg-[#e6e6e6] border border-gray-400 hover:bg-[#d6d6d6] transition duration-200">
-      <i className="text-gray-400 material-icons mr-1 text-[150px] select-none">
-        add_photo_alternate
-      </i>
-      <p className="font-caveat text-gray-500 text-2xl tracking-tighter select-none">
-        {t("pic")}
-      </p>
-    </div>
-  )}
-</div>
-
+        {selectedEvent.banner ? (
+          <div className="relative flex justify-end items-center w-full h-15 mb-4 rounded-2xl overflow-hidden border border-gray-400">
+            <img
+              src={selectedEvent.banner}
+              className="w-full h-full object-cover rounded-2xl"
+              alt="banner"
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 mb-4 rounded-2xl p-14 bg-[#e6e6e6] border border-gray-400 hover:bg-[#d6d6d6] transition duration-200">
+            <i className="text-gray-400 material-icons mr-1 text-[150px] select-none">
+              add_photo_alternate
+            </i>
+            <p className="font-caveat text-gray-500 text-2xl tracking-tighter select-none">
+              {t("pic")}
+            </p>
+          </div>
+        )}
+      </div>
 
       <h1 className="font-bold text-4xl font-caveat tracking-tight">
         {selectedEvent.name}
