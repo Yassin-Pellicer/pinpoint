@@ -11,35 +11,40 @@ import { useSortable } from "@dnd-kit/sortable";
 import { Checkpoint } from "../../utils/classes/cpClass";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { useEvent } from "../../utils/context/eventContext";
+import { get } from "http";
+import { getCommentsHook } from "../../hooks/main/getCommentsHook";
+import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
+import { getUserHook } from "../../hooks/general/getUserHook";
 
-const BottomSheet = () => {
-  const [comments, setComments] = useState([
-    {
-      username: "Pepito",
-      comment:
-        "Este es un comentario de prueba. Este es un comentario de prueba. Este es un comentario de prueba. Este es un comentario de prueba.",
-      rating: 4.5,
-      date: new Date().toLocaleString(),
-    },
-    {
-      username: "Juanito",
-      comment:
-        "Este es otro comentario de prueba. Este es otro comentario de prueba. Este es otro comentario de prueba. Este es otro comentario de prueba.",
-      rating: 3,
-      date: new Date().toLocaleString(),
-    },
-    {
-      username: "Pedrito",
-      comment:
-        "Este es un comentario de prueba mas largo para ver como se ve. Este es un comentario de prueba mas largo para ver como se ve. Este es un comentario de prueba mas largo para ver como se ve. Este es un comentario de prueba mas largo para ver como se ve. Este es un comentario de prueba mas largo para ver como se ve.",
-      rating: 5,
-      date: new Date().toLocaleString(),
-    },
-  ]);
+const List = () => {
+
+  const { selectedEvent } = useEvent();
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getCommentsHook(selectedEvent.id).then((response) => {
+      Promise.all(
+        response.comments.map(async (comment) => {
+          if (comment.assign_rating) {
+            const response2 = await getRatingUserHook(selectedEvent.id, comment.user);
+            comment.rating = response2.rating;
+          }
+          const response3 = await getUserHook(comment.user);
+          comment.username = response3.user.username;
+          return comment;
+        })
+      ).then((comments) => {
+        setComments(comments);
+        setLoading(false);
+      });
+    });
+  }, [selectedEvent.id]);
 
   return (
     <>
-      {comments.map((comment, index) => (
+      {!loading && comments.length > 0 && comments.map((comment, index) => (
         <div
           key={index}
           className="transition-padding p-4 pt-2 my-2 bg-[#d6d6d6] rounded cursor-default"
@@ -50,39 +55,41 @@ const BottomSheet = () => {
                 person
               </span>
               <h2 className="font-caveat text-2xl font-bold tracking-tight">
-              @{comment.username}
-            </h2>
+                @{comment.username}
+              </h2>
             </div>
-            <div>
-            <p className="text-sm tracking-tighter">{comment.date}</p>
-            <div className="flex justify-end items-center">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <i
-                  key={i}
-                  className={`material-icons text-yellow-500 text-sm ${
-                    i <= comment.rating
-                      ? "star"
-                      : i - 0.5 === comment.rating
-                      ? "star_half"
-                      : "star_border"
-                  }`}
-                >
-                  {i <= comment.rating
-                    ? "star"
-                    : i - 0.5 === comment.rating
-                    ? "star_half"
-                    : "star_border"}
-                </i>
-              ))}
-            </div>
-            </div>
+            {comment.assign_rating && (
+              <div>
+                <p className="text-sm mr-auto ml-0 tracking-tighter">{new Date(comment.posted_at).toLocaleDateString()}</p>
+                <div className="flex justify-end items-center">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <i
+                      key={i}
+                      className={`material-icons text-yellow-500 text-sm ${
+                        i <= comment.rating
+                          ? "star"
+                          : i - 0.5 === comment.rating
+                          ? "star_half"
+                          : "star_border"
+                      }`}
+                    >
+                      {i <= comment.rating
+                        ? "star"
+                        : i - 0.5 === comment.rating
+                        ? "star_half"
+                        : "star_border"}
+                    </i>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          <p className="text-sm tracking-tighter">{comment.comment}</p>
+          <p className="text-sm tracking-tighter">{comment.content}</p>
         </div>
       ))}
     </>
   );
 };
 
-export default BottomSheet;
+export default List;
 

@@ -1,4 +1,5 @@
-export const getCheckpointsHook = async (id: number) => {
+export const getCheckpointsHook = async (id?: number) => {
+  if (id === undefined) return;
 
   const res = await fetch(`/api/getCheckpoints/${id}`, {
     method: "GET",
@@ -18,3 +19,4 @@ export const getCheckpointsHook = async (id: number) => {
 
   return data
 };
+

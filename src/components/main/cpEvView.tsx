@@ -12,6 +12,7 @@ const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import fileURL from "../../utils/funcs/createUrlImage";
 import { useEvent }  from "../../utils/context/eventContext";
 import { getCheckpointsHook } from "../../hooks/main/getCheckpointsHook";
+import { getRatingHook } from "../../hooks/main/getRatingHook";
 
 const PlaceCP = () => {
   const map = useMap();
@@ -73,8 +74,9 @@ const PlaceCP = () => {
 
   useEffect(() => {
     getCheckpointsHook(selectedEvent?.id).then((res) => {
-      console.log(res)
-      setCheckpoints(res.checkpoints);
+      if (res) setCheckpoints(res.checkpoints);
+    })
+    getRatingHook(selectedEvent?.id).then((res) => {
     })
   }, [selectedEvent]);
 

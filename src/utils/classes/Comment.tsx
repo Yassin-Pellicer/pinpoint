@@ -1,13 +1,15 @@
 export class Comment {
   content: string;
-  author: number;
-  date: Date;
+  user: number;
+  username: string;
+  posted_at: Date;
   assignRating: boolean;
+  rating: number;
 
-  constructor(content: string, author: number, date: Date, assignRating: boolean) {
+  constructor(content: string, user: number, posted_at: Date, assignRating: boolean) {
     this.content = content;
-    this.author = author;
-    this.date = date;
+    this.user = user;
+    this.posted_at = posted_at;
     this.assignRating = assignRating;
   }
 }

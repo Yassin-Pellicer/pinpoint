@@ -2,13 +2,12 @@ import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  const { eventId, id, comment } = await request.json()
-  console.log({ eventId, id, comment })
+  const { eventId, userId, comment } = await request.json()
 
   try {
       const insertUserQuery = await sql`
       INSERT INTO comment (content, "user", posted_at, assign_rating, event)
-      VALUES (${comment.content}, ${id}, CURRENT_TIMESTAMP, ${comment.assignRating}, ${eventId})
+      VALUES (${comment.content}, ${userId}, CURRENT_TIMESTAMP, ${comment.assignRating}, ${eventId})
     `;
     return NextResponse.json({ result: "ok" })
 

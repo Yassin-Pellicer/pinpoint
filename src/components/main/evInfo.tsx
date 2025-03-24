@@ -7,15 +7,28 @@ import { useEvent } from "../../utils/context/eventContext";
 import fileURL from "../../utils/funcs/createUrlImage";
 import CommentBox from "../comments/commentBox";
 import CpList from "./cpList";
+import { getRatingHook } from "../../hooks/main/getRatingHook";
+import { useSessionContext } from "../../utils/context/sessionContext";
+import { get } from "http";
+import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
+import { getCommentsHook } from "../../hooks/main/getCommentsHook";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
 const eventInfo = () => {
   const { selectedEvent, setSelectedEvent, tags } = useEvent();
+  const { id, username } = useSessionContext();
   const { checkpoints } = useCheckpoints();
+  const [rating, setRating] = useState(0);
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
+  useEffect(() => {
+    getRatingHook(selectedEvent.id).then((response) => {
+      if (response) setRating(response.rating);
+    });
+  }, [selectedEvent.id]);
+  
   return (
     <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
       <div className="relative w-full">
@@ -40,7 +53,7 @@ const eventInfo = () => {
             />
           </div>
         ) : (
-          <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 mb-4 rounded-2xl p-14 bg-[#e6e6e6] border border-gray-400 hover:bg-[#d6d6d6] transition duration-200">
+          <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 mb-4 rounded-2xl p-14 bg-[#e6e6e6] border border-gray-400">
             <i className="text-gray-400 material-icons mr-1 text-[150px] select-none">
               add_photo_alternate
             </i>
@@ -60,21 +73,21 @@ const eventInfo = () => {
           <i
             key={i}
             className={`material-icons text-yellow-500 text-2xl ${
-              i <= Math.floor(3.5)
+              i <= Math.floor(rating)
                 ? "star"
-                : i - 0.5 === 3.5
+                : i - 0.5 === rating
                 ? "star_half"
                 : "star_border"
             }`}
           >
-            {i <= Math.floor(3.5)
+            {i <= Math.floor(rating)
               ? "star"
-              : i - 0.5 === 3.5
+              : i - 0.5 === rating
               ? "star_half"
               : "star_border"}
           </i>
         ))}
-        <p className="text-black text-lg ml-2 tracking-tighter mt-1">{3.5}</p>
+        <p className="text-black text-lg ml-2 tracking-tighter">{rating}</p>
       </div>
 
       <div className="flex flex-row mt-1 mb-4 items-center justify-between text-black">

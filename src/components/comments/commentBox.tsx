@@ -7,6 +7,7 @@ import { Comment } from "../../utils/classes/Comment";
 import { addCommentHook } from "../../hooks/main/addCommentHook";
 import { useEvent } from "../../utils/context/eventContext";
 import { addRatingHook } from "../../hooks/main/addRatingHook";
+import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
 
 const commentBox = () => {
   const { username, id } = useSessionContext();
@@ -16,7 +17,7 @@ const commentBox = () => {
   const { event, selectedEvent } = useEvent();
 
   const handleUploadComment = async (e: React.FormEvent) => {
-    const comment = new Comment(content, id, new Date(), assignRating);
+    const comment = new Comment(content, id,new Date(), assignRating);
     if (comment.content == "") {
       return;
     } else {
@@ -25,12 +26,11 @@ const commentBox = () => {
   };
 
   useEffect(() => {
-    return () => {
-      console.log(rating, id);
-      // This runs when the component unmounts
-      if (rating !== 0) addRatingHook(selectedEvent.id, id, rating);
-    };
-  }, [rating]); 
+    getRatingUserHook(selectedEvent.id, id).then((response) => {
+      setRating(response.rating);
+    });
+  
+  }, [selectedEvent.id]);
 
   return (
     <div className="flex flex-col select-none">
@@ -50,7 +50,7 @@ const commentBox = () => {
                 ? "star_half"
                 : "star_border"
             }`}
-            onClick={() => setRating(i)}
+            onClick={() => {setRating(i); addRatingHook(selectedEvent.id, id, i);}}
           >
             {i <= Math.floor(rating)
               ? "star"
@@ -61,7 +61,7 @@ const commentBox = () => {
         ))}
         <i
           className="material-icons rotate-45 text-gray-500 text-sm ml-2 cursor-pointer"
-          onClick={() => setRating(0)}
+          onClick={() => {setRating(0); addRatingHook(selectedEvent.id, id, 0);}}
         >
           replay
         </i>

@@ -50,7 +50,6 @@ export default function Create() {
           return { ...event, tags: newTags };
         })
       );
-      console.log(updatedEvents);
       setEvents(updatedEvents);
     });
 
