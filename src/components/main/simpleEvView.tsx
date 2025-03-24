@@ -144,6 +144,75 @@ const PlaceCP = () => {
             </Popup>
           </Marker>
         ))}
+        { selectedEvent && checkpoints.length == 0 &&
+        events.map((event) => (
+          <Marker
+            position={event.marker.position}
+            icon={createCustomIcon(event.name)}
+            eventHandlers={{
+              mouseover: (e) => e.target.openPopup(),
+              mouseout: (e) => e.target.closePopup(),
+              click: (e) => {
+                setSelectedEvent(event);
+              },
+            }}
+          >
+            <Popup offset={[55, -30]} className="custom-popup" maxWidth={250}>
+              <div className="flex flex-col">
+                {event.banner ? (
+                  <img
+                    src={event.banner}
+                    className="w-full h-15 rounded-t-xl object-cover "
+                    alt="banner"
+                  />
+                ) : (
+                  <div className="w-full h-15 p-20 flex justify-center items-center rounded-xl bg-[#e6e6e6] border border-gray-400">
+                    <i className="text-gray-400 material-icons text-8xl">
+                      image
+                    </i>
+                  </div>
+                )}
+                <div className="flex flex-col px-2 pb-2 pt-2">
+                  <h1 className="tracking-tighter text-lg leading-none text-white font-bold">
+                    {event.name}
+                  </h1>
+                  <div className="flex items-center">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <i
+                        key={i}
+                        className={`material-icons text-yellow-500 text-lg ${
+                          i <= Math.floor(3.5)
+                            ? "star"
+                            : i - 0.5 === 3.5
+                            ? "star_half"
+                            : "star_border"
+                        }`}
+                      >
+                        {i <= Math.floor(3.5)
+                          ? "star"
+                          : i - 0.5 === 3.5
+                          ? "star_half"
+                          : "star_border"}
+                      </i>
+                    ))}
+                    <p className="text-white text-md tracking-tighter">{3.5}</p>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <p className="text-white text-sm tracking-tighter font-bold">
+                      Click for more details
+                    </p>
+                    <div className="flex space-x-2 text-white">
+                      <i className="material-icons">public</i>
+                      {/* <i className="material-icons">lock</i> */}
+                      <i className="material-icons">qr_code</i>
+                      <i className="material-icons">tour</i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
     </>
   );
 };

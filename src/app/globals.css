@@ -71,3 +71,15 @@ body {
 .ql-snow {
   padding: 15px 18px !important;
 }
+
+.ql-editor h1 {
+  font-size: 1.4em;
+}
+
+.ql-editor h2 {
+  font-size: 1.3em;
+}
+
+.ql-editor h3 {
+  font-size: 1.2em;
+}

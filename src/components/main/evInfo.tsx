@@ -33,10 +33,10 @@ const eventInfo = () => {
     <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
       <div className="relative w-full">
         <div
-          className="absolute top-3 left-3 flex align-center items-center bg-black bg-opacity-50 text-white text-lg px-3 py-2 rounded-xl cursor-pointer z-10 group"
+          className="absolute top-3 w-fit left-3 flex justify-center items-center bg-black bg-opacity-50 text-white text-lg px-3 py-2 rounded-xl cursor-pointer z-10 group"
           onClick={() => setSelectedEvent(null)}
         >
-          <i className="flex material-icons justify-center items-center text-white text-2xl">
+          <i className="flex material-icons justify-center text-center items-center text-white text-2xl">
             arrow_back_ios
           </i>
           <span className="text-md opacity-0 h-0 w-0 group-hover:w-fit group-hover:opacity-100 group-hover:h-6 group-hover:px-2 overflow-hidden mb-1 whitespace-nowrap">
