@@ -5,6 +5,7 @@ export class Comment {
   posted_at: Date;
   assignRating: boolean;
   rating: number;
+  id: number;
 
   constructor(content: string, user: number, posted_at: Date, assignRating: boolean) {
     this.content = content;

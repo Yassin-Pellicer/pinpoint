@@ -16,8 +16,10 @@ export class Event extends EventClass {
     public author: string,
     public comments: Comment[],
     public rating: number,
-    public checkpoints: Checkpoint[] = [] // Only checkpoints remain optional
+    public enableRating: boolean = false,
+    public enableComments: boolean = false,
+    public checkpoints: Checkpoint[] = [] 
   ) {
-    super(); // Ensure the parent class is initialized properly
+    super(); 
   }
 }

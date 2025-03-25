@@ -28,6 +28,10 @@ interface EventContextType {
   setAuthor: (author: string) => void;
   comments: any[];
   setComments: (comments: any[]) => void;
+  enableRatings: boolean;
+  setEnableRatings: (ratings: boolean) => void;
+  enableComments: boolean;
+  setEnableComments: (comments: boolean) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -73,6 +77,14 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, comments }));
   };
 
+  const setEnableRatings = (enableRatings: boolean) => {
+    setEvent((prev) => ({ ...prev, enableRatings }));
+  };
+
+  const setEnableComments = (enableComments: boolean) => {
+    setEvent((prev) => ({ ...prev, enableComments }));
+  };
+
   return (
     <EventContext.Provider
       value={{
@@ -99,7 +111,11 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         author: event.author,
         setAuthor,
         comments: event.comments,
-        setComments
+        setComments,
+        enableRatings: event.enableRatings,
+        setEnableRatings,
+        enableComments: event.enableComments,
+        setEnableComments,
       }}
     >
       {children}

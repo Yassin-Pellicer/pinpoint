@@ -10,9 +10,11 @@ export class Event {
     public banner: string = "",
     public tags: Tag[] = [],
     public qr: boolean = false,
-    public isPublic: boolean = false,
+    public isPublic: boolean = true,
     public author: string = "",
     public comments: Comment[] = [],
-    public rating: number = null
+    public rating: number = null,
+    public enableRatings: boolean = false,
+    public enableComments: boolean = false,
   ) {}
 }

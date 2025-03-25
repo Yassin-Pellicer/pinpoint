@@ -17,7 +17,7 @@ const commentBox = () => {
   const { event, selectedEvent } = useEvent();
 
   const handleUploadComment = async (e: React.FormEvent) => {
-    const comment = new Comment(content, id,new Date(), assignRating);
+    const comment = new Comment(content, id, new Date(), assignRating);
     if (comment.content == "") {
       return;
     } else {
@@ -27,81 +27,104 @@ const commentBox = () => {
 
   useEffect(() => {
     getRatingUserHook(selectedEvent.id, id).then((response) => {
+      console.log(selectedEvent)
       setRating(response.rating);
     });
-  
   }, [selectedEvent.id]);
 
   return (
-    <div className="flex flex-col select-none">
-      <div className="flex flex-col justify-center items-center">
-        <p className="font-caveat text-3xl tracking-tighter font-bold mb-2">
-          ¡Dale una puntuación a este evento!
-        </p>
-      </div>
-      <div className="flex justify-center items-center">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <i
-            key={i}
-            className={`material-icons text-yellow-500 text-3xl cursor-pointer ${
-              i <= Math.floor(rating)
-                ? "star"
-                : i - 0.5 === rating
-                ? "star_half"
-                : "star_border"
-            }`}
-            onClick={() => {setRating(i); addRatingHook(selectedEvent.id, id, i);}}
-          >
-            {i <= Math.floor(rating)
-              ? "star"
-              : i - 0.5 === rating
-              ? "star_half"
-              : "star_border"}
-          </i>
-        ))}
-        <i
-          className="material-icons rotate-45 text-gray-500 text-sm ml-2 cursor-pointer"
-          onClick={() => {setRating(0); addRatingHook(selectedEvent.id, id, 0);}}
-        >
-          replay
-        </i>
-      </div>
-      <textarea
-        className="bg-white p-3 rounded-lg border mt-4 border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs h-[100px] resize-none"
-        placeholder="Escribe un comentario..."
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        maxLength={300}
-        style={{ resize: "none", height: "100px" }}
-      />
+    <>
+      {(selectedEvent.enableRatings || selectedEvent.enableComments) && (
+        <div className="rounded-2xl p-6 bg-gray-200 cursor-default transition">
+          <div className="flex flex-col select-none">
+            {selectedEvent.enableRatings && (
+              <>
+                <div className="flex flex-col justify-center items-center">
+                  <p className="font-caveat text-3xl tracking-tighter font-bold mb-2">
+                    ¡Dale una puntuación a este evento!
+                  </p>
+                </div>
+                <div className="flex justify-center items-center">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <i
+                      key={i}
+                      className={`material-icons text-3xl cursor-pointer ${
+                        i <= rating
+                          ? "text-yellow-500 hover:text-yellow-600"
+                          : "text-gray-400 hover:text-gray-500"
+                      }`}
+                      onClick={() => {
+                        setRating(i);
+                        addRatingHook(selectedEvent.id, id, i);
+                      }}
+                    >
+                      {i <= Math.floor(rating)
+                        ? "star"
+                        : i - 0.5 === rating
+                        ? "star_half"
+                        : "star_border"}
+                    </i>
+                  ))}
+                  <i
+                    className="material-icons rotate-45 text-sm ml-2 cursor-pointer text-gray-500 hover:text-gray-600"
+                    onClick={() => {
+                      setRating(0);
+                      addRatingHook(selectedEvent.id, id, 0);
+                    }}
+                  >
+                    replay
+                  </i>
+                </div>
+              </>
+            )}
+            {selectedEvent.enableComments && (
+              <>
+              <h1 className="font-bold text-2xl tracking-tighter">Comentarios</h1>
+                <textarea
+                  className="bg-white p-3 rounded-lg border mt-2 border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs h-[100px] resize-none"
+                  placeholder="Escribe un comentario..."
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  maxLength={300}
+                  style={{ resize: "none", height: "100px" }}
+                />
 
-      <div className="flex items-center">
-        <label className="select-none tracking-tighter mt-2 text-sm text-black">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={assignRating}
-            onChange={(e) => setAssignRating(e.target.checked)}
-          />
-          Asignar valoración a comentario
-        </label>
-      </div>
+                {selectedEvent.enableRatings && (
+                  <div className="flex items-center">
+                    <label className="select-none tracking-tighter mt-2 text-sm text-black">
+                      <input
+                        type="checkbox"
+                        className="mr-2"
+                        checked={assignRating}
+                        onChange={(e) => setAssignRating(e.target.checked)}
+                      />
+                      Asignar valoración a comentario
+                    </label>
+                  </div>
+                )}
 
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          handleUploadComment(e);
-        }}
-        className="font-bold bg-transparent border-2 text-sm border-black 
-            text-black rounded-xl p-2 hover:bg-blue-500
-            hover:border-blue-500 hover:text-white 
-            transition duration-300 mt-4 mb-10"
-      >
-        Publish Comment
-      </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleUploadComment(e);
+                  }}
+                  className="font-bold bg-transparent border-2 text-sm border-black 
+                text-black rounded-xl p-2 hover:bg-blue-500
+                hover:border-blue-500 hover:text-white 
+                transition duration-300 mt-4"
+                >
+                  Publish Comment
+                </button>
 
-      <CommentList />
-    </div>
+                <div className="mt-6">
+                  <CommentList />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

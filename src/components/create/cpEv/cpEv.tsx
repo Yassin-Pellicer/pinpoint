@@ -34,6 +34,12 @@ const CheckpointEvent = () => {
     setQr,
     author,
     setAuthor,
+    comments,
+    setComments,
+    enableComments,
+    setEnableComments,
+    enableRatings,
+    setEnableRatings,
   } = useEvent();
 
   const t = useTranslations("Create");
@@ -257,15 +263,29 @@ const CheckpointEvent = () => {
         <div className="flex justify-between">
           <FormControl>
             <FormControlLabel
-              control={<Switch name="isPublic" color="primary" />}
-              label={"Permitir Comentarios"}
+              control={
+                <Switch
+                  checked={enableComments}
+                  onChange={(e) => setEnableComments(e.target.checked)}
+                  name="enableComments"
+                  color="primary"
+                />
+              }
+              label="Permitir Comentarios"
             />
           </FormControl>
 
           <FormControl>
             <FormControlLabel
-              control={<Switch name="isPublic" color="primary" />}
-              label={"Permitir Valoraciones"}
+              control={
+                <Switch
+                  checked={enableRatings}
+                  onChange={(e) => setEnableRatings(e.target.checked)}
+                  name="enableRatings"
+                  color="primary"
+                />
+              }
+              label="Permitir Valoraciones"
             />
           </FormControl>
         </div>
@@ -330,7 +350,7 @@ const CheckpointEvent = () => {
         </div>
       </form>
 
-      <Tags open={openTags} setOpen={setOpenTags} />
+      <Tags open={openTags} setOpen={setOpenTags} parentTags={undefined} setParentTags={undefined} />
       <CpList open={openCp} setOpen={setOpenCp} />
     </div>
   );

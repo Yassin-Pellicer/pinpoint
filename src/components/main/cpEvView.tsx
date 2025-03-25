@@ -4,22 +4,28 @@ import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import dynamic from "next/dynamic";
 import { Checkpoint } from "../../utils/classes/cpClass";
-import { useCheckpoints } from "../../utils/context/cpContext"; 
-import { useMapContext } from "../../utils/context/mapContext"; 
+import { useCheckpoints } from "../../utils/context/cpContext";
+import { useMapContext } from "../../utils/context/mapContext";
 import { useTranslations } from "next-intl";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import fileURL from "../../utils/funcs/createUrlImage";
-import { useEvent }  from "../../utils/context/eventContext";
+import { useEvent } from "../../utils/context/eventContext";
 import { getCheckpointsHook } from "../../hooks/main/getCheckpointsHook";
 import { getRatingHook } from "../../hooks/main/getRatingHook";
 
-const PlaceCP = () => {
+const cpView = () => {
   const map = useMap();
-  const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint } = useCheckpoints();
+  const {
+    checkpoints,
+    setCheckpoints,
+    focusedCheckpoint,
+    setFocusedCheckpoint,
+  } = useCheckpoints();
   const [count, setCount] = useState(0);
-  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
-  const { event, setEvent, setMarker, selectedEvent} = useEvent();
+  const { location, setLocation, zoom, setZoom, originalLocation } =
+    useMapContext();
+  const { event, setEvent, setMarker, selectedEvent } = useEvent();
 
   const t = useTranslations("CpInfo");
 
@@ -47,8 +53,7 @@ const PlaceCP = () => {
       `,
       iconSize: [30, 42],
       iconAnchor: [20, 50],
-    }
-  );
+    });
 
   useEffect(() => {
     if (focusedCheckpoint && map) {
@@ -61,7 +66,10 @@ const PlaceCP = () => {
         { animate: true, duration: 0.5 }
       );
       map.eachLayer((layer) => {
-        if (layer instanceof L.Marker && layer.getLatLng().equals(focusedCheckpoint.marker.position)) {
+        if (
+          layer instanceof L.Marker &&
+          layer.getLatLng().equals(focusedCheckpoint.marker.position)
+        ) {
           layer.openPopup();
         }
       });
@@ -71,70 +79,70 @@ const PlaceCP = () => {
     setFocusedCheckpoint(null);
   }, [focusedCheckpoint, map]);
 
-
   useEffect(() => {
     getCheckpointsHook(selectedEvent?.id).then((res) => {
       if (res) setCheckpoints(res.checkpoints);
-    })
-    getRatingHook(selectedEvent?.id).then((res) => {
-    })
+    });
+    getRatingHook(selectedEvent?.id).then((res) => {});
   }, [selectedEvent]);
 
-  map.on('dragend', () => {
-    const center = map.getCenter(); 
+  map.on("dragend", () => {
+    const center = map.getCenter();
     const { lat, lng } = center;
     setLocation([lat, lng]);
   });
 
-  map.on('zoomend', () => {
+  map.on("zoomend", () => {
     const zoom = map.getZoom();
     setZoom(zoom);
   });
 
   return (
     <>
-    {selectedEvent && Array.isArray(checkpoints) && checkpoints.map((cp, index) => (
-         <Marker
-         position={cp.marker.position}
-         icon={createCustomIcon(cp.order)}
-         eventHandlers={{
-           mouseover: (e) => e.target.openPopup(),
-           mouseout: (e) => e.target.closePopup(),
-         }}
-       >
-         <Popup offset={[10, -30]} className="custom-popup" maxWidth={300}>
-           <div className="flex flex-col w-[275px]">
-             {cp.banner ? (
-               <img
-                 src={cp.banner}
-                 className="w-full h-15 rounded-t-xl object-cover "
-                 alt="banner"
-               />
-             ) : (
-               <div className="w-full h-15 p-20 flex justify-center items-center rounded-xl bg-[#e6e6e6] border border-gray-400">
-                 <i className="text-gray-400 material-icons text-8xl">
-                   image
-                 </i>
-               </div>
-             )}
-             <div className="flex flex-col px-2 pb-2 pt-2">
-               <h1 className="tracking-tighter text-lg leading-none text-white font-bold">
-                 {cp.name}
-               </h1>
-               <div className="flex justify-between items-center">
-                 <div className="flex space-x-2 mt-2 text-white">
-                   {/* <i className="material-icons">lock</i> */}
-                   <i className="material-icons">qr_code</i>
-                   <i className="material-icons">tour</i>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </Popup>
-       </Marker>
-      ))}
+      {selectedEvent &&
+        Array.isArray(checkpoints) &&
+        checkpoints.map((cp, index) => (
+          <Marker
+            key={cp.id || `checkpoint-${index}`}
+            position={cp.marker.position}
+            icon={createCustomIcon(cp.order)}
+            eventHandlers={{
+              mouseover: (e) => e.target.openPopup(),
+              mouseout: (e) => e.target.closePopup(),
+            }}
+          >
+            <Popup offset={[10, -30]} className="custom-popup" maxWidth={300}>
+              <div className="flex flex-col w-[275px]">
+                {cp.banner ? (
+                  <img
+                    src={cp.banner}
+                    className="w-full h-15 rounded-t-xl object-cover "
+                    alt="banner"
+                  />
+                ) : (
+                  <div className="w-full h-15 p-20 flex justify-center items-center rounded-xl bg-[#e6e6e6] border border-gray-400">
+                    <i className="text-gray-400 material-icons text-8xl">
+                      image
+                    </i>
+                  </div>
+                )}
+                <div className="flex flex-col px-2 pb-2 pt-2">
+                  <h1 className="tracking-tighter text-lg leading-none text-white font-bold">
+                    {cp.name}
+                  </h1>
+                  <div className="flex justify-between items-center">
+                    <div className="flex space-x-2 mt-2 text-white">
+                      <i className="material-icons">qr_code</i>
+                      <i className="material-icons">tour</i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
     </>
   );
 };
 
-export default PlaceCP;
+export default cpView;

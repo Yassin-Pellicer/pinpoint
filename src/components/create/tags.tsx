@@ -65,14 +65,10 @@ const BottomSheet = ({ open, setOpen, parentTags, setParentTags }) => {
       <div style={{ paddingLeft: 20, paddingRight: 20 }}>
         <div
           style={{ cursor: "pointer", marginTop: "20px" }}
-          onClick={() => 
-            {
-              setOpen(false); 
-              setTags(
-                Tag.tags.filter((tag) => selectedTags[tag.name] === true)
-              )
-            }
-          }
+          onClick={() => {
+            setOpen(false);
+            setTags(Tag.tags.filter((tag) => selectedTags[tag.name] === true));
+          }}
           className="cursor-pointer flex justify-center"
         >
           <img
@@ -87,11 +83,15 @@ const BottomSheet = ({ open, setOpen, parentTags, setParentTags }) => {
         <h3 className="text-2xl font-bold mb-4">{t("title")}</h3>
         <div className="flex justify-center mb-4">{t("description")}</div>
         <div className="flex flex-wrap w-full gap-2">
-          {Tag.tags.map((tag) => (
+          {Tag.tags.map((tag, index) => (
             <button
-              key={tag.name}
-
-              onClick={() => setSelectedTags((prev) => ({ ...prev, [tag.name]: !prev[tag.name] }))}
+              key={tag.name || index} 
+              onClick={() =>
+                setSelectedTags((prev) => ({
+                  ...prev,
+                  [tag.name]: !prev[tag.name],
+                }))
+              }
               className={`rounded-md w-fit p-[10px] py-2 text-center tracking-tight text-black ${
                 selectedTags[tag.name]
                   ? "bg-[#3F7DEA] font-bold tracking-tight text-white"

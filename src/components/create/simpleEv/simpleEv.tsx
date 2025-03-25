@@ -32,6 +32,12 @@ const SimpleEvent = () => {
     setQr,
     author,
     setAuthor,
+    comments,
+    setComments,
+    enableComments,
+    setEnableComments,
+    enableRatings,
+    setEnableRatings,
   } = useEvent();
 
   const [loading, setLoading] = useState(false);
@@ -217,20 +223,33 @@ const SimpleEvent = () => {
         )}
 
         <div className="flex justify-between">
-        <FormControl>
-          <FormControlLabel
-            control={<Switch name="isPublic" color="primary" />}
-            label={"Permitir Comentarios"}
-          />
-        </FormControl>
+          <FormControl>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={enableComments}
+                  onChange={(e) => setEnableComments(e.target.checked)}
+                  name="enableComments"
+                  color="primary"
+                />
+              }
+              label="Permitir Comentarios"
+            />
+          </FormControl>
 
-
-        <FormControl>
-          <FormControlLabel
-            control={<Switch name="isPublic" color="primary" />}
-            label={"Permitir Valoraciones"}
-          />
-        </FormControl>
+          <FormControl>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={enableRatings}
+                  onChange={(e) => setEnableRatings(e.target.checked)}
+                  name="enableRatings"
+                  color="primary"
+                />
+              }
+              label="Permitir Valoraciones"
+            />
+          </FormControl>
         </div>
 
         {tags.length > 0 && (
@@ -280,7 +299,7 @@ const SimpleEvent = () => {
         </div>
       </form>
 
-      <Tags open={openTags} setOpen={setOpenTags} />
+      <Tags open={openTags} setOpen={setOpenTags} parentTags={undefined} setParentTags={undefined} />
     </div>
   );
 };
