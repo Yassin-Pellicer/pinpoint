@@ -17,6 +17,7 @@ import { Tag } from "../../../utils/classes/Tag";
 import { getEventsHook } from "../../../hooks/main/getEventsHook";
 import { getTagsHook } from "../../../hooks/main/getTagsHook";
 import EventInfo from "../../../components/main/evInfo";
+import EventCarousel from "../../../components/main/eventCarousel";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
@@ -52,31 +53,60 @@ export default function Create() {
       );
       setEvents(updatedEvents);
     });
-
   }, []);
 
   useEffect(() => {
-    if (selectedEvent != null) return
+    if (selectedEvent != null) return;
     setCheckpoints([]);
-  }, [selectedEvent])
+  }, [selectedEvent]);
 
   return (
     <Layout>
-
-
       <div className="flex flex-col overflow-auto bg-blue-500 h-screen px-6 min-w-[560px] max-w-[560px]">
         {/* Event type */}
         {!selectedEvent && (
-          <>
-            <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
-              <h1 className="font-bold text-5xl mb-2 tracking-tight font-caveat">
-                {t("title")}
+          <div className="flex flex-col">
+            <div className="flex flex-col items-center align-center">
+              <Logo />
+            </div>
+
+            <div className="mb-6 mt-6 rounded-2xl bg-white p-6 pt-4 pb-0">
+              <h1 className="font-bold font-caveat text-4xl tracking-tighter mb-2">
+                Últimos Eventos en tu Zona
               </h1>
-              <p className="text-sm mt-4">
-                {t.rich("description", {
-                  b: (chunks) => <b>{chunks}</b>,
-                })}
-              </p>
+              <EventCarousel />
+            </div>
+
+            <div className="mb-6 rounded-2xl bg-white p-6 pb-0">
+            <button
+                onClick={(e) => {
+                  setOpenTags(!openTags);
+                  e.preventDefault();
+                }}
+                  className="font-bold bg-transparent border-2 text-sm mb-4 border-black 
+              text-black rounded-xl p-2 hover:bg-blue-500
+                hover:border-blue-500 hover:text-white w-full
+                transition duration-300"
+              >
+                {t("setTags")}
+              </button>
+
+              {tags.length > 0 && (
+                <div className="flex flex-wrap w-full mb-4 gap-2">
+                  {tags.map((tag) => (
+                    <div
+                      key={tag.id}
+                      className={`rounded-md w-fit p-[10px] py-2 text-center
+               text-white bg-[#3F7DEA] font-bold tracking-tight text-white"
+            }`}
+                    >
+                      {tagsTrans(`${tag.name}`)}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <EventCarousel />
             </div>
 
             <div className="mb-6 rounded-2xl bg-white p-6">
@@ -94,33 +124,9 @@ export default function Create() {
                 </div>
               </div>
 
-              <button
-                onClick={(e) => {
-                  setOpenTags(!openTags);
-                  e.preventDefault();
-                }}
-                className="font-bold bg-transparent border-2 text-sm border-black 
-          text-black rounded-xl p-2 hover:bg-blue-500
-          hover:border-blue-500 hover:text-white w-full mt-4
-          transition duration-300"
-              >
-                {t("setTags")}
-              </button>
 
-              {tags.length > 0 && (
-                <div className="flex flex-wrap w-full mt-4 gap-2">
-                  {tags.map((tag) => (
-                    <div
-                      key={tag.id}
-                      className={`rounded-md w-fit p-[10px] py-2 text-center
-               text-white bg-[#3F7DEA] font-bold tracking-tight text-white"
-            }`}
-                    >
-                      {tagsTrans(`${tag.name}`)}
-                    </div>
-                  ))}
-                </div>
-              )}
+
+
             </div>
             <Tags
               open={openTags}
@@ -128,7 +134,7 @@ export default function Create() {
               parentTags={tags}
               setParentTags={setTags}
             />
-          </>
+          </div>
         )}
         {selectedEvent && <EventInfo />}
       </div>

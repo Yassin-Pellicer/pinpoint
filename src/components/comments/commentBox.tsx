@@ -8,6 +8,7 @@ import { addCommentHook } from "../../hooks/main/addCommentHook";
 import { useEvent } from "../../utils/context/eventContext";
 import { addRatingHook } from "../../hooks/main/addRatingHook";
 import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
+import { Alert, Snackbar } from "@mui/material";
 
 const commentBox = () => {
   const { username, id } = useSessionContext();
@@ -22,12 +23,20 @@ const commentBox = () => {
       return;
     } else {
       const response = await addCommentHook(selectedEvent.id, id, comment);
+      setContent("");
+      setSnackbarMessage("Comentario añadido correctamente");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     }
   };
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
+
   useEffect(() => {
     getRatingUserHook(selectedEvent.id, id).then((response) => {
-      console.log(selectedEvent)
+      console.log(selectedEvent);
       setRating(response.rating);
     });
   }, [selectedEvent.id]);
@@ -36,6 +45,22 @@ const commentBox = () => {
     <>
       {(selectedEvent.enableRatings || selectedEvent.enableComments) && (
         <div className="rounded-2xl p-6 bg-gray-200 cursor-default transition">
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            <Alert
+              onClose={() => setSnackbarOpen(false)}
+              severity={
+                snackbarSeverity as "error" | "success" | "info" | "warning"
+              }
+              variant="filled"
+              sx={{ width: "100%" }}
+            >
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
           <div className="flex flex-col select-none">
             {selectedEvent.enableRatings && (
               <>
@@ -79,7 +104,9 @@ const commentBox = () => {
             )}
             {selectedEvent.enableComments && (
               <>
-              <h1 className="font-bold text-2xl tracking-tighter">Comentarios</h1>
+                <h1 className="font-bold text-xl tracking-tighter">
+                  Añadir Comentario
+                </h1>
                 <textarea
                   className="bg-white p-3 rounded-lg border mt-2 border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs h-[100px] resize-none"
                   placeholder="Escribe un comentario..."

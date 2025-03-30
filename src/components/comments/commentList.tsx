@@ -18,6 +18,7 @@ import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
 import { getUserHook } from "../../hooks/general/getUserHook";
 import { useSessionContext } from "../../utils/context/sessionContext";
 import { deleteCommentHook } from "../../hooks/main/deleteCommentHook";
+import { Alert, Snackbar } from "@mui/material";
 
 const List = () => {
 
@@ -25,6 +26,10 @@ const List = () => {
   const { id } = useSessionContext();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
 
   useEffect(() => {
     getCommentsHook(selectedEvent.id).then((response) => {
@@ -48,9 +53,12 @@ const List = () => {
     });
   }, [selectedEvent.id]);
 
-  const handleDeleteComment = async (commentId) => { 
+  const handleDeleteComment = async (commentId) => {
     deleteCommentHook(commentId);
-  }
+    setSnackbarMessage("Comentario borrado correctamente");
+    setSnackbarSeverity("info");
+    setSnackbarOpen(true);
+  };
 
   return (
     <>
@@ -61,6 +69,22 @@ const List = () => {
             key={comment.id}
             className="transition-padding p-4 pt-2 my-2 bg-[#d6d6d6] rounded-2xl cursor-default"
           >
+            <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={3000}
+              onClose={() => setSnackbarOpen(false)}
+            >
+              <Alert
+                onClose={() => setSnackbarOpen(false)}
+                severity={
+                  snackbarSeverity as "error" | "success" | "info" | "warning"
+                }
+                variant="filled"
+                sx={{ width: "100%" }}
+              >
+                {snackbarMessage}
+              </Alert>
+            </Snackbar>
             <div className="flex items-center flex-row justify-between">
               <div className="flex flex-row align-center items-center">
                 <span className="material-icons text-5xl rounded-full mr-2">

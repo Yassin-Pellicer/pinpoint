@@ -16,9 +16,10 @@ import { getCommentsHook } from "../../hooks/main/getCommentsHook";
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
 const eventInfo = () => {
-  const { selectedEvent, setSelectedEvent, tags } = useEvent();
+  const { selectedEvent, setSelectedEvent, tags, marker } = useEvent();
   const { id, username } = useSessionContext();
   const { checkpoints } = useCheckpoints();
+  const [nearestDirection, setNearestDirection] = useState("Loading position...");
   const [rating, setRating] = useState(null);
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
@@ -28,7 +29,24 @@ const eventInfo = () => {
       if (response) setRating(response.rating);
     });
   }, [selectedEvent.id]);
-  
+
+  useEffect(() => {
+      fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedEvent.marker.position[0]}&lon=${selectedEvent.marker.position[1]}`
+      )
+      .then((response) => response.json())
+      .then((data) => {
+        const road = data.address.road || "";
+        const houseNumber = data.address.house_number || "";
+        const fullAddress = houseNumber ? `${road}, nº: ${houseNumber}` : road; 
+
+        if (fullAddress && fullAddress !== nearestDirection) {
+          setNearestDirection(fullAddress);
+        }
+      })
+      .catch((error) => console.error("Error fetching street name:", error));
+  }, []);
+
   return (
     <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
       <div className="relative w-full">
@@ -65,67 +83,98 @@ const eventInfo = () => {
       </div>
 
       <div className="rounded-3xl p-6 bg-gray-200 cursor-default transition mb-6 mt-6">
-        <h1 className="font-bold text-2xl tracking-tight">
-          {selectedEvent.name}
-        </h1>
-
-        <div className="flex flex-end items-center">
-          {rating !== null && (
-            <>
-              {[1, 2, 3, 4, 5].map((i) => (
-                <i
-                  key={i}
-                  className={`material-icons text-yellow-500 text-md ${
-                    i <= Math.floor(rating)
+        <div className="flex flex-row ">
+          <div className="flex flex-row w-full">
+            <h1 className="font-bold text-2xl tracking-tight w-[80%] pr-5 ">
+              {selectedEvent.name}
+            </h1>
+            <div className="flex flex-end max-w-[10%] mr-2">
+              <div className="rounded-full border border-black  mr-2 h-fit flex items-center justify-center">
+                <i className="material-icons text-xl px-2 py-1 ">print</i>
+              </div>
+              <div className="rounded-full border border-black h-fit flex items-center justify-center">
+                <i className="material-icons text-xl px-2 py-1 ">bookmark</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p className="flex text-xs items-center w-[70%] mb-2">
+          {rating !== null ? nearestDirection : ""}
+        </p>
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-end align-center items-center">
+            {rating !== null && (
+              <>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <i
+                    key={i}
+                    className={`material-icons text-yellow-500 text-sm ${
+                      i <= Math.floor(rating)
+                        ? "star"
+                        : i - 0.5 === rating
+                        ? "star_half"
+                        : "star_border"
+                    }`}
+                  >
+                    {i <= Math.floor(rating)
                       ? "star"
                       : i - 0.5 === rating
                       ? "star_half"
-                      : "star_border"
-                  }`}
-                >
-                  {i <= Math.floor(rating)
-                    ? "star"
-                    : i - 0.5 === rating
-                    ? "star_half"
-                    : "star_border"}
-                </i>
-              ))}
-              <p className="text-black text-lg ml-2 tracking-tighter">
-                {rating}
-              </p>
-            </>
-          )}
-        </div>
-
-        <div className="flex flex-row mt-1 mb-4 items-center justify-between text-black">
-          <h2 className="font-bold text-md tracking-tight">
-            Created by {selectedEvent.author}
-          </h2>
-          <div className="flex gap-2">
-            {selectedEvent.isPublic && <i className="material-icons">public</i>}
-            {!selectedEvent.isPublic && <i className="material-icons">lock</i>}
-            {selectedEvent.qr && <i className="material-icons">qr_code</i>}
-            {!selectedEvent.qr && <i className="material-icons">tour</i>}
+                      : "star_border"}
+                  </i>
+                ))}
+                <p className="text-black text-sm ml-2 italic tracking-tighter">
+                  {rating}
+                </p>
+              </>
+            )}
+                    {rating === null && (
+                      <p className="flex text-xs items-center ">
+                        {nearestDirection}
+                      </p>
+                    )}
+          </div>
+          <div className="flex flex-row gap-2">
+            {!selectedEvent.isPublic ? (
+              <div className="flex items-center text-lñg">
+                <i className="material-icons text-md">public</i>
+              </div>
+            ) : (
+              <div className="flex items-center text-sm">
+                <i className="material-icons text-md">lock</i>
+              </div>
+            )}
+            {selectedEvent.qr ? (
+              <div className="flex items-center text-sm">
+                <i className="material-icons text-md">qr_code</i>
+              </div>
+            ) : (
+              <div className="flex items-center text-sm">
+                <i className="material-icons text-md">tour</i>
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
-        <div>
-          {selectedEvent.tags.length > 0 && (
-            <div className="flex flex-wrap w-full mt-4 gap-2">
+      {selectedEvent.tags.length > 0 && (
+        <div className="rounded-3xl p-6 bg-gray-200 cursor-default transition mb-6 mt-6">
+          <div>
+            <div className="flex flex-wrap w-full gap-2">
               {selectedEvent.tags.map((tag) => (
                 <div
                   key={tag.id}
-                  className={`rounded-md w-fit p-[10px] py-2 text-center
-               text-white bg-[#3F7DEA] font-bold tracking-tight text-white"
+                  className={`rounded-full w-fit px-2 py-1 text-center
+               text-white bg-[#3F7DEA] font-bold tracking-tight"
             }`}
                 >
-                  {tagsTrans(`${tag.name}`)}
+                  <p className="text-xs">{tagsTrans(`${tag.name}`)}</p>
                 </div>
               ))}
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
       {selectedEvent.description && (
         <div

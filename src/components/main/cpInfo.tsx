@@ -17,16 +17,28 @@ const CheckpointInfo = ({ id, index }) => {
   } = useCheckpoints();
 
   const [name, setName] = useState(checkpoints[index]?.name || "");
+  const [nearestDirection, setNearestDirection] = useState("Loading position...");
   const [description, setDescription] = useState(
     checkpoints[index]?.description || ""
   );
 
   const t = useTranslations("CpInfo");
 
+  useEffect(() => {
+    fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${checkpoints[index].marker.position[0]}&lon=${checkpoints[index].marker.position[1]}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setNearestDirection(data.address.road);
+      })
+      .catch((error) => console.error("Error fetching street name:", error));
+  }, []);
+
   return (
     <div className="flex flex-col">
       <div
-        className="flex flex-row items-center"
+        className="flex flex-row"
         onClick={() => setFocusedCheckpoint(checkpoints[index])}
       >
         <div className="flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full cursor-pointer">
@@ -36,17 +48,23 @@ const CheckpointInfo = ({ id, index }) => {
         </div>
         <div className="max-w-[300px] cursor-pointer">
           <h1 className="font-bold break-words">{checkpoints[index].name}</h1>
-          <p className="text-xs">
+          <p className="flex text-xs items-center">
+            <span className="material-icons text-sm mr-2">location_on</span>
             {checkpoints[index].marker.position[0]},{" "}
             {checkpoints[index].marker.position[1]}
           </p>
+          <p className="flex text-xs items-center">
+            <span className="material-icons text-sm mr-2">location_city</span>
+            {nearestDirection}
+          </p>
+
         </div>
         <div className="ml-auto">
           <p className="material-icons text-2xl">tour</p>
         </div>
       </div>
 
-      <div className="mt-4 w-full h-fit rounded-2xl bg-[#e6e6e6] m-auto px-2 pt-3">
+      <div className="mt-2 w-full h-fit rounded-2xl bg-[#e6e6e6] m-auto px-2 pt-3">
         <div className="overflow-auto flex flex-col px-3 w-full">
           <div className="flex flex-col justify-center">
             <label className="w-full mt-2">

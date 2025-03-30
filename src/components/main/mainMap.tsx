@@ -30,7 +30,7 @@ export default function MapComponent() {
   return (
     <MapContainer
       zoom={zoom}
-      maxZoom={18}
+      maxZoom={25}
       center={location}
       doubleClickZoom={false}
       className="h-screen w-full z-10"
@@ -43,21 +43,28 @@ export default function MapComponent() {
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://carto.com/attributions">CartoDB</a>'
+            maxNativeZoom={20}
+            maxZoom={25}
           />
         </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="OpenStreetMap">
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+            attribution='&copy; OpenStreetMap contributors'
+            maxNativeZoom={20}
+            maxZoom={25}
           />
         </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="Google Satellite">
-          <TileLayer url="https://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}" />
+          <TileLayer
+            url="https://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+            maxNativeZoom={22}
+            maxZoom={25}
+          />
         </LayersControl.BaseLayer>
       </LayersControl>
 
       <SearchControl />
-      
       <EventsMap />
       <CheckpointMap />
       
