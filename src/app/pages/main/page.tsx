@@ -124,9 +124,6 @@ export default function Create() {
                 </div>
               </div>
 
-
-
-
             </div>
             <Tags
               open={openTags}
