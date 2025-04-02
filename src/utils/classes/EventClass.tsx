@@ -16,5 +16,6 @@ export class Event {
     public rating: number = null,
     public enableRatings: boolean = false,
     public enableComments: boolean = false,
+    public address: string = "",
   ) {}
 }

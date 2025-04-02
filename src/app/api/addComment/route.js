@@ -6,8 +6,8 @@ export async function POST(request) {
 
   try {
       const insertUserQuery = await sql`
-      INSERT INTO comment (content, "user", posted_at, assign_rating, event)
-      VALUES (${comment.content}, ${userId}, CURRENT_TIMESTAMP, ${comment.assignRating}, ${eventId})
+      INSERT INTO comment (content, "user", posted_at, rating, event)
+      VALUES (${comment.content}, ${userId}, CURRENT_TIMESTAMP, ${comment.rating}, ${eventId})
     `;
     return NextResponse.json({ result: "ok" })
 

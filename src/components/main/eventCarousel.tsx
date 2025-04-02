@@ -57,7 +57,9 @@ export default function SwiperComponent() {
                     </div>
                   </div>
                 </div>
-                <p className="flex text-xs items-center w-[70%] mb-2"></p>
+                <p className="flex text-xs items-center w-[70%] mt-2 mb-2">
+                  { event.address}
+                </p>
                 <div className="flex flex-row justify-between">
                   <div className="flex flex-end align-center items-center">
                     {event.rating !== null && (
@@ -68,7 +70,7 @@ export default function SwiperComponent() {
                         {[1, 2, 3, 4, 5].map((i) => (
                           <i
                             key={i}
-                            className={`material-icons text-yellow-500 text-sm ${
+                            className={`material-icons text-white text-sm ${
                               i <= Math.floor(event.rating)
                                 ? "star"
                                 : i - 0.5 === event.rating

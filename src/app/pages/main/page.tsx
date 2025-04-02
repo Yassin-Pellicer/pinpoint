@@ -52,6 +52,7 @@ export default function Create() {
         })
       );
       setEvents(updatedEvents);
+      console.log(updatedEvents);
     });
   }, []);
 

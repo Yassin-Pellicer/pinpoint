@@ -5,6 +5,7 @@ export class Checkpoint {
   order: number;
   name: string;
   marker: any;
+  address: string;
 
   constructor(
     marker: any,

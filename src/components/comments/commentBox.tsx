@@ -18,7 +18,10 @@ const commentBox = () => {
   const { event, selectedEvent } = useEvent();
 
   const handleUploadComment = async (e: React.FormEvent) => {
-    const comment = new Comment(content, id, new Date(), assignRating);
+    let comment = null;
+    if (assignRating) comment = new Comment(content, id, new Date(), rating);
+    else comment = new Comment(content, id, new Date(), null);
+
     if (comment.content == "") {
       return;
     } else {
@@ -69,7 +72,7 @@ const commentBox = () => {
                     ¡Dale una puntuación a este evento!
                   </p>
                 </div>
-                <div className="flex justify-center items-center">
+                <div className="flex justify-center items-center mb-4">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <i
                       key={i}

@@ -17,23 +17,11 @@ const CheckpointInfo = ({ id, index }) => {
   } = useCheckpoints();
 
   const [name, setName] = useState(checkpoints[index]?.name || "");
-  const [nearestDirection, setNearestDirection] = useState("Loading position...");
   const [description, setDescription] = useState(
     checkpoints[index]?.description || ""
   );
 
   const t = useTranslations("CpInfo");
-
-  useEffect(() => {
-    fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${checkpoints[index].marker.position[0]}&lon=${checkpoints[index].marker.position[1]}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setNearestDirection(data.address.road);
-      })
-      .catch((error) => console.error("Error fetching street name:", error));
-  }, []);
 
   return (
     <div className="flex flex-col">
@@ -55,7 +43,7 @@ const CheckpointInfo = ({ id, index }) => {
           </p>
           <p className="flex text-xs items-center">
             <span className="material-icons text-sm mr-2">location_city</span>
-            {nearestDirection}
+            {checkpoints[index].address}
           </p>
 
         </div>

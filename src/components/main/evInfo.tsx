@@ -19,7 +19,6 @@ const eventInfo = () => {
   const { selectedEvent, setSelectedEvent, tags, marker } = useEvent();
   const { id, username } = useSessionContext();
   const { checkpoints } = useCheckpoints();
-  const [nearestDirection, setNearestDirection] = useState("Loading position...");
   const [rating, setRating] = useState(null);
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
@@ -29,23 +28,6 @@ const eventInfo = () => {
       if (response) setRating(response.rating);
     });
   }, [selectedEvent.id]);
-
-  useEffect(() => {
-      fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedEvent.marker.position[0]}&lon=${selectedEvent.marker.position[1]}`
-      )
-      .then((response) => response.json())
-      .then((data) => {
-        const road = data.address.road || "";
-        const houseNumber = data.address.house_number || "";
-        const fullAddress = houseNumber ? `${road}, nº: ${houseNumber}` : road; 
-
-        if (fullAddress && fullAddress !== nearestDirection) {
-          setNearestDirection(fullAddress);
-        }
-      })
-      .catch((error) => console.error("Error fetching street name:", error));
-  }, []);
 
   return (
     <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
@@ -99,7 +81,7 @@ const eventInfo = () => {
           </div>
         </div>
         <p className="flex text-xs items-center w-[70%] mb-2">
-          {rating !== null ? nearestDirection : ""}
+          {rating !== null ? selectedEvent.address : ""}
         </p>
         <div className="flex flex-row justify-between">
           <div className="flex flex-end align-center items-center">
@@ -129,8 +111,8 @@ const eventInfo = () => {
               </>
             )}
                     {rating === null && (
-                      <p className="flex text-xs items-center ">
-                        {nearestDirection}
+                      <p className="flex text-xs items-center pr-10">
+                        {selectedEvent.address}
                       </p>
                     )}
           </div>

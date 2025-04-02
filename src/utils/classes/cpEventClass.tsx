@@ -18,7 +18,8 @@ export class Event extends EventClass {
     public rating: number,
     public enableRating: boolean = false,
     public enableComments: boolean = false,
-    public checkpoints: Checkpoint[] = [] 
+    public checkpoints: Checkpoint[] = [],
+    public address: string = "",
   ) {
     super(); 
   }

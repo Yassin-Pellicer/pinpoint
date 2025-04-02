@@ -99,7 +99,7 @@ const List = () => {
                   <p className="text-sm mr-0 ml-auto tracking-tighter">
                     {new Date(comment.posted_at).toLocaleDateString()}
                   </p>
-                  {comment.assign_rating && (
+                  {comment.rating !== null && (
                     <div>
                       <div className="flex justify-end items-center">
                         {[1, 2, 3, 4, 5].map((i) => (
