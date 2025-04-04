@@ -21,50 +21,36 @@ export default function SwiperComponent() {
   const { events } = useEvent();
 
   return (
-    <div className="relative">
-      <Swiper
-        spaceBetween={25}
-        modules={[Pagination]}
-        pagination={{ clickable: true }}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-        }}
-      >
-        {events.map((event) => (
-          <SwiperSlide key={event.id}>
-            <div className="flex justify-center items-center ">
-              <div className="bg-blue-500 rounded-2xl w-full h-[350px] flex flex-col p-4 mb-9  text-white">
-                <div className="flex items-center justify-center overflow-hidden rounded-t-2xl">
-                  <img src={event.banner} alt="example" className="w-full " />
+    <div className="flex flex-col">
+      {events.map((event, index) => (
+        <div key={index} className="flex justify-center items-center">
+          <div className="bg-blue-500 rounded-2xl w-full h-fit flex items-center align-center flex-row p-4 mb-3 text-white">
+            <div className="overflow-hidden bg-white rounded-full w-[100px] h-[80px]">
+              <img
+                src={event.banner}
+                alt="example"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex flex-col pl-5 w-full">
+              <div className="flex flex-row justify-between items-center">
+                <h1 className="font-bold text-lg pr-5 tracking-tight">
+                  {event.name}
+                </h1>
+                <div className="rounded-full border border-white h-fit flex items-center justify-center">
+                  <i className="material-icons text-xl px-2 py-1 ">bookmark</i>
                 </div>
-                <div className="flex flex-row pt-4 ">
-                  <div className="flex flex-row w-full">
-                    <h1 className="font-bold text-2xl tracking-tight w-[80%] pr-5 ">
-                      {event.name}
-                    </h1>
-                    <div className="flex flex-end max-w-[10%] mr-2">
-                      <div className="rounded-full border border-white  mr-2 h-fit flex items-center justify-center">
-                        <i className="material-icons text-xl px-2 py-1 ">
-                          print
-                        </i>
-                      </div>
-                      <div className="rounded-full border border-white h-fit flex items-center justify-center">
-                        <i className="material-icons text-xl px-2 py-1 ">
-                          bookmark
-                        </i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <p className="flex text-xs items-center w-[70%] mb-2">
-                  {event.rating !== null ? event.address : ""}
-                </p>
-                <div className="flex flex-row justify-between items-center w-full">
+              </div>
+              {event.rating !== null && (
+                <p className="text-xs mb-2 w-full">{event.address}</p>
+              )}
+              <div className="flex flex-row justify-between align-center items-center w-full">
                 <div className="flex items-center">
                   {event.rating !== null && (
                     <>
-                      <p className="text-sm mr-2 italic text-white tracking-tighter">{event.rating}</p>
+                      <p className="text-sm mr-2 italic text-white tracking-tighter">
+                        {event.rating}
+                      </p>
                       {[1, 2, 3, 4, 5].map((i) => (
                         <i
                           key={i}
@@ -87,11 +73,11 @@ export default function SwiperComponent() {
                   )}
                 </div>
                 {event.rating === null ? (
-                  <p className="text-xs mb-2 w-full">{event.address}</p>
+                  <p className="text-xs w-full">{event.address}</p>
                 ) : (
                   <></>
                 )}
-               <div className="flex flex-row gap-4 items-center">
+                <div className="flex flex-row gap-4 items-center">
                   <div className="flex items-center">
                     <i className="material-icons text-md">
                       {event.isPublic ? "public" : "lock"}
@@ -101,12 +87,11 @@ export default function SwiperComponent() {
                     <i className="material-icons text-md">qr_code</i>
                   </div>
                 </div>
-                </div>
               </div>
             </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
