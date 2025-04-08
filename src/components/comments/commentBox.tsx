@@ -39,7 +39,6 @@ const commentBox = () => {
 
   useEffect(() => {
     getRatingUserHook(selectedEvent.id, id).then((response) => {
-      console.log(selectedEvent);
       setRating(response.rating);
     });
   }, [selectedEvent.id]);

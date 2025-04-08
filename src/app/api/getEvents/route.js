@@ -6,6 +6,9 @@ import jwt from 'jsonwebtoken';
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
+    const tags = searchParams.get("tags"); // Expecting comma-separated tag IDs
+    const search = searchParams.get("search");
+
     const query = await sql`
       SELECT *
       FROM "event"`;

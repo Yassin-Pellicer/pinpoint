@@ -19,16 +19,15 @@ import { getTagsHook } from "../../../hooks/main/getTagsHook";
 import EventInfo from "../../../components/main/evInfo";
 import EventCarousel from "../../../components/main/eventCarousel";
 import EventCarouselSearch from "../../../components/main/eventCarouselSearch";
+import debounce from "lodash.debounce";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent } =
-    useEvent();
-  const { location, setLocation, zoom, setZoom, originalLocation } =
-    useMapContext();
+  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent } = useEvent();
+  const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
+  const [localTags, setLocalTags] = useState(filterTags);
 
-  const [tags, setTags] = useState<Tag[]>([]);
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
@@ -37,25 +36,37 @@ export default function Create() {
     []
   );
 
+  // Function to load events with the current filters
+  const loadEvents = async (tags, searchTerm) => {
+    const events = await getEventsHook(tags, searchTerm);
+    const updatedEvents = await Promise.all(
+      events.events.map(async (event) => {
+        const response = await getTagsHook(event.id);
+        const newTags = response.tags.map((tag) => {
+          const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
+          return foundTag || tag;
+        });
+        return { ...event, tags: newTags };
+      })
+    );
+    setEvents(updatedEvents);
+  };
+
   useEffect(() => {
     setCheckpoints([]);
     setEvent(new Event());
-
-    getEventsHook().then(async (events) => {
-      const updatedEvents = await Promise.all(
-        events.events.map(async (event) => {
-          const response = await getTagsHook(event.id);
-          const newTags = response.tags.map((tag) => {
-            const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
-            return foundTag || tag;
-          });
-          return { ...event, tags: newTags };
-        })
-      );
-      setEvents(updatedEvents);
-      console.log(updatedEvents);
-    });
+    loadEvents(filterTags, search);
   }, []);
+
+  useEffect(() => {
+    const handler = debounce(async () => {
+      await loadEvents(filterTags, search);
+    }, 500);
+  
+    handler();
+  
+    return () => handler.cancel && handler.cancel();
+  }, [filterTags, search]);
 
   useEffect(() => {
     if (selectedEvent != null) return;
@@ -77,11 +88,13 @@ export default function Create() {
             </div>
 
             <div className="mb-6 rounded-2xl bg-white p-6">
-              <div className="flex flex-row justify-center items-center align-center gap-2 mb-2">
+              <div className="flex flex-row justify-center items-center align-center gap-2 mb-4">
                 <input
                   type="text"
                   className="outline-none border-2 border-gray-500 rounded-full px-4 py-2 w-full text-xs"
                   placeholder={t("write")}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
                 <button
                   onClick={(e) => {
@@ -96,22 +109,9 @@ export default function Create() {
                   Tags
                 </button>
               </div>
-              <div className="flex align-center items-center mb-4">
-                  <input
-                    id="applyFilter"
-                    type="checkbox"
-                    className="mr-2"
-                  />
-                  <label
-                    htmlFor="applyFilter"
-                    className="text-xs text-gray-500"
-                  >
-                    Aplicar filtros sobre la búsqueda
-                  </label>
-                </div>
-              {tags.length > 0 && (
+              {filterTags.length > 0 && (
                 <div className="flex flex-wrap w-full mb-4 gap-2">
-                  {tags.map((tag) => (
+                  {filterTags.map((tag) => (
                     <div
                       key={tag.id}
                       className={`rounded-full w-fit px-2 py-1 text-center
@@ -128,8 +128,6 @@ export default function Create() {
             <Tags
               open={openTags}
               setOpen={setOpenTags}
-              parentTags={tags}
-              setParentTags={setTags}
             />
           </div>
         )}

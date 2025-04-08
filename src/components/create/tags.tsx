@@ -1,47 +1,39 @@
-"use client";
+import { useEvent } from "../../utils/context/eventContext";
+import { useMapContext } from "../../utils/context/mapContext";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { useSortable } from "@dnd-kit/sortable";
 import { useTranslations } from "next-intl";
 import { Tag } from "../../utils/classes/Tag";
-import { useEffect, useState } from "react";
-import { useEvent } from "../../utils/context/eventContext";
+import { useState, useEffect } from "react";
 
-const BottomSheet = ({ open, setOpen, parentTags, setParentTags }) => {
+const BottomSheet = ({ open, setOpen }) => {
   const t = useTranslations("Tags");
+  const { setFilterTags } = useMapContext();
+
+  const { event, tags, setTags } = useEvent();
+
   const [selectedTags, setSelectedTags] = useState({});
 
-  const {
-    event,
-    name,
-    setName,
-    description,
-    setDescription,
-    marker,
-    setMarker,
-    banner,
-    setBanner,
-    tags,
-    setTags,
-    qr,
-    setQr,
-    isPublic,
-    setIsPublic,
-  } = useEvent();
-
+  // Update selectedTags state based on the tags in context (when open is toggled)
   useEffect(() => {
-    if (tags && !setParentTags) {
       const updatedSelectedTags = Tag.tags.reduce((acc, tag) => {
         acc[tag.name] = tags.some((t) => t.name === tag.name);
         return acc;
       }, {});
       
       setSelectedTags(updatedSelectedTags);
-    }
-    else {
-      setParentTags(Tag.tags.filter((tag) => selectedTags[tag.name] === true));
-    }
-  }, [event, tags, open]);
-  
+      setFilterTags(Tag.tags.filter((tag) => updatedSelectedTags[tag.name]));
+  }, [open]);
+
+  const handleTagSelection = (tagName) => {
+    setSelectedTags((prevSelectedTags) => {
+      const updatedTags = { ...prevSelectedTags, [tagName]: !prevSelectedTags[tagName] };
+
+      // Update the parent tags filter
+      setFilterTags(Tag.tags.filter((tag) => updatedTags[tag.name]));
+
+      return updatedTags;
+    });
+  };
 
   return (
     <SwipeableDrawer
@@ -67,7 +59,8 @@ const BottomSheet = ({ open, setOpen, parentTags, setParentTags }) => {
           style={{ cursor: "pointer", marginTop: "20px" }}
           onClick={() => {
             setOpen(false);
-            setTags(Tag.tags.filter((tag) => selectedTags[tag.name] === true));
+            // Finalize the selection by applying tags
+            setTags(Tag.tags.filter((tag) => selectedTags[tag.name]));
           }}
           className="cursor-pointer flex justify-center"
         >
@@ -85,13 +78,8 @@ const BottomSheet = ({ open, setOpen, parentTags, setParentTags }) => {
         <div className="flex flex-wrap w-full gap-2">
           {Tag.tags.map((tag, index) => (
             <button
-              key={tag.name || index} 
-              onClick={() =>
-                setSelectedTags((prev) => ({
-                  ...prev,
-                  [tag.name]: !prev[tag.name],
-                }))
-              }
+              key={tag.name || index}
+              onClick={() => handleTagSelection(tag.name)} // Toggle tag selection
               className={`rounded-md w-fit p-[10px] py-2 text-center tracking-tight text-black ${
                 selectedTags[tag.name]
                   ? "bg-[#3F7DEA] font-bold tracking-tight text-white"

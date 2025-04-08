@@ -1,23 +1,30 @@
 "use client";
-
 import { createContext, useContext, useEffect, useState } from "react";
+import { Tag } from "../classes/Tag";
 
 interface MapContextType {
   originalLocation: [number, number];
   setOriginalLocation: (location: [number, number]) => void;
-  location: [number, number];
-  setLocation: (location: [number, number]) => void;
+  location: [number, number] | null;
+  setLocation: (location: [number, number] | null) => void;
   zoom: number;
   setZoom: (zoom: number) => void;
+  filterTags: Tag[];
+  setFilterTags: (filterTags: Tag[]) => void;
+  search: string;
+  setSearch: (search: string) => void;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
 
 export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [originalLocation, setOriginalLocation] = useState<[number, number]>([39.4699, -0.3763]);
-  const [location, setLocation] = useState<[number, number]>(null);
+  const [location, setLocation] = useState<[number, number] | null>(null);
   const [zoom, setZoom] = useState<number>(14);
+  const [filterTags, setFilterTags] = useState<Tag[]>([]);
+  const [search, setSearch] = useState("");
 
+  // Load location
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -48,7 +55,11 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         location,
         setLocation,
         zoom,
-        setZoom
+        setZoom,
+        filterTags,
+        setFilterTags,
+        search,
+        setSearch,
       }}
     >
       {children}
@@ -59,7 +70,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
 export const useMapContext = () => {
   const context = useContext(MapContext);
   if (!context) {
-    throw new Error("useEvent must be used within an EventProvider");
+    throw new Error("useMapContext must be used within a MapProvider");
   }
   return context;
 };

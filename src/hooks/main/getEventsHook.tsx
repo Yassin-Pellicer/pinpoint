@@ -1,6 +1,8 @@
-export const getEventsHook = async () => {
+import { Tag } from "../../utils/classes/Tag";
 
-    const res = await fetch("/api/getEvents", {
+export const getEventsHook = async (tags: Tag[], search: string) => {
+
+    const res = await fetch(`/api/getEvents?tags=${tags.map(tag => tag.id).join(',')}&search=${search}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -19,3 +21,4 @@ export const getEventsHook = async () => {
 
     return data
 };
+
