@@ -13,6 +13,8 @@ interface MapContextType {
   setFilterTags: (filterTags: Tag[]) => void;
   search: string;
   setSearch: (search: string) => void;
+  recommendations: any[];
+  setRecommendations: (recommendations: any[]) => void;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -23,6 +25,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [zoom, setZoom] = useState<number>(14);
   const [filterTags, setFilterTags] = useState<Tag[]>([]);
   const [search, setSearch] = useState("");
+  const [recommendations, setRecommendations] = useState<any[]>([]);
 
   // Load location
   useEffect(() => {
@@ -60,6 +63,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         setFilterTags,
         search,
         setSearch,
+        recommendations,
+        setRecommendations,
       }}
     >
       {children}

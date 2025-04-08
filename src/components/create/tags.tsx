@@ -13,7 +13,6 @@ const BottomSheet = ({ open, setOpen }) => {
 
   const [selectedTags, setSelectedTags] = useState({});
 
-  // Update selectedTags state based on the tags in context (when open is toggled)
   useEffect(() => {
       const updatedSelectedTags = Tag.tags.reduce((acc, tag) => {
         acc[tag.name] = tags.some((t) => t.name === tag.name);
@@ -27,13 +26,15 @@ const BottomSheet = ({ open, setOpen }) => {
   const handleTagSelection = (tagName) => {
     setSelectedTags((prevSelectedTags) => {
       const updatedTags = { ...prevSelectedTags, [tagName]: !prevSelectedTags[tagName] };
-
-      // Update the parent tags filter
-      setFilterTags(Tag.tags.filter((tag) => updatedTags[tag.name]));
-
+      
+      const selected = Tag.tags.filter((tag) => updatedTags[tag.name]);
+      setFilterTags(selected);
+      setTags(selected);
+  
       return updatedTags;
     });
   };
+  
 
   return (
     <SwipeableDrawer
@@ -79,8 +80,7 @@ const BottomSheet = ({ open, setOpen }) => {
           {Tag.tags.map((tag, index) => (
             <button
               key={tag.name || index}
-              onClick={() => handleTagSelection(tag.name)} // Toggle tag selection
-              className={`rounded-md w-fit p-[10px] py-2 text-center tracking-tight text-black ${
+              onClick={() => handleTagSelection(tag.name)}              className={`rounded-md w-fit p-[10px] py-2 text-center tracking-tight text-black ${
                 selectedTags[tag.name]
                   ? "bg-[#3F7DEA] font-bold tracking-tight text-white"
                   : "border border-black"

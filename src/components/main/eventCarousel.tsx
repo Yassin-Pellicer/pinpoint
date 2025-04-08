@@ -1,24 +1,42 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-import Card from "../ui/card";
-import Image from "next/image";
-import { useTranslations } from "next-intl";
-
+import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-import example from "../../../public/svg/example.svg";
-import description from "../../../public/img/description.png";
-import qr from "../../../public/img/QR.png";
-import dana from "../../../public/img/dana.png";
 import { useEvent } from "../../utils/context/eventContext";
+import { getEventsHook } from "../../hooks/main/getEventsHook";
+import { getTagsHook } from "../../hooks/main/getTagsHook";
+import { Tag } from "../../utils/classes/Tag";
+import { useMapContext } from "../../utils/context/mapContext";
 
 export default function SwiperComponent() {
-  const { events } = useEvent();
+
+  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent } = useEvent();
+  const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, recommendations, setRecommendations } = useMapContext();
+  const [openTags, setOpenTags] = useState(false);
+  const [localTags, setLocalTags] = useState(filterTags);
+
+  const loadEvents = async (recommendations, userLat, userLon) => {
+    const events = await getEventsHook(null, null, recommendations, userLat, userLon);
+    const updatedEvents = await Promise.all(
+      events.events.map(async (event) => {
+        const response = await getTagsHook(event.id);
+        const newTags = response.tags.map((tag) => {
+          const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
+          return foundTag || tag;
+        });
+        return { ...event, tags: newTags };
+      })
+    );
+    setRecommendations(updatedEvents);
+  };
+
+  useEffect(() => {
+    loadEvents(true, originalLocation[0], originalLocation[1]);
+  }, []);
 
   return (
     <div className="relative">
@@ -31,7 +49,7 @@ export default function SwiperComponent() {
           disableOnInteraction: false,
         }}
       >
-        {events.map((event) => (
+        {recommendations.map((event) => (
           <SwiperSlide key={event.id}>
             <div className="flex justify-center items-center ">
               <div className="bg-blue-500 rounded-2xl w-full h-[350px] flex flex-col p-4 mb-9  text-white">

@@ -253,17 +253,19 @@ const SimpleEvent = () => {
         </div>
 
         {tags.length > 0 && (
-          <div className="flex flex-wrap w-full mb-4 gap-2">
-            {tags.map((tag) => (
-              <div
-                key={tag.name}
-                className={`rounded-md w-fit p-[10px] py-2 text-center
-                 text-white bg-[#3F7DEA] font-bold tracking-tight text-white"
-              }`}
-              >
-                {tagsTrans(`${tag.name}`)}
-              </div>
-            ))}
+          <div>
+            <div className="flex flex-wrap w-full gap-2 my-2">
+              {tags.map((tag) => (
+                <div
+                  key={tag.id}
+                  className={`rounded-full w-fit px-2 py-1 text-center
+               text-white bg-[#3F7DEA] font-bold tracking-tight"
+            }`}
+                >
+                  <p className="text-xs">{tagsTrans(`${tag.name}`)}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
