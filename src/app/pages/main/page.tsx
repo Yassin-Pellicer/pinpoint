@@ -84,7 +84,7 @@ export default function Create() {
         {!selectedEvent && (
           <div className="flex px-6 flex-col mb-6 mt-6 rounded-2xl bg-white">
             <div className="flex mt-6 flex-row justify-between items-center align-center">
-              <div className=" w-[10<0px] flex items-center justify-center">
+              <div className=" w-[100px] flex items-center justify-center">
                 <Logo />
               </div>
               <div className="flex flex-row items-center align-center">
