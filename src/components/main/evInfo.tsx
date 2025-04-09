@@ -53,21 +53,16 @@ const eventInfo = () => {
             />
           </div>
         ) : (
-          <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 rounded-2xl p-14 bg-[#e6e6e6] border border-gray-400">
-            <i className="text-gray-400 material-icons mr-1 text-[150px] select-none">
-              add_photo_alternate
-            </i>
-            <p className="font-caveat text-gray-500 text-2xl tracking-tighter select-none">
-              {t("pic")}
-            </p>
-          </div>
+          <></>
         )}
       </div>
 
-      <div className="rounded-3xl p-6 bg-gray-200 cursor-default transition mb-6 mt-6">
+      <div
+        className={`rounded-3xl p-6 bg-gray-200 cursor-default transition ${selectedEvent.banner ? "mt-6" : ""}`}
+      >
         <div className="flex flex-row ">
           <div className="flex flex-row w-full">
-            <h1 className="font-bold text-2xl tracking-tight w-[80%] pr-5 ">
+            <h1 className={`font-bold text-2xl tracking-tight w-[80%] pr-5 ${selectedEvent.banner ? "" : "pt-14"}`}>
               {selectedEvent.name}
             </h1>
             <div className="flex flex-end max-w-[10%] mr-2">

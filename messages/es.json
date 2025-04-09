@@ -171,12 +171,12 @@
     "tech": "Tecnología"
   },
   "Main": {
-    "title": "Busca eventos",
-    "search": "Escribe el nombre del evento",
+    "search": "Busca eventos",
     "description": "<b>Mueve el mapa, aplica filtros o usa el buscador </b> insertando el título del evento que quieras encontrar.",
     "write": "Escribe para buscar",
     "tags": "Añadir Tags",
     "tagsDescription": "Añade tags para cribar tu búsqueda. <b> Los tags se aplican al buscador. </b>",
-    "setTags": "Filtrar por tags"
+    "setTags": "Filtrar por tags",
+    "recommendations": "Eventos recomendados en tu zona"
   }
 }

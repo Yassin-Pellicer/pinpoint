@@ -13,7 +13,7 @@ const cpList = () => {
         {checkpoints?.map((checkpoint, index) => (
           <div
             key={checkpoint.id || `checkpoint-${index}`}
-            className="p-4 pb-5 my-2 bg-gray-300 rounded-2xl cursor-default hover:bg-[#b6b6b6] transition duration-200 ease-in-out"
+            className="p-4 pb-5 my-2 bg-gray-300 rounded-2xl cursor-default transition duration-100 ease-in-out"
           >
             <CheckpointInfo id={checkpoint.id} index={index} />
           </div>

@@ -14,12 +14,14 @@ import { useMapContext } from "../../utils/context/mapContext";
 
 export default function SwiperComponent() {
 
-  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent } = useEvent();
+  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent, setSelectedEvent } = useEvent();
   const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, recommendations, setRecommendations } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
   const [localTags, setLocalTags] = useState(filterTags);
+  const [loading, setLoading] = useState(true);
 
   const loadEvents = async (recommendations, userLat, userLon) => {
+    setLoading(true);
     const events = await getEventsHook(null, null, recommendations, userLat, userLon);
     const updatedEvents = await Promise.all(
       events.events.map(async (event) => {
@@ -32,6 +34,7 @@ export default function SwiperComponent() {
       })
     );
     setRecommendations(updatedEvents);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -49,82 +52,103 @@ export default function SwiperComponent() {
           disableOnInteraction: false,
         }}
       >
-        {recommendations.map((event) => (
-          <SwiperSlide key={event.id}>
-            <div className="flex justify-center items-center ">
-              <div className="bg-blue-500 rounded-2xl w-full h-[350px] flex flex-col p-4 mb-9  text-white">
-                <div className="flex items-center justify-center overflow-hidden rounded-t-2xl">
-                  <img src={event.banner} alt="example" className="w-full " />
-                </div>
-                <div className="flex flex-row pt-4 ">
-                  <div className="flex flex-row w-full">
-                    <h1 className="font-bold text-2xl tracking-tight w-[80%] pr-5 ">
-                      {event.name}
-                    </h1>
-                    <div className="flex flex-end max-w-[10%] mr-2">
-                      <div className="rounded-full border border-white  mr-2 h-fit flex items-center justify-center">
-                        <i className="material-icons text-xl px-2 py-1 ">
-                          print
-                        </i>
-                      </div>
-                      <div className="rounded-full border border-white h-fit flex items-center justify-center">
-                        <i className="material-icons text-xl px-2 py-1 ">
-                          bookmark
-                        </i>
+        {loading ? (
+          <SwiperSlide>
+            <div className="bg-blue-500 rounded-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
+              <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
+            </div>
+          </SwiperSlide>
+        ) : (
+          recommendations.map((event) => (
+            <SwiperSlide key={event.id}>
+              <div
+                className="flex justify-center items-center select-none cursor-pointer"
+                onClick={(e) => {
+                  setSelectedEvent(event);
+                  e.stopPropagation();
+                }}
+              >
+                <div className="bg-blue-500 rounded-2xl w-full h-[350px] flex flex-col p-4 mb-9  text-white hover:bg-blue-600 transition-colors duration-250">
+                  {event.banner && (
+                    <div className="flex items-center justify-center overflow-hidden rounded-t-2xl">
+                      <img src={event.banner} alt="" className="w-full " />
+                    </div>
+                  )}
+                  <div className="flex flex-row pt-4 ">
+                    <div className="flex flex-row w-full">
+                      <h1 className="font-bold text-2xl tracking-tight w-[80%] pr-5 ">
+                        {event.name}
+                      </h1>
+                      <div className="flex flex-end max-w-[10%] mr-2">
+                        <div className="rounded-full border border-white  mr-2 h-fit flex items-center justify-center">
+                          <i className="material-icons text-xl px-2 py-1 ">
+                            print
+                          </i>
+                        </div>
+                        <div className="rounded-full border border-white h-fit flex items-center justify-center">
+                          <i className="material-icons text-xl px-2 py-1 ">
+                            bookmark
+                          </i>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <p className="flex text-xs items-center w-[70%] mb-2">
-                  {event.rating !== null ? event.address : ""}
-                </p>
-                <div className="flex flex-row justify-between items-center w-full">
-                <div className="flex items-center">
-                  {event.rating !== null && (
-                    <>
-                      <p className="text-sm mr-2 italic text-white tracking-tighter">{event.rating}</p>
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <i
-                          key={i}
-                          className={`material-icons text-white text-sm ${
-                            i <= Math.floor(event.rating)
-                              ? "star"
-                              : i - 0.5 === event.rating
-                              ? "star_half"
-                              : "star_border"
-                          }`}
-                        >
-                          {i <= Math.floor(event.rating)
-                            ? "star"
-                            : i - 0.5 === event.rating
-                            ? "star_half"
-                            : "star_border"}
+                  <p className="flex text-xs items-center w-[70%] mb-2">
+                    {event.rating !== null ? event.address : ""}
+                  </p>
+                  <div className="flex flex-row justify-between items-center w-full">
+                    <div className="flex items-center">
+                      {event.rating !== null && (
+                        <>
+                          <p className="text-sm mr-2 italic text-white tracking-tighter">
+                            {event.rating}
+                          </p>
+                          {[1, 2, 3, 4, 5].map((i) => (
+                            <i
+                              key={i}
+                              className={`material-icons text-white text-sm ${
+                                i <= Math.floor(event.rating)
+                                  ? "star"
+                                  : i - 0.5 === event.rating
+                                  ? "star_half"
+                                  : "star_border"
+                              }`}
+                            >
+                              {i <= Math.floor(event.rating)
+                                ? "star"
+                                : i - 0.5 === event.rating
+                                ? "star_half"
+                                : "star_border"}
+                            </i>
+                          ))}
+                        </>
+                      )}
+                    </div>
+                    {event.rating === null ? (
+                      <p className="text-xs mb-2 w-full">{event.address}</p>
+                    ) : (
+                      <></>
+                    )}
+                    <div className="flex flex-row items-center">
+                      <div className="flex items-center">
+                        <i className="material-icons text-md">
+                          {event.isPublic ? "lock" : "public"}
                         </i>
-                      ))}
-                    </>
-                  )}
-                </div>
-                {event.rating === null ? (
-                  <p className="text-xs mb-2 w-full">{event.address}</p>
-                ) : (
-                  <></>
-                )}
-               <div className="flex flex-row gap-4 items-center">
-                  <div className="flex items-center">
-                    <i className="material-icons text-md">
-                      {event.isPublic ? "public" : "lock"}
-                    </i>
+                      </div>
+                      {event.qr && (
+                        <div className="flex items-center ml-4">
+                          <i className="material-icons text-md ml-4">qr_code</i>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    <i className="material-icons text-md">qr_code</i>
-                  </div>
-                </div>
                 </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
+            </SwiperSlide>
+          ))
+        )}
       </Swiper>
     </div>
   );
 }
+

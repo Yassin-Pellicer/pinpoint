@@ -52,37 +52,39 @@ const CheckpointInfo = ({ id, index }) => {
         </div>
       </div>
 
-      <div className="mt-2 w-full h-fit rounded-2xl bg-[#e6e6e6] m-auto px-2 pt-3">
-        <div className="overflow-auto flex flex-col px-3 w-full">
-          <div className="flex flex-col justify-center">
-            <label className="w-full mt-2">
-              {checkpoints[index].banner && (
-                <div className="cursor-pointer relative flex justify-end items-center w-full h-15 mb-2 rounded-2xl overflow-hidden">
-                  <img
-                    src={checkpoints[index].banner}
-                    className="w-full h-full object-cover rounded-xl"
-                    alt="banner"
-                  />
-                </div>
-              )}
-            </label>
+      {checkpoints[index].banner || description ? (
+        <div className="mt-2 w-full h-fit rounded-2xl bg-gray-200 m-auto px-2 pt-3">
+          <div className="overflow-auto flex flex-col px-3 w-full">
+            <div className="flex flex-col justify-center">
+              <label className="w-full mt-2">
+                {checkpoints[index].banner && (
+                  <div className="cursor-pointer relative flex justify-end items-center w-full h-15 mb-2 rounded-2xl overflow-hidden">
+                    <img
+                      src={checkpoints[index].banner}
+                      className="w-full h-full object-cover rounded-xl"
+                      alt="banner"
+                    />
+                  </div>
+                )}
+              </label>
+            </div>
           </div>
+          <form className="flex flex-col px-3 w-full">
+            {checkpoints[index].banner && (
+              <h1 className="font-bold text-2xl mb-2">{name}</h1>
+            )}
+            <div className="flex flex-col mb-4">
+              <Quill
+                key={index}
+                value={description}
+                readOnly={true}
+                theme="bubble"
+                modules={{ toolbar: false }}
+              />
+            </div>
+          </form>
         </div>
-        <form className="flex flex-col px-3 w-full">
-          {checkpoints[index].banner && (
-            <h1 className="font-bold text-2xl mb-2">{name}</h1>
-          )}
-          <div className="flex flex-col mb-4">
-            <Quill
-              key={index}
-              value={description}
-              readOnly={true}
-              theme="bubble"
-              modules={{ toolbar: false }}
-            />
-          </div>
-        </form>
-      </div>
+      ) : null}
     </div>
   );
 };

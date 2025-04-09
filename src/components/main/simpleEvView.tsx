@@ -37,24 +37,6 @@ const evView = () => {
             background-position: center;
             background-repeat: no-repeat;
           ">
-            <div style="
-              position: absolute;
-              left: 110%;
-              top: 50%;
-              transform: translateY(-50%);
-              background: rgba(0, 0, 0, 0.7);
-              color: white;
-              padding: 4px 8px;
-              border-radius: 4px;
-              font-size: 14px;
-              font-weight: bold;
-              width: 200px;
-              word-wrap: break-word; /* Allow breaking text */
-              white-space: normal; /* Ensure wrapping works */
-              text-align: left;
-            ">
-              ${title}
-            </div>
           </div>
         `,
         iconSize: [30, 42],
@@ -74,23 +56,51 @@ const evView = () => {
     setZoom(map.getZoom());
   });
 
-  // Determine whether to show all events or just the selected one
+  useEffect(() => {
+    if (selectedEvent && map) {
+      map.flyTo(
+        [
+          selectedEvent.marker.position[0] + 0.0007,
+          selectedEvent.marker.position[1],
+        ],
+        18,
+        { animate: true, duration: 0.5 }
+      );
+    }
+    const zoom = map.getZoom();
+    setZoom(zoom);
+  }, [selectedEvent, map]);
+
   const filteredEvents = !selectedEvent || checkpoints.length === 0 ? events : [];
 
   return (
     <>
       {filteredEvents.map((event) => (
         <Marker
-          key={event.id} // Ensure unique keys for React
+          key={event.id}
           position={event.marker.position}
           icon={createCustomIcon(event.name)}
+          ref={(ref) => {
+            if (ref) {
+              if (map.getZoom() > 15) {
+                setTimeout(() => ref.openPopup(), 0);
+              } else {
+                ref.closePopup();
+              }
+            }
+          }}
           eventHandlers={{
-            mouseover: (e) => e.target.openPopup(),
-            mouseout: (e) => e.target.closePopup(),
             click: () => setSelectedEvent(event),
           }}
         >
-          <Popup offset={[13, -30]} className="custom-popup" maxWidth={250}>
+          <Popup
+            offset={[13, -30]}
+            className="custom-popup"
+            maxWidth={250}
+            autoClose={false}
+            closeOnClick={false}
+            autoPan={false}
+          >
             <div className="flex flex-col">
               {event.banner ? (
                 <img
@@ -99,25 +109,38 @@ const evView = () => {
                   alt="banner"
                 />
               ) : (
-                <div className="w-full h-15 p-20 flex justify-center items-center rounded-xl bg-[#e6e6e6] border border-gray-400">
-                  <i className="text-gray-400 material-icons text-8xl">image</i>
-                </div>
+                <></>
               )}
               <div className="flex flex-col px-2 pb-2 pt-2">
                 <h1 className="tracking-tighter text-lg leading-none text-white font-bold">
                   {event.name}
                 </h1>
-                <div className="flex items-center">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <i key={i} className={`material-icons text-yellow-500 text-lg`}>
-                      {i <= Math.floor(3.5)
-                        ? "star"
-                        : i - 0.5 === 3.5
-                        ? "star_half"
-                        : "star_border"}
-                    </i>
-                  ))}
-                  <p className="text-white text-md tracking-tighter">{3.5}</p>
+                <div className="flex items-center mt-2">
+                  {event.rating !== null && (
+                    <>
+                      <p className="text-sm italic pr-2 text-white tracking-tighter">
+                        {event.rating}
+                      </p>
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <i
+                          key={i}
+                          className={`material-icons text-white text-sm ${
+                            i <= Math.floor(event.rating)
+                              ? "star"
+                              : i - 0.5 === event.rating
+                              ? "star_half"
+                              : "star_border"
+                          }`}
+                        >
+                          {i <= Math.floor(event.rating)
+                            ? "star"
+                            : i - 0.5 === event.rating
+                            ? "star_half"
+                            : "star_border"}
+                        </i>
+                      ))}
+                    </>
+                  )}
                 </div>
                 <div className="flex justify-between items-center">
                   <p className="text-white text-sm tracking-tighter font-bold">

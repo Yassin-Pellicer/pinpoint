@@ -15,7 +15,8 @@ export async function GET(request) {
 
     if (!tags.length && !search) {
       query = await sql`SELECT * FROM "event"`;
-    } else if (tags && !search) {
+    } else if (tags.length && !search) {
+      console.log("gola")
       query = await sql`
         SELECT e.*
         FROM event e
@@ -24,18 +25,22 @@ export async function GET(request) {
         GROUP BY e.id
         HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
     `;
-    } else if (!tags && search) {
+    } else if (!tags.length && search) {
+      const searchQuery = `%${search}%`;
       query = await sql`
         SELECT *
         FROM "event"
-        WHERE unaccent(lower(name)) LIKE unaccent(lower(${`%${search}%`}))
-        OR unaccent(lower(description)) LIKE unaccent(lower(${`%${search}%`}))
+        WHERE unaccent(lower(name)) LIKE unaccent(lower(${searchQuery}))
+           OR unaccent(lower(description)) LIKE unaccent(lower(${searchQuery}))
       `;
     } else {
       query = await sql`
-        SELECT *
-        FROM "event"
-        WHERE tags && ${sql.array(tags, 'int')}
+        SELECT e.*
+        FROM event e
+        JOIN event_tags et ON e.id = et.event_id
+        WHERE et.tag_id = ANY(${tags})
+        GROUP BY e.id
+        HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
         AND (
           unaccent(lower(name)) LIKE unaccent(lower(${`%${search}%`}))
           OR unaccent(lower(description)) LIKE unaccent(lower(${`%${search}%`}))
@@ -44,10 +49,22 @@ export async function GET(request) {
     }
 
     if (recommendations) {
+      const earthRadius = 6371;
+      const maxDistance = 10; // in km
+      const minLat = userLat - maxDistance / earthRadius * 180 / Math.PI;
+      const maxLat = userLat + maxDistance / earthRadius * 180 / Math.PI;
+      const deltaLng = maxDistance / earthRadius / Math.cos(userLat * Math.PI / 180) * 180 / Math.PI;
+      const minLng = userLon - deltaLng;
+      const maxLng = userLon + deltaLng;
+
       query = await sql`
         SELECT *
         FROM "event"
-        ORDER BY (position_lat - ${userLat}) * (position_lat - ${userLat}) + (position_lng - ${userLon}) * (position_lng - ${userLon})
+        WHERE position_lat > ${minLat}
+          AND position_lat < ${maxLat}
+          AND position_lng > ${minLng}
+          AND position_lng < ${maxLng}
+        ORDER BY RANDOM()
         LIMIT 5
       `;
     }

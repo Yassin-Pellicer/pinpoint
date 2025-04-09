@@ -18,23 +18,32 @@ import dana from "../../../public/img/dana.png";
 import { useEvent } from "../../utils/context/eventContext";
 
 export default function SwiperComponent() {
-  const { events } = useEvent();
+  const { events, setSelectedEvent } = useEvent();
 
   return (
     <div className="flex flex-col">
       {events.map((event, index) => (
-        <div key={index} className="flex justify-center items-center">
-          <div className="bg-blue-500 rounded-2xl w-full h-fit flex items-center align-center flex-row p-4 mb-3 text-white">
-            <div className="overflow-hidden bg-white rounded-full w-[100px] h-[80px]">
-              <img
-                src={event.banner}
-                alt="example"
-                className="w-full h-full object-cover"
-              />
-            </div>
+        <div
+          key={index}
+          className="flex justify-center items-center select-none cursor-pointer"
+          onClick={(e) => {
+            setSelectedEvent(event);
+            e.stopPropagation();
+          }}
+        >
+          <div className="bg-blue-500 rounded-2xl w-full h-fit flex items-center align-center hover:bg-blue-600 flex-row p-4 mb-3 text-white">
+            {event.banner && (
+              <div className="overflow-hidden bg-white rounded-full w-[100px] h-[80px]">
+                <img
+                  src={event.banner}
+                  alt="example"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
             <div className="flex flex-col pl-5 w-full">
               <div className="flex flex-row justify-between items-center">
-                <h1 className="font-bold text-lg pr-5 tracking-tight">
+                <h1 className="font-bold text-md pr-5 tracking-tight">
                   {event.name}
                 </h1>
                 <div className="rounded-full border border-white h-fit flex items-center justify-center">
@@ -77,15 +86,17 @@ export default function SwiperComponent() {
                 ) : (
                   <></>
                 )}
-                <div className="flex flex-row gap-4 items-center">
+                <div className="flex flex-row items-center">
                   <div className="flex items-center">
                     <i className="material-icons text-md">
-                      {event.isPublic ? "public" : "lock"}
+                      {event.isPublic ? "lock" : "public"}
                     </i>
                   </div>
-                  <div className="flex items-center">
-                    <i className="material-icons text-md">qr_code</i>
-                  </div>
+                  {event.qr && (
+                    <div className="flex items-center ml-4">
+                      <i className="material-icons text-md ml-4">qr_code</i>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

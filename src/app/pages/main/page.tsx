@@ -9,7 +9,7 @@ import MapMain from "../../../components/main/mainMap";
 
 import { useCheckpoints } from "../../../utils/context/cpContext";
 import { useEvent } from "../../../utils/context/eventContext";
-import Logo from "../../../components/ui/logo";
+import Logo from "../../../components/ui/logo_btn";
 import { useMapContext } from "../../../utils/context/mapContext";
 import { Event } from "../../../utils/classes/EventClass";
 import Tags from "../../../components/create/tags";
@@ -20,6 +20,7 @@ import EventInfo from "../../../components/main/evInfo";
 import EventCarousel from "../../../components/main/eventCarousel";
 import EventCarouselSearch from "../../../components/main/eventCarouselSearch";
 import debounce from "lodash.debounce";
+import { useSessionContext } from "../../../utils/context/sessionContext";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
@@ -27,6 +28,7 @@ export default function Create() {
   const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
   const [localTags, setLocalTags] = useState(filterTags);
+  const { username } = useSessionContext();
 
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
@@ -38,9 +40,9 @@ export default function Create() {
 
   // Function to load events with the current filters
   const loadEvents = async (tags, searchTerm) => {
-    const events = await getEventsHook(tags, searchTerm);
+    const newEvents = await getEventsHook(tags, searchTerm);
     const updatedEvents = await Promise.all(
-      events.events.map(async (event) => {
+      newEvents.events.map(async (event) => {
         const response = await getTagsHook(event.id);
         const newTags = response.tags.map((tag) => {
           const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
@@ -49,7 +51,9 @@ export default function Create() {
         return { ...event, tags: newTags };
       })
     );
-    setEvents(updatedEvents);
+    setEvents(
+      updatedEvents
+    );
   };
 
   useEffect(() => {
@@ -78,16 +82,37 @@ export default function Create() {
       <div className="flex flex-col overflow-auto bg-blue-500 h-screen px-6 min-w-[560px] max-w-[560px]">
         {/* Event type */}
         {!selectedEvent && (
-          <div className="flex flex-col">
-            <div className="flex flex-col items-center align-center">
-              <Logo />
+          <div className="flex px-6 flex-col mb-6 mt-6 rounded-2xl bg-white">
+            <div className="flex mt-6 flex-row justify-between items-center align-center">
+              <div className=" w-[10<0px] flex items-center justify-center">
+                <Logo />
+              </div>
+              <div className="flex flex-row items-center align-center">
+                <i className="material-icons w-[40px] h-[40px] text-2xl bg-gray-400 items-center justify-center flex rounded-full mr-4">
+                  person
+                </i>
+                <div className="flex flex-col">
+                  <p className="font-bold text-lg">{username}</p>
+                </div>
+              </div>
+              <div className="flex flex-row items-center align-center gap-2">
+                <div className="rounded-full border border-black h-fit flex items-center justify-center">
+                  <i className="material-icons text-xl px-2 py-1 ">bookmark</i>
+                </div>
+                <div className="rounded-full border border-black h-fit flex items-center justify-center">
+                  <i className="material-icons text-xl px-2 py-1 ">add</i>
+                </div>
+                <div className="rounded-full border border-black h-fit flex items-center justify-center">
+                  <i className="material-icons text-xl px-2 py-1 ">more_vert</i>
+                </div>
+              </div>
             </div>
 
-            <div className="mb-6 mt-6 rounded-2xl bg-white p-6 pb-0">
+            <div className=" mt-6">
               <EventCarousel />
             </div>
 
-            <div className="mb-6 rounded-2xl bg-white p-6">
+            <div className="mb-6">
               <div className="flex flex-row justify-center items-center align-center gap-2 mb-4">
                 <input
                   type="text"
@@ -108,6 +133,14 @@ export default function Create() {
                 >
                   Tags
                 </button>
+                <button
+                  className="font-bold bg-transparent border-2 text-sm border-gray-500 
+              text-gray-500 rounded-full px-2 h-[34px] hover:bg-blue-500
+                hover:border-blue-500 hover:text-white w-fit
+                transition duration-300"
+                >
+                  <i className="material-icons text-xl">lock</i>
+                </button>
               </div>
               {filterTags.length > 0 && (
                 <div className="flex flex-wrap w-full mb-4 gap-2">
@@ -125,10 +158,7 @@ export default function Create() {
               )}
               <EventCarouselSearch />
             </div>
-            <Tags
-              open={openTags}
-              setOpen={setOpenTags}
-            />
+            <Tags open={openTags} setOpen={setOpenTags} />
           </div>
         )}
         {selectedEvent && <EventInfo />}

@@ -120,11 +120,7 @@ const cpView = () => {
                     alt="banner"
                   />
                 ) : (
-                  <div className="w-full h-15 p-20 flex justify-center items-center rounded-xl bg-[#e6e6e6] border border-gray-400">
-                    <i className="text-gray-400 material-icons text-8xl">
-                      image
-                    </i>
-                  </div>
+                  <></>
                 )}
                 <div className="flex flex-col px-2 pb-2 pt-2">
                   <h1 className="tracking-tighter text-lg leading-none text-white font-bold">
