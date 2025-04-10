@@ -24,8 +24,8 @@ import { useSessionContext } from "../../../utils/context/sessionContext";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent } = useEvent();
-  const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch } = useMapContext();
+  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent, events} = useEvent();
+  const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, searchResults, setSearchResults } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
   const [localTags, setLocalTags] = useState(filterTags);
   const { username } = useSessionContext();
@@ -38,8 +38,30 @@ export default function Create() {
     []
   );
 
-  // Function to load events with the current filters
-  const loadEvents = async (tags, searchTerm) => {
+  const loadEvents = async () => {
+    const newEvents = await getEventsHook(undefined, undefined, undefined, location?.[0], location?.[1], zoom, events);
+    const updatedEvents = await Promise.all(
+      newEvents.events.map(async (event) => {
+        const response = await getTagsHook(event.id);
+        const newTags = response.tags.map((tag) => {
+          const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
+          return foundTag || tag;
+        });
+        return { ...event, tags: newTags };
+      })
+    );
+    setEvents((prevEvents) => {
+      const newEventIds = new Set(prevEvents.map(event => event.id));
+      const nonDuplicateEvents = updatedEvents.filter(event => !newEventIds.has(event.id));
+      return [...prevEvents, ...nonDuplicateEvents];
+    });
+  };
+
+  const loadSearchEvents = async (tags, searchTerm) => {
+    if (tags.length === 0 && searchTerm === "") {
+      setSearchResults([]);
+      return;
+    }
     const newEvents = await getEventsHook(tags, searchTerm);
     const updatedEvents = await Promise.all(
       newEvents.events.map(async (event) => {
@@ -51,7 +73,10 @@ export default function Create() {
         return { ...event, tags: newTags };
       })
     );
-    setEvents(
+    const newEventIds = new Set(events.map(event => event.id));
+    const nonDuplicateEvents = updatedEvents.filter(event => !newEventIds.has(event.id));
+    setEvents((prev) => [...prev, ...nonDuplicateEvents]);
+    setSearchResults(
       updatedEvents
     );
   };
@@ -59,12 +84,15 @@ export default function Create() {
   useEffect(() => {
     setCheckpoints([]);
     setEvent(new Event());
-    loadEvents(filterTags, search);
   }, []);
 
   useEffect(() => {
+    loadEvents();
+  }, [zoom, location]);
+
+  useEffect(() => {
     const handler = debounce(async () => {
-      await loadEvents(filterTags, search);
+      await loadSearchEvents(filterTags, search);
     }, 500);
   
     handler();

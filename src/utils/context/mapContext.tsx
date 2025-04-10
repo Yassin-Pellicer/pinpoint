@@ -15,6 +15,8 @@ interface MapContextType {
   setSearch: (search: string) => void;
   recommendations: any[];
   setRecommendations: (recommendations: any[]) => void;
+  searchResults: any[];
+  setSearchResults: (searchResult: any[]) => void;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -26,8 +28,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [filterTags, setFilterTags] = useState<Tag[]>([]);
   const [search, setSearch] = useState("");
   const [recommendations, setRecommendations] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
 
-  // Load location
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -65,6 +67,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         setSearch,
         recommendations,
         setRecommendations,
+        searchResults,
+        setSearchResults,
       }}
     >
       {children}

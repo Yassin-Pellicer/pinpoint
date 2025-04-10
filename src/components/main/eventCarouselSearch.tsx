@@ -1,28 +1,19 @@
 "use client";
 
 import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-import Card from "../ui/card";
-import Image from "next/image";
-import { useTranslations } from "next-intl";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-import example from "../../../public/svg/example.svg";
-import description from "../../../public/img/description.png";
-import qr from "../../../public/img/QR.png";
-import dana from "../../../public/img/dana.png";
 import { useEvent } from "../../utils/context/eventContext";
+import { useMapContext } from "../../utils/context/mapContext";
 
 export default function SwiperComponent() {
-  const { events, setSelectedEvent } = useEvent();
+  const { searchResults } = useMapContext();
+  const { setSelectedEvent } = useEvent();
 
   return (
     <div className="flex flex-col">
-      {events.map((event, index) => (
+      {searchResults.map((event, index) => (
         <div
           key={index}
           className="flex justify-center items-center select-none cursor-pointer"

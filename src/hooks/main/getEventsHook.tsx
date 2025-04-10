@@ -1,15 +1,19 @@
+// utils/hooks/useEvents.ts
 import { Tag } from "../../utils/classes/Tag";
+import { useEvent } from "../../utils/context/eventContext";
 
 export const getEventsHook = async (
-  tags: Tag[],
-  search: string,
+  tags?: Tag[],
+  search?: string,
   recommendations?: boolean,
   userLat?: number,
-  userLon?: number
+  userLon?: number,
+  zoomLevel?: number,
+  events?: any[]
 ) => {
   const queryParams = new URLSearchParams();
 
-  if ( tags && tags.length > 0) {
+  if (tags?.length) {
     queryParams.append("tags", tags.map(tag => tag.id).join(","));
   }
 
@@ -26,6 +30,14 @@ export const getEventsHook = async (
     queryParams.append("lon", String(userLon));
   }
 
+  if (zoomLevel !== undefined) {
+    queryParams.append("zoomLevel", String(zoomLevel));
+  }
+
+  if (events && events.length > 0) {
+    queryParams.append("event_ids", events.map(event => event.id).join(","));
+  }
+  
   const res = await fetch(`/api/getEvents?${queryParams.toString()}`, {
     method: "GET",
     headers: {
@@ -33,13 +45,9 @@ export const getEventsHook = async (
     },
   });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch events: ${res.statusText}`);
-  }
-
   const data = await res.json();
 
-  const events = data.events.map((event: any) => {
+  const result = data.events?.map((event: any) => {
     const { position_lat, position_lng, ...rest } = event;
     return {
       ...rest,
@@ -48,7 +56,7 @@ export const getEventsHook = async (
         draggable: false,
       },
     };
-  });
+  }) ?? [];
 
-  return { ...data, events };
+  return { ...data, events: result }; // Correct the return key to match consumer usage
 };

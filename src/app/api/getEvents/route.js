@@ -7,34 +7,83 @@ export async function GET(request) {
     const tagsParam = searchParams.get("tags"); 
     const search = searchParams.get("search");
     const tags = tagsParam ? tagsParam.split(',').map(Number).filter(n => !isNaN(n)) : [];
+    const eventsParam = searchParams.get("event_ids");
+    const events = eventsParam ? eventsParam.split(',').map(Number).filter(n => !isNaN(n)) : [];
     const recommendations = searchParams.get("recommendations");
     const userLat = parseFloat(searchParams.get("lat"));
     const userLon = parseFloat(searchParams.get("lon"));
+    const zoomLevel = parseInt(searchParams.get("zoomLevel"));
 
-    let query;
+    let result;
 
     if (!tags.length && !search) {
-      query = await sql`SELECT * FROM "event"`;
+      if (isNaN(userLat) || isNaN(userLon)) {
+        return NextResponse.json({ result: "invalid coordinates" }, { status: 400 });
+      }
+
+      const earthRadius = 6371;
+      const maxDistance = zoomLevel < 10 ? 1000 : 100; // in km
+      const minLat = userLat - maxDistance / earthRadius * 180 / Math.PI;
+      const maxLat = userLat + maxDistance / earthRadius * 180 / Math.PI;
+      const deltaLng = maxDistance / earthRadius / Math.cos(userLat * Math.PI / 180) * 180 / Math.PI;
+      const minLng = userLon - deltaLng;
+      const maxLng = userLon + deltaLng;
+      
+      // For events exclusion, we need to handle it differently
+      if (events.length > 0) {
+        // Convert the events array to a comma-separated string of numbers
+        const eventIds = events.join(',');
+        
+        // Use raw SQL string for the NOT IN clause
+        const query = `
+          SELECT * FROM "event"
+          WHERE position_lat > $1
+            AND position_lat < $2
+            AND position_lng > $3
+            AND position_lng < $4
+            AND id NOT IN (${eventIds})
+          ORDER BY 
+            (position_lat - $5) * (position_lat - $5) + 
+            (position_lng - $6) * (position_lng - $6)
+          LIMIT 50
+        `;
+        
+        // Execute with regular parameters
+        result = await sql.query(query, [minLat, maxLat, minLng, maxLng, userLat, userLon]);
+      } else {
+        // No exclusions needed
+        result = await sql`
+          SELECT * FROM "event"
+          WHERE position_lat > ${minLat}
+            AND position_lat < ${maxLat}
+            AND position_lng > ${minLng}
+            AND position_lng < ${maxLng}
+          ORDER BY 
+            (position_lat - ${userLat}) * (position_lat - ${userLat}) + 
+            (position_lng - ${userLon}) * (position_lng - ${userLon})
+          LIMIT 50
+        `;
+      }
     } else if (tags.length && !search) {
-      console.log("gola")
-      query = await sql`
+      result = await sql`
         SELECT e.*
         FROM event e
         JOIN event_tags et ON e.id = et.event_id
         WHERE et.tag_id = ANY(${tags})
         GROUP BY e.id
         HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
-    `;
+      `;
     } else if (!tags.length && search) {
       const searchQuery = `%${search}%`;
-      query = await sql`
+      result = await sql`
         SELECT *
         FROM "event"
         WHERE unaccent(lower(name)) LIKE unaccent(lower(${searchQuery}))
            OR unaccent(lower(description)) LIKE unaccent(lower(${searchQuery}))
       `;
     } else {
-      query = await sql`
+      const searchQuery = `%${search}%`;
+      result = await sql`
         SELECT e.*
         FROM event e
         JOIN event_tags et ON e.id = et.event_id
@@ -42,13 +91,17 @@ export async function GET(request) {
         GROUP BY e.id
         HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
         AND (
-          unaccent(lower(name)) LIKE unaccent(lower(${`%${search}%`}))
-          OR unaccent(lower(description)) LIKE unaccent(lower(${`%${search}%`}))
+          unaccent(lower(e.name)) LIKE unaccent(lower(${searchQuery}))
+          OR unaccent(lower(e.description)) LIKE unaccent(lower(${searchQuery}))
         )
       `;
     }
 
     if (recommendations) {
+      if (isNaN(userLat) || isNaN(userLon)) {
+        return NextResponse.json({ result: "invalid coordinates" }, { status: 400 });
+      }
+
       const earthRadius = 6371;
       const maxDistance = 10; // in km
       const minLat = userLat - maxDistance / earthRadius * 180 / Math.PI;
@@ -57,7 +110,7 @@ export async function GET(request) {
       const minLng = userLon - deltaLng;
       const maxLng = userLon + deltaLng;
 
-      query = await sql`
+      result = await sql`
         SELECT *
         FROM "event"
         WHERE position_lat > ${minLat}
@@ -69,12 +122,17 @@ export async function GET(request) {
       `;
     }
 
-    const response = NextResponse.json({ result: "ok", events: query.rows });
+    const response = NextResponse.json(
+      result && result.rows && result.rows.length 
+        ? { result: "ok", events: result.rows } 
+        : { result: "no events found" }
+    );
+    
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     return response;
 
   } catch (error) {
     console.error("Error fetching events:", error);
-    return NextResponse.json({ result: "ko" }, { status: 500 });
+    return NextResponse.json({ result: "ko", error: error.message }, { status: 500 });
   }
 }

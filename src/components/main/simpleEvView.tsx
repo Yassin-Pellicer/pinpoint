@@ -89,8 +89,21 @@ const evView = () => {
               }
             }
           }}
+          
           eventHandlers={{
             click: () => setSelectedEvent(event),
+            mouseover: (e) => {
+              const ref = e.target as L.Marker;
+              if (ref && map.getZoom() <= 15) {
+                ref.openPopup();
+              }
+            },
+            mouseout: (e) => {
+              const ref = e.target as L.Marker;
+              if (ref && map.getZoom() <= 15) {
+                ref.closePopup();
+              }
+            },
           }}
         >
           <Popup
