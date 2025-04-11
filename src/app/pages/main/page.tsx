@@ -25,7 +25,7 @@ import { useSessionContext } from "../../../utils/context/sessionContext";
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent, events} = useEvent();
-  const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, searchResults, setSearchResults } = useMapContext();
+  const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, searchResults, setSearchResults, recommendations, setRecommendations } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
   const [localTags, setLocalTags] = useState(filterTags);
   const { username } = useSessionContext();
@@ -81,6 +81,25 @@ export default function Create() {
     );
   };
 
+  const loadRecommendations = async (recommendations, userLat, userLon) => {
+    const events = await getEventsHook(null, null, recommendations, userLat, userLon);
+    const updatedEvents = await Promise.all(
+      events.events.map(async (event) => {
+        const response = await getTagsHook(event.id);
+        const newTags = response.tags.map((tag) => {
+          const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
+          return foundTag || tag;
+        });
+        return { ...event, tags: newTags };
+      })
+    );
+    setRecommendations(updatedEvents);
+  };
+
+  useEffect(() => {
+    loadRecommendations(true, originalLocation[0], originalLocation[1]);
+  }, []);
+
   useEffect(() => {
     setCheckpoints([]);
     setEvent(new Event());
@@ -115,20 +134,13 @@ export default function Create() {
               <div className=" w-[100px] flex items-center justify-center">
                 <Logo />
               </div>
-              <div className="flex flex-row items-center align-center">
-                <i className="material-icons w-[40px] h-[40px] text-2xl bg-gray-400 items-center justify-center flex rounded-full mr-4">
+              <div className="flex flex-row items-center align-center"></div>
+              <div className="flex flex-row items-center align-center gap-2">
+                <i className="material-icons w-[40px] h-[40px] text-2xl bg-gray-300 items-center justify-center flex rounded-full">
                   person
                 </i>
                 <div className="flex flex-col">
-                  <p className="font-bold text-lg">{username}</p>
-                </div>
-              </div>
-              <div className="flex flex-row items-center align-center gap-2">
-                <div className="rounded-full border border-black h-fit flex items-center justify-center">
-                  <i className="material-icons text-xl px-2 py-1 ">bookmark</i>
-                </div>
-                <div className="rounded-full border border-black h-fit flex items-center justify-center">
-                  <i className="material-icons text-xl px-2 py-1 ">add</i>
+                  <p className="font-bold text-lg mr-2">{username}</p>
                 </div>
                 <div className="rounded-full border border-black h-fit flex items-center justify-center">
                   <i className="material-icons text-xl px-2 py-1 ">more_vert</i>
@@ -136,15 +148,161 @@ export default function Create() {
               </div>
             </div>
 
-            <div className=" mt-6">
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="h-fit rounded-2xl bg-gray-300 relative hover:cursor-pointer hover:bg-gray-400 transition duration-100">
+                <div className="relative h-full">
+                  <div
+                    className="bg-no-repeat bg-center bg-cover absolute w-1/2 inset-0"
+                    style={{
+                      backgroundImage: "url('/img/cpcreate.png')",
+                      transform: "rotate(-5deg)",
+                    }}
+                  ></div>
+                  <div className="relative z-10 p-5">
+                    <h1
+                      className="text-2xl tracking-tighter font-bold mb-2 text-white"
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    >
+                      ¡Crea un evento ahora!
+                    </h1>
+                    <p
+                      className="text-sm tracking-tighter font-bold text-white"
+                      style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
+                    >
+                      Crea tu evento y comparte planes con la comunidad
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="h-auto rounded-2xl bg-gray-300 relative hover:cursor-pointer hover:bg-gray-400 transition duration-100">
+                <div className="relative h-full">
+                  <div
+                    className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform"
+                    style={{
+                      backgroundImage: "url('/img/comment.png')",
+                      transform: "rotate(5deg)",
+                    }}
+                  ></div>
+                  <div className="relative z-10 p-5">
+                    <h1
+                      className="text-2xl tracking-tighter font-bold mb-2 text-white"
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    >
+                      Entra a tu perfil
+                    </h1>
+                    <p
+                      className="text-sm tracking-tighter font-bold text-white"
+                      style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
+                    >
+                      Accede a tu perfil y revisa tus eventos, comentarios y
+                      signups.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className=" mt-4">
+              <div className="h-auto rounded-t-2xl bg-gray-300 relative transition duration-100 overflow-hidden">
+                <div className="relative h-full">
+                  <div
+                    className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform rotate-[5deg] z-0 m-5"
+                    style={{
+                      backgroundImage: "url('/img/recommended.png')",
+                    }}
+                  ></div>
+
+                  <div className="relative p-5 z-10">
+                    <div className="flex flex-row items-center">
+                      <i
+                        className="material-icons text-white text-7xl mr-5"
+                        style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      >
+                        star
+                      </i>
+                      <h1
+                        className="text-2xl tracking-tighter font-bold mb-2 text-white"
+                        style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      >
+                        Eventos recomendados en tu zona
+                      </h1>
+                    </div>
+                    <p
+                      className="text-sm tracking-tighter font-bold text-white"
+                      style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
+                    >
+                      Explora eventos que podrían interesarte, basados en tu
+                      ubicación y preferencias.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <EventCarousel />
             </div>
 
-            <div className="mb-6">
-              <div className="flex flex-row justify-center items-center align-center gap-2 mb-4">
+            <div className="grid gap-4 mb-4">
+              <div className="h-fit rounded-2xl bg-blue-500 relative hover:cursor-pointer hover:bg-blue-600 transition duration-100">
+                <div className="relative h-full">
+                  <div
+                    className="bg-no-repeat bg-center bg-cover absolute inset-0"
+                    style={{
+                      backgroundImage: "url('/img/QR.png')",
+                      filter: "brightness(0.9)",
+                    }}
+                  ></div>
+                  <div className="relative z-10 p-5 pl-[125px]">
+                    <h1
+                      className="text-2xl tracking-tighter font-bold mb-2 text-white text-right"
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    >
+                      Escanea los QR de los eventos con la aplicación de
+                      Pinpoint
+                    </h1>
+                    <p
+                      className="text-sm tracking-tighter font-bold text-white text-right"
+                      style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
+                    >
+                      Eleva tu experiencia con nuestra app.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-6 px-4 py-4 bg-gray-300 rounded-2xl">
+              <div className="h-fit rounded-2xl mb-4 bg-gray-300 relative p-2">
+                <div className="relative h-full">
+                  <div
+                    className="bg-no-repeat bg-center bg-cover absolute w-1/2 inset-0"
+                    style={{
+                      backgroundImage: "url('/img/world.png')",
+                      transform: "rotate(-5deg)",
+                      opacity: "0.9",
+                    }}
+                  ></div>
+                  <div className="relative z-10 p-5">
+                    <h1
+                      className="text-3xl tracking-tighter font-bold mb-2 text-white"
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    >
+                      <i className="material-icons mr-2 text-2xl">search</i>
+                      Busca un evento
+                    </h1>
+                    <p
+                      className="text-sm tracking-tighter font-bold text-white"
+                      style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
+                    >
+                      Puedes escribir el título del evento o filtrar por tags
+                      ¿Qué aventuras te esperan hoy?
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-row justify-center p-2 bg-blue-500 rounded-2xl w-full h-fit items-center align-center gap-2 mb-4">
                 <input
                   type="text"
-                  className="outline-none border-2 border-gray-500 rounded-full px-4 py-2 w-full text-xs"
+                  className="outline-none rounded-lg px-4 py-2 w-full text-xs"
                   placeholder={t("write")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -154,20 +312,20 @@ export default function Create() {
                     setOpenTags(!openTags);
                     e.preventDefault();
                   }}
-                  className="font-bold bg-transparent border-2 text-sm border-gray-500 
-              text-gray-500 rounded-full px-2 h-[34px] hover:bg-blue-500
-                hover:border-blue-500 hover:text-white w-fit
+                  className="font-bold bg-transparent border-2 text-sm border-white-500  text-white
+                text-white-500 rounded-lg px-2 h-[34px] hover:bg-blue-500
+                hover:border-white-500 hover:text-white w-fit
                 transition duration-300"
                 >
                   Tags
                 </button>
                 <button
-                  className="font-bold bg-transparent border-2 text-sm border-gray-500 
-              text-gray-500 rounded-full px-2 h-[34px] hover:bg-blue-500
-                hover:border-blue-500 hover:text-white w-fit
+                  className="font-bold bg-transparent border-2 text-sm border-white-500 
+                text-white-500 rounded-lg px-2 h-[34px] hover:bg-blue-500
+                hover:border-white-500 hover:text-white w-fit
                 transition duration-300"
                 >
-                  <i className="material-icons text-xl">lock</i>
+                  <i className="material-icons text-white text-xl">lock</i>
                 </button>
               </div>
               {filterTags.length > 0 && (

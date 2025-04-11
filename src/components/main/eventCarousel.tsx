@@ -18,28 +18,7 @@ export default function SwiperComponent() {
   const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, recommendations, setRecommendations } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
   const [localTags, setLocalTags] = useState(filterTags);
-  const [loading, setLoading] = useState(true);
-
-  const loadEvents = async (recommendations, userLat, userLon) => {
-    setLoading(true);
-    const events = await getEventsHook(null, null, recommendations, userLat, userLon);
-    const updatedEvents = await Promise.all(
-      events.events.map(async (event) => {
-        const response = await getTagsHook(event.id);
-        const newTags = response.tags.map((tag) => {
-          const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
-          return foundTag || tag;
-        });
-        return { ...event, tags: newTags };
-      })
-    );
-    setRecommendations(updatedEvents);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    loadEvents(true, originalLocation[0], originalLocation[1]);
-  }, []);
+  const [loading, setLoading] = useState(!recommendations);
 
   return (
     <div className="relative">
@@ -52,9 +31,9 @@ export default function SwiperComponent() {
           disableOnInteraction: false,
         }}
       >
-        {loading ? (
+        {recommendations == null ? (
           <SwiperSlide>
-            <div className="bg-blue-500 rounded-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
+            <div className="bg-blue-500 rounded-t-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
               <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
             </div>
           </SwiperSlide>
@@ -68,7 +47,7 @@ export default function SwiperComponent() {
                   e.stopPropagation();
                 }}
               >
-                <div className="bg-blue-500 rounded-2xl w-full h-[350px] flex flex-col p-4 mb-9  text-white hover:bg-blue-600 transition-colors duration-250">
+                <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9  text-white hover:bg-blue-600 transition-colors duration-250">
                   {event.banner && (
                     <div className="flex items-center justify-center overflow-hidden rounded-t-2xl">
                       <img src={event.banner} alt="" className="w-full " />

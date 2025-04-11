@@ -22,19 +22,16 @@ export async function GET(request) {
       }
 
       const earthRadius = 6371;
-      const maxDistance = zoomLevel < 10 ? 1000 : 100; // in km
+      const maxDistance = zoomLevel < 10 ? 5000 : 500; // in km
       const minLat = userLat - maxDistance / earthRadius * 180 / Math.PI;
       const maxLat = userLat + maxDistance / earthRadius * 180 / Math.PI;
       const deltaLng = maxDistance / earthRadius / Math.cos(userLat * Math.PI / 180) * 180 / Math.PI;
       const minLng = userLon - deltaLng;
       const maxLng = userLon + deltaLng;
       
-      // For events exclusion, we need to handle it differently
       if (events.length > 0) {
-        // Convert the events array to a comma-separated string of numbers
         const eventIds = events.join(',');
         
-        // Use raw SQL string for the NOT IN clause
         const query = `
           SELECT * FROM "event"
           WHERE position_lat > $1
@@ -48,10 +45,8 @@ export async function GET(request) {
           LIMIT 50
         `;
         
-        // Execute with regular parameters
         result = await sql.query(query, [minLat, maxLat, minLng, maxLng, userLat, userLon]);
       } else {
-        // No exclusions needed
         result = await sql`
           SELECT * FROM "event"
           WHERE position_lat > ${minLat}
