@@ -238,6 +238,11 @@ export default function Create() {
                   </div>
                 </div>
               </div>
+              {recommendations.length === 0 && <>
+              <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
+                <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
+              </div>
+              </>}
               <EventCarousel />
             </div>
 

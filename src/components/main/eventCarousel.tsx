@@ -18,7 +18,6 @@ export default function SwiperComponent() {
   const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, recommendations, setRecommendations } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
   const [localTags, setLocalTags] = useState(filterTags);
-  const [loading, setLoading] = useState(!recommendations);
 
   return (
     <div className="relative">
@@ -31,14 +30,7 @@ export default function SwiperComponent() {
           disableOnInteraction: false,
         }}
       >
-        {recommendations == null ? (
-          <SwiperSlide>
-            <div className="bg-blue-500 rounded-t-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
-              <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
-            </div>
-          </SwiperSlide>
-        ) : (
-          recommendations.map((event) => (
+        {recommendations.map((event) => (
             <SwiperSlide key={event.id}>
               <div
                 className="flex justify-center items-center select-none cursor-pointer"
@@ -125,7 +117,7 @@ export default function SwiperComponent() {
               </div>
             </SwiperSlide>
           ))
-        )}
+        }
       </Swiper>
     </div>
   );

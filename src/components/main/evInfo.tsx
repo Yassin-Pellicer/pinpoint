@@ -51,7 +51,7 @@ const eventInfo = ({open, setOpen}) => {
     }}
   >
     {selectedEvent && <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
-      <div className="relative w-full">
+      <div className="relative justify-center w-full">
         <div
           className="absolute top-3 w-fit left-3 flex justify-center items-center text-white text-lg px-3 py-2 rounded-xl cursor-pointer z-10 group outline-none"
           onClick={() => {
@@ -62,10 +62,10 @@ const eventInfo = ({open, setOpen}) => {
           }}
         >
           <i
-            className="flex material-icons justify-center text-center items-center text-white text-4xl"
+            className="flex material-icons justify-center text-center items-center text-white text-5xl"
             style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
           >
-            arrow_back
+           keyboard_arrow_down 
           </i>
         </div>
 
@@ -91,7 +91,7 @@ const eventInfo = ({open, setOpen}) => {
           <div className="flex flex-row w-full">
             <h1
               className={`text-3xl tracking-tighter font-extrabold mb-2 text-white ${
-                selectedEvent.banner ? "" : "pt-14"
+                selectedEvent.banner ? "" : "pt-12"
               }`}
               style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
             >

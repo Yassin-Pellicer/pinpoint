@@ -86,7 +86,7 @@ const List = () => {
           {comments.map((comment) => (
             <div
               key={comment.id}
-              className="transition-padding p-4 border-t-2 border-gray-400 bg-gray-300 cursor-default"
+              className="transition-padding p-4 border-t-[1px] border-gray-400 bg-gray-300 cursor-default"
             >
               <Snackbar
                 open={snackbarOpen}
