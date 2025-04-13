@@ -27,6 +27,7 @@ export default function Create() {
   const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent, events} = useEvent();
   const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, searchResults, setSearchResults, recommendations, setRecommendations } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
   const [localTags, setLocalTags] = useState(filterTags);
   const { username } = useSessionContext();
 
@@ -120,15 +121,15 @@ export default function Create() {
   }, [filterTags, search]);
 
   useEffect(() => {
-    if (selectedEvent != null) return;
+    if (selectedEvent != null) { setOpenDetails(true); return;}
     setCheckpoints([]);
+    setOpenDetails(false);
   }, [selectedEvent]);
 
   return (
     <Layout>
       <div className="flex flex-col overflow-auto bg-blue-500 h-screen px-6 min-w-[560px] max-w-[560px]">
         {/* Event type */}
-        {!selectedEvent && (
           <div className="flex px-6 flex-col mb-6 mt-6 rounded-2xl bg-white">
             <div className="flex mt-6 flex-row justify-between items-center align-center">
               <div className=" w-[100px] flex items-center justify-center">
@@ -203,7 +204,7 @@ export default function Create() {
             </div>
 
             <div className=" mt-4">
-              <div className="h-auto rounded-t-2xl bg-gray-300 relative transition duration-100 overflow-hidden">
+              <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
                 <div className="relative h-full">
                   <div
                     className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform rotate-[5deg] z-0 m-5"
@@ -237,7 +238,6 @@ export default function Create() {
                   </div>
                 </div>
               </div>
-
               <EventCarousel />
             </div>
 
@@ -345,9 +345,9 @@ export default function Create() {
               <EventCarouselSearch />
             </div>
             <Tags open={openTags} setOpen={setOpenTags} />
+
           </div>
-        )}
-        {selectedEvent && <EventInfo />}
+              <EventInfo open={openDetails} setOpen={setOpenDetails} />
       </div>
       {/* Map */}
       <MapMain />

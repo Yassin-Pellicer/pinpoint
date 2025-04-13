@@ -21,7 +21,6 @@ import { deleteCommentHook } from "../../hooks/main/deleteCommentHook";
 import { Alert, Snackbar } from "@mui/material";
 
 const List = () => {
-
   const { selectedEvent } = useEvent();
   const { id } = useSessionContext();
   const [comments, setComments] = useState([]);
@@ -62,87 +61,114 @@ const List = () => {
 
   return (
     <>
-      {!loading &&
-        comments.length > 0 &&
-        comments.map((comment) => (
-          <div
-            key={comment.id}
-            className="transition-padding p-4 pt-2 my-2 bg-gray-300 rounded-2xl cursor-default"
-          >
-            <Snackbar
-              open={snackbarOpen}
-              autoHideDuration={3000}
-              onClose={() => setSnackbarOpen(false)}
-            >
-              <Alert
-                onClose={() => setSnackbarOpen(false)}
-                severity={
-                  snackbarSeverity as "error" | "success" | "info" | "warning"
-                }
-                variant="filled"
-                sx={{ width: "100%" }}
-              >
-                {snackbarMessage}
-              </Alert>
-            </Snackbar>
-            <div className="flex items-center flex-row justify-between">
-              <div className="flex flex-row align-center items-center">
-                <span className="material-icons text-5xl rounded-full mr-2">
-                  person
-                </span>
-                <h2 className="font-caveat text-2xl font-bold tracking-tight">
-                  @{comment.username}
-                </h2>
+      {!loading && comments.length > 0 && (
+        <>
+          <div className="mt-6 h-auto rounded-t-2xl bg-gray-300 relative transition duration-100 overflow-hidden">
+            <div className="relative h-full">
+              <div className="relative p-5 z-10">
+                <div className="flex flex-row items-center">
+                  <i
+                    className="material-icons text-white text-4xl mr-2"
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  >
+                    forum
+                  </i>
+                  <h1
+                    className="text-2xl tracking-tighter font-bold text-white"
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  >
+                    Sección de comentarios
+                  </h1>
+                </div>
               </div>
-              <div className="flex flex-row align-center items-center">
-                <div className="flex flex-col justify-end">
-                  <p className="text-sm mr-0 ml-auto tracking-tighter">
-                    {new Date(comment.posted_at).toLocaleDateString()}
-                  </p>
-                  {comment.rating !== null && (
-                    <div>
-                      <div className="flex justify-end items-center">
-                        {[1, 2, 3, 4, 5].map((i) => (
-                          <i
-                            key={i}
-                            className={`material-icons text-yellow-500 text-sm ${
-                              i <= comment.rating
+            </div>
+          </div>
+          {comments.map((comment) => (
+            <div
+              key={comment.id}
+              className="transition-padding p-4 border-t-2 border-gray-400 bg-gray-300 cursor-default"
+            >
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={() => setSnackbarOpen(false)}
+              >
+                <Alert
+                  onClose={() => setSnackbarOpen(false)}
+                  severity={
+                    snackbarSeverity as "error" | "success" | "info" | "warning"
+                  }
+                  variant="filled"
+                  sx={{ width: "100%" }}
+                >
+                  {snackbarMessage}
+                </Alert>
+              </Snackbar>
+              <div className="flex items-center flex-row justify-between">
+                <div className="flex flex-row align-center items-center">
+                  <span className="material-icons text-5xl rounded-full mr-2">
+                    person
+                  </span>
+                  <h2 className="font-caveat text-2xl font-bold tracking-tight">
+                    @{comment.username}
+                  </h2>
+                </div>
+                <div className="flex flex-row align-center items-center">
+                  <div className="flex flex-col justify-end">
+                    <p className="text-sm mr-0 ml-auto tracking-tighter">
+                      {new Date(comment.posted_at).toLocaleDateString()}
+                    </p>
+                    {comment.rating !== null && (
+                      <div>
+                        <div className="flex justify-end items-center">
+                          {[1, 2, 3, 4, 5].map((i) => (
+                            <i
+                              key={i}
+                              className={`material-icons text-xs cursor-pointer ${
+                                i <= comment.rating
+                                  ? "text-white hover:text-gray-200"
+                                  : "text-gray-400 hover:text-gray-500"
+                              }`}
+                              style={{
+                                textShadow:
+                                  i <= comment.rating
+                                    ? "2px 2px 4px rgba(0,0,0,0.5)"
+                                    : undefined,
+                              }}
+                            >
+                              {i <= comment.rating
                                 ? "star"
                                 : i - 0.5 === comment.rating
                                 ? "star_half"
-                                : "star_border"
-                            }`}
-                          >
-                            {i <= comment.rating
-                              ? "star"
-                              : i - 0.5 === comment.rating
-                              ? "star_half"
-                              : "star_border"}
-                          </i>
-                        ))}
+                                : "star_border"}
+                            </i>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
+                  </div>
+                  {comment.user === id && (
+                    <i
+                      className="material-icons text-xl ml-4 text-gray-600 transition duration-300 hover:cursor-pointer hover:text-red-500"
+                      onClick={() => {
+                        handleDeleteComment(comment.id);
+                        setComments(
+                          comments.filter((c) => c.id !== comment.id)
+                        );
+                      }}
+                    >
+                      delete
+                    </i>
                   )}
                 </div>
-                {comment.user === id && (
-                  <i
-                    className="material-icons text-xl ml-4 text-gray-600 transition duration-300 hover:cursor-pointer hover:text-red-500"
-                    onClick={() => {
-                      handleDeleteComment(comment.id);
-                      setComments(comments.filter((c) => c.id !== comment.id));
-                    }}
-                  >
-                    delete
-                  </i>
-                )}
               </div>
+              <p className="text-sm tracking-tighter">{comment.content}</p>
             </div>
-            <p className="text-sm tracking-tighter">{comment.content}</p>
-          </div>
-        ))}
+          ))}
+        </>
+      )}
     </>
   );
-};
-
+}
 export default List;
 
