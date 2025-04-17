@@ -275,8 +275,8 @@ export default function Create() {
               </div>
             </div>
 
-            <div className="mb-6 px-4 py-4 bg-gray-300 rounded-2xl">
-              <div className="h-fit rounded-2xl mb-4 bg-gray-300 relative p-2">
+            <div className="mb-6 py-4 bg-gray-300 rounded-2xl">
+              <div className="h-fit px-4 rounded-2xl mb-4 bg-gray-300 relative p-2">
                 <div className="relative h-full">
                   <div
                     className="bg-no-repeat bg-center bg-cover absolute w-1/2 inset-0"
@@ -304,7 +304,7 @@ export default function Create() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row justify-center p-2 bg-blue-500 rounded-2xl w-full h-fit items-center align-center gap-2 mb-4">
+              <div className="flex flex-row justify-center p-2 bg-blue-500 w-full h-fit items-center align-center gap-2 mb-4">
                 <input
                   type="text"
                   className="outline-none rounded-lg px-4 py-2 w-full text-xs"
@@ -333,6 +333,7 @@ export default function Create() {
                   <i className="material-icons text-white text-xl">lock</i>
                 </button>
               </div>
+              <div className= "px-4                                                                                                                                                                                                                                                                           ">
               {filterTags.length > 0 && (
                 <div className="flex flex-wrap w-full mb-4 gap-2">
                   {filterTags.map((tag) => (
@@ -348,6 +349,8 @@ export default function Create() {
                 </div>
               )}
               <EventCarouselSearch />
+              </div>
+
             </div>
             <Tags open={openTags} setOpen={setOpenTags} />
 

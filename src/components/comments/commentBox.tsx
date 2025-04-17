@@ -139,13 +139,27 @@ const commentBox = () => {
             {selectedEvent.enableComments && (
               <>
                 <textarea
-                  className="bg-white p-3 rounded-lg border mt-2 border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs h-[100px] resize-none"
+                  className="bg-white p-3 border mt-2 border-gray-400 focus:outline-none text-xs h-[100px] resize-none"
                   placeholder="Escribe un comentario..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   maxLength={300}
                   style={{ resize: "none", height: "100px" }}
                 />
+
+
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleUploadComment(e);
+                  }}
+                  className="font-bold bg-transparent border-l-[1px] border-r-[1px] border-b-[1px] text-sm border-gray-400 
+                text-black rounded-b-2xl p-2 hover:bg-blue-500
+                hover:border-blue-500 hover:text-white 
+                transition duration-300"
+                >
+                  Publish Comment
+                </button>
 
                 {selectedEvent.enableRatings && (
                   <div className="flex items-center">
@@ -160,19 +174,6 @@ const commentBox = () => {
                     </label>
                   </div>
                 )}
-
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleUploadComment(e);
-                  }}
-                  className="font-bold bg-transparent border-2 text-sm border-black 
-                text-black rounded-xl p-2 hover:bg-blue-500
-                hover:border-blue-500 hover:text-white 
-                transition duration-300 mt-2"
-                >
-                  Publish Comment
-                </button>
 
                 <CommentList />
               </>
