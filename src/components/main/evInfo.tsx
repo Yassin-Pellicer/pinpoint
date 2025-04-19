@@ -219,7 +219,11 @@ const eventInfo = ({open, setOpen}) => {
           </div>
 
           {selectedEvent.enableInscription && (
-            <div className={`h-auto rounded-2xl mt-4 ${isInscribed ? 'bg-green-500' : 'bg-blue-500'} relative hover:cursor-pointer transition duration-100`}>
+            <div
+              className={`h-auto rounded-2xl mt-4 ${
+                isInscribed ? "bg-green-500" : "bg-blue-500"
+              } relative hover:cursor-pointer transition duration-100`}
+            >
               <div className="relative h-full">
                 <div
                   className="bg-no-repeat bg-center bg-cover absolute right-[-40px] top-[-15px] bottom-0 w-1/2 transform"
@@ -235,7 +239,9 @@ const eventInfo = ({open, setOpen}) => {
                     className="text-3xl tracking-tighter font-extrabold mb-2 text-white"
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                   >
-                    {isInscribed ? "Estás inscrito al evento" : "¡Inscribirse al evento!"}
+                    {isInscribed
+                      ? "Estás inscrito al evento"
+                      : "¡Inscribirse al evento!"}
                   </h1>
                   <p
                     className="text-sm tracking-tighter font-bold text-white"
@@ -245,16 +251,20 @@ const eventInfo = ({open, setOpen}) => {
                     inscribirte!
                   </p>
                   <div className="mt-4 flex items-center align-center flex-row justify-between">
-                    {isInscribed !== null && (
-                      <button
-                        onClick={() => isInscribed ? handleDeleteInscription() : handleUploadInscription()}
-                        className={`rounded-full w-[150px] font-extrabold tracking-tighter ${
-                          !isInscribed ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"
-                        } py-2 px-4 text-white`}
-                      >
-                        {!isInscribed ? "Inscribirse!" : "Desinscribirte"}
-                      </button>
-                    )}
+                    <button
+                      onClick={() =>
+                        isInscribed
+                          ? handleDeleteInscription()
+                          : handleUploadInscription()
+                      }
+                      className={`rounded-full w-[150px] font-extrabold tracking-tighter ${
+                        !isInscribed
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : "bg-red-600 hover:bg-red-700"
+                      } py-2 px-4 text-white`}
+                    >
+                      {!isInscribed ? "Inscribirse!" : "Desinscribirte"}
+                    </button>
                     {selectedEvent.capacity && (
                       <div className="flex items-center flex-row">
                         <h2
