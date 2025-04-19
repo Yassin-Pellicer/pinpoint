@@ -125,7 +125,7 @@ export default function Create() {
     handler();
   
     return () => handler.cancel && handler.cancel();
-  }, [filterTags, search]);
+  }, [filterTags, search, selectedEvent]);
 
   useEffect(() => {
     if (selectedEvent != null) { setOpenDetails(true); return;}
