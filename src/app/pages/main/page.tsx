@@ -34,13 +34,17 @@ export default function Create() {
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
-  const Quill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
-    []
-  );
-
   const loadEvents = async () => {
-    const newEvents = await getEventsHook(undefined, undefined, undefined, location?.[0], location?.[1], zoom, events.filter(event => event.id !== selectedEvent?.id));
+    const newEvents = await getEventsHook(
+      undefined,
+      undefined,
+      undefined,
+      location?.[0],
+      location?.[1],
+      zoom,
+      events.filter(event => event.id !== selectedEvent?.id)
+    );
+  
     const updatedEvents = await Promise.all(
       newEvents.events.map(async (event) => {
         const response = await getTagsHook(event.id);
@@ -51,13 +55,16 @@ export default function Create() {
         return { ...event, tags: newTags };
       })
     );
-    setEvents((prevEvents) => {
-      const newEventIds = new Set(prevEvents.map(event => event.id));
-      const nonDuplicateEvents = updatedEvents.filter(event => !newEventIds.has(event.id));
-      return [...prevEvents, ...nonDuplicateEvents];
+  
+    setEvents(() => {
+      const updatedMap = new Map(events.filter(event => event.id !== selectedEvent?.id).map(event => [event.id, event]));
+      updatedEvents.forEach(event => {
+        updatedMap.set(event.id, event); // replace or add
+      });
+      return Array.from(updatedMap.values());
     });
   };
-
+  
   const loadSearchEvents = async (tags, searchTerm) => {
     if (tags.length === 0 && searchTerm === "") {
       setSearchResults([]);
