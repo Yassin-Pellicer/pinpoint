@@ -2,8 +2,11 @@ import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  const { name, description, marker, banner, qr, isPublic, author, enableComments, enableRatings } = await request.json()
+  let { name, description, marker, banner, qr, isPublic, author, enableComments, enableRatings, enableInscription, capacity } = await request.json()
 
+  if (capacity == 0) {
+    capacity = null;
+  }
   if (!name) {
     return NextResponse.json({ result: "error", message: "name", status: 400 });
   }
@@ -27,8 +30,8 @@ export async function POST(request) {
 
   try {
     const insertUserQuery = await sql`
-        INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", address)
-        VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${address})
+        INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", "enableInscription", capacity, address)
+        VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${enableInscription}, ${capacity}, ${address})
         RETURNING id
       `;
     const insertedId = insertUserQuery.rows[0].id;

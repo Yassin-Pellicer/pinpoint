@@ -1,4 +1,4 @@
-import { Checkpoint } from "../../utils/classes/cpClass";
+import { Checkpoint } from "../../utils/classes/Checkpoint";
 
 export const addCheckpointsHook = async ( Tags : {eventId: number, data: Checkpoint[]} ) => {
 

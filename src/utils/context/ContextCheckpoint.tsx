@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState } from "react";
-import { Checkpoint } from "../classes/cpClass";
+import { Checkpoint } from "../classes/Checkpoint";
 
 interface CheckpointsContextType {
   checkpoints: Checkpoint[];

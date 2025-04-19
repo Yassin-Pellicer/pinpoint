@@ -1,10 +1,10 @@
 import {NextIntlClientProvider} from 'next-intl';
 import {getLocale, getMessages} from 'next-intl/server';
 import './globals.css';
-import { CheckpointsProvider } from '../utils/context/cpContext';
-import { EventProvider } from '../utils/context/eventContext';
-import { MapProvider } from '../utils/context/mapContext';
-import { SessionProvider } from '../utils/context/sessionContext';
+import { CheckpointsProvider } from '../utils/context/ContextCheckpoint';
+import { EventProvider } from '../utils/context/ContextEvent';
+import { MapProvider } from '../utils/context/ContextMap';
+import { SessionProvider } from '../utils/context/ContextSession';
 
 export default async function RootLayout({
   children

@@ -1,6 +1,6 @@
 "use client";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { useCheckpoints } from "../../utils/context/cpContext";
+import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import { closestCenter, closestCorners, DndContext, pointerWithin, rectIntersection } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -8,19 +8,19 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useSortable } from "@dnd-kit/sortable";
-import { Checkpoint } from "../../utils/classes/cpClass";
+import { Checkpoint } from "../../utils/classes/Checkpoint";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useEvent } from "../../utils/context/eventContext";
+import { useEvent } from "../../utils/context/ContextEvent";
 import { get } from "http";
 import { getCommentsHook } from "../../hooks/main/getCommentsHook";
 import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
 import { getUserHook } from "../../hooks/general/getUserHook";
-import { useSessionContext } from "../../utils/context/sessionContext";
+import { useSessionContext } from "../../utils/context/ContextSession";
 import { deleteCommentHook } from "../../hooks/main/deleteCommentHook";
 import { Alert, Snackbar } from "@mui/material";
 
-const List = () => {
+const List = ({refresh, setRefresh}) => {
   const { selectedEvent } = useEvent();
   const { id } = useSessionContext();
   const [comments, setComments] = useState([]);
@@ -50,7 +50,7 @@ const List = () => {
         setLoading(false);
       });
     });
-  }, [selectedEvent.id]);
+  }, [selectedEvent.id, refresh]);
 
   const handleDeleteComment = async (commentId) => {
     deleteCommentHook(commentId);

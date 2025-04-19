@@ -7,11 +7,11 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import MapMain from "../../../components/main/mainMap";
 
-import { useCheckpoints } from "../../../utils/context/cpContext";
-import { useEvent } from "../../../utils/context/eventContext";
+import { useCheckpoints } from "../../../utils/context/ContextCheckpoint";
+import { useEvent } from "../../../utils/context/ContextEvent";
 import Logo from "../../../components/ui/logo_btn";
-import { useMapContext } from "../../../utils/context/mapContext";
-import { Event } from "../../../utils/classes/EventClass";
+import { useMapContext } from "../../../utils/context/ContextMap";
+import { Event } from "../../../utils/classes/Event";
 import Tags from "../../../components/create/tags";
 import { Tag } from "../../../utils/classes/Tag";
 import { getEventsHook } from "../../../hooks/main/getEventsHook";
@@ -20,7 +20,7 @@ import EventInfo from "../../../components/main/evInfo";
 import EventCarousel from "../../../components/main/eventCarousel";
 import EventCarouselSearch from "../../../components/main/eventCarouselSearch";
 import debounce from "lodash.debounce";
-import { useSessionContext } from "../../../utils/context/sessionContext";
+import { useSessionContext } from "../../../utils/context/ContextSession";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
@@ -40,7 +40,7 @@ export default function Create() {
   );
 
   const loadEvents = async () => {
-    const newEvents = await getEventsHook(undefined, undefined, undefined, location?.[0], location?.[1], zoom, events);
+    const newEvents = await getEventsHook(undefined, undefined, undefined, location?.[0], location?.[1], zoom, events.filter(event => event.id !== selectedEvent?.id));
     const updatedEvents = await Promise.all(
       newEvents.events.map(async (event) => {
         const response = await getTagsHook(event.id);
@@ -108,7 +108,7 @@ export default function Create() {
 
   useEffect(() => {
     loadEvents();
-  }, [zoom, location]);
+  }, [zoom, location, selectedEvent]);
 
   useEffect(() => {
     const handler = debounce(async () => {
@@ -128,8 +128,9 @@ export default function Create() {
 
   return (
     <Layout>
-      <div className="flex flex-col overflow-auto bg-blue-500 h-screen px-6 min-w-[560px] max-w-[560px]">
-        {/* Event type */}
+      <div className="flex flex-row">
+        <div className="flex flex-col overflow-auto bg-blue-500 h-screen shrink-0 px-6 w-[550px]">
+          {/* Event type */}
           <div className="flex px-6 flex-col mb-6 mt-6 rounded-2xl bg-white">
             <div className="flex mt-6 flex-row justify-between items-center align-center">
               <div className=" w-[100px] flex items-center justify-center">
@@ -238,11 +239,13 @@ export default function Create() {
                   </div>
                 </div>
               </div>
-              {recommendations.length === 0 && <>
-              <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
-                <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
-              </div>
-              </>}
+              {recommendations.length === 0 && (
+                <>
+                  <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
+                    <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
+                  </div>
+                </>
+              )}
               <EventCarousel />
             </div>
 
@@ -333,32 +336,31 @@ export default function Create() {
                   <i className="material-icons text-white text-xl">lock</i>
                 </button>
               </div>
-              <div className= "px-4                                                                                                                                                                                                                                                                           ">
-              {filterTags.length > 0 && (
-                <div className="flex flex-wrap w-full mb-4 gap-2">
-                  {filterTags.map((tag) => (
-                    <div
-                      key={tag.id}
-                      className={`rounded-full w-fit px-2 py-1 text-center
+              <div className="px-4                                                                                                                                                                                                                                                                           ">
+                {filterTags.length > 0 && (
+                  <div className="flex flex-wrap w-full mb-4 gap-2">
+                    {filterTags.map((tag) => (
+                      <div
+                        key={tag.id}
+                        className={`rounded-full w-fit px-2 py-1 text-center
                text-white bg-[#3F7DEA] font-bold tracking-tight"
             }`}
-                    >
-                      <p className="text-xs">{tagsTrans(`${tag.name}`)}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <EventCarouselSearch />
+                      >
+                        <p className="text-xs">{tagsTrans(`${tag.name}`)}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <EventCarouselSearch />
               </div>
-
             </div>
             <Tags open={openTags} setOpen={setOpenTags} />
-
           </div>
-              <EventInfo open={openDetails} setOpen={setOpenDetails} />
+          <EventInfo open={openDetails} setOpen={setOpenDetails} />
+        </div>
+        {/* Map */}
+        <MapMain />
       </div>
-      {/* Map */}
-      <MapMain />
     </Layout>
   );
 }

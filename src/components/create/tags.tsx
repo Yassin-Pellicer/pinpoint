@@ -1,5 +1,5 @@
-import { useEvent } from "../../utils/context/eventContext";
-import { useMapContext } from "../../utils/context/mapContext";
+import { useEvent } from "../../utils/context/ContextEvent";
+import { useMapContext } from "../../utils/context/ContextMap";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { useTranslations } from "next-intl";
 import { Tag } from "../../utils/classes/Tag";

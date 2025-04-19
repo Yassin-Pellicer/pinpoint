@@ -3,9 +3,9 @@ import { useMap, useMapEvents } from "react-leaflet";
 import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import dynamic from "next/dynamic";
-import { useEvent } from "../../../utils/context/eventContext";
+import { useEvent } from "../../../utils/context/ContextEvent";
 import { useTranslations } from "next-intl";
-import { useMapContext } from "../../../utils/context/mapContext";
+import { useMapContext } from "../../../utils/context/ContextMap";
 
 const PlaceCP = () => {
   const map = useMap();

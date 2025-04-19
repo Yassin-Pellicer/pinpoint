@@ -6,11 +6,11 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useEvent } from "../../utils/context/eventContext";
+import { useEvent } from "../../utils/context/ContextEvent";
 import { getEventsHook } from "../../hooks/main/getEventsHook";
 import { getTagsHook } from "../../hooks/main/getTagsHook";
 import { Tag } from "../../utils/classes/Tag";
-import { useMapContext } from "../../utils/context/mapContext";
+import { useMapContext } from "../../utils/context/ContextMap";
 
 export default function SwiperComponent() {
 

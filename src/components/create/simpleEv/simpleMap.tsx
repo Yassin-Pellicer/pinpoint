@@ -16,7 +16,7 @@ import CreateEvents from "./simpleEvPlace";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useEffect, useState } from "react";
-import { useMapContext } from "../../../utils/context/mapContext";
+import { useMapContext } from "../../../utils/context/ContextMap";
 
 const center: [number, number] = [51.505, -0.09]; 
 

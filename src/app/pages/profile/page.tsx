@@ -7,11 +7,11 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import MapMain from "../../../components/main/mainMap";
 
-import { useCheckpoints } from "../../../utils/context/cpContext";
-import { useEvent } from "../../../utils/context/eventContext";
+import { useCheckpoints } from "../../../utils/context/ContextCheckpoint";
+import { useEvent } from "../../../utils/context/ContextEvent";
 import Logo from "../../../components/ui/logo_btn";
-import { useMapContext } from "../../../utils/context/mapContext";
-import { Event } from "../../../utils/classes/EventClass";
+import { useMapContext } from "../../../utils/context/ContextMap";
+import { Event } from "../../../utils/classes/Event";
 import Tags from "../../../components/create/tags";
 import { Tag } from "../../../utils/classes/Tag";
 import { getEventsHook } from "../../../hooks/main/getEventsHook";
@@ -20,7 +20,7 @@ import EventInfo from "../../../components/main/evInfo";
 import EventCarousel from "../../../components/main/eventCarousel";
 import EventCarouselSearch from "../../../components/main/eventCarouselSearch";
 import debounce from "lodash.debounce";
-import { useSessionContext } from "../../../utils/context/sessionContext";
+import { useSessionContext } from "../../../utils/context/ContextSession";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();

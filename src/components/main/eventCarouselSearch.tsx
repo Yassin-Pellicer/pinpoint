@@ -4,8 +4,8 @@ import React from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useEvent } from "../../utils/context/eventContext";
-import { useMapContext } from "../../utils/context/mapContext";
+import { useEvent } from "../../utils/context/ContextEvent";
+import { useMapContext } from "../../utils/context/ContextMap";
 
 export default function SwiperComponent() {
   const { searchResults } = useMapContext();

@@ -2,7 +2,7 @@
 import { ReactNode, useEffect } from "react";
 import Menu from "../../../components/home/menu";
 import { useState } from "react";
-import { useSessionContext } from "../../../utils/context/sessionContext";
+import { useSessionContext } from "../../../utils/context/ContextSession";
 import { useRouter } from 'next/navigation';
 
 interface LayoutProps {
@@ -38,7 +38,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [])
 
   return (
-    <main className="flex flex-row">
+    <main className="">
 
       {/* CONTENT */}
       {children}

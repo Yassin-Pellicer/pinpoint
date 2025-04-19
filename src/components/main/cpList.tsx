@@ -1,5 +1,5 @@
 "use client";
-import { useCheckpoints } from "../../utils/context/cpContext";
+import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import { useTranslations } from "next-intl";
 import CheckpointInfo from "./cpInfo";
 

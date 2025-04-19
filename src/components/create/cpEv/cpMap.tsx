@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useMapContext } from "../../../utils/context/mapContext";
+import { useMapContext } from "../../../utils/context/ContextMap";
 
 export default function MapComponent() {
 

@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState } from "react";
-import { Event } from "../classes/EventClass";
+import { Event } from "../classes/Event";
 import { Tag } from "../classes/Tag";
 
 interface EventContextType {
@@ -34,7 +34,14 @@ interface EventContextType {
   setEnableComments: (comments: boolean) => void;
   rating: number;
   setRating: (rating: number) => void;
+  enableInscription: boolean;
+  setEnableInscription: (inscription: boolean) => void;
+  checkpoints: any[];
+  setCheckpoints: (checkpoints: any[]) => void;
   address: string;
+  setAddress: (address: string) => void;
+  capacity: number;
+  setCapacity: (capacity: number) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -92,6 +99,22 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, rating }));
   };
 
+  const setAddress = (address: string) => {
+    setEvent((prev) => ({ ...prev, address }));
+  };
+
+  const setCheckpoints = (checkpoints: any[]) => {
+    setEvent((prev) => ({ ...prev, checkpoints }));
+  };  
+
+  const setEnableInscription = (enableInscription: boolean) => {
+    setEvent((prev) => ({ ...prev, enableInscription }));
+  };
+
+  const setCapacity = (capacity: number) => {
+    setEvent((prev) => ({ ...prev, capacity }));
+  };
+
   return (
     <EventContext.Provider
       value={{
@@ -125,7 +148,14 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         setEnableComments,
         rating: event.rating,
         setRating,
+        checkpoints: event.checkpoints,
+        setCheckpoints,
+        enableInscription: event.enableInscription,
+        setEnableInscription,
         address: event.address,
+        setAddress,
+        capacity: event.capacity,
+        setCapacity,
       }}
     >
       {children}

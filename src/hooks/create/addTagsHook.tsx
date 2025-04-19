@@ -1,4 +1,4 @@
-import { Event } from "../../utils/classes/EventClass";
+import { Event } from "../../utils/classes/Event";
 import { Tag } from "../../utils/classes/Tag";
 
 export const addTagsHook = async ( Tags : {eventId: number, data: Tag[]} ) => {

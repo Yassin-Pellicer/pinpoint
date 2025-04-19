@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Tags from "../tags";
 import dynamic from "next/dynamic";
 import Quill from "quill";
-import { useEvent } from "../../../utils/context/eventContext";
+import { useEvent } from "../../../utils/context/ContextEvent";
 import fileURL from "../../../utils/funcs/createUrlImage";
 import { createEventHook } from "../../../hooks/create/addEventHook";
 import { addTagsHook } from "../../../hooks/create/addTagsHook";
@@ -12,6 +12,7 @@ import SnackbarContent from '@mui/material/SnackbarContent';
 import { addCheckpointsHook } from "../../../hooks/create/addCheckpointsHook";
 import { useRouter } from 'next/navigation';
 import Logo from "../../ui/logo";
+import Counter from "../../ui/counter";
 
 const SimpleEvent = () => {
   const {
@@ -22,26 +23,20 @@ const SimpleEvent = () => {
     setDescription,
     isPublic,
     setIsPublic,
-    marker,
-    setMarker,
     banner,
     setBanner,
     tags,
-    setTags,
-    qr,
-    setQr,
-    author,
-    setAuthor,
-    comments,
-    setComments,
     enableComments,
     setEnableComments,
     enableRatings,
     setEnableRatings,
+    enableInscription,
+    setEnableInscription,
+    capacity,
+    setCapacity,
   } = useEvent();
 
   const [loading, setLoading] = useState(false);
-  const [openCp, setOpenCp] = useState(false);
   const [openTags, setOpenTags] = useState(false);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -59,8 +54,9 @@ const SimpleEvent = () => {
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
+    event.qr = false;
     try {
       const result = await createEventHook(event);
       if (result.status === 400) {
@@ -121,7 +117,7 @@ const SimpleEvent = () => {
 
       <form className="flex flex-col px-3 w-full" onSubmit={handleSubmit}>
         <div className="flex flex-row items-center justify-between text-black">
-          <h1 className="text-4xl tracking-tight font-caveat font-bold">
+          <h1 className="text-3xl tracking-tight font-bold">
             {t("Details.creation")}
           </h1>
           {/* <i className="material-icons">lock</i> */}
@@ -175,82 +171,18 @@ const SimpleEvent = () => {
           style={{ height: "200px", marginBottom: "40px" }}
         />
 
-        <div className="flex justify-between mt-8 flex-row">
-          <FormControl className="">
-            <FormControlLabel
-              label={
-                isPublic
-                  ? t("Details.public.title")
-                  : t("Details.private.title")
-              }
-              control={
-                <Switch
-                  checked={isPublic}
-                  onChange={(e) => setIsPublic(e.target.checked)}
-                  name="isPublic"
-                  color="primary"
-                />
-              }
-            />
-          </FormControl>
-        </div>
-
-        {!isPublic ? (
-          <>
-            <label className="text-sm font-bold mb-1">
-              Introduce tu código de invitación:
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              className="border border-black rounded p-1 mb-1"
-            />
-            <p className="text-sm mt-1 mb-2">
-              {t.rich("Details.private.description", {
-                b: (chunks) => <b>{chunks}</b>,
-              })}
-            </p>
-          </>
-        ) : (
-          <p className="text-sm mt-1 mb-2">
-            {t.rich("Details.public.description", {
-              b: (chunks) => <b>{chunks}</b>,
-            })}
-          </p>
-        )}
-
-        <div className="flex justify-between">
-          <FormControl>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={enableComments}
-                  onChange={(e) => setEnableComments(e.target.checked)}
-                  name="enableComments"
-                  color="primary"
-                />
-              }
-              label="Permitir Comentarios"
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={enableRatings}
-                  onChange={(e) => setEnableRatings(e.target.checked)}
-                  name="enableRatings"
-                  color="primary"
-                />
-              }
-              label="Permitir Valoraciones"
-            />
-          </FormControl>
-        </div>
+        <button
+          onClick={(e) => {
+            setOpenTags(!openTags);
+            e.preventDefault();
+          }}
+          className="font-bold bg-transparent border-l-[1px] border-r-[1px] mt-[18px] border-b-[1px] text-sm border-gray-400 
+          text-black rounded-b-2xl p-2 mb-3 hover:bg-blue-500
+          hover:border-blue-500 hover:text-white 
+          transition duration-300"
+        >
+          {t("Details.setTags")}
+        </button>
 
         {tags.length > 0 && (
           <div>
@@ -269,18 +201,191 @@ const SimpleEvent = () => {
           </div>
         )}
 
-        <button
-          onClick={(e) => {
-            setOpenTags(!openTags);
-            e.preventDefault();
-          }}
-          className="font-bold bg-transparent border-2 text-sm border-black 
-            text-black rounded-xl p-2 hover:bg-blue-500
-            hover:border-blue-500 hover:text-white 
-            transition duration-300 mb-4 mt-4"
+        <div
+          className={`h-auto rounded-2xl mt-3 ${
+            !enableInscription
+              ? "bg-gray-400"
+              : "bg-blue-500 hover:bg-blue-600 transition duration-100"
+          } relative hover:cursor-pointer`}
         >
-          {t("Details.setTags")}
-        </button>
+          <div className="relative select-none flex flex-row h-[150px] items-center justify-center">
+            <div
+              className="bg-no-repeat bg-center bg-cover absolute right-[-40px] top-[-15px] bottom-0 w-1/2 transform"
+              style={{
+                backgroundImage: "url('/img/checklist.png')",
+                transform: "rotate(5deg)",
+                scale: "0.8",
+              }}
+            ></div>
+            <div
+              onClick={() => setEnableInscription(!enableInscription)}
+              className="relative z-10 p-5"
+            >
+              <h1
+                className="text-3xl tracking-tighter font-extrabold mb-2 text-white"
+                style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+              >
+                {enableInscription
+                  ? "Deshabilitar inscripción"
+                  : "Habilitar inscripción"}
+              </h1>
+              <p
+                className="text-sm tracking-tighter font-bold text-white"
+                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
+              >
+                {enableInscription &&
+                  "Si la capacidad se deja en 0 o nula, el aforo será también ilimitado."}
+                {!enableInscription &&
+                  "Habilitar la inscripción permite a los usuarios registrarse en el evento y limitar el aforo de la actividad."}
+              </p>
+            </div>
+            <div className="relative z-10 p-2">
+              {enableInscription && (
+                <Counter
+                  number={capacity}
+                  setNumber={setCapacity}
+                  min={0}
+                  max={10000}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="h-auto rounded-t-2xl mt-6 bg-gray-300 relative transition duration-100 overflow-hidden">
+          <div className="relative h-full">
+            <div className="relative p-4 z-10">
+              <div className="flex flex-row items-center justify-between">
+                <div className="flex items-center">
+                  <i
+                    className="material-icons text-white text-4xl mr-2"
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  >
+                    {isPublic ? "public" : "lock"}
+                  </i>
+                  <h1
+                    className="text-2xl tracking-tighter font-bold text-white"
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  >
+                    {isPublic ? "Evento Público" : "Evento Privado"}
+                  </h1>
+                </div>
+                <FormControl className="flex justify-end">
+                  <FormControlLabel
+                    label={""}
+                    control={
+                      <Switch
+                        checked={isPublic}
+                        onChange={(e) => setIsPublic(e.target.checked)}
+                        name="isPublic"
+                        color="primary"
+                      />
+                    }
+                  />
+                </FormControl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="h-auto rounded-b-2xl bg-gray-200 relative transition duration-100 overflow-hidden">
+          <div className="relative h-full">
+            <div className="relative p-4 z-10">
+              {isPublic ? (
+                <p className="text-sm mt-1 mb-2">
+                  {t.rich("Details.public.description", {
+                    b: (chunks) => <b>{chunks}</b>,
+                  })}
+                </p>
+              ) : (
+                <>
+                  <label className="text-sm font-bold mb-1">
+                    Introduce tu código de invitación:
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
+                    className="border w-full mt-2 border-black rounded p-1 mb-1"
+                  />
+                  <p className="text-sm mt-1 mb-2">
+                    {t.rich("Details.private.description", {
+                      b: (chunks) => <b>{chunks}</b>,
+                    })}
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="h-auto rounded-2xl mt-6 bg-gray-300 relative transition duration-100 overflow-hidden">
+            <div className="relative h-full">
+              <div className="relative p-4 z-10">
+                <div className="flex flex-row items-center justify-between">
+                  <div className="flex items-center">
+                    <h1
+                      className="text-lg tracking-tighter font-bold text-white"
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    >
+                      {enableComments
+                        ? "Comentarios Activados"
+                        : "Comentarios Desactivados"}
+                    </h1>
+                  </div>
+                  <FormControl>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={enableComments}
+                          onChange={(e) => setEnableComments(e.target.checked)}
+                          name="enableComments"
+                          color="primary"
+                        />
+                      }
+                      label=""
+                    />
+                  </FormControl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="h-auto rounded-2xl mt-6 bg-gray-300 relative transition duration-100 overflow-hidden">
+            <div className="relative h-full">
+              <div className="relative p-4 z-10">
+                <div className="flex flex-row items-center justify-between">
+                  <div className="flex items-center">
+                    <h1
+                      className="text-lg tracking-tighter font-bold text-white"
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    >
+                      {enableRatings
+                        ? "Valoraciones Activadas"
+                        : "Valoraciones Desactivadas"}
+                    </h1>
+                  </div>
+                  <FormControl>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={enableRatings}
+                          onChange={(e) => setEnableRatings(e.target.checked)}
+                          name="enableRatings"
+                          color="primary"
+                        />
+                      }
+                      label=""
+                    />
+                  </FormControl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className="flex justify-center">
           <button
@@ -301,7 +406,7 @@ const SimpleEvent = () => {
         </div>
       </form>
 
-      <Tags open={openTags} setOpen={setOpenTags} parentTags={undefined} setParentTags={undefined} />
+      <Tags open={openTags} setOpen={setOpenTags} />
     </div>
   );
 };

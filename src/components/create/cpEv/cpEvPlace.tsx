@@ -3,15 +3,15 @@ import { useMap, useMapEvents } from "react-leaflet";
 import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import dynamic from "next/dynamic";
-import { Checkpoint } from "../../../utils/classes/cpClass";
-import { useCheckpoints } from "../../../utils/context/cpContext"; 
-import { useMapContext } from "../../../utils/context/mapContext"; 
+import { Checkpoint } from "../../../utils/classes/Checkpoint";
+import { useCheckpoints } from "../../../utils/context/ContextCheckpoint"; 
+import { useMapContext } from "../../../utils/context/ContextMap"; 
 import { useTranslations } from "next-intl";
 import CheckpointInfo from "./cpInfo";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import fileURL from "../../../utils/funcs/createUrlImage";
-import { useEvent }  from "../../../utils/context/eventContext";
+import { useEvent }  from "../../../utils/context/ContextEvent";
 
 const PlaceCP = () => {
   const map = useMap();

@@ -1,6 +1,6 @@
 // utils/hooks/useEvents.ts
 import { Tag } from "../../utils/classes/Tag";
-import { useEvent } from "../../utils/context/eventContext";
+import { useEvent } from "../../utils/context/ContextEvent";
 
 export const getEventsHook = async (
   tags?: Tag[],

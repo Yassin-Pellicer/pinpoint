@@ -1,5 +1,6 @@
 import { Tag } from "./Tag";
 import { Comment } from "./Comment";
+import { Checkpoint } from "./Checkpoint";
 
 export class Event {
   constructor(
@@ -17,5 +18,9 @@ export class Event {
     public enableRatings: boolean = false,
     public enableComments: boolean = false,
     public address: string = "",
+    public checkpoints: Checkpoint[] = [],
+    public enableInscription: boolean = false,
+    public capacity: number = null,
+    public inscriptions: number = null,
   ) {}
 }

@@ -3,10 +3,10 @@ import { useMap, useMapEvents } from "react-leaflet";
 import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import dynamic from "next/dynamic";
-import { useEvent } from "../../utils/context/eventContext";
+import { useEvent } from "../../utils/context/ContextEvent";
 import { useTranslations } from "next-intl";
-import { useMapContext } from "../../utils/context/mapContext";
-import { useCheckpoints } from "../../utils/context/cpContext";
+import { useMapContext } from "../../utils/context/ContextMap";
+import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import Logo from "../ui/logo";
 
 const evView = () => {
