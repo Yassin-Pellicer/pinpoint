@@ -22,5 +22,7 @@ export class Event {
     public enableInscription: boolean = false,
     public capacity: number = null,
     public inscriptions: number = null,
+    public start: Date = null,
+    public end: Date = null,
   ) {}
 }

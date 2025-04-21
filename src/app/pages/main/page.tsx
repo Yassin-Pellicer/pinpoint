@@ -22,6 +22,10 @@ import EventCarouselSearch from "../../../components/main/eventCarouselSearch";
 import debounce from "lodash.debounce";
 import { useSessionContext } from "../../../utils/context/ContextSession";
 
+import { CssBaseline } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent, events} = useEvent();
@@ -363,7 +367,10 @@ export default function Create() {
             </div>
             <Tags open={openTags} setOpen={setOpenTags} />
           </div>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <CssBaseline />
           <EventInfo open={openDetails} setOpen={setOpenDetails} />
+          </LocalizationProvider>
         </div>
         {/* Map */}
         <MapMain />

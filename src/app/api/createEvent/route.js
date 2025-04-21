@@ -2,8 +2,25 @@ import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  let { name, description, marker, banner, qr, isPublic, author, enableComments, enableRatings, enableInscription, capacity } = await request.json()
-
+  let {
+    name,
+    description,
+    marker,
+    banner,
+    qr,
+    isPublic,
+    author,
+    enableComments,
+    enableRatings,
+    enableInscription,
+    capacity,
+    start,
+    end
+  } = await request.json();
+  
+  start = start ? new Date(start).toISOString() : null;
+  end = end ? new Date(end).toISOString() : null;
+  
   if (capacity == 0) {
     capacity = null;
   }
@@ -30,8 +47,8 @@ export async function POST(request) {
 
   try {
     const insertUserQuery = await sql`
-        INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", "enableInscription", capacity, address)
-        VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${enableInscription}, ${capacity}, ${address})
+        INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", "enableInscription", capacity, address, start, "end")
+        VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${enableInscription}, ${capacity}, ${address}, ${start}, ${end})
         RETURNING id
       `;
     const insertedId = insertUserQuery.rows[0].id;

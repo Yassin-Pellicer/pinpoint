@@ -16,6 +16,10 @@ import Logo from "../../../components/ui/logo";
 import { useMapContext } from "../../../utils/context/ContextMap";
 import { Event } from "../../../utils/classes/Event";
 
+import { CssBaseline } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { event, setEvent, name, setName, description, setDescription, marker, setMarker, banner, setBanner, tags, setTags, qr, setQr, isPublic, setIsPublic, author, setAuthor} = useEvent();
@@ -96,7 +100,10 @@ export default function Create() {
           </div>
 
           {/* Event Creation */}
-          {selectedButton === "course" ? <CheckpointEvent /> : <SimpleEvent />}
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <CssBaseline />
+            {selectedButton === "course" ? <CheckpointEvent /> : <SimpleEvent />}
+          </LocalizationProvider>
         </div>
 
         {/* Map */}

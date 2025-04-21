@@ -42,6 +42,10 @@ interface EventContextType {
   setAddress: (address: string) => void;
   capacity: number;
   setCapacity: (capacity: number) => void;
+  start: Date;
+  setStart: (start: Date) => void;
+  end: Date;
+  setEnd: (end: Date) => void; 
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -115,6 +119,14 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, capacity }));
   };
 
+  const setStart = (start: Date) => {
+    setEvent((prev) => ({ ...prev, start }));
+  };
+
+  const setEnd = (end: Date) => {
+    setEvent((prev) => ({ ...prev, end }));
+  };
+
   return (
     <EventContext.Provider
       value={{
@@ -156,6 +168,10 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         setAddress,
         capacity: event.capacity,
         setCapacity,
+        start: event.start,
+        setStart,
+        end: event.end,
+        setEnd,
       }}
     >
       {children}

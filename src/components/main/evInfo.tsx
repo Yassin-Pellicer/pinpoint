@@ -20,7 +20,14 @@ import { deleteInscriptionHook } from "../../hooks/main/deleteInscriptionHook";
 import { getEventById } from "../../hooks/main/getEventById";
 import { getTagsHook } from "../../hooks/main/getTagsHook";
 import { Tag } from "../../utils/classes/Tag";
+
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import TextField from '@mui/material/TextField';
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
+
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import EventTimeDisplay from "../ui/date";
 
 const eventInfo = ({open, setOpen}) => {
   const { selectedEvent, setSelectedEvent, tags, marker, setEvents } = useEvent();
@@ -71,6 +78,10 @@ const eventInfo = ({open, setOpen}) => {
     setRefreshKey(prev => prev + 1);
     setIsInscribed(false);
   };
+
+  function formatDisplay(date: Date) {
+    return format(date, "d 'de' MMMM 'de' yyyy 'a las' HH:mm", { locale: es });
+  }
 
   return (
     <SwipeableDrawer
@@ -218,6 +229,8 @@ const eventInfo = ({open, setOpen}) => {
             </div>
           </div>
 
+          {selectedEvent.end && <EventTimeDisplay selectedEvent={selectedEvent}></EventTimeDisplay>}
+
           {selectedEvent.enableInscription && (
             <div
               className={`h-auto rounded-2xl mt-4 ${
@@ -348,7 +361,7 @@ const eventInfo = ({open, setOpen}) => {
             </div>
           </div>
 
-          <div className=" mt-4">
+          <div className=" mt-4 overflow-hidden">
             <div className="h-auto rounded-t-2xl bg-gray-300 relative transition duration-100 overflow-hidden">
               <div className="relative h-full">
                 <div
@@ -378,7 +391,7 @@ const eventInfo = ({open, setOpen}) => {
             </div>
             {selectedEvent.description && (
               <div
-                className="p-6 bg-gray-200 cursor-default transition"
+                className="p-6 bg-gray-200 cursor-default overflow-hidden transition"
                 onClick={() => {
                   navigator.clipboard.writeText(selectedEvent.description);
                 }}
