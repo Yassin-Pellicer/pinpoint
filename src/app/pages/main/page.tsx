@@ -362,8 +362,8 @@ export default function Create() {
                     ))}
                   </div>
                 )}
-                <EventCarouselSearch />
               </div>
+              <EventCarouselSearch />
             </div>
             <Tags open={openTags} setOpen={setOpenTags} />
           </div>

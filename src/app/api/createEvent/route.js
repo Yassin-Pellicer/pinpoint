@@ -46,13 +46,22 @@ export async function POST(request) {
   }
 
   try {
+    if(!start) {
+      const insertUserQuery = await sql`
+      INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", "enableInscription", capacity, address, start, "end")
+      VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${enableInscription}, ${capacity}, ${address}, NOW(), ${end})
+      RETURNING id
+    `;
+  const insertedId = insertUserQuery.rows[0].id;
+  return NextResponse.json({ result: "ok", id: insertedId })
+    }
     const insertUserQuery = await sql`
-        INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", "enableInscription", capacity, address, start, "end")
-        VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${enableInscription}, ${capacity}, ${address}, ${start}, ${end})
-        RETURNING id
-      `;
-    const insertedId = insertUserQuery.rows[0].id;
-    return NextResponse.json({ result: "ok", id: insertedId })
+    INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", "enableInscription", capacity, address, start, "end")
+    VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${enableInscription}, ${capacity}, ${address}, ${start}, ${end})
+    RETURNING id
+  `;
+const insertedId = insertUserQuery.rows[0].id;
+return NextResponse.json({ result: "ok", id: insertedId })    
   } catch (error) {
     console.error('Register Error:', error);
     return NextResponse.json({ result: "" })

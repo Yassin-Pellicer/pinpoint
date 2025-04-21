@@ -22,7 +22,7 @@ export default function SwiperComponent() {
             e.stopPropagation();
           }}
         >
-          <div className="bg-blue-500 rounded-2xl w-full h-fit flex items-center align-center hover:bg-blue-600 flex-row p-4 mb-3 text-white">
+          <div className="bg-blue-500 w-full h-fit flex items-center align-center hover:bg-blue-600 flex-row p-4 border-t-[3px] border-dashed  text-white">
             {event.banner && (
               <div className="overflow-hidden bg-white rounded-full w-[100px] h-[80px]">
                 <img
