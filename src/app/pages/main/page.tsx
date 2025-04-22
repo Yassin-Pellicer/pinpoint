@@ -1,6 +1,6 @@
 "use client";
 
-import Layout from "../home/layout";
+import Layout from "../layout/layout";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import React, { useState, useMemo, useEffect } from "react";
@@ -25,6 +25,7 @@ import { useSessionContext } from "../../../utils/context/ContextSession";
 import { CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import Profile from "../../../components/profile/profile";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
@@ -32,7 +33,7 @@ export default function Create() {
   const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, searchResults, setSearchResults, recommendations, setRecommendations } = useMapContext();
   const [openTags, setOpenTags] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
-  const [localTags, setLocalTags] = useState(filterTags);
+  const [openProfile, setOpenProfile] = useState(false);
   const { username } = useSessionContext();
 
   const t = useTranslations("Main");
@@ -187,7 +188,11 @@ export default function Create() {
                   </div>
                 </div>
               </div>
-              <div className="h-auto rounded-2xl bg-gray-300 relative hover:cursor-pointer hover:bg-gray-400 transition duration-100">
+
+              <div
+                onClick={() => setOpenProfile(!openProfile)}
+                className="h-auto rounded-2xl bg-gray-300 relative hover:cursor-pointer hover:bg-gray-400 transition duration-100"
+              >
                 <div className="relative h-full">
                   <div
                     className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform"
@@ -369,8 +374,9 @@ export default function Create() {
           </div>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <CssBaseline />
-          <EventInfo open={openDetails} setOpen={setOpenDetails} />
+            <EventInfo open={openDetails} setOpen={setOpenDetails} />
           </LocalizationProvider>
+          <Profile open={openProfile} setOpen={setOpenProfile}></Profile>
         </div>
         {/* Map */}
         <MapMain />

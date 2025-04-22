@@ -21,8 +21,6 @@ import { getEventById } from "../../hooks/main/getEventById";
 import { getTagsHook } from "../../hooks/main/getTagsHook";
 import { Tag } from "../../utils/classes/Tag";
 
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import TextField from '@mui/material/TextField';
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
 import { format } from "date-fns";

@@ -1,6 +1,6 @@
 "use client";
 
-import Layout from "../home/layout";
+import Layout from "../layout/layout";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import React, { useState, useMemo, useEffect } from "react";
