@@ -19,6 +19,7 @@ const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import EventCarousel from "../main/eventCarousel";
+import EventCarouselList from "../main/eventCarouselList";
 
 const profile = ({open, setOpen}) => {
   const { selectedEvent, setSelectedEvent, tags, marker, setEvents, events } = useEvent();
@@ -51,6 +52,7 @@ const profile = ({open, setOpen}) => {
           paddingTop: "0rem",
           minWidth: "550px",
           maxWidth: "550px",
+          zIndex: 10,
         },
       }}
     >
@@ -137,7 +139,68 @@ const profile = ({open, setOpen}) => {
               </div>
             </>
           )}
-          <EventCarousel />
+          <EventCarousel events={events} />
+        </div>
+
+        <div className=" mt-4">
+          <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
+            <div className="relative h-full">
+              <div className="relative p-5 z-10">
+                <div className="flex flex-row items-center">
+                  <i
+                    className="material-icons text-white text-3xl mr-5"
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  >
+                    list
+                  </i>
+                  <h1
+                    className="text-2xl tracking-tighter font-bold text-white"
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  >
+                    Tus inscripciones
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          {events.length === 0 && (
+            <>
+              <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
+                <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className=" mt-4">
+          <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
+            <div className="relative h-full">
+              <div className="relative p-5 z-10">
+                <div className="flex flex-row items-center">
+                  <i
+                    className="material-icons text-white text-3xl mr-5"
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  >
+                    bookmark
+                  </i>
+                  <h1
+                    className="text-2xl tracking-tighter font-bold text-white"
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  >
+                    Eventos Guardados
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          {events.length === 0 && (
+            <>
+              <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
+                <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
+              </div>
+            </>
+          )}
+          <EventCarouselList events={events} />
         </div>
       </div>
     </SwipeableDrawer>

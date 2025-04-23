@@ -49,13 +49,12 @@ const commentBox = () => {
     <>
       {(selectedEvent.enableRatings || selectedEvent.enableComments) && (
         <>
-          <div className="h-auto rounded-t-2xl bg-gray-300 relative transition duration-100 overflow-hidden">
+          <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">
               <div
                 className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform rotate-[5deg] z-0 m-5"
                 style={{
                   backgroundImage: "url('/img/stars.png')",
-                  opacity: 0.5,
                 }}
               ></div>
 
@@ -78,7 +77,7 @@ const commentBox = () => {
             </div>
           </div>
 
-          <div className="rounded-b-2xl p-6 pt-3 bg-gray-200 cursor-default transition">
+          <div className="rounded-b-2xl pt-3 bg-gray-200 cursor-default transition">
             <Snackbar
               open={snackbarOpen}
               autoHideDuration={3000}
@@ -95,7 +94,7 @@ const commentBox = () => {
                 {snackbarMessage}
               </Alert>
             </Snackbar>
-            <div className="flex flex-col select-none">
+            <div className="flex px-4 flex-col select-none">
               {selectedEvent.enableRatings && (
                 <>
                   <div className="flex items-center">
@@ -175,10 +174,10 @@ const commentBox = () => {
                       </label>
                     </div>
                   )}
-                  <CommentList refresh={refresh} setRefresh={setRefresh} />
                 </>
               )}
             </div>
+            <CommentList refresh={refresh} setRefresh={setRefresh} />
           </div>
         </>
       )}

@@ -18,7 +18,7 @@ import { getEventsHook } from "../../../hooks/main/getEventsHook";
 import { getTagsHook } from "../../../hooks/main/getTagsHook";
 import EventInfo from "../../../components/main/evInfo";
 import EventCarousel from "../../../components/main/eventCarousel";
-import EventCarouselSearch from "../../../components/main/eventCarouselSearch";
+import EventCarouselList from "../../../components/main/eventCarouselList";
 import debounce from "lodash.debounce";
 import { useSessionContext } from "../../../utils/context/ContextSession";
 
@@ -148,7 +148,6 @@ export default function Create() {
               <div className=" w-[100px] flex items-center justify-center">
                 <Logo />
               </div>
-              <div className="flex flex-row items-center align-center"></div>
               <div className="flex flex-row items-center align-center gap-2">
                 <i className="material-icons w-[40px] h-[40px] text-2xl bg-gray-300 items-center justify-center flex rounded-full">
                   person
@@ -262,7 +261,7 @@ export default function Create() {
                   </div>
                 </>
               )}
-              <EventCarousel />
+              <EventCarousel events={recommendations} />
             </div>
 
             <div className="grid gap-4 mb-4">
@@ -360,7 +359,7 @@ export default function Create() {
                         key={tag.id}
                         className={`rounded-full w-fit px-2 py-1 text-center
                text-white bg-[#3F7DEA] font-bold tracking-tight"
-            }`}
+              }`}
                       >
                         <p className="text-xs">{tagsTrans(`${tag.name}`)}</p>
                       </div>
@@ -368,7 +367,7 @@ export default function Create() {
                   </div>
                 )}
               </div>
-              <EventCarouselSearch />
+              <EventCarouselList events={searchResults} />
             </div>
             <Tags open={openTags} setOpen={setOpenTags} />
           </div>

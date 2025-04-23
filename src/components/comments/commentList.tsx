@@ -63,7 +63,7 @@ const List = ({refresh, setRefresh}) => {
     <>
       {!loading && comments.length > 0 && (
         <>
-          <div className="mt-6 h-auto rounded-t-2xl bg-gray-300 relative transition duration-100 overflow-hidden">
+          <div className="mt-6 h-auto bg-blue-400 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">
               <div className="relative p-5 z-10">
                 <div className="flex flex-row items-center">

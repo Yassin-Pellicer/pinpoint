@@ -161,41 +161,6 @@ const SimpleEvent = () => {
           </div>
         </label>
 
-        <div
-          className={`h-auto rounded-2xl mb-4 ${
-            enableInscription ? "bg-blue-500" : "bg-gray-400"
-          } relative hover:cursor-pointer hover:bg-blue-400 transition duration-100`}
-          onClick={() => setEnableInscription(!enableInscription)}
-        >
-          <div className="relative h-full">
-            <div
-              className="bg-no-repeat bg-center bg-cover absolute right-[-40px] top-[-15px] bottom-0 w-1/2 transform"
-              style={{
-                backgroundImage: "url('/img/checklist.png')",
-                transform: "rotate(5deg)",
-                scale: "0.8",
-              }}
-            ></div>
-            <div className="relative z-10 p-5">
-              <h1
-                className="text-3xl tracking-tighter font-extrabold mb-2 text-white"
-                style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-              >
-                {!enableInscription
-                  ? "Habilita la inscripción al evento"
-                  : "Deshabilita la inscripción."}
-              </h1>
-              <p
-                className="text-sm tracking-tighter font-bold text-white"
-                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
-              >
-                Con inscripción, los usuarios podrán apuntarse a tus
-                actividades. Tendrás que limitar el aforo.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {enableInscription && (
           <>
             <label className="font-bold">Capacidad del evento:</label>

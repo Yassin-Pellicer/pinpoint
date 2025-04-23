@@ -99,6 +99,7 @@ const eventInfo = ({open, setOpen}) => {
           paddingTop: "0rem",
           minWidth: "550px",
           maxWidth: "550px",
+          zIndex: 20,
         },
       }}
     >
@@ -461,8 +462,8 @@ const eventInfo = ({open, setOpen}) => {
           )}
 
           <div className="mt-4">
-            <CommentBox></CommentBox>
           </div>
+          <CommentBox></CommentBox>
         </div>
       )}
     </SwipeableDrawer>

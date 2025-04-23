@@ -5,15 +5,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useEvent } from "../../utils/context/ContextEvent";
-import { useMapContext } from "../../utils/context/ContextMap";
 
-export default function SwiperComponent() {
-  const { searchResults } = useMapContext();
+export default function SwiperComponent( {events} ) {
   const { setSelectedEvent } = useEvent();
-
   return (
     <div className="flex flex-col">
-      {searchResults.map((event, index) => (
+      {events?.map((event, index) => (
         <div
           key={index}
           className="flex justify-center items-center select-none cursor-pointer"

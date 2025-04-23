@@ -1,24 +1,13 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useEvent } from "../../utils/context/ContextEvent";
-import { getEventsHook } from "../../hooks/main/getEventsHook";
-import { getTagsHook } from "../../hooks/main/getTagsHook";
-import { Tag } from "../../utils/classes/Tag";
-import { useMapContext } from "../../utils/context/ContextMap";
 
-export default function SwiperComponent() {
-
-  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent, setSelectedEvent } = useEvent();
-  const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, recommendations, setRecommendations } = useMapContext();
-  const [openTags, setOpenTags] = useState(false);
-  const [localTags, setLocalTags] = useState(filterTags);
-
+export default function SwiperComponent({events}) {
+  const { setSelectedEvent } = useEvent();
   return (
     <div className="relative">
       <Swiper
@@ -30,7 +19,7 @@ export default function SwiperComponent() {
           disableOnInteraction: false,
         }}
       >
-        {recommendations.map((event) => (
+        {events?.map((event) => (
             <SwiperSlide key={event.id}>
               <div
                 className="flex justify-center items-center select-none cursor-pointer"
