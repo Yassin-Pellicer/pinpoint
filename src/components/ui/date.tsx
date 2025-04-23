@@ -25,23 +25,36 @@ export default function EventTimeDisplay({selectedEvent}) {
       
       const totalDuration = end.getTime() - start.getTime();
       const elapsedTime = now.getTime() - start.getTime();
-      const calculated = Math.floor((elapsedTime / totalDuration) * 100);
+      
+      // Cap progress at 100%
+      let calculated = Math.floor((elapsedTime / totalDuration) * 100);
+      calculated = Math.min(calculated, 100);
+      calculated = Math.max(calculated, 0); // Also prevent negative values
+      
       setProgress(calculated);
       
       // Calculate remaining time
-      const timeLeft = end.getTime() - now.getTime();
-      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      
-      let timeLeftString = "";
-      if (days > 0) timeLeftString += `${days}d `;
-      if (hours > 0 || days > 0) timeLeftString += `${hours}h `;
-      timeLeftString += `${minutes}m restantes`;
-      
-      setTimeLeftText(timeLeftString);
+      if (calculated >= 100) {
+        // If we've reached 100%, set "0m restantes"
+        setTimeLeftText("0m restantes");
+      } else {
+        const timeLeft = end.getTime() - now.getTime();
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        
+        let timeLeftString = "";
+        if (days > 0) timeLeftString += `${days}d `;
+        if (hours > 0 || days > 0) timeLeftString += `${hours}h `;
+        timeLeftString += `${minutes}m restantes`;
+        
+        setTimeLeftText(timeLeftString);
+      }
 
-      if (calculated >= 80) {
+      // Set color based on progress
+      if (calculated >= 100) {
+        setProgressColor("bg-red-500");
+      } else if (calculated >= 80) {
         setProgressColor("bg-red-500");
       } else if (calculated >= 50) {
         setProgressColor("bg-orange-400");
