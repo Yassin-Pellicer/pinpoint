@@ -77,6 +77,12 @@ export async function GET(request) {
         FROM event e
         JOIN event_tags et ON e.id = et.event_id
         WHERE et.tag_id = ANY(${tags})
+         AND (
+          ("start" IS NULL AND "end" IS NULL)
+          OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
+          OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
+          OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+        )
         GROUP BY e.id
         HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
       `;
@@ -85,14 +91,16 @@ export async function GET(request) {
       result = await sql`
         SELECT *
         FROM "event"
-        WHERE unaccent(lower(name)) LIKE unaccent(lower(${searchQuery}))
+        WHERE (
+          unaccent(lower(e.name)) LIKE unaccent(lower(${searchQuery}))
+          OR unaccent(lower(e.description)) LIKE unaccent(lower(${searchQuery}))
+        )
         AND (
           ("start" IS NULL AND "end" IS NULL)
           OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
           OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
           OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
         )
-           OR unaccent(lower(description)) LIKE unaccent(lower(${searchQuery}))
       `;
     } else {
       const searchQuery = `%${search}%`;
@@ -107,12 +115,12 @@ export async function GET(request) {
           OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
           OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
         )
-        GROUP BY e.id
-        HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
         AND (
           unaccent(lower(e.name)) LIKE unaccent(lower(${searchQuery}))
           OR unaccent(lower(e.description)) LIKE unaccent(lower(${searchQuery}))
         )
+        GROUP BY e.id
+        HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
       `;
     }
 
@@ -136,11 +144,12 @@ export async function GET(request) {
           AND position_lat < ${maxLat}
           AND position_lng > ${minLng}
           AND position_lng < ${maxLng}
-          AND (
-  ("start" IS NULL AND "end" IS NULL)
-  OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
-  OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
-)
+        AND (
+          ("start" IS NULL AND "end" IS NULL)
+          OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
+          OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
+          OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+        )
         ORDER BY RANDOM()
         LIMIT 5
       `;

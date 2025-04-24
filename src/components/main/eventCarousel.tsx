@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useEvent } from "../../utils/context/ContextEvent";
+import EventDate from "../ui/date";
 
 export default function SwiperComponent({events}) {
   const { setSelectedEvent } = useEvent();
@@ -36,21 +37,9 @@ export default function SwiperComponent({events}) {
                   )}
                   <div className="flex flex-row pt-4 ">
                     <div className="flex flex-row w-full">
-                      <h1 className="font-bold text-2xl tracking-tight w-[80%] pr-5 ">
+                      <h1 className="font-bold text-2xl tracking-tighter pr-5 ">
                         {event.name}
                       </h1>
-                      <div className="flex flex-end max-w-[10%] mr-2">
-                        <div className="rounded-full border border-white  mr-2 h-fit flex items-center justify-center">
-                          <i className="material-icons text-xl px-2 py-1 ">
-                            print
-                          </i>
-                        </div>
-                        <div className="rounded-full border border-white h-fit flex items-center justify-center">
-                          <i className="material-icons text-xl px-2 py-1 ">
-                            bookmark
-                          </i>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <p className="flex text-xs items-center w-[70%] mb-2">
@@ -102,6 +91,9 @@ export default function SwiperComponent({events}) {
                       )}
                     </div>
                   </div>
+                  {event.start && event.end && (
+            <EventDate selectedEvent={event} listMode={true} />
+          )}
                 </div>
               </div>
             </SwiperSlide>

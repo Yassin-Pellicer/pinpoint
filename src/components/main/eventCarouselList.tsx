@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useEvent } from "../../utils/context/ContextEvent";
+import EventDate from "../../components/ui/date"; // Adjust the path as needed
 
 export default function SwiperComponent( {events} ) {
   const { setSelectedEvent } = useEvent();
@@ -34,9 +35,6 @@ export default function SwiperComponent( {events} ) {
                 <h1 className="font-bold text-md pr-5 tracking-tight">
                   {event.name}
                 </h1>
-                <div className="rounded-full border border-white h-fit flex items-center justify-center">
-                  <i className="material-icons text-xl px-2 py-1 ">bookmark</i>
-                </div>
               </div>
               {event.rating !== null && (
                 <p className="text-xs mb-2 w-full">{event.address}</p>
@@ -87,7 +85,10 @@ export default function SwiperComponent( {events} ) {
                   )}
                 </div>
               </div>
-            </div>
+              {event.start && event.end && (
+              <EventDate selectedEvent={event} listMode={true} />
+            )}
+            </div>{" "}
           </div>
         </div>
       ))}

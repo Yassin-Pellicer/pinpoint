@@ -13,6 +13,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { getInscriptionHook } from "../../hooks/main/getInscriptionHook";
 import { deleteInscriptionHook } from "../../hooks/main/deleteInscriptionHook";
 import { getEventById } from "../../hooks/main/getEventById";
+import { getEventsByInscription } from "../../hooks/profile/getEventsByInscriptionHook";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -20,19 +21,40 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import EventCarousel from "../main/eventCarousel";
 import EventCarouselList from "../main/eventCarouselList";
+import EventInscriptions from "./eventInscriptionsList";
+import { getTagsHook } from "../../hooks/main/getTagsHook";
+import { Tag } from "../../utils/classes/Tag";
 
 const profile = ({open, setOpen}) => {
   const { selectedEvent, setSelectedEvent, tags, marker, setEvents, events } = useEvent();
   const { id, username } = useSessionContext();
   const { checkpoints } = useCheckpoints();
   const [isInscribed, setIsInscribed] = useState(null);
-  const [inscriptions, setInscriptions] = useState(selectedEvent?.inscriptions || 0);
+  const [inscribedEvents, setInscribedEvents] = useState([]);
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("error");
+
+  useEffect(() => { 
+    if (id) {
+      getEventsByInscription(id).then(async (response) => {
+        const updatedEvents = await Promise.all(
+          response.events.map(async (event) => {
+            const tagResponse = await getTagsHook(event.id);
+            const newTags = tagResponse.tags.map((tag) => {
+              const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
+              return foundTag || tag;
+            });
+            return { ...event, tags: newTags };
+          })
+        );
+        setInscribedEvents(updatedEvents);
+      });
+    }
+  }, [id, open]);
 
   return (
     <SwipeableDrawer
@@ -81,7 +103,6 @@ const profile = ({open, setOpen}) => {
         </button>
         <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
           <div className="flex flex-col items-center justify-center">
-            {/* Profile Picture Circle */}
             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-400 mb-4">
               <img
                 src="/api/placeholder/150/150"
@@ -170,6 +191,9 @@ const profile = ({open, setOpen}) => {
               </div>
             </>
           )}
+          <div className="flex flex-col">
+            <EventInscriptions events={inscribedEvents} />
+          </div>
         </div>
 
         <div className=" mt-4">

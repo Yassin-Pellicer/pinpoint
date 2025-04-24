@@ -13,11 +13,11 @@ export async function GET(_request, { params }) {
       query = await sql`
         SELECT "user"
         FROM inscription_user
-        WHERE "user" = ${userId} AND event = ${id}
+        WHERE event = ${id}
       `;
     } else {
       query = await sql`
-        SELECT "user"
+        SELECT "event"
         FROM inscription_user
         WHERE "user" = ${userId}
       `;

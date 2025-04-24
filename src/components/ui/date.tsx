@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function EventTimeDisplay({selectedEvent}) {
+export default function EventTimeDisplay({selectedEvent, listMode}) {
   const [progress, setProgress] = useState(0);
   const [timeLeftText, setTimeLeftText] = useState("");
   const [progressColor, setProgressColor] = useState("bg-green-400");
@@ -70,10 +70,10 @@ export default function EventTimeDisplay({selectedEvent}) {
   }, [selectedEvent]);
 
   return (
-    <div className="h-auto rounded-2xl mt-3 bg-blue-500">
+    <div className={`h-auto rounded-2xl mt-3 ${!listMode && "bg-blue-500"}`}>
       <div className="relative h-full">
-        <div className="relative p-4 z-10">
-          <div className="grid grid-cols-2 gap-4">
+        <div className={`relative ${listMode ? "p-0" : "p-4"} z-10`}>
+          {!listMode && <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col">
               <div className="flex flex-row mb-2 items-center">
                 <div className="text-white text-2xl mr-2">
@@ -132,9 +132,9 @@ export default function EventTimeDisplay({selectedEvent}) {
                 className="rounded-lg p-2 bg-white bg-opacity-90 text-gray-800 text-sm w-full focus:outline-none"
               />
             </div>
-          </div>
+          </div>}
 
-          <div className="mt-4">
+          {!listMode && <div className="mt-4">
             <div className="flex justify-between items-center mb-1">
               <span className="text-xs font-medium text-white">
                 Tiempo restante
@@ -154,7 +154,24 @@ export default function EventTimeDisplay({selectedEvent}) {
                 {timeLeftText}
               </span>
             </div>
-          </div>
+          </div>}
+          
+          {listMode && <div className="">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-xs font-medium text-white">
+                Tiempo restante
+              </span>
+              <span className="text-xs font-medium text-white">
+                {progress}%
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className={`${progressColor} h-2.5 rounded-full transition-all duration-500 ease-in-out`}
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>}
         </div>
       </div>
     </div>

@@ -228,7 +228,7 @@ const eventInfo = ({open, setOpen}) => {
             </div>
           </div>
 
-          {selectedEvent.end && <EventTimeDisplay selectedEvent={selectedEvent}></EventTimeDisplay>}
+          {selectedEvent.end && <EventTimeDisplay selectedEvent={selectedEvent} listMode={false} />}
 
           {selectedEvent.enableInscription && (
             <div
