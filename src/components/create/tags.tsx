@@ -15,19 +15,19 @@ const BottomSheet = ({ open, setOpen }) => {
 
   useEffect(() => {
       const updatedSelectedTags = Tag.tags.reduce((acc, tag) => {
-        acc[tag.name] = tags.some((t) => t.name === tag.name);
+        acc[tag.tag_id] = tags.some((t) => t.tag_id === tag.tag_id);
         return acc;
       }, {});
       
       setSelectedTags(updatedSelectedTags);
-      setFilterTags(Tag.tags.filter((tag) => updatedSelectedTags[tag.name]));
+      setFilterTags(Tag.tags.filter((tag) => updatedSelectedTags[tag.tag_id]));
   }, [open]);
 
   const handleTagSelection = (tagName) => {
     setSelectedTags((prevSelectedTags) => {
       const updatedTags = { ...prevSelectedTags, [tagName]: !prevSelectedTags[tagName] };
       
-      const selected = Tag.tags.filter((tag) => updatedTags[tag.name]);
+      const selected = Tag.tags.filter((tag) => updatedTags[tag.tag_id]);
       setFilterTags(selected);
       setTags(selected);
   
@@ -60,8 +60,7 @@ const BottomSheet = ({ open, setOpen }) => {
           style={{ cursor: "pointer", marginTop: "20px" }}
           onClick={() => {
             setOpen(false);
-            // Finalize the selection by applying tags
-            setTags(Tag.tags.filter((tag) => selectedTags[tag.name]));
+            setTags(Tag.tags.filter((tag) => selectedTags[tag.tag_id]));
           }}
           className="cursor-pointer flex justify-center"
         >
@@ -79,14 +78,15 @@ const BottomSheet = ({ open, setOpen }) => {
         <div className="flex flex-wrap w-full gap-2">
           {Tag.tags.map((tag, index) => (
             <button
-              key={tag.name || index}
-              onClick={() => handleTagSelection(tag.name)}              className={`rounded-md w-fit p-[10px] py-2 text-center tracking-tight text-black ${
-                selectedTags[tag.name]
+              key={tag.tag_id || index}
+              onClick={() => handleTagSelection(tag.tag_id)}
+              className={`rounded-md w-fit p-[10px] py-2 text-center tracking-tight text-black ${
+                selectedTags[tag.tag_id]
                   ? "bg-[#3F7DEA] font-bold tracking-tight text-white"
                   : "border border-black"
               }`}
             >
-              {t(`${tag.name}`)}
+              {t(`${tag.tag_id}`)}
             </button>
           ))}
         </div>

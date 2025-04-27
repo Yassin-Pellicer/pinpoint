@@ -12,8 +12,14 @@ export async function GET(_request, { params }) {
     const result = await sql`
       SELECT e.*
       FROM event e
-      JOIN inscription_user iu ON e.id = iu.event
-      WHERE iu.user = ${userId}
+      JOIN bookmarks book ON e.id = book.event
+      WHERE book.user = ${userId}
+      AND (
+          ("start" IS NULL AND "end" IS NULL)
+          OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
+          OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
+          OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+        )
     `;
 
     const eventIds = result.rows.map(event => event.id);
@@ -38,9 +44,9 @@ export async function GET(_request, { params }) {
     }) ?? [];
 
     const response = NextResponse.json(
-      result && result.rows.length 
+      result && result.rows && result.rows.length 
         ? { result: "ok", events: eventsWithMarkers } 
-        : { result: "event not found" }
+        : { result: "no events found" }
     );
 
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');

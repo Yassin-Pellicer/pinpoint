@@ -20,7 +20,7 @@ import EventInfo from "../../../components/main/evInfo";
 import EventCarousel from "../../../components/main/eventCarousel";
 import EventCarouselList from "../../../components/main/eventCarouselList";
 import debounce from "lodash.debounce";
-import { useSessionContext } from "../../../utils/context/ContextSession";
+import { useSession } from "../../../utils/context/ContextSession";
 
 import { CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -29,84 +29,84 @@ import Profile from "../../../components/profile/profile";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { event, setEvent, setEvents, setMarker, setAuthor, selectedEvent, events} = useEvent();
-  const { location, setLocation, zoom, setZoom, originalLocation, filterTags, setFilterTags, search, setSearch, searchResults, setSearchResults, recommendations, setRecommendations } = useMapContext();
+  const {
+    event,
+    setEvent,
+    setEvents,
+    selectedEvent,
+    events,
+  } = useEvent();
+  const {
+    location,
+    zoom,
+    setZoom,
+    originalLocation,
+    filterTags,
+    search,
+    setSearch,
+    searchResults,
+    setSearchResults,
+    recommendations,
+    setRecommendations,
+  } = useMapContext();
+
   const [openTags, setOpenTags] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
-  const { username } = useSessionContext();
+  const { username } = useSession();
 
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
   const loadEvents = async () => {
-    const newEvents = await getEventsHook(
+    const response = await getEventsHook(
       undefined,
       undefined,
       undefined,
       location?.[0],
       location?.[1],
       zoom,
-      events.filter(event => event.id !== selectedEvent?.id)
+      events.filter((event) => event.id !== selectedEvent?.id)
     );
-  
-    const updatedEvents = await Promise.all(
-      newEvents.events.map(async (event) => {
-        const response = await getTagsHook(event.id);
-        const newTags = response.tags.map((tag) => {
-          const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
-          return foundTag || tag;
-        });
-        return { ...event, tags: newTags };
-      })
-    );
-  
-    setEvents(() => {
-      const updatedMap = new Map(events.filter(event => event.id !== selectedEvent?.id).map(event => [event.id, event]));
-      updatedEvents.forEach(event => {
-        updatedMap.set(event.id, event); // replace or add
+
+    if (response.events) {
+      const updatedMap = new Map(
+        events
+          .filter((event) => event.id !== selectedEvent?.id)
+          .map((event) => [event.id, event])
+      );
+      response.events.forEach((event) => {
+        updatedMap.set(event.id, event);
       });
-      return Array.from(updatedMap.values());
-    });
+      setEvents(Array.from(updatedMap.values()));
+    }
   };
-  
+
   const loadSearchEvents = async (tags, searchTerm) => {
     if (tags.length === 0 && searchTerm === "") {
       setSearchResults([]);
       return;
     }
-    const newEvents = await getEventsHook(tags, searchTerm);
-    const updatedEvents = await Promise.all(
-      newEvents.events.map(async (event) => {
-        const response = await getTagsHook(event.id);
-        const newTags = response.tags.map((tag) => {
-          const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
-          return foundTag || tag;
-        });
-        return { ...event, tags: newTags };
-      })
-    );
-    const newEventIds = new Set(events.map(event => event.id));
-    const nonDuplicateEvents = updatedEvents.filter(event => !newEventIds.has(event.id));
-    setEvents((prev) => [...prev, ...nonDuplicateEvents]);
-    setSearchResults(
-      updatedEvents
-    );
+    const response = await getEventsHook(tags, searchTerm);
+    if (response.events) {
+      setSearchResults(response.events);
+      const newEventIds = new Set(events.map((event) => event.id));
+      const nonDuplicateEvents = response.events.filter(
+        (event) => !newEventIds.has(event.id)
+      );
+      setEvents((prev) => [...prev, ...nonDuplicateEvents]);
+    }
   };
 
   const loadRecommendations = async (recommendations, userLat, userLon) => {
-    const events = await getEventsHook(null, null, recommendations, userLat, userLon);
-    const updatedEvents = await Promise.all(
-      events.events.map(async (event) => {
-        const response = await getTagsHook(event.id);
-        const newTags = response.tags.map((tag) => {
-          const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
-          return foundTag || tag;
-        });
-        return { ...event, tags: newTags };
-      })
+    const response = await getEventsHook(
+      null,
+      null,
+      recommendations,
+      userLat,
+      userLon
     );
-    setRecommendations(updatedEvents);
+    setRecommendations(response.events);
   };
 
   useEffect(() => {
@@ -126,14 +126,17 @@ export default function Create() {
     const handler = debounce(async () => {
       await loadSearchEvents(filterTags, search);
     }, 500);
-  
+
     handler();
-  
+
     return () => handler.cancel && handler.cancel();
   }, [filterTags, search, selectedEvent]);
 
   useEffect(() => {
-    if (selectedEvent != null) { setOpenDetails(true); return;}
+    if (selectedEvent != null) {
+      setOpenDetails(true);
+      return;
+    }
     setCheckpoints([]);
     setOpenDetails(false);
   }, [selectedEvent]);
@@ -356,12 +359,12 @@ export default function Create() {
                   <div className="flex flex-wrap w-full mb-4 gap-2">
                     {filterTags.map((tag) => (
                       <div
-                        key={tag.id}
+                        key={tag.tag_id}
                         className={`rounded-full w-fit px-2 py-1 text-center
                text-white bg-[#3F7DEA] font-bold tracking-tight"
               }`}
                       >
-                        <p className="text-xs">{tagsTrans(`${tag.name}`)}</p>
+                        <p className="text-xs">{tagsTrans(`${tag.tag_id}`)}</p>
                       </div>
                     ))}
                   </div>

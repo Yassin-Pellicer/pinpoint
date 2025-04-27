@@ -1,12 +1,25 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { getEventsByInscription } from "../../hooks/profile/getEventsByInscriptionHook";
+import { getBookmarksHook } from "../../hooks/profile/getBookmarksHook";
+import { Event } from "../classes/Event";
 
 interface SessionContextType {
   id: number | null;
   setId: (id: number | null) => void;
   username: string | null;
   setUsername: (username: string | null) => void;
+  inscriptions: Event[] | null;
+  setInscriptions: (inscriptions: Event[] | null) => void;
+  bookmarks: Event[] | null;
+  setBookmarks: (bookmarks: Event[] | null) => void;
+  createdEvents: Event[] | null;
+  setCreatedEvents: (createdEvents: Event[] | null) => void;
+  triggerFetchInscriptions: () => void;
+  triggerFetchBookmarks: () => void;
+  fetchInscriptions: boolean;
+  fetchBookmarks: boolean;
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
@@ -14,6 +27,56 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
   const [username, setUsername] = useState<string | null>(null);
   const [id, setId] = useState<number | null>(null);
+  const [inscriptions, setInscriptions] = useState<Event[] | null>(null);
+  const [bookmarks, setBookmarks] = useState<Event[] | null>(null);
+  const [createdEvents, setCreatedEvents] = useState<Event[] | null>(null);
+
+  const [fetchInscriptions, setFetchInscriptions] = useState(false);
+  const [fetchBookmarks, setFetchBookmarks] = useState(false);
+
+  const triggerFetchInscriptions = () => {
+    setFetchInscriptions(true);
+  };
+
+  const triggerFetchBookmarks = () => {
+    setFetchBookmarks(true);
+  };
+
+  useEffect(() => { 
+    if (fetchInscriptions && id !== null) {
+      getEventsByInscription(id).then(async (response) => {
+        setInscriptions(response.events);
+        setFetchInscriptions(false);
+      });
+    }
+  }, [fetchInscriptions]);
+
+  useEffect(() => { 
+    if (fetchBookmarks && id !== null) {
+      getBookmarksHook(id).then(async (response) => {
+        setBookmarks(response.events);
+        setFetchBookmarks(false);
+      });
+    }
+  }, [fetchBookmarks]);
+
+  useEffect(() => {
+    if (id !== null) {
+      getEventsByInscription(id).then(async (response) => {
+        setInscriptions(response.events);
+        setFetchInscriptions(false);
+      });
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (id !== null) {
+      getBookmarksHook(id).then(async (response) => {
+        setBookmarks(response.events);
+        setFetchBookmarks(false);
+      });
+    }
+  }, [id]);
 
   return (
     <SessionContext.Provider
@@ -22,6 +85,16 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         setId,
         username,
         setUsername,
+        inscriptions,
+        setInscriptions,
+        bookmarks,
+        setBookmarks,
+        createdEvents,
+        setCreatedEvents,
+        triggerFetchInscriptions,
+        triggerFetchBookmarks,
+        fetchInscriptions,
+        fetchBookmarks,
       }}
     >
       {children}
@@ -29,7 +102,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   );
 }
 
-export const useSessionContext = () => {
+export const useSession = () => {
   const context = useContext(SessionContext);
   if (!context) {
     throw new Error("useEvent must be used within an EventProvider");

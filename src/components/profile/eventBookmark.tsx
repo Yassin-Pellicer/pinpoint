@@ -6,16 +6,15 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useEvent } from "../../utils/context/ContextEvent";
 import EventDate from "../ui/date";
-import { getInscriptionHook } from "../../hooks/main/getInscriptionHook";
 import { useSession } from "../../utils/context/ContextSession";
-import { addInscriptionHook } from "../../hooks/main/addInscriptionHook";
-import { deleteInscriptionHook } from "../../hooks/main/deleteInscriptionHook";
 import { Alert, Snackbar } from "@mui/material";
+import { deleteBookmarkHook } from "../../hooks/main/deleteBookmarkHook";
+import { addBookmarkHook } from "../../hooks/main/addBookmarkHook";
 
 export default function SwiperComponent( {event} ) {
   const { id } = useSession();
   const { setSelectedEvent, selectedEvent } = useEvent();
-  const { inscriptions, triggerFetchInscriptions } = useSession();
+  const { bookmarks, triggerFetchBookmarks } = useSession();
   const [isInscribed, setIsInscribed] = useState(null);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -23,30 +22,30 @@ export default function SwiperComponent( {event} ) {
   const [snackbarSeverity, setSnackbarSeverity] = useState("error");
 
   useEffect(() => {
-    if (event?.id && inscriptions) {
-      const users = inscriptions.map((i) => i.id);
+    if (event?.id && bookmarks) {
+      const users = bookmarks.map((i) => i.id);
       setIsInscribed(users.includes(event.id));
     }
-  }, [inscriptions]);
+  }, [bookmarks]);
 
-  const handleUploadInscription = async () => {
-    const response = await addInscriptionHook(event.id, id);
+  const handleUploadBookmark = async () => {
+    const response = await addBookmarkHook(event.id, id);
     setSnackbarMessage("Te has inscrito correctamente!");
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
     
     setIsInscribed(true);
-    triggerFetchInscriptions();
+    triggerFetchBookmarks();
   };
 
-  const handleDeleteInscription = async () => {
-    const response = await deleteInscriptionHook(event.id, id);
+  const handleDeleteBookmark = async () => {
+    const response = await deleteBookmarkHook(event.id, id);
     setSnackbarMessage("Te has desinscrito correctamente!");
     setSnackbarSeverity("info");
     setSnackbarOpen(true);
     
     setIsInscribed(false);
-    triggerFetchInscriptions();
+    triggerFetchBookmarks();
   };
 
   return (
@@ -108,17 +107,17 @@ export default function SwiperComponent( {event} ) {
           { <div className="flex flex-row justify-end items-center w-full">
             {isInscribed ? (
               <button
-                onClick={handleDeleteInscription}
+                onClick={handleDeleteBookmark}
                 className="w-full font-extrabold font-white p-1 hover:bg-red-500 mt-2 rounded-2xl border-[1px] border-white transition duration-100"
               >
-                Desinscribirme
+                Eliminar marcador
               </button>
             ) : (
               <button
-                onClick={handleUploadInscription}
+                onClick={handleUploadBookmark}
                 className="w-full font-extrabold font-white p-1 hover:bg-green-600 mt-2 rounded-2xl border-[1px] border-white transition duration-100"
               >
-                Inscribirme
+                Añadir marcador
               </button>
             )}
           </div> }

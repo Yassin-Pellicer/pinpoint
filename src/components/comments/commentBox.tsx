@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useSessionContext } from "../../utils/context/ContextSession";
+import { useSession } from "../../utils/context/ContextSession";
 import CommentList from "../comments/commentList";
 import { Comment } from "../../utils/classes/Comment";
 import { addCommentHook } from "../../hooks/main/addCommentHook";
@@ -12,7 +12,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { getCommentsHook } from "../../hooks/main/getCommentsHook";
 
 const commentBox = () => {
-  const { username, id } = useSessionContext();
+  const { username, id } = useSession();
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(0);
   const [assignRating, setAssignRating] = useState(false);

@@ -251,7 +251,7 @@ const CheckpointEvent = () => {
                     className="text-2xl tracking-tighter font-bold text-white"
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                   >
-                    Fecha y hora
+                    Vigencia del evento
                   </h1>
                 </div>
               </div>

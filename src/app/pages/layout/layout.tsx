@@ -2,7 +2,7 @@
 import { ReactNode, useEffect } from "react";
 import Menu from "../../../components/home/menu";
 import { useState } from "react";
-import { useSessionContext } from "../../../utils/context/ContextSession";
+import { useSession } from "../../../utils/context/ContextSession";
 import { useRouter } from 'next/navigation';
 
 interface LayoutProps {
@@ -11,7 +11,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [open, setOpen] = useState(false);
-  const {username, setUsername, setId} = useSessionContext();
+  const {username, setUsername, setId} = useSession();
   const router = useRouter();
 
   useEffect(() => {

@@ -1,60 +1,23 @@
-
 "use client";
-import { useState, useEffect, use } from "react";
-import dynamic from "next/dynamic";
-import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
-import { useTranslations } from "next-intl";
-import { useEvent } from "../../utils/context/ContextEvent";
-import CommentBox from "../comments/commentBox";
-import { useSessionContext } from "../../utils/context/ContextSession";
+import { useState } from "react";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { addInscriptionHook }from "../../hooks/main/addInscriptionHook";
 import { Alert, Snackbar } from "@mui/material";
-import { getInscriptionHook } from "../../hooks/main/getInscriptionHook";
-import { deleteInscriptionHook } from "../../hooks/main/deleteInscriptionHook";
-import { getEventById } from "../../hooks/main/getEventById";
-import { getEventsByInscription } from "../../hooks/profile/getEventsByInscriptionHook";
+import { useSession } from "../../utils/context/ContextSession";
 
-const Quill = dynamic(() => import("react-quill"), { ssr: false });
-
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
 import EventCarousel from "../main/eventCarousel";
-import EventCarouselList from "../main/eventCarouselList";
-import EventInscriptions from "./eventInscriptionsList";
-import { getTagsHook } from "../../hooks/main/getTagsHook";
-import { Tag } from "../../utils/classes/Tag";
+import EventBookmarkList from "./eventBookmarkList";
+import EventInscriptions from "./eventInscriptionList";
 
 const profile = ({open, setOpen}) => {
-  const { selectedEvent, setSelectedEvent, tags, marker, setEvents, events } = useEvent();
-  const { id, username } = useSessionContext();
-  const { checkpoints } = useCheckpoints();
-  const [isInscribed, setIsInscribed] = useState(null);
-  const [inscribedEvents, setInscribedEvents] = useState([]);
-  const t = useTranslations("Main");
-  const tagsTrans = useTranslations("Tags");
-
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
+  const [snackbarMessage] = useState("");
+  const [snackbarSeverity] = useState("error");
 
-  useEffect(() => { 
-    if (id) {
-      getEventsByInscription(id).then(async (response) => {
-        const updatedEvents = await Promise.all(
-          response.events.map(async (event) => {
-            const tagResponse = await getTagsHook(event.id);
-            const newTags = tagResponse.tags.map((tag) => {
-              const foundTag = Tag.tags.find((aux) => aux?.id === tag.tag_id);
-              return foundTag || tag;
-            });
-            return { ...event, tags: newTags };
-          })
-        );
-        setInscribedEvents(updatedEvents);
-      });
-    }
-  }, [id, open]);
+  const { 
+    inscriptions,
+    bookmarks,
+    createdEvents,
+  } = useSession();
 
   return (
     <SwipeableDrawer
@@ -111,10 +74,8 @@ const profile = ({open, setOpen}) => {
               />
             </div>
 
-            {/* User Tag */}
             <h2 className="text-xl font-bold text-blue-600 mb-1">@username</h2>
 
-            {/* User Email */}
             <p className="text-gray-600">user@example.com</p>
           </div>
         </div>
@@ -153,14 +114,7 @@ const profile = ({open, setOpen}) => {
               </div>
             </div>
           </div>
-          {events.length === 0 && (
-            <>
-              <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
-                <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
-              </div>
-            </>
-          )}
-          <EventCarousel events={events} />
+          <EventCarousel events={createdEvents} />
         </div>
 
         <div className=" mt-4">
@@ -184,15 +138,8 @@ const profile = ({open, setOpen}) => {
               </div>
             </div>
           </div>
-          {events.length === 0 && (
-            <>
-              <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
-                <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
-              </div>
-            </>
-          )}
           <div className="flex flex-col">
-            <EventInscriptions events={inscribedEvents} />
+            <EventInscriptions events={inscriptions} />
           </div>
         </div>
 
@@ -217,14 +164,7 @@ const profile = ({open, setOpen}) => {
               </div>
             </div>
           </div>
-          {events.length === 0 && (
-            <>
-              <div className="bg-blue-500 rounded-b-2xl w-full h-[350px] flex flex-col p-4 mb-9 items-center align-center justify-center text-white">
-                <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
-              </div>
-            </>
-          )}
-          <EventCarouselList events={events} />
+          <EventBookmarkList events={bookmarks} />
         </div>
       </div>
     </SwipeableDrawer>

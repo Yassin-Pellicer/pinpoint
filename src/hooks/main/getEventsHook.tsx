@@ -1,6 +1,4 @@
-// utils/hooks/useEvents.ts
 import { Tag } from "../../utils/classes/Tag";
-import { useEvent } from "../../utils/context/ContextEvent";
 
 export const getEventsHook = async (
   tags?: Tag[],
@@ -14,7 +12,7 @@ export const getEventsHook = async (
   const queryParams = new URLSearchParams();
 
   if (tags?.length) {
-    queryParams.append("tags", tags.map(tag => tag.id).join(","));
+    queryParams.append("tags", tags.map((tag) => tag.tag_id).join(","));
   }
 
   if (search) {
@@ -45,18 +43,6 @@ export const getEventsHook = async (
     },
   });
 
-  const data = await res.json();
+  return await res.json();
+}
 
-  const result = data.events?.map((event: any) => {
-    const { position_lat, position_lng, ...rest } = event;
-    return {
-      ...rest,
-      marker: {
-        position: [position_lat, position_lng],
-        draggable: false,
-      },
-    };
-  }) ?? [];
-
-  return { ...data, events: result }; // Correct the return key to match consumer usage
-};

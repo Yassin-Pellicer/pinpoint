@@ -1,6 +1,6 @@
 
 export class Tag {
-  constructor(public name: string, public id?: number) {}
+  constructor(public name: string, public tag_id?: number) {}
 
   static readonly tags = [
     new Tag("buy", 1),

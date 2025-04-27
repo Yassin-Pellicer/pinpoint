@@ -16,13 +16,13 @@ import { get } from "http";
 import { getCommentsHook } from "../../hooks/main/getCommentsHook";
 import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
 import { getUserHook } from "../../hooks/general/getUserHook";
-import { useSessionContext } from "../../utils/context/ContextSession";
+import { useSession } from "../../utils/context/ContextSession";
 import { deleteCommentHook } from "../../hooks/main/deleteCommentHook";
 import { Alert, Snackbar } from "@mui/material";
 
 const List = ({refresh, setRefresh}) => {
   const { selectedEvent } = useEvent();
-  const { id } = useSessionContext();
+  const { id } = useSession();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
 

@@ -155,9 +155,30 @@ export async function GET(request) {
       `;
     }
 
+    const eventIds = result.rows.map(event => event.id);
+
+    const tagsQuery = await sql`
+      SELECT *
+      FROM "event_tags"
+      WHERE event_id = ANY(${eventIds})
+    `;
+
+    const eventsWithMarkers = result.rows?.map((event) => {
+      const eventTags = tagsQuery.rows.filter((tag) => tag.event_id === event.id);
+      const { position_lat, position_lng, ...rest } = event;
+      return {
+        ...rest,
+        marker: {
+          position: [position_lat, position_lng],
+          draggable: false,
+        },
+        tags: eventTags,
+      };
+    }) ?? [];
+
     const response = NextResponse.json(
       result && result.rows && result.rows.length 
-        ? { result: "ok", events: result.rows } 
+        ? { result: "ok", events: eventsWithMarkers } 
         : { result: "no events found" }
     );
     

@@ -4,8 +4,7 @@ import React from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useEvent } from "../../utils/context/ContextEvent";
-import EventInscription from "../profile/eventInscription";
+import EventBookmark from "./eventBookmark";
 
 export default function SwiperComponent( {events} ) {
   return (
@@ -15,7 +14,7 @@ export default function SwiperComponent( {events} ) {
           key={index}
           className="flex justify-center items-center select-none cursor-pointer"
         >
-          <EventInscription event={event} />
+          <EventBookmark event={event} />
         </div>
       ))}
     </div>

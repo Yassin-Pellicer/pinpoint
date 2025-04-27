@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET(_request, {params}) {
   try {
-    const { id } = params; // Get the dynamic ID from the route
+    const { id } = params;
     const query = await sql`
       SELECT *
       FROM "event_tags" WHERE event_id = ${id}`; ;
