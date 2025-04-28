@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { useSession } from "../../../utils/context/ContextSession";
 import { deleteInscriptionHook } from "../../../hooks/main/deleteInscriptionHook";
 import { addInscriptionHook } from "../../../hooks/main/addInscriptionHook";
+import { getEventById } from "../../../hooks/main/getEventById";
 
 const mainInscribedBox = ({ event }) => {
   const [isInscribed, setIsInscribed] = useState(null);
   const { id, inscriptions, triggerFetchInscriptions } = useSession();
+  const [people, setPeople] = useState(event.inscriptions);
 
   useEffect(() => {
     if (event === null) {
@@ -25,6 +27,7 @@ const mainInscribedBox = ({ event }) => {
     const response = await addInscriptionHook(event.id, id);
 
     triggerFetchInscriptions();
+    setPeople(people + 1)
     setIsInscribed(true);
   };
 
@@ -32,6 +35,7 @@ const mainInscribedBox = ({ event }) => {
     const response = await deleteInscriptionHook(event.id, id);
 
     triggerFetchInscriptions();
+    setPeople(people - 1)
     setIsInscribed(false);
   };
 
@@ -111,7 +115,7 @@ const mainInscribedBox = ({ event }) => {
                             textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
                           }}
                         >
-                          {inscriptions?.length || 0}
+                          {people}
                         </h2>
                         <h2
                           className="text-white text-2xl font-extrabold ml-2"
