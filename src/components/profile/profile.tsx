@@ -4,7 +4,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { Alert, Snackbar } from "@mui/material";
 import { useSession } from "../../utils/context/ContextSession";
 
-import EventCarousel from "../main/eventCarousel";
+import EventCarousel from "../main/mainEventCarousel";
 import EventBookmarkList from "./eventBookmarkList";
 import EventInscriptions from "./eventInscriptionList";
 

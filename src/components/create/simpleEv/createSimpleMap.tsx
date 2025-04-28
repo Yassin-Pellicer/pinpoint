@@ -11,7 +11,7 @@ import "leaflet-geosearch/dist/geosearch.css";
 import "leaflet/dist/leaflet.css";
 
 import { SearchControl } from "../../../utils/funcs/searchControl";
-import CreateEvents from "./simpleEvPlace";
+import CreateEvents from "./createSimpleEventMarkers";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";

@@ -10,7 +10,7 @@ import "leaflet-geosearch/dist/geosearch.css";
 import "leaflet/dist/leaflet.css";
 
 import { SearchControl } from "../../../utils/funcs/searchControl";
-import CreateEvents from "./cpEvPlace";
+import CreateEvents from "./createCheckpointEventMarkers";
 import { useEffect, useState } from "react";
 
 import "leaflet/dist/leaflet.css";

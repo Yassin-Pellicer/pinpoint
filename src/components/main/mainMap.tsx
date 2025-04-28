@@ -15,8 +15,8 @@ import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useMapContext } from "../../utils/context/ContextMap";
-import EventsMap from "./simpleEvView";
-import CheckpointMap from "./cpEvView";
+import EventsMap from "./mainEventMarkers";
+import CheckpointMap from "./mainCheckpointMarkers";
 
 export default function MapComponent() {
 

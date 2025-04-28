@@ -16,9 +16,9 @@ import Tags from "../../../components/create/tags";
 import { Tag } from "../../../utils/classes/Tag";
 import { getEventsHook } from "../../../hooks/main/getEventsHook";
 import { getTagsHook } from "../../../hooks/main/getTagsHook";
-import EventInfo from "../../../components/main/evInfo";
-import EventCarousel from "../../../components/main/eventCarousel";
-import EventCarouselList from "../../../components/main/eventCarouselList";
+import EventInfo from "../../../components/main/mainEventInfo";
+import EventCarousel from "../../../components/main/mainEventCarousel";
+import EventCarouselList from "../../../components/main/mainEventList";
 import debounce from "lodash.debounce";
 import { useSession } from "../../../utils/context/ContextSession";
 

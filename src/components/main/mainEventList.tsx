@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useEvent } from "../../utils/context/ContextEvent";
-import EventDate from "../../components/ui/date"; // Adjust the path as needed
+import EventDate from "../ui/date"; // Adjust the path as needed
 
 export default function SwiperComponent( {events} ) {
   const { setSelectedEvent } = useEvent();

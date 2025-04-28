@@ -7,7 +7,7 @@ import { Checkpoint } from "../../../utils/classes/Checkpoint";
 import { useCheckpoints } from "../../../utils/context/ContextCheckpoint"; 
 import { useMapContext } from "../../../utils/context/ContextMap"; 
 import { useTranslations } from "next-intl";
-import CheckpointInfo from "./cpInfo";
+import CheckpointInfo from "./createCheckpointInfo";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import fileURL from "../../../utils/funcs/createUrlImage";

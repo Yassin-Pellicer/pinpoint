@@ -10,7 +10,7 @@ import {
 import { useSortable } from "@dnd-kit/sortable";
 import { Checkpoint } from "../../../utils/classes/Checkpoint";
 import { useTranslations } from "next-intl";
-import CheckpointInfo from "./cpInfo";
+import CheckpointInfo from "./createCheckpointInfo";
 import { useEffect, useState } from "react";
 
 const BottomSheet = ({ open, setOpen }) => {

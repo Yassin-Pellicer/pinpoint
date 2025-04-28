@@ -1,7 +1,7 @@
 import { Slider, FormControl, FormControlLabel, Switch, Snackbar, Alert, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
-import CpList from "./cpList";
+import CpList from "./createCheckpointList";
 import Tags from "../tags";
 import dynamic from "next/dynamic";
 import Quill from "quill";
@@ -224,7 +224,7 @@ const CheckpointEvent = () => {
             <div className="flex flex-wrap w-full gap-2 my-2">
               {tags.map((tag) => (
                 <div
-                  key={tag.id}
+                  key={tag.tag_id}
                   className={`rounded-full w-fit px-2 py-1 text-center
                text-white bg-[#3F7DEA] font-bold tracking-tight"
             }`}
