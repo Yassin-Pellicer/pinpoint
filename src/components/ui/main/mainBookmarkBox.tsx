@@ -1,12 +1,19 @@
 "use client";
 import { useState, useEffect} from "react";
 import { useSession } from "../../../utils/context/ContextSession";
-import { addBookmarkHook } from "../../../hooks/main/addBookmarkHook";
-import { deleteBookmarkHook } from "../../../hooks/main/deleteBookmarkHook";
+import { addBookmarkHook } from "../../../hooks/main/add/addBookmarkHook";
+import { deleteBookmarkHook } from "../../../hooks/main/delete/deleteBookmarkHook";
 
 const bookmarkBox = ({ event }) => {
   const { id, triggerFetchBookmarks, bookmarks} = useSession();
   const [isBookmarked, setIsBookmarked] = useState(null);
+
+  useEffect(() => {
+    if (event?.id) {
+      const events = bookmarks?.map((i) => i.id) || [];
+      setIsBookmarked(events.includes(event.id));
+    }
+  }, [bookmarks, event?.id]);
 
   const handleUploadBookmark = async () => {
     const response = await addBookmarkHook(event.id, id);
@@ -21,13 +28,6 @@ const bookmarkBox = ({ event }) => {
     triggerFetchBookmarks();
     setIsBookmarked(false);
   };
-
-  useEffect(() => {
-    if (event?.id) {
-      const events = bookmarks?.map((i) => i.id) || [];
-      setIsBookmarked(events.includes(event.id));
-    }
-  }, [bookmarks, event?.id]);
 
   return (
     <div

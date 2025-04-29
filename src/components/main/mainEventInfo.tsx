@@ -10,10 +10,12 @@ import EventTimeDisplay from "../ui/date";
 import Quill from "react-quill";
 import InscribedBox from "../ui/main/mainInscriptionBox";
 import BookmarkBox from "../ui/main/mainBookmarkBox";
+import { useSession } from "../../utils/context/ContextSession";
+import { useMapContext } from "../../utils/context/ContextMap";
 
 const eventInfo = ({open, setOpen}) => {
   {/* CONTEXTS */}
-  const { selectedEvent, setSelectedEvent } = useEvent();
+  const { selectedEvent, setSelectedEvent } = useMapContext();
   const { checkpoints } = useCheckpoints();
 
   {/* TRANSLATIONS */}
@@ -152,7 +154,7 @@ const eventInfo = ({open, setOpen}) => {
           </div>
 
           {selectedEvent.end && (
-            <EventTimeDisplay selectedEvent={selectedEvent} listMode={false} />
+            <EventTimeDisplay event={selectedEvent} listMode={false} />
           )}
 
           <InscribedBox event={selectedEvent}></InscribedBox>

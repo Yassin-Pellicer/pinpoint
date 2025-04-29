@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function EventTimeDisplay({selectedEvent, listMode}) {
+export default function EventTimeDisplay({event, listMode}) {
   const [progress, setProgress] = useState(0);
   const [timeLeftText, setTimeLeftText] = useState("");
   const [progressColor, setProgressColor] = useState("bg-green-400");
@@ -20,8 +20,8 @@ export default function EventTimeDisplay({selectedEvent, listMode}) {
   useEffect(() => {
     const calculateProgress = () => {
       const now = new Date();
-      const start = new Date(selectedEvent.start);
-      const end = new Date(selectedEvent.end);
+      const start = new Date(event?.start);
+      const end = new Date(event?.end);
       
       const totalDuration = end.getTime() - start.getTime();
       const elapsedTime = now.getTime() - start.getTime();
@@ -67,7 +67,7 @@ export default function EventTimeDisplay({selectedEvent, listMode}) {
     const timer = setInterval(calculateProgress, 60000);
     
     return () => clearInterval(timer);
-  }, [selectedEvent]);
+  }, [event]);
 
   return (
     <div className={`h-auto rounded-2xl mt-3 ${!listMode && "bg-blue-500"}`}>
@@ -98,7 +98,7 @@ export default function EventTimeDisplay({selectedEvent, listMode}) {
               </div>
               <input
                 type="text"
-                value={formatDisplay(new Date(selectedEvent.start))}
+                value={formatDisplay(new Date(event.start))}
                 readOnly
                 className="rounded-lg p-2 bg-white bg-opacity-90 text-gray-800 text-sm w-full focus:outline-none"
               />
@@ -127,7 +127,7 @@ export default function EventTimeDisplay({selectedEvent, listMode}) {
               </div>
               <input
                 type="text"
-                value={formatDisplay(new Date(selectedEvent.end))}
+                value={formatDisplay(new Date(event.end))}
                 readOnly
                 className="rounded-lg p-2 bg-white bg-opacity-90 text-gray-800 text-sm w-full focus:outline-none"
               />

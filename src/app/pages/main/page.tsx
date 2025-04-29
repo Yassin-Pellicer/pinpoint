@@ -13,9 +13,6 @@ import Logo from "../../../components/ui/logo_btn";
 import { useMapContext } from "../../../utils/context/ContextMap";
 import { Event } from "../../../utils/classes/Event";
 import Tags from "../../../components/create/tags";
-import { Tag } from "../../../utils/classes/Tag";
-import { getEventsHook } from "../../../hooks/main/getEventsHook";
-import { getTagsHook } from "../../../hooks/main/getTagsHook";
 import EventInfo from "../../../components/main/mainEventInfo";
 import EventCarousel from "../../../components/main/mainEventCarousel";
 import EventCarouselList from "../../../components/main/mainEventList";
@@ -30,24 +27,20 @@ import Profile from "../../../components/profile/profile";
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const {
-    event,
-    setEvent,
-    setEvents,
-    selectedEvent,
-    events,
+    setEvent
   } = useEvent();
   const {
+    selectedEvent,
     location,
     zoom,
-    setZoom,
-    originalLocation,
     filterTags,
     search,
-    setSearch,
     searchResults,
-    setSearchResults,
     recommendations,
-    setRecommendations,
+    loadEvents,
+    loadSearchEvents,
+    loadRecommendations,
+    setSearch,
   } = useMapContext();
 
   const [openTags, setOpenTags] = useState(false);
@@ -58,88 +51,35 @@ export default function Create() {
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
-  const loadEvents = async () => {
-    const response = await getEventsHook(
-      undefined,
-      undefined,
-      undefined,
-      location?.[0],
-      location?.[1],
-      zoom,
-      events.filter((event) => event.id !== selectedEvent?.id)
-    );
-
-    if (response.events) {
-      const updatedMap = new Map(
-        events
-          .filter((event) => event.id !== selectedEvent?.id)
-          .map((event) => [event.id, event])
-      );
-      response.events.forEach((event) => {
-        updatedMap.set(event.id, event);
-      });
-      setEvents(Array.from(updatedMap.values()));
-    }
-  };
-
-  const loadSearchEvents = async (tags, searchTerm) => {
-    if (tags.length === 0 && searchTerm === "") {
-      setSearchResults([]);
-      return;
-    }
-    const response = await getEventsHook(tags, searchTerm);
-    if (response.events) {
-      setSearchResults(response.events);
-      const newEventIds = new Set(events.map((event) => event.id));
-      const nonDuplicateEvents = response.events.filter(
-        (event) => !newEventIds.has(event.id)
-      );
-      setEvents((prev) => [...prev, ...nonDuplicateEvents]);
-    }
-  };
-
-  const loadRecommendations = async (recommendations, userLat, userLon) => {
-    const response = await getEventsHook(
-      null,
-      null,
-      recommendations,
-      userLat,
-      userLon
-    );
-    setRecommendations(response.events);
-  };
-
   useEffect(() => {
-    loadRecommendations(true, originalLocation[0], originalLocation[1]);
+    loadRecommendations();
   }, []);
-
-  useEffect(() => {
-    setCheckpoints([]);
-    setEvent(new Event());
-  }, []);
-
-  useEffect(() => {
-    loadEvents();
-  }, [zoom, location, selectedEvent]);
-
-  useEffect(() => {
-    const handler = debounce(async () => {
-      await loadSearchEvents(filterTags, search);
-    }, 500);
-
-    handler();
-
-    return () => handler.cancel && handler.cancel();
-  }, [filterTags, search, selectedEvent]);
-
-  useEffect(() => {
-    if (selectedEvent != null) {
-      setOpenDetails(true);
-      return;
-    }
-    setCheckpoints([]);
-    setOpenDetails(false);
-  }, [selectedEvent]);
+  
+    useEffect(() => {
+      setCheckpoints([]);
+      setEvent(new Event());
+    }, []);
+  
+    useEffect(() => {
+      loadEvents();
+    }, [zoom, location, selectedEvent]);
+  
+    useEffect(() => {
+      const handler = debounce(async () => {
+        await loadSearchEvents(filterTags, search);
+      }, 500);
+      handler();
+      return () => handler.cancel && handler.cancel();
+    }, [filterTags, search, selectedEvent]);
+  
+    useEffect(() => {
+      if (selectedEvent != null) {
+        setOpenDetails(true);
+        return;
+      }
+      setCheckpoints([]);
+      setOpenDetails(false);
+    }, [selectedEvent]);
 
   return (
     <Layout>

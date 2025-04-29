@@ -1,6 +1,7 @@
-export const getEventsByInscription = async (userId?: number) => {
+export const getRatingHook = async (id?: number) => {
+  if (typeof id === "undefined") return;
 
-  const res = await fetch(`/api/get/events/getEventsByInscription/${userId}`, {
+  const res = await fetch(`/api/get/getRating/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -10,3 +11,4 @@ export const getEventsByInscription = async (userId?: number) => {
 
   return await res.json();
 };
+

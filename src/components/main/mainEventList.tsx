@@ -4,11 +4,11 @@ import React from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useEvent } from "../../utils/context/ContextEvent";
 import EventDate from "../ui/date"; // Adjust the path as needed
+import { useMapContext } from "../../utils/context/ContextMap";
 
 export default function SwiperComponent( {events} ) {
-  const { setSelectedEvent } = useEvent();
+  const { setSelectedEvent } = useMapContext();
   return (
     <div className="flex flex-col">
       {events?.map((event, index) => (
@@ -86,7 +86,7 @@ export default function SwiperComponent( {events} ) {
                 </div>
               </div>
               {event.start && event.end && (
-              <EventDate selectedEvent={event} listMode={true} />
+              <EventDate event={event} listMode={true} />
             )}
             </div>{" "}
           </div>

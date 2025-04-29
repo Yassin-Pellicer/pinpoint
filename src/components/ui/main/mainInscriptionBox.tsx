@@ -1,20 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSession } from "../../../utils/context/ContextSession";
-import { deleteInscriptionHook } from "../../../hooks/main/deleteInscriptionHook";
-import { addInscriptionHook } from "../../../hooks/main/addInscriptionHook";
-import { getEventById } from "../../../hooks/main/getEventById";
+import { deleteInscriptionHook } from "../../../hooks/main/delete/deleteInscriptionHook";
+import { addInscriptionHook } from "../../../hooks/main/add/addInscriptionHook";
 
 const mainInscribedBox = ({ event }) => {
   const [isInscribed, setIsInscribed] = useState(null);
   const { id, inscriptions, triggerFetchInscriptions } = useSession();
-  const [people, setPeople] = useState(event.inscriptions);
-
-  useEffect(() => {
-    if (event === null) {
-      setIsInscribed(null);
-    }
-  }, [event]);
+  const [people, setPeople] = useState(Number(event.inscriptions));
 
   useEffect(() => {
     if (event?.id) {
@@ -27,7 +20,7 @@ const mainInscribedBox = ({ event }) => {
     const response = await addInscriptionHook(event.id, id);
 
     triggerFetchInscriptions();
-    setPeople(people + 1)
+    setPeople((prevPeople) => prevPeople + 1);
     setIsInscribed(true);
   };
 
@@ -35,7 +28,7 @@ const mainInscribedBox = ({ event }) => {
     const response = await deleteInscriptionHook(event.id, id);
 
     triggerFetchInscriptions();
-    setPeople(people - 1)
+    setPeople((prevPeople) => prevPeople - 1);
     setIsInscribed(false);
   };
 

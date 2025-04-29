@@ -1,6 +1,6 @@
-export const getEventsByInscription = async (userId?: number) => {
+export const getEventsByBookmark = async (userId?: number) => {
 
-  const res = await fetch(`/api/get/events/getEventsByInscription/${userId}`, {
+  const res = await fetch(`/api/get/events/getEventsByBookmark/${userId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -5,7 +5,7 @@ export const addTagsHook = async ( Tags : {eventId: number, data: Tag[]} ) => {
 
     const { eventId, data } = Tags;
 
-    const res = await fetch("/api/addTags", {
+    const res = await fetch("/api/add/addTags", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

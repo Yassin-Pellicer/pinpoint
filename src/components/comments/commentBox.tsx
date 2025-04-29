@@ -4,12 +4,12 @@ import { useTranslations } from "next-intl";
 import { useSession } from "../../utils/context/ContextSession";
 import CommentList from "../comments/commentList";
 import { Comment } from "../../utils/classes/Comment";
-import { addCommentHook } from "../../hooks/main/addCommentHook";
+import { addCommentHook } from "../../hooks/main/add/addCommentHook";
 import { useEvent } from "../../utils/context/ContextEvent";
-import { addRatingHook } from "../../hooks/main/addRatingHook";
-import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
+import { addRatingHook } from "../../hooks/main/add/addRatingHook";
+import { getRatingUserHook } from "../../hooks/main/get/getRatingUserHook";
 import { Alert, Snackbar } from "@mui/material";
-import { getCommentsHook } from "../../hooks/main/getCommentsHook";
+import { useMapContext } from "../../utils/context/ContextMap";
 
 const commentBox = () => {
   const { username, id } = useSession();
@@ -17,7 +17,7 @@ const commentBox = () => {
   const [rating, setRating] = useState(0);
   const [assignRating, setAssignRating] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const { event, selectedEvent } = useEvent();
+  const { selectedEvent } = useMapContext();
 
   const handleUploadComment = async (e: React.FormEvent) => {
     let comment = null;

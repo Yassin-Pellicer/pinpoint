@@ -11,8 +11,8 @@ import { useTranslations } from "next-intl";
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import fileURL from "../../utils/funcs/createUrlImage";
 import { useEvent } from "../../utils/context/ContextEvent";
-import { getCheckpointsHook } from "../../hooks/main/getCheckpointsHook";
-import { getRatingHook } from "../../hooks/main/getRatingHook";
+import { getCheckpointsHook } from "../../hooks/main/get/getCheckpointsHook";
+import { getRatingHook } from "../../hooks/main/get/getRatingHook";
 
 const cpView = () => {
   const map = useMap();

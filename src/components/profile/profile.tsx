@@ -19,6 +19,8 @@ const profile = ({open, setOpen}) => {
     createdEvents,
   } = useSession();
 
+  
+
   return (
     <SwipeableDrawer
       anchor="bottom"

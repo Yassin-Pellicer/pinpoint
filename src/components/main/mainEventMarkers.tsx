@@ -15,7 +15,7 @@ const evView = () => {
   const t = useTranslations("SimplePopup");
   const tagsTrans = useTranslations("Tags");
 
-  const { events, selectedEvent, setSelectedEvent } = useEvent();
+  const { events, selectedEvent, setSelectedEvent } = useMapContext();
   const { checkpoints } = useCheckpoints();
 
   const { location, setLocation, zoom, setZoom, originalLocation } =
@@ -75,7 +75,7 @@ const evView = () => {
 
   return (
     <>
-      {filteredEvents.map((event) => (
+      {filteredEvents?.map((event) => (
         <Marker
           key={event.id}
           position={event.marker.position}

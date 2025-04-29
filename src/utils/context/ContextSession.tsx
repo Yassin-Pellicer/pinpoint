@@ -1,9 +1,10 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { getEventsByInscription } from "../../hooks/profile/getEventsByInscriptionHook";
-import { getBookmarksHook } from "../../hooks/profile/getBookmarksHook";
 import { Event } from "../classes/Event";
+import { getEventsByBookmark } from "../../hooks/profile/getEventsByBookmarkHook";
+import { getEventsByInscription } from "../../hooks/profile/getEventsByInscriptionHook";
+import { useMapContext } from "./ContextMap";
 
 interface SessionContextType {
   id: number | null;
@@ -34,6 +35,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   const [fetchInscriptions, setFetchInscriptions] = useState(false);
   const [fetchBookmarks, setFetchBookmarks] = useState(false);
 
+  const {events, setEvents} = useMapContext();
+
   const triggerFetchInscriptions = () => {
     setFetchInscriptions(true);
   };
@@ -53,7 +56,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
   useEffect(() => { 
     if (fetchBookmarks && id !== null) {
-      getBookmarksHook(id).then(async (response) => {
+      getEventsByBookmark(id).then(async (response) => {
         setBookmarks(response.events);
         setFetchBookmarks(false);
       });
@@ -71,7 +74,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
   useEffect(() => {
     if (id !== null) {
-      getBookmarksHook(id).then(async (response) => {
+      getEventsByBookmark(id).then(async (response) => {
         setBookmarks(response.events);
         setFetchBookmarks(false);
       });

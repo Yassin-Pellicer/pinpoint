@@ -1,27 +1,15 @@
 "use client";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
-import { closestCenter, closestCorners, DndContext, pointerWithin, rectIntersection } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { useSortable } from "@dnd-kit/sortable";
-import { Checkpoint } from "../../utils/classes/Checkpoint";
-import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useEvent } from "../../utils/context/ContextEvent";
-import { get } from "http";
-import { getCommentsHook } from "../../hooks/main/getCommentsHook";
-import { getRatingUserHook } from "../../hooks/main/getRatingUserHook";
+import { getCommentsHook } from "../../hooks/main/get/getCommentsHook";
+import { getRatingUserHook } from "../../hooks/main/get/getRatingUserHook";
 import { getUserHook } from "../../hooks/general/getUserHook";
 import { useSession } from "../../utils/context/ContextSession";
-import { deleteCommentHook } from "../../hooks/main/deleteCommentHook";
+import { deleteCommentHook } from "../../hooks/main/delete/deleteCommentHook";
 import { Alert, Snackbar } from "@mui/material";
+import { useMapContext } from "../../utils/context/ContextMap";
 
 const List = ({refresh, setRefresh}) => {
-  const { selectedEvent } = useEvent();
+  const { selectedEvent } = useMapContext();
   const { id } = useSession();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);

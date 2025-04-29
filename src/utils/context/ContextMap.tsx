@@ -1,8 +1,17 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Tag } from "../classes/Tag";
+import { Event } from "../classes/Event";
+import { getEventById, getEventsDynamic, getEventsSearch, getRecommendations } from "../../hooks/main/get/getEventsHook";
+import { get } from "http";
 
 interface MapContextType {
+  events: Event[];
+  setEvents: (events: Event[]) => void;
+  searchResults: any[];
+  setSearchResults: (searchResult: any[]) => void;
+  selectedEvent: Event | null;
+  setSelectedEvent: (event: any) => void;
   originalLocation: [number, number];
   setOriginalLocation: (location: [number, number]) => void;
   location: [number, number] | null;
@@ -15,8 +24,9 @@ interface MapContextType {
   setSearch: (search: string) => void;
   recommendations: any[];
   setRecommendations: (recommendations: any[]) => void;
-  searchResults: any[];
-  setSearchResults: (searchResult: any[]) => void;
+  loadEvents: () => Promise<void>;
+  loadSearchEvents: (tags: Tag[], searchTerm: string) => Promise<void>;
+  loadRecommendations: () => Promise<void>;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -29,28 +39,56 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [search, setSearch] = useState("");
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [searchResults, setSearchResults] = useState<any[]>([]);
-
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
+  
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setLocation([latitude, longitude]);
         setOriginalLocation([latitude, longitude]);
-        sessionStorage.setItem(
-          "map-center",
-          JSON.stringify([latitude, longitude])
-        );
-        sessionStorage.setItem("map-reloaded", "true");
       },
       (error) => {
-        console.error("Error getting location. Make sure to allow location access:", error.message);
         setLocation([39.4699, -0.3763]);
         setOriginalLocation([39.4699, -0.3763]);
-        sessionStorage.setItem("map-center", JSON.stringify([39.4699, -0.3763]));
-        sessionStorage.setItem("map-reloaded", "true");
       }
     );
   }, []);
+
+  const loadEvents = async () => {
+    const response = await getEventsDynamic(location?.[0], location?.[1], zoom,
+       events.filter((event) => event.id !== selectedEvent?.id)
+    );
+    if (response.events) {
+      const updatedMap = new Map(
+        events
+          .filter((event) => event.id !== selectedEvent?.id)
+          .map((event) => [event.id, event])
+      );
+      response.events.forEach((event) => {
+        updatedMap.set(event.id, event);
+      });
+      setEvents(Array.from(updatedMap.values()));
+    }
+  };
+
+  const loadSearchEvents = async (tags, searchTerm) => {
+    const response = await getEventsSearch(tags, searchTerm);
+    if (response.events) {
+      setSearchResults(response.events);
+      const newEventIds = new Set(events.map((event) => event.id));
+      const nonDuplicateEvents = response.events.filter(
+        (event) => !newEventIds.has(event.id)
+      );
+      setEvents((prev) => [...prev, ...nonDuplicateEvents]);
+    }
+  };
+
+  const loadRecommendations = async () => {
+    const response = await getRecommendations(originalLocation?.[0], originalLocation?.[1]);
+    setRecommendations(response.events);
+  };
 
   return (
     <MapContext.Provider
@@ -69,12 +107,19 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         setRecommendations,
         searchResults,
         setSearchResults,
+        selectedEvent,
+        setSelectedEvent,
+        events,
+        setEvents,
+        loadEvents,
+        loadSearchEvents,
+        loadRecommendations,
       }}
     >
       {children}
     </MapContext.Provider>
   );
-}
+};
 
 export const useMapContext = () => {
   const context = useContext(MapContext);
