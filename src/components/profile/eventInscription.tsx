@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useEvent } from "../../utils/context/ContextEvent";
 import EventDate from "../ui/date";
 import { useSession } from "../../utils/context/ContextSession";
 import { addInscriptionHook } from "../../hooks/main/add/addInscriptionHook";

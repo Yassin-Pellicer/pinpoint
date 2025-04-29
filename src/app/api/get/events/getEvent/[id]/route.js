@@ -1,12 +1,11 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0; 
+
 export async function GET(_request, { params }) {
   const id = parseInt(params.id);
-
-  if (isNaN(id)) {
-    return NextResponse.json({ result: "invalid id" }, { status: 400 });
-  }
 
   try {
     const result = await sql`
@@ -15,7 +14,7 @@ export async function GET(_request, { params }) {
       WHERE e.id = ${id}
     `;
 
-   const eventIds = result.rows.map(event => event.id);
+    const eventIds = result.rows.map(event => event.id);
 
     const tagsQuery = await sql`
       SELECT *

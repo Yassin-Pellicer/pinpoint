@@ -7,7 +7,9 @@ import { addInscriptionHook } from "../../../hooks/main/add/addInscriptionHook";
 const mainInscribedBox = ({ event }) => {
   const [isInscribed, setIsInscribed] = useState(null);
   const { id, inscriptions, triggerFetchInscriptions } = useSession();
-  const [people, setPeople] = useState(Number(event.inscriptions));
+  const [people, setPeople] = useState(
+    inscriptions?.find((i) => i.id === event?.id)?.inscriptions || 0
+  );
 
   useEffect(() => {
     if (event?.id) {

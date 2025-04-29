@@ -17,10 +17,10 @@ interface SessionContextType {
   setBookmarks: (bookmarks: Event[] | null) => void;
   createdEvents: Event[] | null;
   setCreatedEvents: (createdEvents: Event[] | null) => void;
-  triggerFetchInscriptions: () => void;
-  triggerFetchBookmarks: () => void;
   fetchInscriptions: boolean;
+  triggerFetchInscriptions: () => void;
   fetchBookmarks: boolean;
+  triggerFetchBookmarks: () => void;
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
@@ -34,8 +34,6 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
   const [fetchInscriptions, setFetchInscriptions] = useState(false);
   const [fetchBookmarks, setFetchBookmarks] = useState(false);
-
-  const {events, setEvents} = useMapContext();
 
   const triggerFetchInscriptions = () => {
     setFetchInscriptions(true);
@@ -94,10 +92,10 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         setBookmarks,
         createdEvents,
         setCreatedEvents,
-        triggerFetchInscriptions,
-        triggerFetchBookmarks,
         fetchInscriptions,
+        triggerFetchInscriptions,
         fetchBookmarks,
+        triggerFetchBookmarks,
       }}
     >
       {children}

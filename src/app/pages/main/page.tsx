@@ -46,7 +46,7 @@ export default function Create() {
   const [openTags, setOpenTags] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
-  const { username } = useSession();
+  const { username, inscriptions } = useSession();
 
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
@@ -78,8 +78,7 @@ export default function Create() {
         return;
       }
       setCheckpoints([]);
-      setOpenDetails(false);
-      loadEvents();
+      setOpenDetails(false)
     }, [selectedEvent]);
 
   return (

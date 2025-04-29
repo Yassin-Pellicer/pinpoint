@@ -25,7 +25,8 @@ const cpView = () => {
   const [count, setCount] = useState(0);
   const { location, setLocation, zoom, setZoom, originalLocation } =
     useMapContext();
-  const { event, setEvent, setMarker, selectedEvent } = useEvent();
+  const { event, setEvent, setMarker } = useEvent();
+  const { selectedEvent } = useMapContext();
 
   const t = useTranslations("CpInfo");
 

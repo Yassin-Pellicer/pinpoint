@@ -16,7 +16,6 @@ export async function POST(request) {
     if (inscriptions >= capacity && capacity != null) {
       return NextResponse.json({ result: "error", message: "full", status: 400 });
     }
-
     const insertUserQuery = await sql`
     INSERT INTO inscription_user ("user", event)
     VALUES (${id}, ${eventId})

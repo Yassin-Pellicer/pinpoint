@@ -29,7 +29,7 @@ export async function GET(request) {
       const searchQuery = `%${search}%`;
       result = await sql`
         SELECT *
-        FROM "event"
+        FROM "event" e
         WHERE (
           unaccent(lower(e.name)) LIKE unaccent(lower(${searchQuery}))
           OR unaccent(lower(e.description)) LIKE unaccent(lower(${searchQuery}))
