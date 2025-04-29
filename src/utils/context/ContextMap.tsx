@@ -62,9 +62,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     );
     if (response.events) {
       const updatedMap = new Map(
-        events
-          .filter((event) => event.id !== selectedEvent?.id)
-          .map((event) => [event.id, event])
+        events.map((event) => [event.id, event])
       );
       response.events.forEach((event) => {
         updatedMap.set(event.id, event);

@@ -62,7 +62,7 @@ export default function Create() {
   
     useEffect(() => {
       loadEvents();
-    }, [zoom, location, selectedEvent]);
+    }, [zoom, location]);
   
     useEffect(() => {
       const handler = debounce(async () => {
@@ -70,7 +70,7 @@ export default function Create() {
       }, 500);
       handler();
       return () => handler.cancel && handler.cancel();
-    }, [filterTags, search, selectedEvent]);
+    }, [filterTags, search]);
   
     useEffect(() => {
       if (selectedEvent != null) {
@@ -79,6 +79,7 @@ export default function Create() {
       }
       setCheckpoints([]);
       setOpenDetails(false);
+      loadEvents();
     }, [selectedEvent]);
 
   return (
