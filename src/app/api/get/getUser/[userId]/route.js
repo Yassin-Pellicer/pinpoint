@@ -3,15 +3,16 @@ import { NextResponse } from 'next/server';
 
 export async function GET(_request, { params }) {
   try {
-    const { id } = params;
+    const { userId } = params;
     const query = await sql`
-      SELECT *
+      SELECT id, username, email, "profilePicture", followers, following, description, banner
       FROM "user" 
-      WHERE id = ${id}
+      WHERE id = ${userId}
     `;
-    return NextResponse.json({ result: "ok", user: query.rows[0] });
+    return NextResponse.json({ user: query.rows[0] });
   } catch (error) {
-    console.error('Database query error:', error);
     return NextResponse.json({ result: "ko" });
   }
 }
+
+

@@ -3,18 +3,37 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Event } from "../classes/Event";
 import { getEventsByAuthor, getEventsByBookmark, getEventsByInscription } from "../../hooks/main/get/getEventsHook";
+import { User } from "../classes/User";
+import { Comment } from "../classes/Comment";
+import { Rating } from "../classes/Rating";
 
 interface SessionContextType {
-  id: number | null;
-  setId: (id: number | null) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
   username: string | null;
   setUsername: (username: string | null) => void;
-  inscriptions: Event[] | null;
-  setInscriptions: (inscriptions: Event[] | null) => void;
-  bookmarks: Event[] | null;
-  setBookmarks: (bookmarks: Event[] | null) => void;
+  banner: string | null;
+  setBanner: (banner: string | null) => void;
+  email: string | null;
+  setEmail: (email: string | null) => void;
+  description: string | null;
+  setDescription: (description: string | null) => void;
+  followers: number | null;
+  setFollowers: (followers: number | null) => void;
+  following: number | null;
+  setFollowing: (following: number | null) => void;
   createdEvents: Event[] | null;
   setCreatedEvents: (createdEvents: Event[] | null) => void;
+  comments: Comment[] | null;
+  setComments: (comments: Comment[] | null) => void;
+  ratings: Rating[] | null;
+  setRatings: (ratings: Rating[] | null) => void;
+  bookmarks: Event[] | null;
+  setBookmarks: (bookmarks: Event[] | null) => void;
+  profilePicture: string | null;
+  setProfilePicture: (profilePicture: string | null) => void;
+  inscriptions: Event[] | null;
+  setInscriptions: (inscriptions: Event[] | null) => void;
   fetchInscriptions: boolean;
   triggerFetchInscriptions: () => void;
   fetchBookmarks: boolean;
@@ -24,14 +43,94 @@ interface SessionContextType {
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
-  const [username, setUsername] = useState<string | null>(null);
-  const [id, setId] = useState<number | null>(null);
-  const [inscriptions, setInscriptions] = useState<Event[] | null>(null);
-  const [bookmarks, setBookmarks] = useState<Event[] | null>(null);
-  const [createdEvents, setCreatedEvents] = useState<Event[] | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const [fetchInscriptions, setFetchInscriptions] = useState(false);
   const [fetchBookmarks, setFetchBookmarks] = useState(false);
+
+  const setUsername = (name: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, username: name };
+    });
+  };
+
+  const setDescription = (description: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, description };
+    });
+  };
+
+  const setBanner = (banner: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, banner };
+    });
+  };
+
+  const setEmail = (email: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, email };
+    });
+  };
+
+  const setProfilePicture = (profilePicture: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, profilePicture };
+    });
+  };
+
+  const setFollowers = (followers: number) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, followers };
+    });
+  };
+
+  const setFollowing = (following: number) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, following };
+    });
+  };
+
+  const setComments = (comments: Comment[]) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, comments };
+    });
+  };
+
+  const setRatings = (ratings: Rating[]) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, ratings };
+    });
+  };
+
+  const setCreatedEvents = (createdEvents: Event[]) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, createdEvents };
+    });
+  };
+
+  const setBookmarks = (bookmarks: Event[]) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, bookmarks };
+    });
+  };
+
+  const setInscriptions = (inscriptions: Event[]) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, inscriptions };
+    });
+  };
 
   const triggerFetchInscriptions = () => {
     setFetchInscriptions(true);
@@ -42,8 +141,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   };
 
   useEffect(() => { 
-    if (fetchInscriptions && id !== null) {
-      getEventsByInscription(id).then(async (response) => {
+    if (fetchInscriptions && user !== null) {
+      getEventsByInscription(user?.id).then(async (response) => {
         setInscriptions(response.events);
         setFetchInscriptions(false);
       });
@@ -51,8 +150,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   }, [fetchInscriptions]);
 
   useEffect(() => { 
-    if (fetchBookmarks && id !== null) {
-      getEventsByBookmark(id).then(async (response) => {
+    if (fetchBookmarks && user !== null) {
+      getEventsByBookmark(user?.id).then(async (response) => {
         setBookmarks(response.events);
         setFetchBookmarks(false);
       });
@@ -60,43 +159,59 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   }, [fetchBookmarks]);
 
   useEffect(() => {
-    if (id !== null) {
-      getEventsByInscription(id).then(async (response) => {
+    if (user?.id != null) {
+      getEventsByInscription(user?.id).then(async (response) => {
         setInscriptions(response.events);
         setFetchInscriptions(false);
       });
     }
-  }, [id]);
+  }, [user?.id]);
 
   useEffect(() => {
-    if (id !== null) {
-      getEventsByBookmark(id).then(async (response) => {
+    if (user?.id != null) {
+      getEventsByBookmark(user?.id).then(async (response) => {
         setBookmarks(response.events);
         setFetchBookmarks(false);
       });
     }
-  }, [id]);
+  }, [user?.id]);
 
   useEffect(() => {
-    if (id !== null) {
-      getEventsByAuthor(id).then(async (response) => {
+    if (user?.id != null) {
+      getEventsByAuthor(user?.id).then(async (response) => {
         setCreatedEvents(response.events);
       });
     }
-  }, [id]);
+  }, [user?.id]);
 
   return (
     <SessionContext.Provider
       value={{
-        id,
-        setId,
-        username,
+        user,
+        setUser,
+        username: user?.username,
         setUsername,
-        inscriptions,
-        setInscriptions,
-        bookmarks,
+        banner: user?.banner,
+        setBanner,
+        email: user?.email,
+        setEmail,
+        description: user?.description,
+        setDescription,
+        profilePicture: user?.profilePicture,
+        setProfilePicture,        
+        followers: user?.followers,
+        setFollowers,        
+        following: user?.following,
+        setFollowing,        
+        comments: user?.comments,
+        setComments,
+        ratings: user?.ratings,
+        setRatings,
+        bookmarks: user?.bookmarks,
         setBookmarks,
-        createdEvents,
+        inscriptions: user?.inscriptions,
+        setInscriptions,
+        createdEvents: user?.createdEvents,
         setCreatedEvents,
         fetchInscriptions,
         triggerFetchInscriptions,

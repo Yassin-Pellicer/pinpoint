@@ -121,8 +121,6 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, end }));
   };
 
-
-
   return (
     <EventContext.Provider
       value={{

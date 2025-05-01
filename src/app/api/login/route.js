@@ -12,6 +12,7 @@ export async function POST(request) {
     const query = await sql`SELECT * FROM "user" WHERE "email" = ${email}`;
 
     const username = query.rows[0];
+    const id = query.rows[0];
 
     if (username === undefined) {
       return NextResponse.json({ result: "user_not_found" });
@@ -24,8 +25,7 @@ export async function POST(request) {
       const token = jwt.sign(
         {
           exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
-          email: email,
-          username: username,
+          id: id
         },
         'secret'
       );

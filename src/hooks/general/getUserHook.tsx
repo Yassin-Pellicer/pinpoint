@@ -1,7 +1,6 @@
-export const getUserHook = async (id: number | null) => {
-  if (typeof id === "undefined") return;
+export const getUserHook = async (userId: number | null) => {
 
-  const res = await fetch(`/api/get/getUser/${id}`, {
+  const res = await fetch(`/api/get/getUser/${userId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

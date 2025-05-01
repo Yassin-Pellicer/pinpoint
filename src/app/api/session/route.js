@@ -1,5 +1,4 @@
 "use server";
-import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
 import { verify } from 'jsonwebtoken';
 
@@ -10,9 +9,10 @@ export async function GET(request) {
     return NextResponse.json({ auth: false });
   }
 
+  const id = verify(cookie, "secret").id.id;
+
   try {
-    const user = verify(cookie, "secret"); 
-    return NextResponse.json({ auth: true, user: user });
+    return NextResponse.json({ auth: true, id: id });
   } catch (error) {
     return NextResponse.json({ auth: false });
   }

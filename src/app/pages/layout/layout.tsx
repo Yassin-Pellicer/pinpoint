@@ -4,6 +4,7 @@ import Menu from "../../../components/home/menu";
 import { useState } from "react";
 import { useSession } from "../../../utils/context/ContextSession";
 import { useRouter } from 'next/navigation';
+import { getUserHook } from "../../../hooks/general/getUserHook";
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,7 +12,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [open, setOpen] = useState(false);
-  const {username, setUsername, setId} = useSession();
+  const { setUser } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -25,8 +26,8 @@ export default function Layout({ children }: LayoutProps) {
       });
       const data = await response.json();
       if (data.auth) {
-        setUsername(data.user.username.username);
-        setId(data.user.username.id);
+        const response = await getUserHook(data.id);
+        setUser(response.user);
       }
       else {
         router.push("/pages/auth/login")
@@ -52,8 +53,8 @@ export default function Layout({ children }: LayoutProps) {
           <span className="material-icons text-3xl">menu</span>
         </button>
       </div>
-
       <Menu open={open} setOpen={setOpen} />
+
     </main>
   );
 }

@@ -20,23 +20,30 @@ return (
 
       <div className="flex flex-col justify-between w-full px-6 pb-6 rounded-b-2xl h-[fit] z-10 bg-gray-300">
         <div className="flex flex-row justify-between">
-        <div className="flex flex-col pt-[70px] ">
-          <h2 className="text-2xl font-bold text-blue-600 mb-1">username</h2>
-        </div>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-[40px] mt-4 px-4 rounded-full">
-          Seguir
-        </button>
+          <div className="flex flex-col pt-[70px] ">
+            <h2
+              className="text-white text-3xl mr-5"
+              style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+            >
+              username
+            </h2>
+          </div>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-[40px] mt-4 px-4 rounded-full">
+            Seguir
+          </button>
         </div>
         <div className="flex flex-col justify-between w-full py-2">
           <p className="text-sm text-gray-600 tracking-tighter pb-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus. 
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit
+            amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis
+            natoque penatibus.
           </p>
           <div className="flex flex-row">
             <p className="text-sm text-gray-600 mr-2">
-               <span className="font-bold">Siguiendo:</span> 21
+              <span className="font-bold">Siguiendo:</span> 21
             </p>
             <p className="text-sm text-gray-600">
-               <span className="font-bold">Seguidores:</span> 324
+              <span className="font-bold">Seguidores:</span> 324
             </p>
           </div>
         </div>
