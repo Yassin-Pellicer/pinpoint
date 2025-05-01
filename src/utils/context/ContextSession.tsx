@@ -2,9 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { Event } from "../classes/Event";
-import { getEventsByBookmark } from "../../hooks/profile/getEventsByBookmarkHook";
-import { getEventsByInscription } from "../../hooks/profile/getEventsByInscriptionHook";
-import { useMapContext } from "./ContextMap";
+import { getEventsByAuthor, getEventsByBookmark, getEventsByInscription } from "../../hooks/main/get/getEventsHook";
 
 interface SessionContextType {
   id: number | null;
@@ -75,6 +73,14 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
       getEventsByBookmark(id).then(async (response) => {
         setBookmarks(response.events);
         setFetchBookmarks(false);
+      });
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (id !== null) {
+      getEventsByAuthor(id).then(async (response) => {
+        setCreatedEvents(response.events);
       });
     }
   }, [id]);

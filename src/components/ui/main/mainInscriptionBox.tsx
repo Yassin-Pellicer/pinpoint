@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { useSession } from "../../../utils/context/ContextSession";
 import { deleteInscriptionHook } from "../../../hooks/main/delete/deleteInscriptionHook";
 import { addInscriptionHook } from "../../../hooks/main/add/addInscriptionHook";
+import { useMapContext } from "../../../utils/context/ContextMap";
 
 const mainInscribedBox = ({ event }) => {
   const [isInscribed, setIsInscribed] = useState(null);
   const { id, inscriptions, triggerFetchInscriptions } = useSession();
-  const [people, setPeople] = useState(
-    inscriptions?.find((i) => i.id === event?.id)?.inscriptions || 0
-  );
+  const { setModifiedEvent } = useMapContext();
+  const [people, setPeople] = useState(Number(event.inscriptions));
 
   useEffect(() => {
     if (event?.id) {
@@ -23,6 +23,7 @@ const mainInscribedBox = ({ event }) => {
 
     triggerFetchInscriptions();
     setPeople((prevPeople) => prevPeople + 1);
+    setModifiedEvent(event);
     setIsInscribed(true);
   };
 
@@ -31,6 +32,7 @@ const mainInscribedBox = ({ event }) => {
 
     triggerFetchInscriptions();
     setPeople((prevPeople) => prevPeople - 1);
+    setModifiedEvent(event); 
     setIsInscribed(false);
   };
 

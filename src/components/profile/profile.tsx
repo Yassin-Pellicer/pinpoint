@@ -1,25 +1,19 @@
 "use client";
-import { useState } from "react";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { Alert, Snackbar } from "@mui/material";
 import { useSession } from "../../utils/context/ContextSession";
 
 import EventCarousel from "../main/mainEventCarousel";
 import EventBookmarkList from "./eventBookmarkList";
 import EventInscriptions from "./eventInscriptionList";
+import Banner from "../ui/banner";
 
 const profile = ({open, setOpen}) => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage] = useState("");
-  const [snackbarSeverity] = useState("error");
 
   const { 
     inscriptions,
     bookmarks,
     createdEvents,
   } = useSession();
-
-  
 
   return (
     <SwipeableDrawer
@@ -43,44 +37,15 @@ const profile = ({open, setOpen}) => {
         },
       }}
     >
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-      >
-        <Alert
-          onClose={() => setSnackbarOpen(false)}
-          severity={
-            snackbarSeverity as "error" | "success" | "info" | "warning"
-          }
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-      <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
+      <div className="mt-6 rounded-2xl bg-white p-6">
         <button
           onClick={() => setOpen(false)}
-          className="bg-blue-500 p-2 text-white"
+          className="bg-blue-500 p-2 w-full h-fit rounded-t-2xl"
         >
-          close
+          <i className="material-icons text-white">keyboard_arrow_down</i>
         </button>
-        <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
-          <div className="flex flex-col items-center justify-center">
-            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-400 mb-4">
-              <img
-                src="/api/placeholder/150/150"
-                alt="Profile Picture"
-                className="w-full h-full object-cover"
-              />
-            </div>
 
-            <h2 className="text-xl font-bold text-blue-600 mb-1">@username</h2>
-
-            <p className="text-gray-600">user@example.com</p>
-          </div>
-        </div>
+        <Banner></Banner>
 
         <div className=" mt-4">
           <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">

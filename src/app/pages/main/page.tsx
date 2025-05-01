@@ -37,6 +37,7 @@ export default function Create() {
     search,
     searchResults,
     recommendations,
+    modifiedEvent,
     loadEvents,
     loadSearchEvents,
     loadRecommendations,
@@ -46,7 +47,7 @@ export default function Create() {
   const [openTags, setOpenTags] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
-  const { username, inscriptions } = useSession();
+  const { username } = useSession();
 
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
@@ -55,37 +56,36 @@ export default function Create() {
     loadRecommendations();
   }, []);
   
-    useEffect(() => {
-      setCheckpoints([]);
-      setEvent(new Event());
-    }, []);
-  
-    useEffect(() => {
-      loadEvents();
-    }, [zoom, location]);
-  
-    useEffect(() => {
-      const handler = debounce(async () => {
-        await loadSearchEvents(filterTags, search);
-      }, 500);
-      handler();
-      return () => handler.cancel && handler.cancel();
-    }, [filterTags, search]);
-  
-    useEffect(() => {
-      if (selectedEvent != null) {
-        setOpenDetails(true);
-        return;
-      }
-      setCheckpoints([]);
-      setOpenDetails(false)
-    }, [selectedEvent]);
+  useEffect(() => {
+    setCheckpoints([]);
+    setEvent(new Event());
+  }, []);
+
+  useEffect(() => {
+    loadEvents();
+  }, [zoom, location, modifiedEvent, selectedEvent]);
+
+  useEffect(() => {
+    const handler = debounce(async () => {
+      await loadSearchEvents(filterTags, search);
+    }, 500);
+    handler();
+    return () => handler.cancel && handler.cancel();
+  }, [filterTags, search]);
+
+  useEffect(() => {
+    if (selectedEvent != null) {
+      setOpenDetails(true);
+      return;
+    }
+    setCheckpoints([]);
+    setOpenDetails(false)
+  }, [selectedEvent]);
 
   return (
     <Layout>
       <div className="flex flex-row">
         <div className="flex flex-col overflow-auto bg-blue-500 h-screen shrink-0 px-6 w-[550px]">
-          {/* Event type */}
           <div className="flex px-6 flex-col mb-6 mt-6 rounded-2xl bg-white">
             <div className="flex mt-6 flex-row justify-between items-center align-center">
               <div className=" w-[100px] flex items-center justify-center">

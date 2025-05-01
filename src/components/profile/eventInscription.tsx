@@ -8,7 +8,7 @@ import { useMapContext } from "../../utils/context/ContextMap";
 
 export default function SwiperComponent( {event} ) {
   const { id } = useSession();
-  const { setSelectedEvent, selectedEvent } = useMapContext();
+  const { setSelectedEvent, setModifiedEvent } = useMapContext();
   const { inscriptions, triggerFetchInscriptions } = useSession();
   const [isInscribed, setIsInscribed] = useState(null);
 
@@ -23,6 +23,7 @@ export default function SwiperComponent( {event} ) {
     const response = await addInscriptionHook(event.id, id);
     
     setIsInscribed(true);
+    setModifiedEvent(event);
     triggerFetchInscriptions();
   };
 
@@ -30,6 +31,7 @@ export default function SwiperComponent( {event} ) {
     const response = await deleteInscriptionHook(event.id, id);
     
     setIsInscribed(false);
+    setModifiedEvent(event);
     triggerFetchInscriptions();
   };
 

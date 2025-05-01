@@ -13,6 +13,45 @@ export const getEventById = async (id?: number) => {
   return await res.json();
 };
 
+export const getEventsByInscription = async (userId?: number) => {
+
+  const res = await fetch(`/api/get/events/getEventsByInscription/${userId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      'Cache-Control': 'no-cache'
+    },
+  });
+
+  return await res.json();
+};
+
+export const getEventsByBookmark = async (userId?: number) => {
+
+  const res = await fetch(`/api/get/events/getEventsByBookmark/${userId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      'Cache-Control': 'no-cache'
+    },
+  });
+
+  return await res.json();
+};
+
+export const getEventsByAuthor = async (userId?: number) => {
+
+  const res = await fetch(`/api/get/events/getEventsByAuthor/${userId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      'Cache-Control': 'no-cache'
+    },
+  });
+
+  return await res.json();
+};
+
 export const getEventsDynamic = async (
   userLat?: number,
   userLon?: number,

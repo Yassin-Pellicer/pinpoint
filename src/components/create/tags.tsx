@@ -45,7 +45,7 @@ const BottomSheet = ({ open, setOpen }) => {
       variant="persistent"
       PaperProps={{
         style: {
-          maxWidth: "35rem",
+          maxWidth: "549px",
           height: "100%",
           marginRight: "auto",
           marginLeft: "1px",

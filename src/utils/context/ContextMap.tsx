@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Tag } from "../classes/Tag";
 import { Event } from "../classes/Event";
 import { getEventById, getEventsDynamic, getEventsSearch, getRecommendations } from "../../hooks/main/get/getEventsHook";
-import { get } from "http";
 
 interface MapContextType {
   events: Event[];
@@ -24,6 +23,8 @@ interface MapContextType {
   setSearch: (search: string) => void;
   recommendations: any[];
   setRecommendations: (recommendations: any[]) => void;
+  modifiedEvent: Event | null;
+  setModifiedEvent: (event: Event | null) => void;
   loadEvents: () => Promise<void>;
   loadSearchEvents: (tags: Tag[], searchTerm: string) => Promise<void>;
   loadRecommendations: () => Promise<void>;
@@ -41,6 +42,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
+  const [modifiedEvent, setModifiedEvent] = useState<Event | null>(null);
   
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -58,7 +60,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loadEvents = async () => {
     const response = await getEventsDynamic(location?.[0], location?.[1], zoom,
-       events.filter((event) => event.id !== selectedEvent?.id)
+       events.filter((event) => event.id !== selectedEvent?.id && event.id !== modifiedEvent?.id)
     );
     if (response.events) {
       const updatedMap = new Map(
@@ -68,6 +70,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         updatedMap.set(event.id, event);
       });
       setEvents(Array.from(updatedMap.values()));
+      setModifiedEvent(null);
     }
   };
 
@@ -112,6 +115,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         loadEvents,
         loadSearchEvents,
         loadRecommendations,
+        modifiedEvent,
+        setModifiedEvent,
       }}
     >
       {children}

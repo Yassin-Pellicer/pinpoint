@@ -1,7 +1,6 @@
 "use client";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import { useTranslations } from "next-intl";
-import { useEvent } from "../../utils/context/ContextEvent";
 import CommentBox from "../comments/commentBox";
 import CpList from "./mainCheckpointList";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
@@ -10,7 +9,6 @@ import EventTimeDisplay from "../ui/date";
 import Quill from "react-quill";
 import InscribedBox from "../ui/main/mainInscriptionBox";
 import BookmarkBox from "../ui/main/mainBookmarkBox";
-import { useSession } from "../../utils/context/ContextSession";
 import { useMapContext } from "../../utils/context/ContextMap";
 
 const eventInfo = ({open, setOpen}) => {
@@ -46,26 +44,20 @@ const eventInfo = ({open, setOpen}) => {
     >
       {selectedEvent && (
         <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
-          <div className="relative justify-center w-full">
-            <div
-              className="absolute top-3 w-fit left-3 flex justify-center items-center text-white text-lg px-3 py-2 rounded-xl cursor-pointer z-10 group outline-none"
+        <button
               onClick={() => {
                 setOpen(false);
                 setTimeout(() => {
                   setSelectedEvent(null);
                 }, 300);
               }}
-            >
-              <i
-                className="flex material-icons justify-center text-center items-center text-white text-5xl"
-                style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
-              >
-                keyboard_arrow_down
-              </i>
-            </div>
-
+          className="bg-blue-500 p-2 w-full h-fit  rounded-t-2xl"
+        >
+          <i className="material-icons text-white text-3xl">keyboard_arrow_down</i>
+        </button>
+          <div className="relative justify-center w-full">
             {selectedEvent.banner ? (
-              <div className="relative flex justify-end items-center w-full h-15 rounded-t-2xl overflow-hidden border-t border-x border-gray-400">
+              <div className="relative flex justify-end items-center w-full h-15 overflow-hidden border-t border-x border-gray-400">
                 <img
                   src={selectedEvent.banner}
                   className="w-full h-full object-cover"
