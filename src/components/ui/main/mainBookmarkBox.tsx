@@ -5,7 +5,7 @@ import { addBookmarkHook } from "../../../hooks/main/add/addBookmarkHook";
 import { deleteBookmarkHook } from "../../../hooks/main/delete/deleteBookmarkHook";
 
 const bookmarkBox = ({ event }) => {
-  const { id, triggerFetchBookmarks, bookmarks} = useSession();
+  const { user, triggerFetchBookmarks, bookmarks} = useSession();
   const [isBookmarked, setIsBookmarked] = useState(null);
 
   useEffect(() => {
@@ -16,14 +16,14 @@ const bookmarkBox = ({ event }) => {
   }, [bookmarks, event?.id]);
 
   const handleUploadBookmark = async () => {
-    const response = await addBookmarkHook(event.id, id);
+    const response = await addBookmarkHook(event.id, user.id);
     
     triggerFetchBookmarks();
     setIsBookmarked(true);
   };
 
   const handleDeleteBookmark = async () => {
-    const response = await deleteBookmarkHook(event.id, id);
+    const response = await deleteBookmarkHook(event.id, user.id);
     
     triggerFetchBookmarks();
     setIsBookmarked(false);

@@ -10,15 +10,27 @@ import Quill from "react-quill";
 import InscribedBox from "../ui/main/mainInscriptionBox";
 import BookmarkBox from "../ui/main/mainBookmarkBox";
 import { useMapContext } from "../../utils/context/ContextMap";
+import { useSession } from "../../utils/context/ContextSession";
+import { useEvent } from "../../utils/context/ContextEvent";
+import { useRouter } from "next/navigation";
 
 const eventInfo = ({open, setOpen}) => {
   {/* CONTEXTS */}
   const { selectedEvent, setSelectedEvent } = useMapContext();
   const { checkpoints } = useCheckpoints();
+  const { user } = useSession();
+  const { setEvent } = useEvent();
+
+  const router = useRouter();
 
   {/* TRANSLATIONS */}
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
+
+  const handleEditEvent = (event) => {
+    setEvent(event);
+    router.push("/pages/create")
+   }
 
   return (
     <SwipeableDrawer
@@ -43,18 +55,21 @@ const eventInfo = ({open, setOpen}) => {
       }}
     >
       {selectedEvent && (
-        <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
-        <button
-              onClick={() => {
-                setOpen(false);
-                setTimeout(() => {
-                  setSelectedEvent(null);
-                }, 300);
-              }}
-          className="bg-blue-500 p-2 w-full h-fit  rounded-t-2xl"
-        >
-          <i className="material-icons text-white text-3xl">keyboard_arrow_down</i>
-        </button>
+        <div className="mb-6 mt-6 rounded-2xl bg-white p-4">
+          <button
+            onClick={() => {
+              setOpen(false);
+              setTimeout(() => {
+                setSelectedEvent(null);
+              }, 300);
+            }}
+            className="bg-blue-500 w-full h-fit  rounded-t-2xl"
+          >
+            <i className="material-icons text-white text-3xl">
+              keyboard_arrow_down
+            </i>
+          </button>
+
           <div className="relative justify-center w-full">
             {selectedEvent.banner ? (
               <div className="relative flex justify-end items-center w-full h-15 overflow-hidden border-t border-x border-gray-400">
@@ -143,6 +158,14 @@ const eventInfo = ({open, setOpen}) => {
                 )}
               </div>
             </div>
+            {selectedEvent.author === user.id && (
+              <button
+                onClick={() => handleEditEvent(selectedEvent)}
+                className="mt-4 w-full font-extrabold font-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100"
+              >
+                Editar Evento
+              </button>
+            )}
           </div>
 
           {selectedEvent.end && (

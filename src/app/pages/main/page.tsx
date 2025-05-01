@@ -19,10 +19,11 @@ import EventCarouselList from "../../../components/main/mainEventList";
 import debounce from "lodash.debounce";
 import { useSession } from "../../../utils/context/ContextSession";
 
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, setRef } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Profile from "../../../components/profile/profile";
+import { set } from "date-fns";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
@@ -47,18 +48,20 @@ export default function Create() {
   const [openTags, setOpenTags] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
-  const { username } = useSession();
+  const { username, setUser } = useSession();
+  const { setRecommendations } = useMapContext();
+  const { setSelectedEvent } = useMapContext();
 
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
-
-  useEffect(() => {
-    loadRecommendations();
-  }, []);
   
   useEffect(() => {
     setCheckpoints([]);
+    setUser(null);
+    setSelectedEvent(null);
+    setRecommendations([]);
     setEvent(new Event());
+    loadRecommendations();
   }, []);
 
   useEffect(() => {

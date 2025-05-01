@@ -12,7 +12,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { useMapContext } from "../../utils/context/ContextMap";
 
 const commentBox = () => {
-  const { username, id } = useSession();
+  const { user } = useSession();
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(0);
   const [assignRating, setAssignRating] = useState(false);
@@ -21,13 +21,13 @@ const commentBox = () => {
 
   const handleUploadComment = async (e: React.FormEvent) => {
     let comment = null;
-    if (assignRating) comment = new Comment(content, id, new Date(), rating);
-    else comment = new Comment(content, id, new Date(), null);
+    if (assignRating) comment = new Comment(content, user.id, new Date(), rating);
+    else comment = new Comment(content, user.id, new Date(), null);
 
     if (comment.content == "") {
       return;
     } else {
-      const response = await addCommentHook(selectedEvent.id, id, comment);
+      const response = await addCommentHook(selectedEvent.id, user.id, comment);
       setContent("");
       setSnackbarMessage("Comentario añadido correctamente");
       setSnackbarSeverity("success");
@@ -40,7 +40,7 @@ const commentBox = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState("error");
 
   useEffect(() => {
-    getRatingUserHook(selectedEvent.id, id).then((response) => {
+    getRatingUserHook(selectedEvent.id, user.id).then((response) => {
       setRating(response.rating);
     });
   }, [selectedEvent.id]);
@@ -114,7 +114,7 @@ const commentBox = () => {
                         }}
                         onClick={() => {
                           setRating(i);
-                          addRatingHook(selectedEvent.id, id, i);
+                          addRatingHook(selectedEvent.id, user.id, i);
                         }}
                       >
                         {i <= Math.floor(rating)
@@ -128,7 +128,7 @@ const commentBox = () => {
                       className="material-icons rotate-45 text-sm ml-2 cursor-pointer text-gray-500 hover:text-gray-600"
                       onClick={() => {
                         setRating(0);
-                        addRatingHook(selectedEvent.id, id, 0);
+                        addRatingHook(selectedEvent.id, user.id, 0);
                       }}
                     >
                       replay

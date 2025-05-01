@@ -19,6 +19,7 @@ import TextField from '@mui/material/TextField';
 const SimpleEvent = () => {
   const {
     event,
+    setCheckpoints,
     name,
     setName,
     description,
@@ -62,6 +63,8 @@ const SimpleEvent = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setCheckpoints([]);
+    event.checkpoints = [];
     event.qr = false;
     try {
       const result = await createEventHook(event);
@@ -209,12 +212,12 @@ const SimpleEvent = () => {
             <div className="flex flex-wrap w-full gap-2 my-2">
               {tags.map((tag) => (
                 <div
-                  key={tag.id}
+                  key={tag.tag_id}
                   className={`rounded-full w-fit px-2 py-1 text-center
                text-white bg-[#3F7DEA] font-bold tracking-tight"
             }`}
                 >
-                  <p className="text-xs">{tagsTrans(`${tag.name}`)}</p>
+                  <p className="text-xs">{tagsTrans(`${tag.tag_id}`)}</p>
                 </div>
               ))}
             </div>

@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Event } from "../classes/Event";
 import { Tag } from "../classes/Tag";
 
@@ -20,8 +20,8 @@ interface EventContextType {
   setQr: (qr: boolean) => void;
   isPublic: boolean;
   setIsPublic: (isPublic: boolean) => void;
-  author: string;
-  setAuthor: (author: string) => void;
+  author: number;
+  setAuthor: (author: number) => void;
   comments: any[];
   setComments: (comments: any[]) => void;
   enableRatings: boolean;
@@ -77,7 +77,7 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, isPublic }));
   };
 
-  const setAuthor = (author: string) => {
+  const setAuthor = (author: number) => {
     setEvent((prev) => ({ ...prev, author }));
   };
 
@@ -120,6 +120,10 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
   const setEnd = (end: Date) => {
     setEvent((prev) => ({ ...prev, end }));
   };
+
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
 
   return (
     <EventContext.Provider

@@ -12,7 +12,7 @@ export class Event {
     public tags: Tag[] = [],
     public qr: boolean = false,
     public isPublic: boolean = true,
-    public author: string = "",
+    public author: number = null,
     public comments: Comment[] = [],
     public rating: number = null,
     public enableRatings: boolean = false,

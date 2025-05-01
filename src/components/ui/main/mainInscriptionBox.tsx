@@ -7,7 +7,7 @@ import { useMapContext } from "../../../utils/context/ContextMap";
 
 const mainInscribedBox = ({ event }) => {
   const [isInscribed, setIsInscribed] = useState(null);
-  const { id, inscriptions, triggerFetchInscriptions } = useSession();
+  const { user, inscriptions, triggerFetchInscriptions } = useSession();
   const { setModifiedEvent } = useMapContext();
   const [people, setPeople] = useState(Number(event.inscriptions));
 
@@ -19,7 +19,7 @@ const mainInscribedBox = ({ event }) => {
   }, [inscriptions, event?.id]);
 
   const handleUploadInscription = async () => {
-    const response = await addInscriptionHook(event.id, id);
+    const response = await addInscriptionHook(event.id, user.id);
 
     triggerFetchInscriptions();
     setPeople((prevPeople) => prevPeople + 1);
@@ -28,7 +28,7 @@ const mainInscribedBox = ({ event }) => {
   };
 
   const handleDeleteInscription = async () => {
-    const response = await deleteInscriptionHook(event.id, id);
+    const response = await deleteInscriptionHook(event.id, user.id);
 
     triggerFetchInscriptions();
     setPeople((prevPeople) => prevPeople - 1);

@@ -7,7 +7,7 @@ import { deleteInscriptionHook } from "../../hooks/main/delete/deleteInscription
 import { useMapContext } from "../../utils/context/ContextMap";
 
 export default function SwiperComponent( {event} ) {
-  const { id } = useSession();
+  const { user } = useSession();
   const { setSelectedEvent, setModifiedEvent } = useMapContext();
   const { inscriptions, triggerFetchInscriptions } = useSession();
   const [isInscribed, setIsInscribed] = useState(null);
@@ -20,7 +20,7 @@ export default function SwiperComponent( {event} ) {
   }, [inscriptions]);
 
   const handleUploadInscription = async () => {
-    const response = await addInscriptionHook(event.id, id);
+    const response = await addInscriptionHook(event.id, user.id);
     
     setIsInscribed(true);
     setModifiedEvent(event);
@@ -28,7 +28,7 @@ export default function SwiperComponent( {event} ) {
   };
 
   const handleDeleteInscription = async () => {
-    const response = await deleteInscriptionHook(event.id, id);
+    const response = await deleteInscriptionHook(event.id, user.id);
     
     setIsInscribed(false);
     setModifiedEvent(event);

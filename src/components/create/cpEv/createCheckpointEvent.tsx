@@ -229,7 +229,7 @@ const CheckpointEvent = () => {
                text-white bg-[#3F7DEA] font-bold tracking-tight"
             }`}
                 >
-                  <p className="text-xs">{tagsTrans(`${tag.name}`)}</p>
+                  <p className="text-xs">{tagsTrans(`${tag.tag_id}`)}</p>
                 </div>
               ))}
             </div>

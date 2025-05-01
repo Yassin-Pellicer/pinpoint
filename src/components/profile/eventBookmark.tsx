@@ -8,7 +8,7 @@ import { addBookmarkHook } from "../../hooks/main/add/addBookmarkHook";
 import { useMapContext } from "../../utils/context/ContextMap";
 
 export default function SwiperComponent( {event} ) {
-  const { id } = useSession();
+  const { user } = useSession();
   const { setSelectedEvent } = useMapContext();
   const { bookmarks, triggerFetchBookmarks } = useSession();
   
@@ -22,14 +22,14 @@ export default function SwiperComponent( {event} ) {
   }, [bookmarks]);
 
   const handleUploadBookmark = async () => {
-    const response = await addBookmarkHook(event.id, id);
+    const response = await addBookmarkHook(event.id, user.id);
     
     setIsBookmarked(true);
     triggerFetchBookmarks();
   };
 
   const handleDeleteBookmark = async () => {
-    const response = await deleteBookmarkHook(event.id, id);
+    const response = await deleteBookmarkHook(event.id, user.id);
     
     setIsBookmarked(false);
     triggerFetchBookmarks();
@@ -93,7 +93,6 @@ export default function SwiperComponent( {event} ) {
             )}
           </div>
         }
-
         {event.start && event.end && (
           <EventDate event={event} listMode={true} />
         )}

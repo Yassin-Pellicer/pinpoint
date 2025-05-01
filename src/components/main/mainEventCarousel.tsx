@@ -42,7 +42,7 @@ export default function SwiperComponent({events}) {
                     </h1>
                   </div>
                 </div>
-                <p className="flex text-xs items-center w-[70%] mb-2">
+                <p className="flex text-xs items-center w-[70%]">
                   {event.rating !== null ? event.address : ""}
                 </p>
                 <div className="flex flex-row justify-between items-center w-full">
@@ -74,7 +74,7 @@ export default function SwiperComponent({events}) {
                     )}
                   </div>
                   {event.rating === null ? (
-                    <p className="text-xs mb-2 w-full">{event.address}</p>
+                    <p className="text-xs w-full">{event.address}</p>
                   ) : (
                     <></>
                   )}

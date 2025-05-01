@@ -20,9 +20,9 @@ return (
 
       <div className="flex flex-col justify-between w-full px-6 pb-6 rounded-b-2xl h-[fit] z-10 bg-gray-300">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col pt-[70px] ">
+          <div className="flex flex-col pt-[60px] ">
             <h2
-              className="text-white text-3xl mr-5"
+              className="text-white text-3xl font-bold mr-5"
               style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
             >
               username

@@ -10,7 +10,7 @@ import { useMapContext } from "../../utils/context/ContextMap";
 
 const List = ({refresh, setRefresh}) => {
   const { selectedEvent } = useMapContext();
-  const { id } = useSession();
+  const { user } = useSession();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -135,7 +135,7 @@ const List = ({refresh, setRefresh}) => {
                       </div>
                     )}
                   </div>
-                  {comment.user === id && (
+                  {comment.user === user.id && (
                     <i
                       className="material-icons text-xl ml-4 text-gray-600 transition duration-300 hover:cursor-pointer hover:text-red-500"
                       onClick={() => {

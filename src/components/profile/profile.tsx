@@ -2,7 +2,7 @@
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { useSession } from "../../utils/context/ContextSession";
 
-import EventCarousel from "../main/mainEventCarousel";
+import EventCarousel from "./profileEventCarousel";
 import EventBookmarkList from "./eventBookmarkList";
 import EventInscriptions from "./eventInscriptionList";
 import Banner from "../ui/banner";
@@ -39,10 +39,10 @@ const profile = ({open, setOpen}) => {
     >
       <div className="mt-6 rounded-2xl bg-white p-6">
         <button
-          onClick={() => setOpen(false)}
-          className="bg-blue-500 p-2 w-full h-fit rounded-t-2xl"
+          onClick={() => { setOpen(false) }}
+          className="bg-blue-500 w-full h-fit  rounded-t-2xl"
         >
-          <i className="material-icons text-white">keyboard_arrow_down</i>
+          <i className="material-icons text-white text-3xl">keyboard_arrow_down</i>
         </button>
 
         <Banner></Banner>

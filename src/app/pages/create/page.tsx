@@ -22,7 +22,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { event, setEvent, name, setName, description, setDescription, marker, setMarker, banner, setBanner, tags, setTags, qr, setQr, isPublic, setIsPublic, author, setAuthor} = useEvent();
+  const { setMarker } = useEvent();
   const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
 
   const [selectedButton, setSelectedButton] = useState("simple");
@@ -32,11 +32,6 @@ export default function Create() {
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
   );
-
-  useEffect(() => {
-    setCheckpoints([]);
-    setEvent(new Event());
-  }, []);
 
   if (!location) {
     return (
@@ -71,8 +66,6 @@ export default function Create() {
                 onClick={() => {
                   if (selectedButton === "simple") return;
                   setSelectedButton("simple");
-                  setMarker(null);
-                  setCheckpoints([]);
                 }}
               >
                 {t("simple")}
