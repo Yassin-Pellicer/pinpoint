@@ -42,6 +42,8 @@ interface EventContextType {
   setStart: (start: Date) => void;
   end: Date;
   setEnd: (end: Date) => void; 
+  date: Date;
+  setDate: (date: Date) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -121,9 +123,9 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, end }));
   };
 
-  useEffect(() => {
-    console.log(event);
-  }, [event]);
+  const setDate = (date: Date) => {
+    setEvent((prev) => ({ ...prev, date }));
+  };
 
   return (
     <EventContext.Provider
@@ -166,6 +168,8 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         setStart,
         end: event.end,
         setEnd,
+        date: event.date,
+        setDate
       }}
     >
       {children}

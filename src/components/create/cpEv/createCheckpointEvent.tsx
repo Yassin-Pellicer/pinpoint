@@ -48,6 +48,8 @@ const CheckpointEvent = () => {
     setStart,
     end,
     setEnd,
+    date,
+    setDate
   } = useEvent();
 
   const t = useTranslations("Create");
@@ -257,7 +259,6 @@ const CheckpointEvent = () => {
               </div>
 
               <div className="grid mt-2 grid-cols-2 gap-4">
-                {/* Hora de Inicio */}
                 <div className="flex flex-col">
                   <div
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
@@ -310,7 +311,6 @@ const CheckpointEvent = () => {
                   />
                 </div>
 
-                {/* Hora de Fin */}
                 <div className="flex flex-col">
                   <div
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
@@ -362,6 +362,58 @@ const CheckpointEvent = () => {
                     }}
                   />
                 </div>
+              </div>
+
+              <div className="flex mt-4 flex-col">
+                <div
+                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  className="flex flex-row mb-2 items-center"
+                >
+                  <i className="material-icons text-white text-2xl mr-2">
+                    timer
+                  </i>
+                  <h1 className="text-white text-2xl tracking-tighter font-bold">
+                    Fecha y hora del evento*
+                  </h1>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setDate(null);
+                    }}
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    className="flex items-center justify-center ml-auto"
+                  >
+                    <i className="material-icons text-white">refresh</i>
+                  </button>
+                </div>
+                <DateTimePicker
+                  label="Seleccione fecha y hora"
+                  format="dd/MM/yyyy HH:mm"
+                  value={date}
+                  onChange={(newValue) => {
+                    if (!newValue) return;
+                    if (newValue < end && end) {
+                      setSnackbarMessage(
+                        "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
+                      );
+                      setSnackbarSeverity("error");
+                      setSnackbarOpen(true);
+                    } else {
+                      setDate(newValue);
+                    }
+                  }}
+                  slotProps={{
+                    textField: {
+                      InputProps: {
+                        readOnly: true,
+                        style: { fontSize: "0.875rem" },
+                      },
+                      InputLabelProps: {
+                        style: { fontSize: "0.875rem" },
+                      },
+                    },
+                  }}
+                />
               </div>
             </div>
           </div>

@@ -23,7 +23,6 @@ import { CssBaseline, setRef } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Profile from "../../../components/profile/profile";
-import { set } from "date-fns";
 
 export default function Create() {
   const { checkpoints, setCheckpoints } = useCheckpoints();

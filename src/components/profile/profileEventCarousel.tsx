@@ -8,15 +8,27 @@ import EventDate from "../ui/date";
 import { useMapContext } from "../../utils/context/ContextMap";
 import { useEvent } from "../../utils/context/ContextEvent";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { getCheckpointsHook } from "../../hooks/main/get/getCheckpointsHook";
+import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 
 export default function SwiperComponent({events}) {
   const { setEvent } = useEvent();
+  const { setCheckpoints } = useCheckpoints();
   const { setSelectedEvent } = useMapContext();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleEditEvent = (event) => {
-  router.push("/pages/create")
-   setEvent(event);
+    setLoading(true);
+    setEvent(event);
+    getCheckpointsHook(event?.id).then((res) => {
+      if (res) setCheckpoints(res.checkpoints);
+      console.log(res)
+      setLoading(false);
+    }).finally(() => {
+      router.push("/pages/create")
+    });
   }
 
   return (
@@ -111,10 +123,19 @@ export default function SwiperComponent({events}) {
                   )}
                 </div>
                 <button
-                  onClick={() => handleEditEvent(event)}
-                  className="mt-4 w-[98%] font-extrabold font-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100"
+                  onClick={() => {
+                    setLoading(true);
+                    setTimeout(() => {
+                      handleEditEvent(event);
+                    }, 1000);
+                  }}
+                  className="mt-4 w-[98%] font-extrabold text-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100 flex justify-center items-center h-7"
                 >
-                  Editar Evento
+                  {loading ? (
+                    <div className="animate-spin h-4 w-4 border-4 border-white border-t-transparent rounded-full"></div>
+                  ) : (
+                    "Editar Evento"
+                  )}
                 </button>
               </div>
             </div>

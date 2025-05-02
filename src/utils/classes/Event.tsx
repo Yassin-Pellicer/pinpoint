@@ -24,5 +24,6 @@ export class Event {
     public inscriptions: number = null,
     public start: Date = null,
     public end: Date = null,
+    public date: Date = null,
   ) {}
 }

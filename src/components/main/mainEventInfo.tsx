@@ -13,6 +13,7 @@ import { useMapContext } from "../../utils/context/ContextMap";
 import { useSession } from "../../utils/context/ContextSession";
 import { useEvent } from "../../utils/context/ContextEvent";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const eventInfo = ({open, setOpen}) => {
   {/* CONTEXTS */}
@@ -20,6 +21,7 @@ const eventInfo = ({open, setOpen}) => {
   const { checkpoints } = useCheckpoints();
   const { user } = useSession();
   const { setEvent } = useEvent();
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -159,12 +161,21 @@ const eventInfo = ({open, setOpen}) => {
               </div>
             </div>
             {selectedEvent.author === user.id && (
-              <button
-                onClick={() => handleEditEvent(selectedEvent)}
-                className="mt-4 w-full font-extrabold font-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100"
-              >
-                Editar Evento
-              </button>
+               <button
+               onClick={() => {
+                 setLoading(true);
+                 setTimeout(() => {
+                   handleEditEvent(selectedEvent);
+                 }, 1000);
+               }}
+               className="mt-4 w-full font-extrabold text-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100 flex justify-center items-center h-10"
+             >
+               {loading ? (
+                 <div className="animate-spin h-4 w-4 border-4 border-white border-t-transparent rounded-full"></div>
+               ) : (
+                 "Editar Evento"
+               )}
+             </button>
             )}
           </div>
 

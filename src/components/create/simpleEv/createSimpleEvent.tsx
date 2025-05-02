@@ -41,6 +41,8 @@ const SimpleEvent = () => {
     setStart,
     end,
     setEnd,
+    date,
+    setDate,
   } = useEvent();
 
   const [loading, setLoading] = useState(false);
@@ -129,7 +131,6 @@ const SimpleEvent = () => {
           <h1 className="text-3xl tracking-tight font-bold">
             {t("Details.creation")}
           </h1>
-          {/* <i className="material-icons">lock</i> */}
           {isPublic && <i className="material-icons">public</i>}
           {!isPublic && <i className="material-icons">lock</i>}
         </div>
@@ -164,20 +165,6 @@ const SimpleEvent = () => {
           </div>
         </label>
 
-        {enableInscription && (
-          <>
-            <label className="font-bold">Capacidad del evento:</label>
-            <input
-              type="number"
-              value={capacity}
-              onChange={(e) => {
-                setCapacity(parseInt(e.target.value, 10));
-              }}
-              className="border border-black rounded p-2"
-            />
-          </>
-        )}
-
         <label className="font-bold">{t("Details.title")}</label>
         <input
           type="text"
@@ -188,6 +175,7 @@ const SimpleEvent = () => {
           className="border border-black rounded p-1 mb-3"
         />
         <label className="font-bold">{t("Details.description")}</label>
+
         <Quill
           value={description}
           onChange={setDescription}
@@ -245,7 +233,6 @@ const SimpleEvent = () => {
               </div>
 
               <div className="grid mt-2 grid-cols-2 gap-4">
-                {/* Hora de Inicio */}
                 <div className="flex flex-col">
                   <div
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
@@ -295,7 +282,6 @@ const SimpleEvent = () => {
                   />
                 </div>
 
-                {/* Hora de Fin */}
                 <div className="flex flex-col">
                   <div
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
@@ -345,6 +331,55 @@ const SimpleEvent = () => {
                   />
                 </div>
               </div>
+
+              <div className="flex mt-4 flex-col">
+                  <div
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    className="flex flex-row mb-2 items-center"
+                  >
+                    <i className="material-icons text-white text-2xl mr-2">
+                      timer
+                    </i>
+                    <h1 className="text-white text-2xl tracking-tighter font-bold">
+                      Fecha y hora del evento*
+                    </h1>
+                    <button
+                      onClick={(e) => {e.preventDefault(); setDate(null)}}
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      className="flex items-center justify-center ml-auto"
+                    >
+                      <i className="material-icons text-white">refresh</i>
+                    </button>
+                  </div>
+                  <DateTimePicker
+                    label="Seleccione fecha y hora"
+                    format="dd/MM/yyyy HH:mm"
+                    value={date}
+                    onChange={(newValue) => {
+                      if (!newValue) return;
+                      if (newValue < end && end) {
+                        setSnackbarMessage(
+                          "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
+                        );
+                        setSnackbarSeverity("error");
+                        setSnackbarOpen(true);
+                      } else {
+                        setDate(newValue);
+                      }
+                    }}
+                    slotProps={{
+                      textField: {
+                        InputProps: {
+                          readOnly: true,
+                          style: { fontSize: "0.875rem" },
+                        },
+                        InputLabelProps: {
+                          style: { fontSize: "0.875rem" },
+                        },
+                      },
+                    }}
+                  />
+                </div>
             </div>
           </div>
         </div>
