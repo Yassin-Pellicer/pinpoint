@@ -16,25 +16,6 @@ import { useEffect, useState } from "react";
 const BottomSheet = ({ open, setOpen }) => {
   const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint, } = useCheckpoints();
   const t = useTranslations("CpList");
-  const [expandedCheckpoints, setExpandedCheckpoints] = useState({});
-
-  useEffect(() => {
-    setExpandedCheckpoints((prev) => {
-      const updatedExpandedState = {};
-      checkpoints.forEach((cp) => {
-        updatedExpandedState[cp.id] = prev[cp.id] || false;
-      });
-
-      return updatedExpandedState;
-    });
-  }, [checkpoints]);
-
-  const toggleCheckpointDetails = (id) => {
-    setExpandedCheckpoints((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -137,7 +118,7 @@ const BottomSheet = ({ open, setOpen }) => {
               <SortableContext items={checkpoints} strategy={verticalListSortingStrategy}>
                 <div className="flex flex-col">
                   {checkpoints.map((checkpoint, index) => (
-                    <DraggableCheckpoint index={index} key={checkpoint.id} id={checkpoint.id} />
+                    <DraggableCheckpoint index={index} key={`${checkpoint.id}-${index}`} id={checkpoint.id} />
                   ))}
                 </div>
               </SortableContext>

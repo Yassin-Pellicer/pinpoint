@@ -16,17 +16,16 @@ import { CssBaseline } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import LoadingScreen from "../../../components/ui/loadingScreen";
+import { useCheckpoints } from "../../../utils/context/ContextCheckpoint";
 
 export default function Create() {
   const { location } = useMapContext();
+  const { checkpoints } = useCheckpoints();
 
-  const [selectedButton, setSelectedButton] = useState("simple");
-  const t = useTranslations("Create");
-
-  const Quill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
-    []
+  const [selectedButton, setSelectedButton] = useState(
+    checkpoints.length === 0 ? "simple" : "course"
   );
+  const t = useTranslations("Create");
 
   if (!location) {
     return <LoadingScreen />;

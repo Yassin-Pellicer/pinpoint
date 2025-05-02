@@ -1,70 +1,144 @@
-import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
+import { sql } from "@vercel/postgres";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
-  let {
-    name,
-    description,
-    marker,
-    banner,
-    qr,
-    isPublic,
-    author,
-    enableComments,
-    enableRatings,
-    enableInscription,
-    capacity,
-    start,
-    end
-  } = await request.json();
-  
-  start = start ? new Date(start).toISOString() : null;
-  end = end ? new Date(end).toISOString() : null;
-  
-  if (capacity == 0) {
-    capacity = null;
-  }
-  if (!name) {
-    return NextResponse.json({ result: "error", message: "name", status: 400 });
-  }
-
-  if (!marker) {
-    return NextResponse.json({ result: "error", message: "marker", status: 400 });
-  }
-
-  let address = "";
   try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${marker.position[0]}&lon=${marker.position[1]}`
-    );
-    const data = await response.json();
-    const road = data.address.road || "";
-    const houseNumber = data.address.house_number || "";
-    address = houseNumber ? `${road}, nº: ${houseNumber}` : road;
-  } catch (error) {
-    console.error("Error fetching street name:", error);
-  }
+    let {
+      id,
+      name,
+      description,
+      marker,
+      banner,
+      qr,
+      isPublic,
+      author,
+      enableComments,
+      enableRatings,
+      enableInscription,
+      capacity,
+      start,
+      end,
+      date,
+      tags,
+    } = await request.json();
 
-  try {
-    if(!start) {
-      const insertUserQuery = await sql`
-      INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", "enableInscription", capacity, address, start, "end")
-      VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${enableInscription}, ${capacity}, ${address}, NOW(), ${end})
-      RETURNING id
-    `;
-  const insertedId = insertUserQuery.rows[0].id;
-  return NextResponse.json({ result: "ok", id: insertedId })
+    if (!name) {
+      return NextResponse.json({
+        result: "error",
+        message: "name",
+        status: 400,
+      });
     }
-    const insertUserQuery = await sql`
-    INSERT INTO event (name, description, position_lat, position_lng, banner, qr, ispublic, author, "enableRatings", "enableComments", "enableInscription", capacity, address, start, "end")
-    VALUES (${name}, ${description}, ${marker.position[0]}, ${marker.position[1]}, ${banner}, ${qr}, ${isPublic}, ${author}, ${enableRatings}, ${enableComments}, ${enableInscription}, ${capacity}, ${address}, ${start}, ${end})
-    RETURNING id
-  `;
-const insertedId = insertUserQuery.rows[0].id;
-return NextResponse.json({ result: "ok", id: insertedId })    
+
+    if (!marker) {
+      return NextResponse.json({
+        result: "error",
+        message: "marker",
+        status: 400,
+      });
+    }
+
+    start = start ? new Date(start).toISOString() : null;
+    end = end ? new Date(end).toISOString() : null;
+
+    if (capacity === 0) {
+      capacity = null;
+    }
+
+    let address = "";
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${marker.position[0]}&lon=${marker.position[1]}`
+      );
+      const data = await response.json();
+      const road = data.address.road || "";
+      const houseNumber = data.address.house_number || "";
+      address = houseNumber ? `${road}, nº: ${houseNumber}` : road;
+    } catch (error) {
+      console.error("Error fetching street name:", error);
+    }
+
+    if (!start) {
+      start = new Date().toISOString();
+    }
+
+    if (id) {
+      const checkIdQuery = await sql`SELECT id FROM event WHERE id = ${id}`;
+
+      if (checkIdQuery.rowCount > 0) {
+        await sql`
+          UPDATE event 
+          SET 
+            name = ${name},
+            description = ${description},
+            position_lat = ${marker.position[0]},
+            position_lng = ${marker.position[1]},
+            banner = ${banner},
+            qr = ${qr},
+            "isPublic" = ${isPublic},
+            author = ${author},
+            "enableRatings" = ${enableRatings},
+            "enableComments" = ${enableComments},
+            "enableInscription" = ${enableInscription},
+            capacity = ${capacity},
+            address = ${address},
+            start = ${start},
+            "end" = ${end},
+            date = ${date},
+            creationtime = NOW()
+          WHERE id = ${id}
+          RETURNING id
+        `;
+
+        await sql`
+          DELETE FROM event_tags WHERE event_id = ${id}
+        `;
+
+        console.log(tags)
+
+        for (const tag of tags) {
+          await sql`
+            INSERT INTO event_tags (event_id, tag_id)
+            SELECT ${id}, id FROM tags WHERE tag = ${tag.name}
+          `;
+        }
+        return NextResponse.json({ result: "ok", id: id, updated: true });
+      }
+
+    } else {
+      const insertQuery = await sql`
+        INSERT INTO event (
+          name, description, position_lat, position_lng, 
+          banner, qr, "isPublic", author, 
+          "enableRatings", "enableComments", "enableInscription", 
+          capacity, address, start, "end", date, creationtime
+        )
+        VALUES (
+          ${name}, ${description}, ${marker.position[0]}, ${marker.position[1]},
+          ${banner}, ${qr}, ${isPublic}, ${author},
+          ${enableRatings}, ${enableComments}, ${enableInscription},
+          ${capacity}, ${address}, ${start}, ${end}, ${date}, NOW()
+        )
+        RETURNING id
+      `;
+
+      const insertedId = insertQuery.rows[0].id;
+
+      for (const tag of tags) {
+        await sql`
+          INSERT INTO event_tags (event_id, tag_id)
+          SELECT ${insertedId}, id FROM tags WHERE tag = ${tag.name}
+        `;
+      }
+
+      return NextResponse.json({ result: "ok", id: insertedId, created: true });
+    }
   } catch (error) {
-    console.error('Register Error:', error);
-    return NextResponse.json({ result: "" })
+    console.error("Event Operation Error:", error);
+    return NextResponse.json({
+      result: "error",
+      message: "Internal server error",
+      status: 500,
+    });
   }
 }
-

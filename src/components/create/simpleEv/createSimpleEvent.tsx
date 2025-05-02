@@ -15,6 +15,7 @@ import Logo from "../../ui/logo";
 import Counter from "../../ui/counter";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import TextField from '@mui/material/TextField';
+import formatDate from "../../../utils/funcs/formatDate";
 
 const SimpleEvent = () => {
   const {
@@ -81,8 +82,6 @@ const SimpleEvent = () => {
           setSnackbarOpen(true);
         }
       } else {
-        await addTagsHook({ eventId: result.id, data: tags });
-
         setSnackbarMessage(t("successNotif"));
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
@@ -255,7 +254,7 @@ const SimpleEvent = () => {
                   <DateTimePicker
                     label="Seleccione fecha y hora"
                     format="dd/MM/yyyy HH:mm"
-                    value={start}
+                    value={new Date(start) && start}
                     onChange={(newValue) => {
                       if (!newValue) return;
                       if (end && newValue > end) {
@@ -304,7 +303,7 @@ const SimpleEvent = () => {
                   <DateTimePicker
                     label="Seleccione fecha y hora"
                     format="dd/MM/yyyy HH:mm"
-                    value={end}
+                    value={new Date(end) && end}
                     onChange={(newValue) => {
                       if (!newValue) return;
                       if (start && newValue < start) {
@@ -313,7 +312,15 @@ const SimpleEvent = () => {
                         );
                         setSnackbarSeverity("error");
                         setSnackbarOpen(true);
-                      } else {
+
+                      } else if (newValue > end && end) {
+                        setSnackbarMessage(
+                          "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
+                        );
+                        setSnackbarSeverity("error");
+                        setSnackbarOpen(true);
+                      }
+                      else {
                         setEnd(newValue);
                       }
                     }}
@@ -354,7 +361,7 @@ const SimpleEvent = () => {
                   <DateTimePicker
                     label="Seleccione fecha y hora"
                     format="dd/MM/yyyy HH:mm"
-                    value={date}
+                    value={new Date(date)}
                     onChange={(newValue) => {
                       if (!newValue) return;
                       if (newValue < end && end) {
@@ -487,10 +494,7 @@ const SimpleEvent = () => {
                   </label>
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
+                    value={""}
                     className="border w-full mt-2 border-black rounded p-1 mb-1"
                   />
                   <p className="text-sm mt-1 mb-2">

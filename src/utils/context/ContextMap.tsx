@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Tag } from "../classes/Tag";
 import { Event } from "../classes/Event";
-import { getEventById, getEventsDynamic, getEventsSearch, getRecommendations } from "../../hooks/main/get/getEventsHook";
+import { getEventsDynamic, getEventsSearch, getRecommendations } from "../../hooks/main/get/getEventsHook";
 
 interface MapContextType {
   events: Event[];

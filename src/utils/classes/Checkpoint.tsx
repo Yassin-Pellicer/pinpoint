@@ -1,5 +1,6 @@
 export class Checkpoint {
   id: number;
+  event: number
   banner: string;
   description: string;
   order: number;
@@ -13,6 +14,7 @@ export class Checkpoint {
     banner: string,
     description: string,
     order: number,
+    event: number,
     name: string,
   ) {
     this.id = id;
@@ -20,6 +22,7 @@ export class Checkpoint {
     this.description = description;
     this.order = order;
     this.name = name;
+    this.event = event;
     this.marker = marker;
   }
 }

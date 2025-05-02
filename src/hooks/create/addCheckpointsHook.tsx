@@ -4,7 +4,7 @@ export const addCheckpointsHook = async ( Tags : {eventId: number, data: Checkpo
 
     const { eventId, data } = Tags;
 
-    const res = await fetch("/api/addCheckpoints", {
+    const res = await fetch("/api/add/addCheckpoints", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

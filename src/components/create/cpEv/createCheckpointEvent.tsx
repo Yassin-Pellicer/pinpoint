@@ -238,7 +238,7 @@ const CheckpointEvent = () => {
           </div>
         )}
 
-        <div className="h-auto rounded-2xl mt-3 bg-gray-300 relative transition duration-100 overflow-hidden">
+<div className="h-auto rounded-2xl mt-3 bg-gray-300 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div className="relative p-4 z-10">
               <div className="flex flex-row items-center justify-between">
@@ -271,10 +271,7 @@ const CheckpointEvent = () => {
                       Hora de Inicio
                     </h1>
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setStart(null);
-                      }}
+                      onClick={(e) => {e.preventDefault(); setStart(null)}}
                       style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                       className="flex items-center justify-center ml-auto"
                     >
@@ -284,7 +281,7 @@ const CheckpointEvent = () => {
                   <DateTimePicker
                     label="Seleccione fecha y hora"
                     format="dd/MM/yyyy HH:mm"
-                    value={start}
+                    value={new Date(start) && start}
                     onChange={(newValue) => {
                       if (!newValue) return;
                       if (end && newValue > end) {
@@ -323,10 +320,7 @@ const CheckpointEvent = () => {
                       Hora de Fin
                     </h1>
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setEnd(null);
-                      }}
+                      onClick={(e) => {e.preventDefault(); setEnd(null)}}
                       style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                       className="flex items-center justify-center ml-auto"
                     >
@@ -336,7 +330,7 @@ const CheckpointEvent = () => {
                   <DateTimePicker
                     label="Seleccione fecha y hora"
                     format="dd/MM/yyyy HH:mm"
-                    value={end}
+                    value={new Date(end) && end}
                     onChange={(newValue) => {
                       if (!newValue) return;
                       if (start && newValue < start) {
@@ -345,7 +339,15 @@ const CheckpointEvent = () => {
                         );
                         setSnackbarSeverity("error");
                         setSnackbarOpen(true);
-                      } else {
+                      } 
+                      else if (newValue > end && end) {
+                        setSnackbarMessage(
+                          "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
+                        );
+                        setSnackbarSeverity("error");
+                        setSnackbarOpen(true);
+                      }
+                      else {
                         setEnd(newValue);
                       }
                     }}
@@ -365,56 +367,53 @@ const CheckpointEvent = () => {
               </div>
 
               <div className="flex mt-4 flex-col">
-                <div
-                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                  className="flex flex-row mb-2 items-center"
-                >
-                  <i className="material-icons text-white text-2xl mr-2">
-                    timer
-                  </i>
-                  <h1 className="text-white text-2xl tracking-tighter font-bold">
-                    Fecha y hora del evento*
-                  </h1>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setDate(null);
-                    }}
+                  <div
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    className="flex items-center justify-center ml-auto"
+                    className="flex flex-row mb-2 items-center"
                   >
-                    <i className="material-icons text-white">refresh</i>
-                  </button>
+                    <i className="material-icons text-white text-2xl mr-2">
+                      timer
+                    </i>
+                    <h1 className="text-white text-2xl tracking-tighter font-bold">
+                      Fecha y hora del evento*
+                    </h1>
+                    <button
+                      onClick={(e) => {e.preventDefault(); setDate(null)}}
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      className="flex items-center justify-center ml-auto"
+                    >
+                      <i className="material-icons text-white">refresh</i>
+                    </button>
+                  </div>
+                  <DateTimePicker
+                    label="Seleccione fecha y hora"
+                    format="dd/MM/yyyy HH:mm"
+                    value={new Date(date)}
+                    onChange={(newValue) => {
+                      if (!newValue) return;
+                      if (newValue < end && end) {
+                        setSnackbarMessage(
+                          "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
+                        );
+                        setSnackbarSeverity("error");
+                        setSnackbarOpen(true);
+                      } else {
+                        setDate(newValue);
+                      }
+                    }}
+                    slotProps={{
+                      textField: {
+                        InputProps: {
+                          readOnly: true,
+                          style: { fontSize: "0.875rem" },
+                        },
+                        InputLabelProps: {
+                          style: { fontSize: "0.875rem" },
+                        },
+                      },
+                    }}
+                  />
                 </div>
-                <DateTimePicker
-                  label="Seleccione fecha y hora"
-                  format="dd/MM/yyyy HH:mm"
-                  value={date}
-                  onChange={(newValue) => {
-                    if (!newValue) return;
-                    if (newValue < end && end) {
-                      setSnackbarMessage(
-                        "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
-                      );
-                      setSnackbarSeverity("error");
-                      setSnackbarOpen(true);
-                    } else {
-                      setDate(newValue);
-                    }
-                  }}
-                  slotProps={{
-                    textField: {
-                      InputProps: {
-                        readOnly: true,
-                        style: { fontSize: "0.875rem" },
-                      },
-                      InputLabelProps: {
-                        style: { fontSize: "0.875rem" },
-                      },
-                    },
-                  }}
-                />
-              </div>
             </div>
           </div>
         </div>

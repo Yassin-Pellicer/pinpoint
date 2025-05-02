@@ -14,16 +14,31 @@ export async function POST(request) {
       const houseNumber = data.address.house_number || "";
       const fullAddress = houseNumber ? `${road}, nº: ${houseNumber}` : road;
 
-      const insertUserQuery = await sql`
-      INSERT INTO checkpoint (name, event, position_lat, position_lng, description, banner, "order", address)
-      VALUES (${checkpoint.name}, ${eventId.id}, ${checkpoint.marker.position[0]}, ${checkpoint.marker.position[1]}, ${checkpoint.description}, ${checkpoint.banner}, ${checkpoint.order}, ${fullAddress})
-    `;
+      const existingCheckpoint = await sql`
+      SELECT id FROM checkpoint WHERE id = ${checkpoint.id}
+      `;
+
+      if (existingCheckpoint.rows[0].id == checkpoint.id) {
+        await sql`
+        UPDATE checkpoint
+        SET name = ${checkpoint.name}, event = ${eventId.id}, position_lat = ${checkpoint.marker.position[0]},
+            position_lng = ${checkpoint.marker.position[1]}, description = ${checkpoint.description}, 
+            banner = ${checkpoint.banner}, "order" = ${checkpoint.order}, address = ${fullAddress}
+        WHERE id = ${checkpoint.id}
+        `;
+      } else {
+        await sql`
+        INSERT INTO checkpoint (name, event, position_lat, position_lng, description, banner, "order", address)
+        VALUES (${checkpoint.name}, ${eventId.id}, ${checkpoint.marker.position[0]}, ${checkpoint.marker.position[1]}, 
+                ${checkpoint.description}, ${checkpoint.banner}, ${checkpoint.order}, ${fullAddress})
+        `;
+      }
     }
-    return NextResponse.json({ result: "ok" })
+    return NextResponse.json({ result: "ok" });
 
   } catch (error) {
     console.error('Register Error:', error);
-    return NextResponse.json({ result: "" })
+    return NextResponse.json({ result: "" });
   }
 }
 
