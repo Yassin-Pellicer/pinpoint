@@ -3,19 +3,13 @@ import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import Tags from "../tags";
 import dynamic from "next/dynamic";
-import Quill from "quill";
 import { useEvent } from "../../../utils/context/ContextEvent";
 import fileURL from "../../../utils/funcs/createUrlImage";
 import { createEventHook } from "../../../hooks/create/addEventHook";
-import { addTagsHook } from "../../../hooks/create/addTagsHook";
-import SnackbarContent from '@mui/material/SnackbarContent';
-import { addCheckpointsHook } from "../../../hooks/create/addCheckpointsHook";
 import { useRouter } from 'next/navigation';
 import Logo from "../../ui/logo";
 import Counter from "../../ui/counter";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import TextField from '@mui/material/TextField';
-import formatDate from "../../../utils/funcs/formatDate";
 
 const SimpleEvent = () => {
   const {
@@ -173,8 +167,8 @@ const SimpleEvent = () => {
           }}
           className="border border-black rounded p-1 mb-3"
         />
-        <label className="font-bold">{t("Details.description")}</label>
 
+        <label className="font-bold">{t("Details.description")}</label>
         <Quill
           value={description}
           onChange={setDescription}

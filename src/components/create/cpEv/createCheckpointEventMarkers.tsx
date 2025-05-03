@@ -79,8 +79,10 @@ const PlaceCP = () => {
   });
 
   useEffect(() => {
-    const newCheckpoint = checkpoints.find((checkpoint) => checkpoint.order === 1);
-    setMarker(newCheckpoint.marker);
+    if (checkpoints.length > 0) {
+      const newCheckpoint = checkpoints.find((checkpoint) => checkpoint.order === 1);
+      setMarker(newCheckpoint.marker);
+    }
   }, [checkpoints])
 
   map.on("dragend", () => {

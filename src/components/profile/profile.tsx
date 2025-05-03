@@ -9,6 +9,8 @@ import Banner from "../ui/banner";
 
 const profile = ({open, setOpen}) => {
 
+  const { user } = useSession();
+
   const { 
     inscriptions,
     bookmarks,
@@ -49,7 +51,7 @@ const profile = ({open, setOpen}) => {
           </i>
         </button>
 
-        <Banner></Banner>
+        <Banner user={user}></Banner>
 
         <div className=" mt-4">
           <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">

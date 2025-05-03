@@ -38,6 +38,10 @@ interface SessionContextType {
   triggerFetchInscriptions: () => void;
   fetchBookmarks: boolean;
   triggerFetchBookmarks: () => void;
+  link: string | null;
+  setLink: (link: string | null) => void;
+  memberSince: Date | null;
+  setMemberSince: (memberSince: Date | null) => void;
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
@@ -132,6 +136,20 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     });
   };
 
+  const setLink = (link: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, link };
+    });
+  };
+
+  const setMemberSince = (memberSince: Date) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return { ...prev, memberSince };
+    });
+  };
+
   const triggerFetchInscriptions = () => {
     setFetchInscriptions(true);
   };
@@ -213,6 +231,10 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         setInscriptions,
         createdEvents: user?.createdEvents,
         setCreatedEvents,
+        link: user?.link,
+        setLink,
+        memberSince: user?.memberSince,
+        setMemberSince,
         fetchInscriptions,
         triggerFetchInscriptions,
         fetchBookmarks,

@@ -17,5 +17,7 @@ export class User {
     public inscriptions: Event[] = [],
     public comments: Comment[] = [],
     public ratings: Rating[] = [],
+    public link: string = "",
+    public memberSince: Date = null
   ) {}
 }
