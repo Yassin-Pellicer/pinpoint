@@ -39,10 +39,14 @@ const profile = ({open, setOpen}) => {
     >
       <div className="mt-6 rounded-2xl bg-white p-6">
         <button
-          onClick={() => { setOpen(false) }}
-          className="bg-blue-500 w-full h-fit  rounded-t-2xl"
+          onClick={() => {
+            setOpen(false);
+          }}
+          className="bg-blue-400 w-full h-fit sticky top-0 z-50"
         >
-          <i className="material-icons text-white text-3xl">keyboard_arrow_down</i>
+          <i className="material-icons text-white text-3xl">
+            keyboard_arrow_down
+          </i>
         </button>
 
         <Banner></Banner>

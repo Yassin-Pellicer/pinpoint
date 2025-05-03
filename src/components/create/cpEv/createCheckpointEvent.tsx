@@ -88,8 +88,7 @@ const CheckpointEvent = () => {
           setSnackbarOpen(true);
         }
       } else {
-        await addTagsHook({ eventId: result.id, data: tags });
-        await addCheckpointsHook({ eventId: result, data: checkpoints });
+        await addCheckpointsHook({ eventId: result.id, data: checkpoints });
 
         setSnackbarMessage(t("successNotif"));
         setSnackbarSeverity("success");

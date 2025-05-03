@@ -34,21 +34,15 @@ export default function Layout({ children }: LayoutProps) {
         console.error("Session fetch failed:", error);
         router.push("/pages/auth/login");
       } finally {
-        setLoading(false); // Done loading on initial fetch
+        setLoading(false); 
       }
     };
 
     fetchSessionFromCookies();
   }, [router, setUser]);
 
-  // Optional: show loading when pathname changes
   useEffect(() => {
     setLoading(true);
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 500); // Fake loading effect, can remove or tweak
-
-    return () => clearTimeout(timeout);
   }, [pathname]);
 
   return (

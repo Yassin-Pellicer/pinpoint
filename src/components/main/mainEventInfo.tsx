@@ -17,7 +17,7 @@ import { useState } from "react";
 
 const eventInfo = ({open, setOpen}) => {
   {/* CONTEXTS */}
-  const { selectedEvent, setSelectedEvent } = useMapContext();
+  const { selectedEvent, setSelectedEvent, setEditMode } = useMapContext();
   const { checkpoints } = useCheckpoints();
   const { user } = useSession();
   const { setEvent } = useEvent();
@@ -31,6 +31,7 @@ const eventInfo = ({open, setOpen}) => {
 
   const handleEditEvent = (event) => {
     setEvent(event);
+    setEditMode(true);
     router.push("/pages/create")
    }
 
@@ -57,7 +58,7 @@ const eventInfo = ({open, setOpen}) => {
       }}
     >
       {selectedEvent && (
-        <div className="mb-6 mt-6 rounded-2xl bg-white p-4">
+        <div className="mb-6 mt-6 relative rounded-2xl bg-white p-4">
           <button
             onClick={() => {
               setOpen(false);
@@ -65,7 +66,7 @@ const eventInfo = ({open, setOpen}) => {
                 setSelectedEvent(null);
               }, 300);
             }}
-            className="bg-blue-500 w-full h-fit  rounded-t-2xl"
+            className="bg-blue-400 w-full h-fit sticky top-0 z-50"
           >
             <i className="material-icons text-white text-3xl">
               keyboard_arrow_down
@@ -161,21 +162,21 @@ const eventInfo = ({open, setOpen}) => {
               </div>
             </div>
             {selectedEvent.author === user.id && (
-               <button
-               onClick={() => {
-                 setLoading(true);
-                 setTimeout(() => {
-                   handleEditEvent(selectedEvent);
-                 }, 1000);
-               }}
-               className="mt-4 w-full font-extrabold text-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100 flex justify-center items-center h-10"
-             >
-               {loading ? (
-                 <div className="animate-spin h-4 w-4 border-4 border-white border-t-transparent rounded-full"></div>
-               ) : (
-                 "Editar Evento"
-               )}
-             </button>
+              <button
+                onClick={() => {
+                  setLoading(true);
+                  setTimeout(() => {
+                    handleEditEvent(selectedEvent);
+                  }, 1000);
+                }}
+                className="mt-4 w-full font-extrabold text-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100 flex justify-center items-center h-10"
+              >
+                {loading ? (
+                  <div className="animate-spin h-4 w-4 border-4 border-white border-t-transparent rounded-full"></div>
+                ) : (
+                  "Editar Evento"
+                )}
+              </button>
             )}
           </div>
 
@@ -191,7 +192,7 @@ const eventInfo = ({open, setOpen}) => {
             <div className="h-auto rounded-2xl bg-green-400 relative hover:cursor-pointer hover:bg-green-500 transition duration-100">
               <div className="relative h-full">
                 <div
-                  className="bg-no-repeat bg-center bg-cover absolute right-0 top-[-50px] bottom-0 w-1/2 transform"
+                  className="bg-no-repeat bg-center bg-cover absolute right-2 top-[-50px] bottom-0 w-1/2 transform"
                   style={{
                     backgroundImage: "url('/img/printer.png')",
                     transform: "rotate(5deg)",

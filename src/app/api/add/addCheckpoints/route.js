@@ -5,6 +5,8 @@ export async function POST(request) {
   const { eventId, data } = await request.json()
 
   try {
+    await sql`DELETE FROM checkpoint WHERE event = ${eventId}`;
+
     for (const checkpoint of data) {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${checkpoint.marker.position[0]}&lon=${checkpoint.marker.position[1]}`
@@ -14,25 +16,11 @@ export async function POST(request) {
       const houseNumber = data.address.house_number || "";
       const fullAddress = houseNumber ? `${road}, nº: ${houseNumber}` : road;
 
-      const existingCheckpoint = await sql`
-      SELECT id FROM checkpoint WHERE id = ${checkpoint.id}
+      await sql`
+      INSERT INTO checkpoint (name, event, position_lat, position_lng, description, banner, "order", address)
+      VALUES (${checkpoint.name}, ${eventId}, ${checkpoint.marker.position[0]}, ${checkpoint.marker.position[1]}, 
+              ${checkpoint.description}, ${checkpoint.banner}, ${checkpoint.order}, ${fullAddress})
       `;
-
-      if (existingCheckpoint.rows[0].id == checkpoint.id) {
-        await sql`
-        UPDATE checkpoint
-        SET name = ${checkpoint.name}, event = ${eventId.id}, position_lat = ${checkpoint.marker.position[0]},
-            position_lng = ${checkpoint.marker.position[1]}, description = ${checkpoint.description}, 
-            banner = ${checkpoint.banner}, "order" = ${checkpoint.order}, address = ${fullAddress}
-        WHERE id = ${checkpoint.id}
-        `;
-      } else {
-        await sql`
-        INSERT INTO checkpoint (name, event, position_lat, position_lng, description, banner, "order", address)
-        VALUES (${checkpoint.name}, ${eventId.id}, ${checkpoint.marker.position[0]}, ${checkpoint.marker.position[1]}, 
-                ${checkpoint.description}, ${checkpoint.banner}, ${checkpoint.order}, ${fullAddress})
-        `;
-      }
     }
     return NextResponse.json({ result: "ok" });
 

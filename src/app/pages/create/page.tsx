@@ -19,8 +19,10 @@ import LoadingScreen from "../../../components/ui/loadingScreen";
 import { useCheckpoints } from "../../../utils/context/ContextCheckpoint";
 
 export default function Create() {
-  const { location } = useMapContext();
+  const { location, editMode } = useMapContext();
   const { checkpoints } = useCheckpoints();
+
+  useEffect(() => {console.log(editMode)}, [editMode])
 
   const [selectedButton, setSelectedButton] = useState(
     checkpoints.length === 0 ? "simple" : "course"
@@ -36,7 +38,7 @@ export default function Create() {
       <div className="flex flex-row">
         <div className="flex flex-col overflow-auto bg-blue-500 w-[550px] shrink-0 h-screen px-6">
           {/* Event type */}
-          <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
+          {!editMode && <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
             <h1 className="font-bold text-3xl mb-2 tracking-tight ">
               {t("type")}
             </h1>
@@ -75,7 +77,16 @@ export default function Create() {
                 b: (chunks) => <b>{chunks}</b>,
               })}
             </p>
-          </div>
+          </div>}
+
+          {editMode && <div className="mb-6 mt-6 rounded-2xl bg-green-400 p-6">
+            <h1 className="font-bold text-3xl mb-2 tracking-tight ">
+              Estás en modo edición.
+            </h1>
+            <p className="text-sm mt-4">
+              Al editar un evento no puedes cambiar su tipo. Volver a la página principal dejará el evento intacto.
+            </p>
+          </div>}
 
           {/* Event Creation */}
           <LocalizationProvider dateAdapter={AdapterDateFns}>

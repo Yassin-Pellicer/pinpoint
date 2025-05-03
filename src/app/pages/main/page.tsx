@@ -48,7 +48,7 @@ export default function Create() {
   const [openDetails, setOpenDetails] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const { username, setUser } = useSession();
-  const { setRecommendations } = useMapContext();
+  const { setRecommendations, setEditMode } = useMapContext();
   const { setSelectedEvent } = useMapContext();
 
   const t = useTranslations("Main");
@@ -60,6 +60,7 @@ export default function Create() {
     setSelectedEvent(null);
     setRecommendations([]);
     setEvent(new Event());
+    setEditMode(false);
     loadRecommendations();
   }, []);
 

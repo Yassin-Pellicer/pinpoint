@@ -6,6 +6,8 @@ import { getEventsDynamic, getEventsSearch, getRecommendations } from "../../hoo
 
 interface MapContextType {
   events: Event[];
+  editMode: boolean;
+  setEditMode: (edit: boolean) => void;
   setEvents: (events: Event[]) => void;
   searchResults: any[];
   setSearchResults: (searchResult: any[]) => void;
@@ -43,7 +45,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [modifiedEvent, setModifiedEvent] = useState<Event | null>(null);
-  
+  const [editMode, setEditMode] = useState(false);
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -117,6 +120,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         loadRecommendations,
         modifiedEvent,
         setModifiedEvent,
+        editMode,
+        setEditMode,
       }}
     >
       {children}

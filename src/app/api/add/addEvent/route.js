@@ -38,7 +38,7 @@ export async function POST(request) {
       });
     }
 
-    start = start ? new Date(start).toISOString() : null;
+    start = start ? new Date(start).toISOString() : new Date().toISOString();
     end = end ? new Date(end).toISOString() : null;
 
     if (capacity === 0) {
@@ -58,13 +58,9 @@ export async function POST(request) {
       console.error("Error fetching street name:", error);
     }
 
-    if (!start) {
-      start = new Date().toISOString();
-    }
-
     if (id) {
       const checkIdQuery = await sql`SELECT id FROM event WHERE id = ${id}`;
-
+      console.log("Event updated:", id);
       if (checkIdQuery.rowCount > 0) {
         await sql`
           UPDATE event 
@@ -87,52 +83,52 @@ export async function POST(request) {
             date = ${date},
             creationtime = NOW()
           WHERE id = ${id}
-          RETURNING id
         `;
-
+        console.log("Event updated:", id);
         await sql`
           DELETE FROM event_tags WHERE event_id = ${id}
         `;
-
-        console.log(tags)
-
+        console.log("Event updated:", id);
         for (const tag of tags) {
           await sql`
             INSERT INTO event_tags (event_id, tag_id)
             SELECT ${id}, id FROM tags WHERE tag = ${tag.name}
           `;
         }
-        return NextResponse.json({ result: "ok", id: id, updated: true });
+
+        console.log("Event updated:", id);
+
+        return NextResponse.json({id, result: "ok"});
       }
-
-    } else {
-      const insertQuery = await sql`
-        INSERT INTO event (
-          name, description, position_lat, position_lng, 
-          banner, qr, "isPublic", author, 
-          "enableRatings", "enableComments", "enableInscription", 
-          capacity, address, start, "end", date, creationtime
-        )
-        VALUES (
-          ${name}, ${description}, ${marker.position[0]}, ${marker.position[1]},
-          ${banner}, ${qr}, ${isPublic}, ${author},
-          ${enableRatings}, ${enableComments}, ${enableInscription},
-          ${capacity}, ${address}, ${start}, ${end}, ${date}, NOW()
-        )
-        RETURNING id
-      `;
-
-      const insertedId = insertQuery.rows[0].id;
-
-      for (const tag of tags) {
-        await sql`
-          INSERT INTO event_tags (event_id, tag_id)
-          SELECT ${insertedId}, id FROM tags WHERE tag = ${tag.name}
-        `;
-      }
-
-      return NextResponse.json({ result: "ok", id: insertedId, created: true });
     }
+
+    // If `id` doesn't exist or is invalid, insert a new one
+    const insertQuery = await sql`
+      INSERT INTO event (
+        name, description, position_lat, position_lng, 
+        banner, qr, "isPublic", author, 
+        "enableRatings", "enableComments", "enableInscription", 
+        capacity, address, start, "end", date, creationtime
+      )
+      VALUES (
+        ${name}, ${description}, ${marker.position[0]}, ${marker.position[1]},
+        ${banner}, ${qr}, ${isPublic}, ${author},
+        ${enableRatings}, ${enableComments}, ${enableInscription},
+        ${capacity}, ${address}, ${start}, ${end}, ${date}, NOW()
+      )
+      RETURNING id
+    `;
+
+    const insertedId = insertQuery.rows[0].id;
+
+    for (const tag of tags) {
+      await sql`
+        INSERT INTO event_tags (event_id, tag_id)
+        SELECT ${insertedId}, id FROM tags WHERE tag = ${tag.name}
+      `;
+    }
+
+    return NextResponse.json({ result: "ok", id: insertedId, created: true });
   } catch (error) {
     console.error("Event Operation Error:", error);
     return NextResponse.json({

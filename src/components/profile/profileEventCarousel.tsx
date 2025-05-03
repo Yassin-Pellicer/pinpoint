@@ -15,7 +15,7 @@ import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 export default function SwiperComponent({events}) {
   const { setEvent } = useEvent();
   const { setCheckpoints } = useCheckpoints();
-  const { setSelectedEvent } = useMapContext();
+  const { setSelectedEvent, setEditMode } = useMapContext();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -27,6 +27,7 @@ export default function SwiperComponent({events}) {
       console.log(res)
       setLoading(false);
     }).finally(() => {
+      setEditMode(true);
       router.push("/pages/create")
     });
   }
