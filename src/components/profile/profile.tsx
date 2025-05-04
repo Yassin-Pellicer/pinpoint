@@ -7,15 +7,7 @@ import EventBookmarkList from "./eventBookmarkList";
 import EventInscriptions from "./eventInscriptionList";
 import Banner from "../ui/banner";
 
-const profile = ({open, setOpen}) => {
-
-  const { user } = useSession();
-
-  const { 
-    inscriptions,
-    bookmarks,
-    createdEvents,
-  } = useSession();
+const profile = ({open, setOpen, user}) => {
 
   return (
     <SwipeableDrawer
@@ -87,7 +79,7 @@ const profile = ({open, setOpen}) => {
               </div>
             </div>
           </div>
-          <EventCarousel events={createdEvents} />
+          <EventCarousel events={user?.createdEvents} />
         </div>
 
         <div className=" mt-4">
@@ -112,7 +104,7 @@ const profile = ({open, setOpen}) => {
             </div>
           </div>
           <div className="flex flex-col">
-            <EventInscriptions events={inscriptions} />
+            <EventInscriptions events={user?.inscriptions} />
           </div>
         </div>
 
@@ -137,7 +129,7 @@ const profile = ({open, setOpen}) => {
               </div>
             </div>
           </div>
-          <EventBookmarkList events={bookmarks} />
+          <EventBookmarkList events={user?.bookmarks} />
         </div>
       </div>
     </SwipeableDrawer>

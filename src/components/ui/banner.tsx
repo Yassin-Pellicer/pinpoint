@@ -1,26 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "../../utils/context/ContextSession";
 import fileURL from "../../utils/funcs/createUrlImage";
+import { addUserHook } from "../../hooks/general/addUserHook";
 
 export default function Banner( {user} ) {
-  const { 
+  const {
+    setUser,
     setBanner,
     setProfilePicture,
     setUsername,
     setDescription,
-    setFollowers,
-    setFollowing,
     setLink,
-    setUser,
   } = useSession();
 
+  const [userCopy, setUserCopy] = useState(null);
   const [editable, setEditable] = useState(false);
-  const [userCopy, setUserCopy] = useState(user);
 
-  const membershipYear = 2023;
-  
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await addUserHook(user);
+    if (response.result == "username_exists") {
+      alert("El nombre de usuario ya existe. Intenta seleccionar otro");
+      setEditable(true);
+    }
+    else {
+      setUserCopy(user);
+      setEditable(false);
+    }
+  }
+
+  useEffect(() => {
+    setUserCopy(user);
+  }, [user]);
+
   return (
     <>
       {!editable && (
@@ -82,13 +96,13 @@ export default function Banner( {user} ) {
                   {user?.description ||
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus."}
                 </p>
-                <div className="flex flex-row mb-2 gap-4">
+                <div className="flex flex-row mb-2 flex-wrap">
                   <div className="flex flex-row">
                     <i className="material-icons text-gray-600 text-sm mr-1">
                       calendar_today
                     </i>
-                    <p className="text-sm italic text-gray-600 ">
-                      Miembro desde {user?.membershipYear || 0}
+                    <p className="text-sm italic text-gray-600 mr-4">
+                      Miembro desde {user?.memberSince ? new Date(user.memberSince).toLocaleDateString('es-ES') : 'N/A'}
                     </p>
                   </div>
                   <div className="flex flex-row">
@@ -150,8 +164,9 @@ export default function Banner( {user} ) {
                 )}
               </div>
             </label>
+
             <div className="flex flex-row absolute ml-[75px] transform -translate-x-1/2 top-[130px] z-20">
-              <div className="flex w-[125px] h-[125px] rounded-full overflow-hidden border-4 items-center justify-center cursor-pointer bg-gray-300 border-white">
+              <div className="flex w-[125px] h-[125px] rounded-full overflow-hidden border-4 items-center justify-center bg-gray-200 hover:bg-gray-300 transition duration-100 border-white">
                 <input
                   accept="image/*"
                   id="imageProfile"
@@ -170,7 +185,7 @@ export default function Banner( {user} ) {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <i className="text-gray-400 material-icons mt-8 text-[150px] select-none">
+                    <i className="text-gray-400 material-icons mt-8 text-[150px] select-none cursor-pointer">
                       person
                     </i>
                   )}
@@ -179,20 +194,16 @@ export default function Banner( {user} ) {
             </div>
 
             <div className="flex flex-col justify-between w-full px-6 pb-6 rounded-b-2xl h-[fit] z-10 bg-gray-300">
-              <div className="flex flex-row justify-between">
-                <div className="flex flex-col pt-[60px] ">
-                <label className="text-sm">Editar nombre de usuario</label>
-                  <input
-                    type="text"
-                    value={user?.username}
-                    maxLength={25}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="text-xl font-bold mr-5 border border-black rounded p-1"
-                  />
-                </div>
+              <div className="flex flex-row justify-end">
                 <div className="flex flex-row gap-2">
+                <button
+                    onClick={(e) => {setEditable(false); setUser(userCopy)}}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
+                  >
+                    <i className="material-icons text-lg">close</i>
+                  </button>
                   <button
-                    onClick={() => setEditable(false)}
+                    onClick={(e) => handleSubmit(e)}
                     className="bg-green-500 hover:bg-green-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
                   >
                     <i className="material-icons text-lg">check</i>
@@ -203,28 +214,30 @@ export default function Banner( {user} ) {
                 </div>
               </div>
               <div className="flex flex-col justify-between w-full py-2">
-              <label className="text-sm">Editar descripción</label>
+                <label className="text-sm">Editar nombre de usuario</label>
+                <input
+                  type="text"
+                  value={user?.username}
+                  maxLength={25}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="text-xl font-bold mr-5 border border-black rounded p-1 w-full"
+                />
+                <label className="text-sm mt-2">Editar descripción</label>
                 <textarea
                   value={user?.description}
                   maxLength={150}
                   onChange={(e) => setDescription(e.target.value)}
                   className="text-sm text-gray-600 tracking-tight pb-2 border border-black rounded p-1 mb-3 h-[100px]"
                 />
-                <div className="flex flex-row mb-2 gap-4">
-                  <div className="flex items-center justify-center flex-row">
-                    <i className="material-icons text-gray-600 text-sm mr-2 mb-2">
-                      link
-                    </i>
-                    <input
-                      type="url"
-                      placeholder="https://example.com"
-                      maxLength={50}
-                      value={user?.link}
-                      onChange={(e) => setLink(e.target.value)}
-                      className="text-sm italic text-blue-700 rounded p-1 mb-3"
-                    />
-                  </div>
-                </div>
+                <i className="material-icons text-gray-600 text-sm">link</i>
+                <input
+                  type="url"
+                  placeholder="https://example.com"
+                  maxLength={50}
+                  value={user?.link}
+                  onChange={(e) => setLink(e.target.value)}
+                  className="text-sm italic text-blue-700 rounded p-1 w-full mb-3"
+                />
                 <div className="flex flex-row">
                   <p className="text-sm text-gray-600 mr-2">
                     <span className="font-bold">Siguiendo:</span>{" "}

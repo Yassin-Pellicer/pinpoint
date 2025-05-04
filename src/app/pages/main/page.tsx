@@ -43,6 +43,8 @@ export default function Create() {
     loadRecommendations,
     setSearch,
   } = useMapContext();
+  
+  const { user } = useSession();
 
   const [openTags, setOpenTags] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
@@ -321,7 +323,7 @@ export default function Create() {
             <CssBaseline />
             <EventInfo open={openDetails} setOpen={setOpenDetails} />
           </LocalizationProvider>
-          <Profile open={openProfile} setOpen={setOpenProfile}></Profile>
+          {user !== null && <Profile open={openProfile} user={user} setOpen={setOpenProfile}></Profile>}
         </div>
         {/* Map */}
         <MapMain />

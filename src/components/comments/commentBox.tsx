@@ -1,14 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
 import { useSession } from "../../utils/context/ContextSession";
 import CommentList from "../comments/commentList";
 import { Comment } from "../../utils/classes/Comment";
 import { addCommentHook } from "../../hooks/main/add/addCommentHook";
-import { useEvent } from "../../utils/context/ContextEvent";
 import { addRatingHook } from "../../hooks/main/add/addRatingHook";
 import { getRatingUserHook } from "../../hooks/main/get/getRatingUserHook";
-import { Alert, Snackbar } from "@mui/material";
 import { useMapContext } from "../../utils/context/ContextMap";
 
 const commentBox = () => {
@@ -21,23 +18,16 @@ const commentBox = () => {
 
   const handleUploadComment = async (e: React.FormEvent) => {
     let comment = null;
-    if (assignRating) comment = new Comment(content, user.id, new Date(), rating);
-    else comment = new Comment(content, user.id, new Date(), null);
+    if (assignRating) comment = new Comment(content, user.id, user.username, new Date(), rating);
+    else comment = new Comment(content, user.id, user.username,new Date(), null);
 
     if (comment.content == "") {
       return;
     } else {
       const response = await addCommentHook(selectedEvent.id, user.id, comment);
       setContent("");
-      setSnackbarMessage("Comentario añadido correctamente");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
     }
   };
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
 
   useEffect(() => {
     getRatingUserHook(selectedEvent.id, user.id).then((response) => {
@@ -78,22 +68,6 @@ const commentBox = () => {
           </div>
 
           <div className="rounded-b-2xl pt-3 bg-gray-200 cursor-default transition">
-            <Snackbar
-              open={snackbarOpen}
-              autoHideDuration={3000}
-              onClose={() => setSnackbarOpen(false)}
-            >
-              <Alert
-                onClose={() => setSnackbarOpen(false)}
-                severity={
-                  snackbarSeverity as "error" | "success" | "info" | "warning"
-                }
-                variant="filled"
-                sx={{ width: "100%" }}
-              >
-                {snackbarMessage}
-              </Alert>
-            </Snackbar>
             <div className="flex px-4 flex-col select-none">
               {selectedEvent.enableRatings && (
                 <>
