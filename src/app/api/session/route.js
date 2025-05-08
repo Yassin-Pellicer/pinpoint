@@ -9,7 +9,7 @@ export async function GET(request) {
     return NextResponse.json({ auth: false });
   }
 
-  const id = verify(cookie, "secret").id.id;
+  const id = verify(cookie, "secret").id;
 
   try {
     return NextResponse.json({ auth: true, id: id });

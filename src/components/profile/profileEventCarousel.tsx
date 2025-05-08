@@ -50,6 +50,7 @@ export default function SwiperComponent({events}) {
                 <div
                   className="flex h-[350px] flex-col"
                   onClick={(e) => {
+                    router.push(`/main/event/${event.id}`);
                     setSelectedEvent(event);
                     e.stopPropagation();
                   }}

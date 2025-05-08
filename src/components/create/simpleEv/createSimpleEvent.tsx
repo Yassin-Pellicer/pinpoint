@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import Logo from "../../ui/logo";
 import Counter from "../../ui/counter";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { useSession } from "../../../utils/context/ContextSession";
 
 const SimpleEvent = () => {
   const {
@@ -46,7 +47,8 @@ const SimpleEvent = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("error");
-
+  const { user } = useSession();
+  
   const router = useRouter();
   
   const t = useTranslations("Create");
@@ -64,7 +66,7 @@ const SimpleEvent = () => {
     event.checkpoints = [];
     event.qr = false;
     try {
-      const result = await createEventHook(event);
+      const result = await createEventHook(event, user.id);
       if (result.status === 400) {
         if (result.message === "name") {
           setSnackbarMessage(t("nameNotif"));

@@ -8,10 +8,11 @@ import { useTranslations } from "next-intl";
 import { useMapContext } from "../../utils/context/ContextMap";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import Logo from "../ui/logo";
+import { useRouter } from "next/navigation";
 
 const evView = () => {
   const map = useMap();
-
+  const router = useRouter();
   const t = useTranslations("SimplePopup");
   const tagsTrans = useTranslations("Tags");
 
@@ -57,7 +58,7 @@ const evView = () => {
   });
 
   useEffect(() => {
-    if (selectedEvent && map) {
+    if (router && selectedEvent && map) {
       map.flyTo(
         [
           selectedEvent.marker.position[0] + 0.0007,
@@ -66,10 +67,10 @@ const evView = () => {
         18,
         { animate: true, duration: 0.5 }
       );
+      const zoom = map.getZoom();
+      setZoom(zoom);
     }
-    const zoom = map.getZoom();
-    setZoom(zoom);
-  }, [selectedEvent, map]);
+  }, [router, selectedEvent, map]);
 
   const filteredEvents = !selectedEvent || checkpoints.length === 0 ? events : [];
 
@@ -91,7 +92,10 @@ const evView = () => {
           }}
           
           eventHandlers={{
-            click: () => setSelectedEvent(event),
+            click: () => {
+              setSelectedEvent(event);
+              router.push(`/main/event/${event.id}`);
+            },
             mouseover: (e) => {
               const ref = e.target as L.Marker;
               if (ref && map.getZoom() <= 15) {

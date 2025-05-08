@@ -5,22 +5,17 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
 export async function POST(request) {
-
   const { email, password, remember } = await request.json();
 
   try {
     const query = await sql`SELECT * FROM "user" WHERE "email" = ${email}`;
-
-    const username = query.rows[0];
-    const id = query.rows[0];
+    const { username, id } = query.rows[0];
 
     if (username === undefined) {
       return NextResponse.json({ result: "user_not_found" });
     }
-    
-    const hashedPassword = username.password;
-    const match = await bcrypt.compare(password, hashedPassword);
 
+    const match = await bcrypt.compare(password, query.rows[0].password);
     if (match) {
       const token = jwt.sign(
         {
@@ -50,3 +45,4 @@ export async function POST(request) {
     return NextResponse.json({ result: "exception" });
   }
 }
+

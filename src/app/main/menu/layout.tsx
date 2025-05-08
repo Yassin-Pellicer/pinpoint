@@ -19,26 +19,34 @@ export default function Layout({ children }: LayoutProps) {
   const [loading, setLoading] = useState(true); // Initial load state
 
   useEffect(() => {
-    const fetchSessionFromCookies = async () => {
-      try {
-        const response = await fetch('/api/session');
-        const data = await response.json();
+    let isMounted = true;
 
-        if (data.auth) {
-          const userRes = await getUserHook(data.id);
-          setUser(userRes.user);
-        } else {
-          router.push("/pages/auth/login");
+    const fetchSessionFromCookies = async () => {
+      if (isMounted) {
+        try {
+          const response = await fetch('/api/session');
+          const data = await response.json();
+
+          if (data.auth) {
+            const userRes = await getUserHook(data.id);
+            setUser(userRes.user);
+          } else {
+            router.push("/login");
+          }
+        } catch (error) {
+          console.error("Session fetch failed:", error);
+          router.push("/login");
+        } finally {
+          if (isMounted) setLoading(false); 
         }
-      } catch (error) {
-        console.error("Session fetch failed:", error);
-        router.push("/pages/auth/login");
-      } finally {
-        setLoading(false); 
       }
     };
 
     fetchSessionFromCookies();
+
+    return () => {
+      isMounted = false;
+    };
   }, [router, setUser]);
 
   useEffect(() => {

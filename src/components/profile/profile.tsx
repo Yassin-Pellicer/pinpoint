@@ -31,7 +31,7 @@ const profile = ({open, setOpen, user}) => {
         },
       }}
     >
-      <div className="mt-6 rounded-2xl bg-white p-6">
+      <div className="mt-6 rounded-2xl bg-white p-4">
         <button
           onClick={() => {
             setOpen(false);

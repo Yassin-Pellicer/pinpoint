@@ -20,12 +20,11 @@ import CheckpointMap from "./mainCheckpointMarkers";
 
 export default function MapComponent() {
 
-  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
+  const { location, setLocation, zoom, setZoom, originalLocation, loadEvents, modifiedEvent, selectedEvent } = useMapContext();
 
-  const [center, setCenter] = useState<[number, number] | null>(() => {
-    const savedCenter = sessionStorage.getItem("map-center");
-    return savedCenter ? JSON.parse(savedCenter) : null;
-  });
+  useEffect(() => {
+    loadEvents();
+  }, [zoom, location, modifiedEvent, selectedEvent]);
 
   return (
     <MapContainer

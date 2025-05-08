@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Logo from "../../../../components/ui/logo";
+import Logo from "../../components/ui/logo";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { loginHook } from "../../../../hooks/auth/login/loginHook";
+import { loginHook } from "../../hooks/auth/login/loginHook";
 import { useRouter } from "next/navigation";
 import { error } from "console";
 
@@ -38,7 +38,7 @@ export default function Login() {
       } else if (result.result === "exception") {
         setErrorMessage(t("exception"));
       } else {
-        router.push("/pages/home");
+        router.push("/main/home");
       }
     } catch (error) {
       setErrorMessage(t("exception"));

@@ -6,9 +6,11 @@ import { useSession } from "../../utils/context/ContextSession";
 import { deleteBookmarkHook } from "../../hooks/main/delete/deleteBookmarkHook";
 import { addBookmarkHook } from "../../hooks/main/add/addBookmarkHook";
 import { useMapContext } from "../../utils/context/ContextMap";
+import { useRouter } from "next/navigation";
 
 export default function SwiperComponent( {event} ) {
   const { user } = useSession();
+  const router = useRouter();
   const { setSelectedEvent } = useMapContext();
   const { bookmarks, triggerFetchBookmarks } = useSession();
   
@@ -49,7 +51,7 @@ export default function SwiperComponent( {event} ) {
       <div className="flex flex-col pl-5 w-full">
         <div
           onClick={(e) => {
-            setSelectedEvent(event);
+            router.push(`/main/event/${event.id}`);
             e.stopPropagation();
           }}
           className="flex flex-row justify-between items-center"

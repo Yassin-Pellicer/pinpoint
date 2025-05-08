@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Logo from "../../../../components/ui/logo";
+import Logo from "../../components/ui/logo";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { signupHook } from "../../../../hooks/auth/signup/signupHook";
+import { signupHook } from "../../hooks/auth/signup/signupHook";
 import { useRouter } from "next/navigation";
 
 export default function Signup() {

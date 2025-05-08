@@ -6,6 +6,7 @@ import { getEventsByAuthor, getEventsByBookmark, getEventsByInscription } from "
 import { User } from "../classes/User";
 import { Comment } from "../classes/Comment";
 import { Rating } from "../classes/Rating";
+import { getUserHook } from "../../hooks/general/getUserHook";
 
 interface SessionContextType {
   user: User | null;
@@ -51,6 +52,17 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
   const [fetchInscriptions, setFetchInscriptions] = useState(false);
   const [fetchBookmarks, setFetchBookmarks] = useState(false);
+
+  useEffect(() => {
+    const fetchSessionFromCookies = async () => {
+      const response = await fetch("/api/session");
+      const data = await response.json();
+      const userRes = await getUserHook(data.id);
+      setUser(userRes.user);
+    };
+
+    fetchSessionFromCookies();
+  }, [setUser]);
 
   const setUsername = (name: string) => {
     setUser((prev) => {

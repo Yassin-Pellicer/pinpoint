@@ -1,6 +1,5 @@
 .vercel
 .next
 /node_modules
-package*
 .env*
 .env*.local

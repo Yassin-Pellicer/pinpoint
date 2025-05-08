@@ -5,9 +5,11 @@ import { useSession } from "../../utils/context/ContextSession";
 import { addInscriptionHook } from "../../hooks/main/add/addInscriptionHook";
 import { deleteInscriptionHook } from "../../hooks/main/delete/deleteInscriptionHook";
 import { useMapContext } from "../../utils/context/ContextMap";
+import { useRouter } from "next/navigation";
 
 export default function SwiperComponent( {event} ) {
   const { user } = useSession();
+  const router = useRouter();
   const { setSelectedEvent, setModifiedEvent } = useMapContext();
   const { inscriptions, triggerFetchInscriptions } = useSession();
   const [isInscribed, setIsInscribed] = useState(null);
@@ -49,6 +51,7 @@ export default function SwiperComponent( {event} ) {
       <div className="flex flex-col pl-5 w-full">
         <div
           onClick={(e) => {
+            router.push(`/main/event/${event.id}`);
             setSelectedEvent(event);
             e.stopPropagation();
           }}

@@ -24,20 +24,22 @@ const commentBox = () => {
     if (comment.content == "") {
       return;
     } else {
-      const response = await addCommentHook(selectedEvent.id, user.id, comment);
+      const response = await addCommentHook(selectedEvent?.id, user.id, comment);
       setContent("");
     }
   };
 
   useEffect(() => {
-    getRatingUserHook(selectedEvent.id, user.id).then((response) => {
-      setRating(response.rating);
-    });
-  }, [selectedEvent.id]);
+    if (selectedEvent) {
+      getRatingUserHook(selectedEvent.id, user.id).then((response) => {
+        setRating(response.rating);
+      });
+    }
+  }, [selectedEvent?.id]);
 
   return (
     <>
-      {(selectedEvent.enableRatings || selectedEvent.enableComments) && (
+      {(selectedEvent?.enableRatings || selectedEvent?.enableComments) && (
         <>
           <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">
@@ -69,7 +71,7 @@ const commentBox = () => {
 
           <div className="rounded-b-2xl pt-3 bg-gray-200 cursor-default transition">
             <div className="flex px-4 flex-col select-none">
-              {selectedEvent.enableRatings && (
+              {selectedEvent?.enableRatings && (
                 <>
                   <div className="flex items-center">
                     {[1, 2, 3, 4, 5].map((i) => (
@@ -88,7 +90,7 @@ const commentBox = () => {
                         }}
                         onClick={() => {
                           setRating(i);
-                          addRatingHook(selectedEvent.id, user.id, i);
+                          addRatingHook(selectedEvent?.id, user.id, i);
                         }}
                       >
                         {i <= Math.floor(rating)
@@ -102,7 +104,7 @@ const commentBox = () => {
                       className="material-icons rotate-45 text-sm ml-2 cursor-pointer text-gray-500 hover:text-gray-600"
                       onClick={() => {
                         setRating(0);
-                        addRatingHook(selectedEvent.id, user.id, 0);
+                        addRatingHook(selectedEvent?.id, user?.id, 0);
                       }}
                     >
                       replay
@@ -110,7 +112,7 @@ const commentBox = () => {
                   </div>
                 </>
               )}
-              {selectedEvent.enableComments && (
+              {selectedEvent?.enableComments && (
                 <>
                   <textarea
                     className="bg-white p-3 border mt-2 border-gray-400 focus:outline-none text-xs h-[100px] resize-none"
@@ -135,7 +137,7 @@ const commentBox = () => {
                     Publish Comment
                   </button>
 
-                  {selectedEvent.enableRatings && (
+                  {selectedEvent?.enableRatings && (
                     <div className="flex items-center">
                       <label className="select-none tracking-tighter mt-2 text-sm text-black">
                         <input

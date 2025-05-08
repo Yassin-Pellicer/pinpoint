@@ -1,22 +1,22 @@
 "use client";
 
-import Layout from "../layout/layout";
+import Layout from "../main/menu/layout";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import CheckpointEvent from "../../../components/create/cpEv/createCheckpointEvent";
-import SimpleEvent from "../../../components/create/simpleEv/createSimpleEvent";
-import MapComponentCP from "../../../components/create/cpEv/createCheckpointMap";
-import MapComponentSimple from "../../../components/create/simpleEv/createSimpleMap";
+import CheckpointEvent from "../../components/create/cpEv/createCheckpointEvent";
+import SimpleEvent from "../../components/create/simpleEv/createSimpleEvent";
+import MapComponentCP from "../../components/create/cpEv/createCheckpointMap";
+import MapComponentSimple from "../../components/create/simpleEv/createSimpleMap";
 
-import { useMapContext } from "../../../utils/context/ContextMap";
+import { useMapContext } from "../../utils/context/ContextMap";
 
 import { CssBaseline } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import LoadingScreen from "../../../components/ui/loadingScreen";
-import { useCheckpoints } from "../../../utils/context/ContextCheckpoint";
+import LoadingScreen from "../../components/ui/loadingScreen";
+import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 
 export default function Create() {
   const { location, editMode } = useMapContext();

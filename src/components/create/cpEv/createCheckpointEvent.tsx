@@ -17,6 +17,7 @@ import Logo from "../../ui/logo";
 import Counter from "../../ui/counter";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import TextField from '@mui/material/TextField';
+import { useSession } from "../../../utils/context/ContextSession";
 
 const CheckpointEvent = () => {
   const {
@@ -66,6 +67,7 @@ const CheckpointEvent = () => {
   const router = useRouter();
 
   const { checkpoints, setCheckpoints } = useCheckpoints();
+  const { user } = useSession();
 
   const Quill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
@@ -76,7 +78,7 @@ const CheckpointEvent = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const result = await createEventHook(event);
+      const result = await createEventHook(event, user.id);
       if (result.status === 400) {
         if (result.message === "name") {
           setSnackbarMessage(t("nameNotif"));
@@ -94,7 +96,7 @@ const CheckpointEvent = () => {
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
         
-        router.push("/pages/main");
+        router.push("/main/home");
       }
     } catch (error) {
       console.error(error);

@@ -6,9 +6,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import EventDate from "../ui/date";
 import { useMapContext } from "../../utils/context/ContextMap";
+import { useRouter } from "next/navigation";
 
 export default function SwiperComponent({events}) {
   const { setSelectedEvent } = useMapContext();
+  const router = useRouter();
   return (
     <div className="relative">
       <Swiper
