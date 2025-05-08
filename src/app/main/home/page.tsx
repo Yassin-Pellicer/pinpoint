@@ -60,8 +60,8 @@ export default function Create() {
 
   useEffect(() => {
     setSelectedEvent(null);
-    loadRecommendations();
   }, []);
+
 
   useEffect(() => {
     loadEvents();

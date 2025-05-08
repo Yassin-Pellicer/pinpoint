@@ -94,6 +94,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     setRecommendations(response.events);
   };
 
+  useEffect(() => { loadRecommendations(); }, [])
+
   return (
     <MapContext.Provider
       value={{

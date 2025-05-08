@@ -13,50 +13,9 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [open, setOpen] = useState(false);
-  const { setUser } = useSession();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [loading, setLoading] = useState(true); // Initial load state
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchSessionFromCookies = async () => {
-      if (isMounted) {
-        try {
-          const response = await fetch('/api/session');
-          const data = await response.json();
-
-          if (data.auth) {
-            const userRes = await getUserHook(data.id);
-            setUser(userRes.user);
-          } else {
-            router.push("/login");
-          }
-        } catch (error) {
-          console.error("Session fetch failed:", error);
-          router.push("/login");
-        } finally {
-          if (isMounted) setLoading(false); 
-        }
-      }
-    };
-
-    fetchSessionFromCookies();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [router, setUser]);
-
-  useEffect(() => {
-    setLoading(true);
-  }, [pathname]);
 
   return (
     <main className="">
-      {loading && <LoadingScreen />}
-
       {children}
 
       <div className="fixed mt-2 mr-2 top-0 right-0 z-50">
