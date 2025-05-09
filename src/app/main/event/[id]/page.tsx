@@ -47,12 +47,12 @@ const eventInfo = ({open, setOpen}) => {
   const handleEditEvent = (event) => {
     setEvent(event);
     setEditMode(true);
-    router.push("/pages/create")
+    router.push("/create")
    }
 
   return (
     <>
-      {event && user && (
+      {event && (
         <div>
           <button
             onClick={() => {

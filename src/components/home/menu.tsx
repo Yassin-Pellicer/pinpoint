@@ -20,7 +20,7 @@ const Menu = ({ open, setOpen }) => {
 
   const routes = [
     "/main/home",
-    "/pages/create",
+    "/create",
     "/pages/profile",
     // "/",
     // "/aboutUs",

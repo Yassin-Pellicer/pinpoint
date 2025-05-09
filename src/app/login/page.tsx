@@ -127,7 +127,7 @@ export default function Login() {
             {t("forgot")}
           </p>
           <Link
-            href="/pages/auth/signup"
+            href="/signup"
             className="justify-center text-center font-caveat 
           text-4xl tracking-tighter mt-2 underline text-white"
           >

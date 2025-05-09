@@ -1,8 +1,6 @@
 "use client";
 
-import Layout from "../main/menu/layout";
 import "react-quill/dist/quill.snow.css";
-import dynamic from "next/dynamic";
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import CheckpointEvent from "../../components/create/cpEv/createCheckpointEvent";
@@ -34,11 +32,11 @@ export default function Create() {
   }
 
   return (
-    <Layout>
-      <div className="flex flex-row">
-        <div className="flex flex-col overflow-auto bg-blue-500 w-[550px] shrink-0 h-screen px-6">
-          {/* Event type */}
-          {!editMode && <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
+    <div className="flex flex-row">
+      <div className="flex flex-col overflow-auto bg-blue-500 w-[550px] shrink-0 h-screen px-6">
+        {/* Event type */}
+        {!editMode && (
+          <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
             <h1 className="font-bold text-3xl mb-2 tracking-tight ">
               {t("type")}
             </h1>
@@ -77,35 +75,34 @@ export default function Create() {
                 b: (chunks) => <b>{chunks}</b>,
               })}
             </p>
-          </div>}
+          </div>
+        )}
 
-          {editMode && <div className="mb-6 mt-6 rounded-2xl bg-green-400 p-6">
+        {editMode && (
+          <div className="mb-6 mt-6 rounded-2xl bg-green-400 p-6">
             <h1 className="font-bold text-3xl mb-2 tracking-tight ">
               Estás en modo edición.
             </h1>
             <p className="text-sm mt-4">
-              Al editar un evento no puedes cambiar su tipo. Volver a la página principal dejará el evento intacto.
+              Al editar un evento no puedes cambiar su tipo. Volver a la página
+              principal dejará el evento intacto.
             </p>
-          </div>}
-
-          {/* Event Creation */}
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <CssBaseline />
-            {selectedButton === "course" ? (
-              <CheckpointEvent />
-            ) : (
-              <SimpleEvent />
-            )}
-          </LocalizationProvider>
-        </div>
-
-        {/* Map */}
-        {selectedButton === "course" ? (
-          <MapComponentCP />
-        ) : (
-          <MapComponentSimple />
+          </div>
         )}
+
+        {/* Event Creation */}
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <CssBaseline />
+          {selectedButton === "course" ? <CheckpointEvent /> : <SimpleEvent />}
+        </LocalizationProvider>
       </div>
-    </Layout>
+
+      {/* Map */}
+      {selectedButton === "course" ? (
+        <MapComponentCP />
+      ) : (
+        <MapComponentSimple />
+      )}
+    </div>
   );
 }

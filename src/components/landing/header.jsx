@@ -12,14 +12,14 @@ export default function Header() {
       </div>
       <div className="flex flex-row sm:mt-0 mt-4">
         <Link
-          href="/pages/auth/login"
+          href="/login"
           className="mr-4 bg-transparent border w-fit h-fit text-3xl tracking-tight font-caveat font-extrabold pr-3
          border-white text-white rounded-2xl p-2 cursor-pointer hover:bg-blue-600 hover:text-white transition duration-200"
         >
           {t("auth.login")}
         </Link>
         <Link
-          href="/pages/auth/signup"
+          href="/signup"
           className="bg-transparent border w-fit text-3xl tracking-tight font-caveat font-extrabold pr-3
          border-white text-white rounded-2xl p-2 cursor-pointer hover:bg-blue-600 hover:text-white transition duration-200"
         >

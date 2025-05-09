@@ -50,7 +50,7 @@ export default function Signup() {
       if (result.result === "user_exists") {
         setErrorMessage(t("userExists"));
       } else {
-        router.push("/pages/auth/login");
+        router.push("/login");
       }
     } catch (error) {
       setErrorMessage(t("exception"));
@@ -148,7 +148,7 @@ export default function Signup() {
             {t("forgot")}
           </p>
           <Link
-            href="/pages/auth/login"
+            href="//login"
             className="justify-center text-center font-caveat 
           text-4xl tracking-tighter mt-2 underline text-white"
           >

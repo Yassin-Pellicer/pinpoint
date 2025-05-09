@@ -28,7 +28,7 @@ export default function SwiperComponent({events}) {
       setLoading(false);
     }).finally(() => {
       setEditMode(true);
-      router.push("/pages/create")
+      router.push("/create")
     });
   }
 
