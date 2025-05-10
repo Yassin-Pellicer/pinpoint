@@ -9,12 +9,14 @@ import { useEffect, useState } from "react";
 import { getEventsByAuthor, getEventsByBookmark, getEventsByInscription } from "../../../../hooks/main/get/getEventsHook";
 import { getUserHook } from "../../../../hooks/general/getUserHook";
 import { useMapContext } from "../../../../utils/context/ContextMap";
+import EventCarouselList  from "../../../../components/main/mainEventList";
 
-const profile = () => {
+const ProfileTabs = () => {
   const { id } = useParams();
   const router = useRouter();
-
-  const {setSelectedEvent} = useMapContext();
+  const { setSelectedEvent } = useMapContext();
+  
+  const [activeTab, setActiveTab] = useState("created");
   const [createdEvents, setCreatedEvents] = useState([]);
   const [inscriptions, setInscriptions] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
@@ -25,143 +27,100 @@ const profile = () => {
     getUserHook(Number(id)).then((response) => {
       setUser(response.user);
     });
-  }, [id])
+  }, [id, setSelectedEvent]);
 
   useEffect(() => {
     if (user?.id != null) {
-      getEventsByInscription(user?.id).then(async (response) => {
+      getEventsByInscription(user.id).then((response) => {
         console.log("Fetched inscriptions", response);
         setInscriptions(response.events);
       });
-    }
-  }, [user]);
 
-  useEffect(() => {
-    if (user?.id != null) {
-      getEventsByBookmark(user?.id).then(async (response) => {
+      getEventsByBookmark(user.id).then((response) => {
         console.log("Fetched bookmarks", response);
         setBookmarks(response.events);
       });
-    }
-  }, [user]);
 
-  useEffect(() => {
-    if (user?.id != null) {
-      getEventsByAuthor(user?.id).then(async (response) => {
+      getEventsByAuthor(user.id).then((response) => {
         console.log("Fetched created events", response);
         setCreatedEvents(response.events);
       });
     }
   }, [user]);
 
+  const tabData = [
+    {
+      id: "created",
+      name: "Eventos",
+      icon: "star",
+      description: "Revisa y edita los eventos que has creado.",
+      component: <EventCarouselList events={createdEvents} />
+    },
+    {
+      id: "inscriptions",
+      name: "Inscripciones",
+      icon: "list",
+      description: "Eventos a los que estás inscrito.",
+      component: <EventInscriptions events={inscriptions} />
+    },
+    {
+      id: "bookmarks",
+      name: "Marcadores",
+      icon: "bookmark",
+      description: "Eventos que has guardado para más tarde.",
+      component: <EventBookmarkList events={bookmarks} />
+    },
+    {
+      id: "comments",
+      name: "Actividad",
+      icon: "comment",
+      description: "Revisa y edita los eventos que has creado.",
+      component: <EventCarouselList events={createdEvents} />
+    },
+  ];
+
+  const activeTabData = tabData.find(tab => tab.id === activeTab);
+
   return (
     <>
-      <div className="sticky top-0 z-50 bg-white grid grid-cols-[80%_20%]">
-        <button
-          onClick={() => router.back()}
-          className="bg-blue-400 h-full hover:bg-blue-500 shadow-2xl"
-        >
-          <i className="material-icons text-white text-xl">arrow_back</i>
-        </button>
-
-        <button
-          onClick={() => router.push("/main/home")}
-          className="bg-green-400 h-full hover:bg-green-500 shadow-2xl"
-        >
-          <i className="material-icons text-white text-xl">home</i>
-        </button>
-      </div>
-
-      <Banner user={user}></Banner>
-
-      <div className=" mt-4">
-        <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
-          <div className="relative h-full">
-            <div
-              className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform rotate-[5deg] z-0 m-5"
-              style={{
-                backgroundImage: "url('/img/recommended.png')",
-              }}
-            ></div>
-
-            <div className="relative p-5 z-10">
-              <div className="flex flex-row items-center">
-                <i
-                  className="material-icons text-white text-3xl mr-5"
-                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                >
-                  star
-                </i>
-                <h1
-                  className="text-2xl tracking-tighter font-bold mb-2 text-white"
-                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                >
-                  Eventos creados por ti
-                </h1>
-              </div>
-              <p
-                className="text-sm tracking-tighter font-bold text-white"
-                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
-              >
-                Revisa y edita los eventos que has creado.
-              </p>
-            </div>
-          </div>
-        </div>
-        <EventCarousel events={createdEvents} />
-      </div>
-
-      <div className=" mt-4">
-        <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
-          <div className="relative h-full">
-            <div className="relative p-5 z-10">
-              <div className="flex flex-row items-center">
-                <i
-                  className="material-icons text-white text-3xl mr-5"
-                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                >
-                  list
-                </i>
-                <h1
-                  className="text-2xl tracking-tighter font-bold text-white"
-                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                >
-                  Tus inscripciones
-                </h1>
-              </div>
-            </div>
-          </div>
-        </div>
+      {!user && (
         <div className="flex flex-col">
-          <EventInscriptions events={inscriptions} />
-        </div>
-      </div>
-
-      <div className=" mt-4">
-        <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
-          <div className="relative h-full">
-            <div className="relative p-5 z-10">
-              <div className="flex flex-row items-center">
-                <i
-                  className="material-icons text-white text-3xl mr-5"
-                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                >
-                  bookmark
-                </i>
-                <h1
-                  className="text-2xl tracking-tighter font-bold text-white"
-                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                >
-                  Eventos Guardados
-                </h1>
-              </div>
-            </div>
+          <div className="bg-gray-200 w-full h-[200px] flex flex-col p-4 items-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
+          </div>
+          <div className="bg-gray-300 w-full h-[200px] flex flex-col p-4 items-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
           </div>
         </div>
-        <EventBookmarkList events={bookmarks} />
+      )}
+
+      {user && <Banner user={user} />}
+
+      <div className="flex justify-around border-b border-gray-200 bg-white z-30 -mt-6">
+        {tabData.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex-1 py-4 px-1 text-center relative hover:bg-gray-50 transition duration-150 ${
+              activeTab === tab.id ? "font-bold" : "text-gray-500"
+            }`}
+          >
+            <div className="flex align-center flex-row items-center justify-center">
+              <i className="material-icons mr-2 text-lg">{tab.icon}</i>
+              <span className="text-sm md:text-base">{tab.name}</span>
+            </div>
+            {activeTab === tab.id && (
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-blue-500"></div>
+            )}
+          </button>
+        ))}
+      </div>
+
+      <div>
+        {activeTabData?.component}
       </div>
     </>
   );
 };
 
-export default profile;
+export default ProfileTabs;

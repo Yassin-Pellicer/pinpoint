@@ -14,11 +14,7 @@ const cpList = () => {
           <div
             key={checkpoint.id || `checkpoint-${index}`}
             className={
-              index === 0
-                ? "p-4 bg-gray-300  cursor-default transition duration-100 ease-in-out"
-                : index === checkpoints.length - 1
-                ? "p-4 pb-5 bg-gray-300 border-t-[3px] border-dashed rounded-b-2xl cursor-default transition duration-100 ease-in-out"
-                : "p-4 pb-5 bg-gray-300 border-t-[3px] border-dashed cursor-default transition duration-100 ease-in-out"
+              "p-4 pb-5 bg-white border-[1px] border-gray-300 cursor-default transition duration-100 ease-in-out"
             }
           >
             <CheckpointInfo id={checkpoint.id} index={index} />

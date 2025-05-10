@@ -41,7 +41,7 @@ const commentBox = () => {
     <>
       {(selectedEvent?.enableRatings || selectedEvent?.enableComments) && (
         <>
-          <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">
+          <div className="h-auto bg-blue-400 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">
               <div
                 className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform rotate-[5deg] z-0 m-5"

@@ -38,12 +38,12 @@ const bookmarkBox = ({ event }) => {
 
   return (
     <div
-      className={`h-auto rounded-2xl overflow-hidden ${
+      className={`h-auto overflow-hidden ${
         isBookmarked === null
           ? "bg-gray-400"
           : isBookmarked
-          ? "bg-green-500"
-          : "bg-blue-500"
+          ? "bg-blue-500"
+          : "bg-orange-500"
       } relative hover:cursor-pointer transition duration-100`}
       onClick={() =>
         isBookmarked === null
@@ -74,7 +74,7 @@ const bookmarkBox = ({ event }) => {
               className="text-2xl tracking-tighter font-bold mb-2 text-white break-words"
               style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
             >
-              Añadir a eventos marcados
+              {!isBookmarked ? "Añadido a Marcadores" : "Añadir a eventos marcados"}
             </h1>
           )}
           <p

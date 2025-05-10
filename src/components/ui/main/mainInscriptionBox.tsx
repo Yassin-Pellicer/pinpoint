@@ -45,8 +45,8 @@ const mainInscribedBox = ({ event }) => {
     <>
       {event.enableInscription && (
         <div
-          className={`h-auto rounded-2xl mt-4 ${
-            isInscribed ? "bg-green-500" : "bg-blue-500"
+          className={`h-auto ${
+            isInscribed ? "bg-green-500" : "bg-amber-400"
           } relative hover:cursor-pointer transition duration-100`}
         >
           <div className="relative h-full">

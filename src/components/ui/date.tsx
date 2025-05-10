@@ -70,7 +70,7 @@ export default function EventTimeDisplay({event, listMode}) {
   }, [event]);
 
   return (
-    <div className={`h-auto rounded-2xl mt-3 ${!listMode && "bg-blue-500"}`}>
+    <div className={`h-auto ${!listMode && "bg-purple-500"}`}>
       <div className="relative h-full">
         <div className={`relative ${listMode ? "p-0" : "p-4"} z-10`}>
           {!listMode && <div className="grid grid-cols-2 gap-4">
@@ -157,15 +157,8 @@ export default function EventTimeDisplay({event, listMode}) {
           </div>}
           
           {listMode && <div className="">
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-xs font-medium text-white">
-                Tiempo restante
-              </span>
-              <span className="text-xs font-medium text-white">
-                {progress}%
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
+
+            <div className="w-full bg-gray-200 rounded-full mt-4 h-2.5">
               <div
                 className={`${progressColor} h-2.5 rounded-full transition-all duration-500 ease-in-out`}
                 style={{ width: `${progress}%` }}

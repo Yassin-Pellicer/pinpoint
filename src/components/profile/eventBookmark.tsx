@@ -31,7 +31,7 @@ export default function SwiperComponent( {event} ) {
   };
 
   return (
-    <div className="bg-blue-500 w-full h-fit flex items-center align-center hover:bg-blue-600 flex-row p-4 border-t-[3px] border-dashed  text-white">
+    <div className="bg-gray-100 text-black w-full h-fit flex items-center align-center hover:bg-gray-200 flex-row p-4 border-gray-300 border-[1px]">
       {event.banner && (
         <div className="overflow-hidden bg-white rounded-full w-[100px] h-[80px]">
           <img
@@ -74,7 +74,7 @@ export default function SwiperComponent( {event} ) {
             {isBookmarked ? (
               <button
                 onClick={handleDeleteBookmark}
-                className="w-full font-extrabold font-white p-1 hover:bg-red-500 mt-2 rounded-2xl border-[1px] border-white transition duration-100"
+                className="w-full font-bold font-white p-1 hover:bg-red-500 mt-2 rounded-2xl border-[1px] border-black transition duration-100"
               >
                 Eliminar marcador
               </button>

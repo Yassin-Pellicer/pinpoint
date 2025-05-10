@@ -6,9 +6,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import EventDate from "../ui/date"; // Adjust the path as needed
 import { useMapContext } from "../../utils/context/ContextMap";
+import { useRouter } from "next/navigation";
 
 export default function SwiperComponent( {events} ) {
-  const { setSelectedEvent } = useMapContext();
+  const { setSelectedEvent, setSearch, setFilterTags } = useMapContext();
+  const router = useRouter();
   return (
     <div className="flex flex-col">
       {events?.map((event, index) => (
@@ -16,11 +18,14 @@ export default function SwiperComponent( {events} ) {
           key={index}
           className="flex justify-center items-center select-none cursor-pointer"
           onClick={(e) => {
+            router.push("/main/event/" + event.id);
+            setSearch("");
+            setFilterTags([])
             setSelectedEvent(event);
             e.stopPropagation();
           }}
         >
-          <div className="bg-blue-500 w-full h-fit flex items-center align-center hover:bg-blue-600 flex-row p-4 border-t-[3px] border-dashed  text-white">
+    <div className="bg-gray-100 text-black w-full h-fit flex items-center align-center hover:bg-gray-200 flex-row p-4 border-gray-300 border-[1px]">
             {event.banner && (
               <div className="overflow-hidden bg-white rounded-full w-[100px] h-[80px]">
                 <img
@@ -43,13 +48,13 @@ export default function SwiperComponent( {events} ) {
                 <div className="flex items-center">
                   {event.rating !== null && (
                     <>
-                      <p className="text-sm mr-2 italic text-white tracking-tighter">
-                        {event.rating}
+                      <p className="text-sm mr-2 italic text-black tracking-tighter">
+                        Puntuación: {event.rating}
                       </p>
                       {[1, 2, 3, 4, 5].map((i) => (
                         <i
                           key={i}
-                          className={`material-icons text-white text-sm ${
+                          className={`material-icons text-yellow-500 text-sm ${
                             i <= Math.floor(event.rating)
                               ? "star"
                               : i - 0.5 === event.rating

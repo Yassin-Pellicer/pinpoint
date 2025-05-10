@@ -16,8 +16,10 @@ import InscribedBox from "../../../../components/ui/main/mainInscriptionBox";
 import CommentBox from "../../../../components/comments/commentBox";
 import CpList from "../../../../components/main/mainCheckpointList";
 import { getEventById } from "../../../../hooks/main/get/getEventsHook";
+import { getUserHook } from "../../../../hooks/general/getUserHook";
+import Banner from "../../../../components/ui/banner";
 
-const eventInfo = ({open, setOpen}) => {
+const eventInfo = () => {
   const { setSelectedEvent, setEditMode } = useMapContext();
   const { checkpoints } = useCheckpoints();
   const { user } = useSession();
@@ -25,6 +27,7 @@ const eventInfo = ({open, setOpen}) => {
   const [loading, setLoading] = useState(true);
   const { setEvent } = useEvent();
   const [event, setCurrentEvent] = useState(null);
+  const [author, setAuthor] = useState(null);
 
   const params = useParams();
   const router = useRouter();
@@ -41,17 +44,24 @@ const eventInfo = ({open, setOpen}) => {
       .finally(() => setLoading(false));
   }, [eventId]);
 
-  {/* TRANSLATIONS */}
+  useEffect(() => {
+    if (event) {
+      getUserHook(Number(event.author)).then((response) => {
+        setAuthor(response.user);
+      });
+    }
+  }, [event]);
+
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
   const formatDisplay = (date) => {
-    return date.toLocaleString('es-ES', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return date.toLocaleString("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -59,67 +69,34 @@ const eventInfo = ({open, setOpen}) => {
     <>
       {!event && (
         <div className="flex flex-col">
-          <div className="sticky top-0 z-50 bg-white grid grid-cols-[80%_20%]">
-            <button
-              onClick={() => router.back()}
-              className="bg-blue-400 h-full hover:bg-blue-500 shadow-2xl"
-            >
-              <i className="material-icons text-white text-xl">arrow_back</i>
-            </button>
-
-            <button
-              onClick={() => router.push("/main/home")}
-              className="bg-green-400 h-full hover:bg-green-500 shadow-2xl"
-            >
-              <i className="material-icons text-white text-xl">home</i>
-            </button>
+          <div className="bg-gray-300 w-full h-[350px] flex flex-col p-4 items-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
           </div>
-
-          <div className="bg-gray-300 w-full h-[350px] flex flex-col p-4 items-center align-center justify-center text-white">
-            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+          <div className="bg-blue-500 w-full h-[200px] flex flex-col p-4 items-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
           </div>
-
-          <div className="bg-blue-500 rounded-b-2xl w-full h-[200px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
-            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+          <div className="bg-purple-500 w-full h-[150px] flex flex-col p-4 items-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
           </div>
-
-          <div className="bg-blue-500 rounded-2xl w-full h-[150px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
-            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+          <div className="bg-yellow-500 w-full h-[150px] flex flex-col p-4 items-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-blue-500 rounded-2xl w-full h-[150px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
-              <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+          <div className="grid grid-cols-2">
+            <div className="bg-blue-500 w-full h-[150px] flex flex-col p-4 items-center justify-center text-white">
+              <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
             </div>
-            <div className="bg-green-400 rounded-2xl w-full h-[150px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
-              <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+            <div className="bg-green-400 w-full h-[150px] flex flex-col p-4 items-center justify-center text-white">
+              <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
             </div>
           </div>
-
-          <div className="bg-gray-300 rounded-2xl w-full h-[800px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
-            <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
+          <div className="bg-gray-300 w-full h-[800px] flex flex-col p-4 items-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white"></div>
           </div>
         </div>
       )}
 
       {event && (
         <div>
-          <div className="sticky top-0 z-50 bg-white grid grid-cols-[80%_20%]">
-            <button
-              onClick={() => router.back()}
-              className="bg-blue-400 h-full hover:bg-blue-500 shadow-2xl"
-            >
-              <i className="material-icons text-white text-xl">arrow_back</i>
-            </button>
-
-            <button
-              onClick={() => router.push("/main/home")}
-              className="bg-green-400 h-full hover:bg-green-500 shadow-2xl"
-            >
-              <i className="material-icons text-white text-xl">home</i>
-            </button>
-          </div>
-
           <div className="relative justify-center w-full">
             {event.banner ? (
               <div className="relative flex justify-end items-center w-full h-15 overflow-hidden border-t border-x border-gray-400">
@@ -134,11 +111,7 @@ const eventInfo = ({open, setOpen}) => {
             )}
           </div>
 
-          <div
-            className={`${
-              event.banner ? "rounded-b-2xl" : "rounded-2xl"
-            }  p-6 bg-blue-500 text-white cursor-default transition`}
-          >
+          <div className="p-6 bg-blue-500 text-white cursor-default transition">
             <div className="flex flex-row ">
               <div className="flex flex-row w-full">
                 <h1
@@ -151,21 +124,23 @@ const eventInfo = ({open, setOpen}) => {
                 </h1>
               </div>
             </div>
-            <p className="flex text-xs items-center w-[70%] mb-2">
+            <div className="flex items-center mb-2">
               {event.rating != null && (
-                <div className="flex flex-col gap-4">
-                  {event.dated && (
-                    <p className="text-white text-xl tracking-tight">
-                      Este evento tendrá lugar el{" "}
-                      {formatDisplay(new Date(event.date))}
+                <div className="flex items-center mb-2">
+                  <div className="flex flex-col gap-4">
+                    {event.date && (
+                      <p className="text-white font-bold text-2xl tracking-tighter">
+                          Este evento tendrá lugar el{" "}
+                        {formatDisplay(new Date(event.date))}
+                      </p>
+                    )}
+                    <p className="flex text-md items-center pr-10">
+                      {event.address}
                     </p>
-                  )}
-                  <p className="flex text-xs items-center pr-10">
-                    {event.address}
-                  </p>
+                  </div>
                 </div>
               )}
-            </p>
+            </div>
             <div className="flex flex-row justify-between">
               <div className="flex flex-end align-center items-center">
                 {event.rating != null && (
@@ -194,22 +169,25 @@ const eventInfo = ({open, setOpen}) => {
                   </>
                 )}
                 {event.rating === null && (
-                  <div className="flex flex-col gap-4">
-                    {event.date && (
-                      <p className="text-white text-xl tracking-tight pr-10">
-                        Este evento tendrá lugar el{" "}
-                        {formatDisplay(new Date(event.date))}
+                  <div className="flex items-center mb-2">
+                    <div className="flex flex-col">
+                      {event.date && (
+                        <p className="text-white font-bold text-2xl tracking-tighter">
+                          Este evento tendrá lugar el{" "}
+                          {formatDisplay(new Date(event.date))}
+                        </p>
+                      )}
+                      <p className="flex text-md items-center pr-10">
+                        {event.address}
                       </p>
-                    )}
-                    <p className="flex text-xs items-center pr-10">
-                      {event.address}
-                    </p>
+                    </div>
                   </div>
                 )}
               </div>
+
               <div className="flex flex-row gap-2">
                 {!event.isPublic ? (
-                  <div className="flex items-center text-lñg">
+                  <div className="flex items-center text-sm">
                     <i className="material-icons text-md">public</i>
                   </div>
                 ) : (
@@ -228,6 +206,7 @@ const eventInfo = ({open, setOpen}) => {
                 )}
               </div>
             </div>
+
             {event.author === user?.id && (
               <button
                 onClick={() => {
@@ -251,10 +230,10 @@ const eventInfo = ({open, setOpen}) => {
 
           <InscribedBox event={event}></InscribedBox>
 
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="grid grid-cols-2">
             <BookmarkBox event={event}></BookmarkBox>
 
-            <div className="h-auto rounded-2xl bg-green-400 relative hover:cursor-pointer hover:bg-green-500 transition duration-100">
+            <div className="h-auto bg-green-400 relative hover:cursor-pointer hover:bg-green-600 transition duration-100">
               <div className="relative h-full">
                 <div
                   className="bg-no-repeat bg-center bg-cover absolute right-2 top-[-50px] bottom-0 w-1/2 transform"
@@ -282,38 +261,20 @@ const eventInfo = ({open, setOpen}) => {
             </div>
           </div>
 
-          <div className=" mt-4 overflow-hidden">
-            <div className="h-auto rounded-t-2xl bg-gray-300 relative transition duration-100 overflow-hidden">
-              <div className="relative h-full">
-                <div
-                  className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform rotate-[5deg] z-0 m-5"
-                  style={{
-                    backgroundImage: "url('/img/recommended.png')",
-                  }}
-                ></div>
-
-                <div className="relative p-5 z-10">
-                  <div className="flex flex-row items-center">
-                    <i
-                      className="material-icons text-white text-4xl mr-2"
-                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    >
-                      info
-                    </i>
-                    <h1
-                      className="text-2xl tracking-tighter font-bold text-white"
-                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    >
-                      Más Información
-                    </h1>
-                  </div>
+          <div className="overflow-hidden">
+            <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-b-[1px] border-gray-300">
+              <div className="relative p-5 z-10">
+                <div className="flex flex-row items-center ">
+                  <h1 className="text-2xl tracking-tighter font-bold text-black">
+                    Más Información
+                  </h1>
                 </div>
               </div>
             </div>
 
             {event.description && (
               <div
-                className="p-6 bg-gray-200 cursor-default overflow-hidden transition"
+                className="p-6 bg-white cursor-default overflow-hidden transition"
                 onClick={() => {
                   navigator.clipboard.writeText(event.description);
                 }}
@@ -331,7 +292,7 @@ const eventInfo = ({open, setOpen}) => {
           </div>
 
           {event.tags.length > 0 && (
-            <div className="h-auto rounded-b-2xl bg-gray-200 pb-6 px-6 pt-3 relative transition duration-100 overflow-hidden">
+            <div className="h-auto bg-white pb-6 px-6 pt-3 relative transition duration-100 overflow-hidden">
               <div>
                 <div className="flex flex-wrap w-full gap-2">
                   {event.tags.map((tag) => (
@@ -349,9 +310,20 @@ const eventInfo = ({open, setOpen}) => {
             </div>
           )}
 
+          <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-[1px] border-gray-300">
+            <div className="relative p-5 z-10">
+              <div className="flex flex-row items-center ">
+                <h1 className="text-2xl tracking-tighter font-bold text-black">
+                  Evento creado por...
+                </h1>
+              </div>
+            </div>
+          </div>
+          <Banner user={user}></Banner>
+
           {checkpoints && checkpoints.length > 0 && (
             <>
-              <div className="h-auto rounded-t-2xl bg-blue-300 mt-4 relative transition duration-100 overflow-hidden">
+              <div className="h-auto bg-blue-300 relative transition duration-100 overflow-hidden">
                 <div className="relative h-full">
                   <div
                     className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform rotate-[5deg] z-0 m-5"
@@ -382,13 +354,9 @@ const eventInfo = ({open, setOpen}) => {
                   </div>
                 </div>
               </div>
-              <div className="mb-4">
-                <CpList />
-              </div>
+              <CpList />
             </>
           )}
-
-          <div className="mt-4"></div>
           <CommentBox></CommentBox>
         </div>
       )}

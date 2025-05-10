@@ -53,7 +53,7 @@ const CheckpointInfo = ({ id, index }) => {
       </div>
 
       {checkpoints[index].banner || description ? (
-        <div className="mt-2 w-full h-fit rounded-2xl bg-gray-200 m-auto px-2 pt-3">
+        <div className="mt-2 w-full h-fit m-auto">
           <div className="overflow-auto flex flex-col px-3 w-full">
             <div className="flex flex-col justify-center">
               <label className="w-full mt-2">
