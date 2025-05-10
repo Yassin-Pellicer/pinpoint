@@ -12,16 +12,9 @@ export default function SwiperComponent( {event} ) {
   const { user } = useSession();
   const router = useRouter();
   const { setSelectedEvent } = useMapContext();
-  const { bookmarks, triggerFetchBookmarks } = useSession();
+  const { triggerFetchBookmarks } = useSession();
   
-  const [isBookmarked, setIsBookmarked] = useState(null);
-
-  useEffect(() => {
-    if (event?.id && bookmarks) {
-      const users = bookmarks.map((i) => i.id);
-      setIsBookmarked(users.includes(event.id));
-    }
-  }, [bookmarks]);
+  const [isBookmarked, setIsBookmarked] = useState(true);
 
   const handleUploadBookmark = async () => {
     const response = await addBookmarkHook(event.id, user.id);

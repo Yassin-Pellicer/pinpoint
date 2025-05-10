@@ -2,9 +2,15 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import Menu from "../../components/home/menu";
+import { getUserHook } from "../../hooks/general/getUserHook";
+import { useSession } from "../../utils/context/ContextSession";
 
 interface LayoutProps {
   children: ReactNode;
+}
+
+function setUser(user: any) {
+  throw new Error("Function not implemented.");
 }
 
 export default function Layout({ children }: LayoutProps) {

@@ -62,7 +62,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     };
 
     fetchSessionFromCookies();
-  }, [setUser]);
+  }, []);
 
   const setUsername = (name: string) => {
     setUser((prev) => {

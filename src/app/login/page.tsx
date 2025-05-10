@@ -3,10 +3,11 @@
 import Link from "next/link";
 import Logo from "../../components/ui/logo";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { loginHook } from "../../hooks/auth/login/loginHook";
 import { useRouter } from "next/navigation";
 import { error } from "console";
+import { getUserHook } from "../../hooks/general/getUserHook";
 
 export default function Login() {
   const [email, setEmail]               = useState("");
@@ -148,3 +149,7 @@ export default function Login() {
     </main>
   );
 }
+function setUser(user: any) {
+  throw new Error("Function not implemented.");
+}
+

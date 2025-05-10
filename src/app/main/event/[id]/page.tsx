@@ -18,12 +18,13 @@ import CpList from "../../../../components/main/mainCheckpointList";
 import { getEventById } from "../../../../hooks/main/get/getEventsHook";
 
 const eventInfo = ({open, setOpen}) => {
-  const { selectedEvent, setSelectedEvent, setEditMode } = useMapContext();
+  const { setSelectedEvent, setEditMode } = useMapContext();
   const { checkpoints } = useCheckpoints();
   const { user } = useSession();
 
   const [loading, setLoading] = useState(true);
-  const [event, setEvent] = useState(null);
+  const { setEvent } = useEvent();
+  const [event, setCurrentEvent] = useState(null);
 
   const params = useParams();
   const router = useRouter();
@@ -35,7 +36,7 @@ const eventInfo = ({open, setOpen}) => {
     getEventById(Number(eventId))
       .then((response) => {
         setSelectedEvent(response.event);
-        setEvent(response.event);
+        setCurrentEvent(response.event);
       })
       .finally(() => setLoading(false));
   }, [eventId]);
@@ -44,26 +45,80 @@ const eventInfo = ({open, setOpen}) => {
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
-  const handleEditEvent = (event) => {
-    setEvent(event);
-    setEditMode(true);
-    router.push("/create")
-   }
+  const formatDisplay = (date) => {
+    return date.toLocaleString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   return (
     <>
+      {!event && (
+        <div className="flex flex-col">
+          <div className="sticky top-0 z-50 bg-white grid grid-cols-[80%_20%]">
+            <button
+              onClick={() => router.back()}
+              className="bg-blue-400 h-full hover:bg-blue-500 shadow-2xl"
+            >
+              <i className="material-icons text-white text-xl">arrow_back</i>
+            </button>
+
+            <button
+              onClick={() => router.push("/main/home")}
+              className="bg-green-400 h-full hover:bg-green-500 shadow-2xl"
+            >
+              <i className="material-icons text-white text-xl">home</i>
+            </button>
+          </div>
+
+          <div className="bg-gray-300 w-full h-[350px] flex flex-col p-4 items-center align-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+          </div>
+
+          <div className="bg-blue-500 rounded-b-2xl w-full h-[200px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+          </div>
+
+          <div className="bg-blue-500 rounded-2xl w-full h-[150px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-blue-500 rounded-2xl w-full h-[150px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
+              <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+            </div>
+            <div className="bg-green-400 rounded-2xl w-full h-[150px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
+              <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white p4"></div>
+            </div>
+          </div>
+
+          <div className="bg-gray-300 rounded-2xl w-full h-[800px] flex flex-col p-4 mb-6 items-center align-center justify-center text-white">
+            <div className="animate-spin rounded-full h-[150px] w-[150px] border-b-4 border-white p4"></div>
+          </div>
+        </div>
+      )}
+
       {event && (
         <div>
-          <button
-            onClick={() => {
-              router.back();
-            }}
-            className="bg-blue-400 w-full h-fit sticky top-0 z-50"
-          >
-            <i className="material-icons text-white text-3xl">
-              keyboard_arrow_down
-            </i>
-          </button>
+          <div className="sticky top-0 z-50 bg-white grid grid-cols-[80%_20%]">
+            <button
+              onClick={() => router.back()}
+              className="bg-blue-400 h-full hover:bg-blue-500 shadow-2xl"
+            >
+              <i className="material-icons text-white text-xl">arrow_back</i>
+            </button>
+
+            <button
+              onClick={() => router.push("/main/home")}
+              className="bg-green-400 h-full hover:bg-green-500 shadow-2xl"
+            >
+              <i className="material-icons text-white text-xl">home</i>
+            </button>
+          </div>
 
           <div className="relative justify-center w-full">
             {event.banner ? (
@@ -97,7 +152,19 @@ const eventInfo = ({open, setOpen}) => {
               </div>
             </div>
             <p className="flex text-xs items-center w-[70%] mb-2">
-              {event.rating != null ? event.address : ""}
+              {event.rating != null && (
+                <div className="flex flex-col gap-4">
+                  {event.dated && (
+                    <p className="text-white text-xl tracking-tight">
+                      Este evento tendrá lugar el{" "}
+                      {formatDisplay(new Date(event.date))}
+                    </p>
+                  )}
+                  <p className="flex text-xs items-center pr-10">
+                    {event.address}
+                  </p>
+                </div>
+              )}
             </p>
             <div className="flex flex-row justify-between">
               <div className="flex flex-end align-center items-center">
@@ -127,9 +194,17 @@ const eventInfo = ({open, setOpen}) => {
                   </>
                 )}
                 {event.rating === null && (
-                  <p className="flex text-xs items-center pr-10">
-                    {event.address}
-                  </p>
+                  <div className="flex flex-col gap-4">
+                    {event.date && (
+                      <p className="text-white text-xl tracking-tight pr-10">
+                        Este evento tendrá lugar el{" "}
+                        {formatDisplay(new Date(event.date))}
+                      </p>
+                    )}
+                    <p className="flex text-xs items-center pr-10">
+                      {event.address}
+                    </p>
+                  </div>
                 )}
               </div>
               <div className="flex flex-row gap-2">
@@ -157,9 +232,9 @@ const eventInfo = ({open, setOpen}) => {
               <button
                 onClick={() => {
                   setLoading(true);
-                  setTimeout(() => {
-                    handleEditEvent(event);
-                  }, 1000);
+                  setEvent(event);
+                  setEditMode(true);
+                  router.push("/create");
                 }}
                 className="mt-4 w-full font-extrabold text-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100 flex justify-center items-center h-10"
               >
@@ -172,9 +247,7 @@ const eventInfo = ({open, setOpen}) => {
             )}
           </div>
 
-          {event.end && (
-            <EventTimeDisplay event={event} listMode={false} />
-          )}
+          {event.end && <EventTimeDisplay event={event} listMode={false} />}
 
           <InscribedBox event={event}></InscribedBox>
 

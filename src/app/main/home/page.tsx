@@ -21,8 +21,6 @@ import Profile from "../../../components/profile/profile";
 import { useRouter } from "next/navigation";
 
 export default function Create() {
-  const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { setEvent } = useEvent();
   const {
     selectedEvent,
     location,
@@ -41,10 +39,7 @@ export default function Create() {
   const { user } = useSession();
 
   const [openTags, setOpenTags] = useState(false);
-  const [openDetails, setOpenDetails] = useState(false);
-  const [openProfile, setOpenProfile] = useState(false);
   const { username, setUser } = useSession();
-  const { setRecommendations, setEditMode } = useMapContext();
   const { setSelectedEvent } = useMapContext();
 
   const router = useRouter();
@@ -55,7 +50,6 @@ export default function Create() {
   useEffect(() => {
     setSelectedEvent(null);
   }, []);
-
 
   useEffect(() => {
     loadEvents();
@@ -69,8 +63,7 @@ export default function Create() {
     return () => handler.cancel && handler.cancel();
   }, [filterTags, search]);
 
-
-   useEffect(() => {
+  useEffect(() => {
     if (!selectedEvent) {
       router.push("/main/home");
     }
@@ -78,6 +71,7 @@ export default function Create() {
       router.push("/main/event/" + selectedEvent?.id);
     }
   }, [selectedEvent]);
+
   return (
     <>
       <div className="flex mt-6 flex-row justify-between items-center align-center">
@@ -125,7 +119,7 @@ export default function Create() {
         </div>
 
         <div
-          onClick={() => setOpenProfile(!openProfile)}
+          onClick={() => router.push("/main/user/" + user?.id)}
           className="h-auto rounded-2xl bg-gray-300 relative hover:cursor-pointer hover:bg-gray-400 transition duration-100"
         >
           <div className="relative h-full">
@@ -307,13 +301,6 @@ export default function Create() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <CssBaseline />
       </LocalizationProvider>
-      {user !== null && (
-        <Profile
-          open={openProfile}
-          user={user}
-          setOpen={setOpenProfile}
-        ></Profile>
-      )}
     </>
   );
 }

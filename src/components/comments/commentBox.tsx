@@ -30,12 +30,12 @@ const commentBox = () => {
   };
 
   useEffect(() => {
-    if (selectedEvent) {
-      getRatingUserHook(selectedEvent.id, user.id).then((response) => {
+    if (user) {
+      getRatingUserHook(selectedEvent.id, user?.id).then((response) => {
         setRating(response.rating);
       });
     }
-  }, [selectedEvent?.id]);
+  }, [user]);
 
   return (
     <>

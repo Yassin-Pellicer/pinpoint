@@ -59,16 +59,21 @@ const profile = () => {
 
   return (
     <>
-      <button
-        onClick={() => {
-          router.back();
-        }}
-        className="bg-blue-400 w-full h-fit sticky top-0 z-50"
-      >
-        <i className="material-icons text-white text-3xl">
-          keyboard_arrow_down
-        </i>
-      </button>
+      <div className="sticky top-0 z-50 bg-white grid grid-cols-[80%_20%]">
+        <button
+          onClick={() => router.back()}
+          className="bg-blue-400 h-full hover:bg-blue-500 shadow-2xl"
+        >
+          <i className="material-icons text-white text-xl">arrow_back</i>
+        </button>
+
+        <button
+          onClick={() => router.push("/main/home")}
+          className="bg-green-400 h-full hover:bg-green-500 shadow-2xl"
+        >
+          <i className="material-icons text-white text-xl">home</i>
+        </button>
+      </div>
 
       <Banner user={user}></Banner>
 

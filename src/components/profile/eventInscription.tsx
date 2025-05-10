@@ -11,15 +11,8 @@ export default function SwiperComponent( {event} ) {
   const { user } = useSession();
   const router = useRouter();
   const { setSelectedEvent, setModifiedEvent } = useMapContext();
-  const { inscriptions, triggerFetchInscriptions } = useSession();
-  const [isInscribed, setIsInscribed] = useState(null);
-
-  useEffect(() => {
-    if (event?.id && inscriptions) {
-      const users = inscriptions.map((i) => i.id);
-      setIsInscribed(users.includes(event.id));
-    }
-  }, [inscriptions]);
+  const { triggerFetchInscriptions } = useSession();
+  const [isInscribed, setIsInscribed] = useState(true);
 
   const handleUploadInscription = async () => {
     const response = await addInscriptionHook(event.id, user.id);
