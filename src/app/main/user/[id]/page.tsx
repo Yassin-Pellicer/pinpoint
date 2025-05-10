@@ -29,7 +29,6 @@ const profile = () => {
 
   useEffect(() => {
     if (user?.id != null) {
-      console.log("Fetching inscriptions");
       getEventsByInscription(user?.id).then(async (response) => {
         console.log("Fetched inscriptions", response);
         setInscriptions(response.events);
@@ -39,7 +38,6 @@ const profile = () => {
 
   useEffect(() => {
     if (user?.id != null) {
-      console.log("Fetching bookmarks");
       getEventsByBookmark(user?.id).then(async (response) => {
         console.log("Fetched bookmarks", response);
         setBookmarks(response.events);
@@ -49,7 +47,6 @@ const profile = () => {
 
   useEffect(() => {
     if (user?.id != null) {
-      console.log("Fetching created events");
       getEventsByAuthor(user?.id).then(async (response) => {
         console.log("Fetched created events", response);
         setCreatedEvents(response.events);

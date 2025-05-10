@@ -4,24 +4,30 @@ import { useSession } from "../../../utils/context/ContextSession";
 import { deleteInscriptionHook } from "../../../hooks/main/delete/deleteInscriptionHook";
 import { addInscriptionHook } from "../../../hooks/main/add/addInscriptionHook";
 import { useMapContext } from "../../../utils/context/ContextMap";
+import { getCheckInscription } from "../../../hooks/main/get/getCheckInscriptionHook";
 
 const mainInscribedBox = ({ event }) => {
   const [isInscribed, setIsInscribed] = useState(null);
-  const { user, inscriptions, triggerFetchInscriptions } = useSession();
+  const { user, triggerFetchInscriptions } = useSession();
   const { setModifiedEvent } = useMapContext();
   const [people, setPeople] = useState(Number(event.inscriptions));
 
   useEffect(() => {
-    if (event?.id) {
-      const users = inscriptions?.map((i) => i.id) || [];
-      setIsInscribed(users.includes(event.id));
+    if (user) {
+      getCheckInscription(user.id, event.id).then((response) => {
+        console.log("Fetched inscriptions", response);
+        if (response.isInscribed) {
+          setIsInscribed(true);
+        } else {
+          setIsInscribed(false);
+        }
+      })
     }
-  }, [inscriptions, event?.id]);
+  }, [user?.id]);
 
   const handleUploadInscription = async () => {
     const response = await addInscriptionHook(event.id, user.id);
 
-    triggerFetchInscriptions();
     setPeople((prevPeople) => prevPeople + 1);
     setModifiedEvent(event);
     setIsInscribed(true);
@@ -30,7 +36,6 @@ const mainInscribedBox = ({ event }) => {
   const handleDeleteInscription = async () => {
     const response = await deleteInscriptionHook(event.id, user.id);
 
-    triggerFetchInscriptions();
     setPeople((prevPeople) => prevPeople - 1);
     setModifiedEvent(event); 
     setIsInscribed(false);

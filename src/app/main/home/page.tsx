@@ -4,8 +4,6 @@ import "react-quill/dist/quill.snow.css";
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 
-import { useCheckpoints } from "../../../utils/context/ContextCheckpoint";
-import { useEvent } from "../../../utils/context/ContextEvent";
 import Logo from "../../../components/ui/logo_btn";
 import { useMapContext } from "../../../utils/context/ContextMap";
 import Tags from "../../../components/create/tags";
@@ -17,7 +15,6 @@ import { useSession } from "../../../utils/context/ContextSession";
 import { CssBaseline, setRef } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import Profile from "../../../components/profile/profile";
 import { useRouter } from "next/navigation";
 
 export default function Create() {

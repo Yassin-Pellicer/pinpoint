@@ -3,29 +3,36 @@ import { useState, useEffect} from "react";
 import { useSession } from "../../../utils/context/ContextSession";
 import { addBookmarkHook } from "../../../hooks/main/add/addBookmarkHook";
 import { deleteBookmarkHook } from "../../../hooks/main/delete/deleteBookmarkHook";
+import { getCheckBookmark } from "../../../hooks/main/get/getCheckBookmarkHook";
+import { useMapContext } from "../../../utils/context/ContextMap";
 
 const bookmarkBox = ({ event }) => {
   const { user, triggerFetchBookmarks, bookmarks} = useSession();
-  const [isBookmarked, setIsBookmarked] = useState(null);
+  const { setModifiedEvent } = useMapContext();
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
-    if (event?.id) {
-      const events = bookmarks?.map((i) => i.id) || [];
-      setIsBookmarked(events.includes(event.id));
+    if (user) {
+      getCheckBookmark(user.id, event.id).then((response) => {
+        console.log("Fetched bookmarks", response);
+        if (response.isBookmarked) {
+          setIsBookmarked(true);
+        } else {
+          setIsBookmarked(false);
+        }
+      })
     }
-  }, [bookmarks, event?.id]);
+  }, [user?.id]);
 
   const handleUploadBookmark = async () => {
     const response = await addBookmarkHook(event.id, user.id);
-    
-    triggerFetchBookmarks();
+    setModifiedEvent(event);
     setIsBookmarked(true);
   };
 
   const handleDeleteBookmark = async () => {
     const response = await deleteBookmarkHook(event.id, user.id);
-    
-    triggerFetchBookmarks();
+    setModifiedEvent(event);
     setIsBookmarked(false);
   };
 
