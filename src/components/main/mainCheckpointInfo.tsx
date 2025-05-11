@@ -45,7 +45,6 @@ const CheckpointInfo = ({ id, index }) => {
             <span className="material-icons text-sm mr-2">location_city</span>
             {checkpoints[index].address}
           </p>
-
         </div>
         <div className="ml-auto">
           <p className="material-icons text-2xl">tour</p>
@@ -53,36 +52,39 @@ const CheckpointInfo = ({ id, index }) => {
       </div>
 
       {checkpoints[index].banner || description ? (
-        <div className="mt-2 w-full h-fit m-auto">
-          <div className="overflow-auto flex flex-col px-3 w-full">
-            <div className="flex flex-col justify-center">
-              <label className="w-full mt-2">
-                {checkpoints[index].banner && (
-                  <div className="cursor-pointer relative flex justify-end items-center w-full h-15 mb-2 rounded-2xl overflow-hidden">
-                    <img
-                      src={checkpoints[index].banner}
-                      className="w-full h-full object-cover rounded-xl"
-                      alt="banner"
-                    />
-                  </div>
-                )}
-              </label>
+        <div className="mt-2 w-full pl-5 h-fit m-auto flex flex-row">
+          <div className="w-2 min-h-full pl-1 bg-blue-400 rounded-l-md mr-3"></div>
+          <div className="flex flex-col pl-4">
+            <div className="overflow-auto flex flex-col px-3 w-full">
+              <div className="flex flex-col justify-center">
+                <label className="w-full mt-2">
+                  {checkpoints[index].banner && (
+                    <div className="cursor-pointer relative flex justify-end items-center w-full h-15 mb-2 rounded-2xl overflow-hidden">
+                      <img
+                        src={checkpoints[index].banner}
+                        className="w-full h-full object-cover rounded-xl"
+                        alt="banner"
+                      />
+                    </div>
+                  )}
+                </label>
+              </div>
             </div>
+            <form className="flex flex-col px-3 w-full">
+              {checkpoints[index].banner && (
+                <h1 className="font-bold text-2xl mb-2">{name}</h1>
+              )}
+              <div className="flex flex-col mb-4">
+                <Quill
+                  key={index}
+                  value={description}
+                  readOnly={true}
+                  theme="bubble"
+                  modules={{ toolbar: false }}
+                />
+              </div>
+            </form>
           </div>
-          <form className="flex flex-col px-3 w-full">
-            {checkpoints[index].banner && (
-              <h1 className="font-bold text-2xl mb-2">{name}</h1>
-            )}
-            <div className="flex flex-col mb-4">
-              <Quill
-                key={index}
-                value={description}
-                readOnly={true}
-                theme="bubble"
-                modules={{ toolbar: false }}
-              />
-            </div>
-          </form>
         </div>
       ) : null}
     </div>

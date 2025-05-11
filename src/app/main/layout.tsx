@@ -44,7 +44,7 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex flex-row">
-      <div className="flex flex-col overflow-auto shrink-0 h-screen w-[525px] z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)]">
+      <div className="flex flex-col overflow-auto shrink-0 h-screen overflow-x-clip w-[525px] z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)]">
         <div className="flex flex-col sticky top-0 z-[100] bg-white">
           <div className="flex flex-row  justify-center p-2 bg-white-500 w-full h-fit items-center align-center">
             <div className="w-[24%] flex items-center justify-center">
