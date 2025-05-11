@@ -1,16 +1,17 @@
-import { sql } from "@vercel/postgres";
+import { connectToDatabase } from "../../../../../../utils/db/db";
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 export async function GET(_request, { params }) {
+  const client = await connectToDatabase();
+  const { id, userId } = params;
+  const query = await client.query(
+    'SELECT rating FROM "rating" WHERE event = $1 AND "user" = $2',
+    [id, userId]
+  );
   try {
-    const { id, userId } = params;
-    const query = await sql`
-      SELECT rating
-      FROM "rating" 
-      WHERE event = ${id} AND "user" = ${userId}`;
+    if (query.rows.length === 0) {
+      return NextResponse.json({ result: "ko" });
+    }
     const response = NextResponse.json({
       result: "ok",
       rating: query.rows[0].rating,
@@ -18,5 +19,8 @@ export async function GET(_request, { params }) {
     return response;
   } catch (error) {
     return NextResponse.json({ result: "ko" });
+  }
+  finally { 
+    client.release(); // This is critical
   }
 }

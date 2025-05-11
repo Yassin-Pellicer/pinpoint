@@ -32,17 +32,14 @@ const ProfileTabs = () => {
   useEffect(() => {
     if (user?.id != null) {
       getEventsByInscription(user.id).then((response) => {
-        console.log("Fetched inscriptions", response);
         setInscriptions(response.events);
       });
 
       getEventsByBookmark(user.id).then((response) => {
-        console.log("Fetched bookmarks", response);
         setBookmarks(response.events);
       });
 
       getEventsByAuthor(user.id).then((response) => {
-        console.log("Fetched created events", response);
         setCreatedEvents(response.events);
       });
     }

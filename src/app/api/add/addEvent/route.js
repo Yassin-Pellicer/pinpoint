@@ -1,7 +1,9 @@
-import { sql } from "@vercel/postgres";
+import { connectToDatabase } from "../../../../utils/db/db";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
+  const client = await connectToDatabase();
+
   try {
     let {
       id,
@@ -59,51 +61,76 @@ export async function POST(request) {
     }
 
     if (id) {
-      const checkIdQuery = await sql`SELECT id FROM event WHERE id = ${id}`;
-      console.log("Event updated:", id);
+      const checkIdQuery = await client.query(
+        "SELECT id FROM event WHERE id = $1",
+        [id]
+      );
       if (checkIdQuery.rowCount > 0) {
-        await sql`
+        await client.query(
+          `
           UPDATE event 
           SET 
-            name = ${name},
-            description = ${description},
-            position_lat = ${marker.position[0]},
-            position_lng = ${marker.position[1]},
-            banner = ${banner},
-            qr = ${qr},
-            "isPublic" = ${isPublic},
-            author = ${author},
-            "enableRatings" = ${enableRatings},
-            "enableComments" = ${enableComments},
-            "enableInscription" = ${enableInscription},
-            capacity = ${capacity},
-            address = ${address},
-            start = ${start},
-            "end" = ${end},
-            date = ${date},
+            name = $1,
+            description = $2,
+            position_lat = $3,
+            position_lng = $4,
+            banner = $5,
+            qr = $6,
+            "isPublic" = $7,
+            author = $8,
+            "enableRatings" = $9,
+            "enableComments" = $10,
+            "enableInscription" = $11,
+            capacity = $12,
+            address = $13,
+            start = $14,
+            "end" = $15,
+            date = $16,
             creationtime = NOW()
-          WHERE id = ${id}
-        `;
-        console.log("Event updated:", id);
-        await sql`
-          DELETE FROM event_tags WHERE event_id = ${id}
-        `;
-        console.log("Event updated:", id);
+          WHERE id = $17
+        `,
+          [
+            name,
+            description,
+            marker.position[0],
+            marker.position[1],
+            banner,
+            qr,
+            isPublic,
+            author,
+            enableRatings,
+            enableComments,
+            enableInscription,
+            capacity,
+            address,
+            start,
+            end,
+            date,
+            id,
+          ]
+        );
+        await client.query(
+          `
+          DELETE FROM event_tags WHERE event_id = $1
+        `,
+          [id]
+        );
         for (const tag of tags) {
-          await sql`
+          await client.query(
+            `
             INSERT INTO event_tags (event_id, tag_id)
-            SELECT ${id}, id FROM tags WHERE tag = ${tag.name}
-          `;
+            SELECT $1, id FROM tags WHERE tag = $2
+          `,
+            [id, tag.name]
+          );
         }
 
-        console.log("Event updated:", id);
-
-        return NextResponse.json({id, result: "ok"});
+        return NextResponse.json({ id, result: "ok" });
       }
     }
 
-    // If `id` doesn't exist or is invalid, insert a new one
-    const insertQuery = await sql`
+    const insertQuery = await client.query(
+      `
       INSERT INTO event (
         name, description, position_lat, position_lng, 
         banner, qr, "isPublic", author, 
@@ -111,21 +138,43 @@ export async function POST(request) {
         capacity, address, start, "end", date, creationtime
       )
       VALUES (
-        ${name}, ${description}, ${marker.position[0]}, ${marker.position[1]},
-        ${banner}, ${qr}, ${isPublic}, ${author},
-        ${enableRatings}, ${enableComments}, ${enableInscription},
-        ${capacity}, ${address}, ${start}, ${end}, ${date}, NOW()
+        $1, $2, $3, $4,
+        $5, $6, $7, $8,
+        $9, $10, $11,
+        $12, $13, $14, $15, $16, NOW()
       )
       RETURNING id
-    `;
+    `,
+      [
+        name,
+        description,
+        marker.position[0],
+        marker.position[1],
+        banner,
+        qr,
+        isPublic,
+        author,
+        enableRatings,
+        enableComments,
+        enableInscription,
+        capacity,
+        address,
+        start,
+        end,
+        date,
+      ]
+    );
 
     const insertedId = insertQuery.rows[0].id;
 
     for (const tag of tags) {
-      await sql`
+      await client.query(
+        `
         INSERT INTO event_tags (event_id, tag_id)
-        SELECT ${insertedId}, id FROM tags WHERE tag = ${tag.name}
-      `;
+        SELECT $1, id FROM tags WHERE tag = $2
+      `,
+        [insertedId, tag.name]
+      );
     }
 
     return NextResponse.json({ result: "ok", id: insertedId, created: true });
@@ -137,4 +186,8 @@ export async function POST(request) {
       status: 500,
     });
   }
+  finally { 
+    client.release(); // This is critical
+  }
 }
+

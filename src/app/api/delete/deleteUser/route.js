@@ -1,16 +1,18 @@
-import { sql } from "@vercel/postgres";
+import { connectToDatabase } from "../../../../../../utils/db/db";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
+  const client = await connectToDatabase();
   try {
     let {
       id,
     } = await request.json();
 
     if (id) {
-      await sql`
-        DELETE FROM user WHERE id = ${id}
-      `;
+      const deleteUserQuery = await client.query(
+        'DELETE FROM "user" WHERE id = $1',
+        [id]
+      );
       return NextResponse.json({ result: "ok", deleted: true });
     }
 
@@ -21,4 +23,8 @@ export async function POST(request) {
       status: 500,
     });
   }
+  finally { 
+    client.release(); // This is critical
+  }
 }
+

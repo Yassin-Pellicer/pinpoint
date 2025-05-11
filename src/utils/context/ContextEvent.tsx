@@ -127,8 +127,6 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     setEvent((prev) => ({ ...prev, date }));
   };
 
-  useEffect(() => {console.log(event)}, [event])
-
   return (
     <EventContext.Provider
       value={{

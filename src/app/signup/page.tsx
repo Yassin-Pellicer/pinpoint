@@ -54,7 +54,7 @@ export default function Signup() {
       }
     } catch (error) {
       setErrorMessage(t("exception"));
-    } finally {
+    } finally { 
       setLoading(false);
     }
   }

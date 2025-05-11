@@ -23,22 +23,8 @@ interface SessionContextType {
   setFollowers: (followers: number | null) => void;
   following: number | null;
   setFollowing: (following: number | null) => void;
-  createdEvents: Event[] | null;
-  setCreatedEvents: (createdEvents: Event[] | null) => void;
-  comments: Comment[] | null;
-  setComments: (comments: Comment[] | null) => void;
-  ratings: Rating[] | null;
-  setRatings: (ratings: Rating[] | null) => void;
-  bookmarks: Event[] | null;
-  setBookmarks: (bookmarks: Event[] | null) => void;
   profilePicture: string | null;
   setProfilePicture: (profilePicture: string | null) => void;
-  inscriptions: Event[] | null;
-  setInscriptions: (inscriptions: Event[] | null) => void;
-  fetchInscriptions: boolean;
-  triggerFetchInscriptions: () => void;
-  fetchBookmarks: boolean;
-  triggerFetchBookmarks: () => void;
   link: string | null;
   setLink: (link: string | null) => void;
   memberSince: Date | null;
@@ -162,58 +148,6 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     });
   };
 
-  const triggerFetchInscriptions = () => {
-    setFetchInscriptions(true);
-  };
-
-  const triggerFetchBookmarks = () => {
-    setFetchBookmarks(true);
-  };
-
-  useEffect(() => { 
-    if (fetchInscriptions && user !== null) {
-      getEventsByInscription(user?.id).then(async (response) => {
-        setInscriptions(response.events);
-        setFetchInscriptions(false);
-      });
-    }
-  }, [fetchInscriptions]);
-
-  useEffect(() => { 
-    if (fetchBookmarks && user !== null) {
-      getEventsByBookmark(user?.id).then(async (response) => {
-        setBookmarks(response.events);
-        setFetchBookmarks(false);
-      });
-    }
-  }, [fetchBookmarks]);
-
-  useEffect(() => {
-    if (user?.id != null) {
-      getEventsByInscription(user?.id).then(async (response) => {
-        setInscriptions(response.events);
-        setFetchInscriptions(false);
-      });
-    }
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (user?.id != null) {
-      getEventsByBookmark(user?.id).then(async (response) => {
-        setBookmarks(response.events);
-        setFetchBookmarks(false);
-      });
-    }
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (user?.id != null) {
-      getEventsByAuthor(user?.id).then(async (response) => {
-        setCreatedEvents(response.events);
-      });
-    }
-  }, [user?.id]);
-
   return (
     <SessionContext.Provider
       value={{
@@ -233,24 +167,10 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         setFollowers,        
         following: user?.following,
         setFollowing,        
-        comments: user?.comments,
-        setComments,
-        ratings: user?.ratings,
-        setRatings,
-        bookmarks: user?.bookmarks,
-        setBookmarks,
-        inscriptions: user?.inscriptions,
-        setInscriptions,
-        createdEvents: user?.createdEvents,
-        setCreatedEvents,
         link: user?.link,
         setLink,
         memberSince: user?.memberSince,
         setMemberSince,
-        fetchInscriptions,
-        triggerFetchInscriptions,
-        fetchBookmarks,
-        triggerFetchBookmarks,
       }}
     >
       {children}

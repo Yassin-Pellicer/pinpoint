@@ -1,14 +1,14 @@
-import { sql } from '@vercel/postgres';
+import { connectToDatabase } from '../../../utils/db/db';
 import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
 export async function POST(request) {
+  const client = connectToDatabase();
   const { email, password, remember } = await request.json();
-
   try {
-    const query = await sql`SELECT * FROM "user" WHERE "email" = ${email}`;
+    const query = await client.query('SELECT * FROM "user" WHERE "email" = $1', [email]);
     const { username, id } = query.rows[0];
 
     if (username === undefined) {
@@ -43,6 +43,9 @@ export async function POST(request) {
   } catch (error) {
     console.error('Login Error:', error);
     return NextResponse.json({ result: "exception" });
+  }
+  finally { 
+    client.release(); // This is critical
   }
 }
 

@@ -24,7 +24,6 @@ export default function SwiperComponent({events}) {
     setEvent(event);
     getCheckpointsHook(event?.id).then((res) => {
       if (res) setCheckpoints(res.checkpoints);
-      console.log(res)
       setLoading(false);
     }).finally(() => {
       setEditMode(true);

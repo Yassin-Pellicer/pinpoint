@@ -7,48 +7,39 @@ import { getCheckBookmark } from "../../../hooks/main/get/getCheckBookmarkHook";
 import { useMapContext } from "../../../utils/context/ContextMap";
 
 const bookmarkBox = ({ event }) => {
-  const { user, triggerFetchBookmarks, bookmarks} = useSession();
+  const { user } = useSession();
   const { setModifiedEvent } = useMapContext();
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     if (user) {
       getCheckBookmark(user.id, event.id).then((response) => {
-        console.log("Fetched bookmarks", response);
-        if (response.isBookmarked) {
-          setIsBookmarked(true);
-        } else {
-          setIsBookmarked(false);
-        }
+        setIsBookmarked(response.isBookmarked);
       })
     }
   }, [user?.id]);
 
   const handleUploadBookmark = async () => {
     const response = await addBookmarkHook(event.id, user.id);
-    setModifiedEvent(event);
+    setModifiedEvent(event); 
     setIsBookmarked(true);
   };
 
   const handleDeleteBookmark = async () => {
     const response = await deleteBookmarkHook(event.id, user.id);
-    setModifiedEvent(event);
+    setModifiedEvent(event); 
     setIsBookmarked(false);
   };
 
   return (
     <div
       className={`h-auto overflow-hidden ${
-        isBookmarked === null
-          ? "bg-gray-400"
-          : isBookmarked
-          ? "bg-blue-500"
-          : "bg-orange-500"
+        isBookmarked
+          ? "bg-orange-500"
+          : "bg-blue-500"
       } relative hover:cursor-pointer transition duration-100`}
       onClick={() =>
-        isBookmarked === null
-          ? null
-          : isBookmarked
+        isBookmarked
           ? handleDeleteBookmark()
           : handleUploadBookmark()
       }
@@ -74,7 +65,7 @@ const bookmarkBox = ({ event }) => {
               className="text-2xl tracking-tighter font-bold mb-2 text-white break-words"
               style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
             >
-              {!isBookmarked ? "Añadido a Marcadores" : "Añadir a eventos marcados"}
+              {isBookmarked ? "Añadido a Marcadores" : "Añadir a eventos marcados"}
             </h1>
           )}
           <p

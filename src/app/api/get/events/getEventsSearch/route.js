@@ -1,7 +1,8 @@
-import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
+import { connectToDatabase } from "../../../../../utils/db/db";
+import { NextResponse } from "next/server";
 
 export async function GET(request) {
+  const client = await connectToDatabase();
   try {
     const { searchParams } = new URL(request.url);
     const tagsParam = searchParams.get("tags"); 
@@ -11,11 +12,11 @@ export async function GET(request) {
     let result;
 
     if (tags.length && !search) {
-      result = await sql`
+      result = await client.query(`
         SELECT e.*
         FROM event e
         JOIN event_tags et ON e.id = et.event_id
-        WHERE et.tag_id = ANY(${tags})
+        WHERE et.tag_id = ANY($1)
          AND (
           ("start" IS NULL AND "end" IS NULL)
           OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
@@ -23,16 +24,16 @@ export async function GET(request) {
           OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
         )
         GROUP BY e.id
-        HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
-      `;
+        HAVING COUNT(DISTINCT et.tag_id) = $2
+      `, [tags, tags.length]);
     } else if (!tags.length && search) {
       const searchQuery = `%${search}%`;
-      result = await sql`
+      result = await client.query(`
         SELECT *
         FROM "event" e
         WHERE (
-          unaccent(lower(e.name)) LIKE unaccent(lower(${searchQuery}))
-          OR unaccent(lower(e.description)) LIKE unaccent(lower(${searchQuery}))
+          unaccent(lower(e.name)) LIKE unaccent(lower($1))
+          OR unaccent(lower(e.description)) LIKE unaccent(lower($1))
         )
         AND (
           ("start" IS NULL AND "end" IS NULL)
@@ -40,14 +41,14 @@ export async function GET(request) {
           OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
           OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
         )
-      `;
+      `, [searchQuery]);
     } else {
       const searchQuery = `%${search}%`;
-      result = await sql`
+      result = await client.query(`
         SELECT e.*
         FROM event e
         JOIN event_tags et ON e.id = et.event_id
-        WHERE et.tag_id = ANY(${tags})
+        WHERE et.tag_id = ANY($1)
         AND (
           ("start" IS NULL AND "end" IS NULL)
           OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
@@ -55,21 +56,21 @@ export async function GET(request) {
           OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
         )
         AND (
-          unaccent(lower(e.name)) LIKE unaccent(lower(${searchQuery}))
-          OR unaccent(lower(e.description)) LIKE unaccent(lower(${searchQuery}))
+          unaccent(lower(e.name)) LIKE unaccent(lower($2))
+          OR unaccent(lower(e.description)) LIKE unaccent(lower($2))
         )
         GROUP BY e.id
-        HAVING COUNT(DISTINCT et.tag_id) = ${tags.length}
-      `;
+        HAVING COUNT(DISTINCT et.tag_id) = $3
+      `, [tags, searchQuery, tags.length]);
     }
 
     const eventIds = result.rows.map(event => event.id);
 
-    const tagsQuery = await sql`
+    const tagsQuery = await client.query(`
       SELECT *
       FROM "event_tags"
-      WHERE event_id = ANY(${eventIds})
-    `;
+      WHERE event_id = ANY($1)
+    `, [eventIds]);
 
     const eventsWithMarkers = result.rows?.map((event) => {
       const eventTags = tagsQuery.rows.filter((tag) => tag.event_id === event.id);
@@ -88,5 +89,8 @@ export async function GET(request) {
 
   } catch (error) {
     return NextResponse.json({ result: "ko", error: error.message }, { status: 500 });
+  }
+  finally { 
+    client.release(); // This is critical
   }
 }

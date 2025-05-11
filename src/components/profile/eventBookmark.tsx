@@ -12,22 +12,19 @@ export default function SwiperComponent( {event} ) {
   const { user } = useSession();
   const router = useRouter();
   const { setSelectedEvent } = useMapContext();
-  const { triggerFetchBookmarks } = useSession();
   
   const [isBookmarked, setIsBookmarked] = useState(true);
 
   const handleUploadBookmark = async () => {
     const response = await addBookmarkHook(event.id, user.id);
-    
+    setSelectedEvent(event);
     setIsBookmarked(true);
-    triggerFetchBookmarks();
   };
 
   const handleDeleteBookmark = async () => {
     const response = await deleteBookmarkHook(event.id, user.id);
-    
+    setSelectedEvent(event);
     setIsBookmarked(false);
-    triggerFetchBookmarks();
   };
 
   return (

@@ -11,23 +11,16 @@ export default function SwiperComponent( {event} ) {
   const { user } = useSession();
   const router = useRouter();
   const { setSelectedEvent, setModifiedEvent } = useMapContext();
-  const { triggerFetchInscriptions } = useSession();
   const [isInscribed, setIsInscribed] = useState(true);
 
   const handleUploadInscription = async () => {
     const response = await addInscriptionHook(event.id, user.id);
-    
     setIsInscribed(true);
-    setModifiedEvent(event);
-    triggerFetchInscriptions();
   };
 
   const handleDeleteInscription = async () => {
     const response = await deleteInscriptionHook(event.id, user.id);
-    
     setIsInscribed(false);
-    setModifiedEvent(event);
-    triggerFetchInscriptions();
   };
 
   return (
@@ -46,6 +39,7 @@ export default function SwiperComponent( {event} ) {
           onClick={(e) => {
             router.push(`/main/event/${event.id}`);
             setSelectedEvent(event);
+            setModifiedEvent(event);
             e.stopPropagation();
           }}
           className="flex flex-row justify-between items-center"

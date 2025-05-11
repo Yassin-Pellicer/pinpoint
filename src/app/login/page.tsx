@@ -43,7 +43,7 @@ export default function Login() {
       }
     } catch (error) {
       setErrorMessage(t("exception"));
-    } finally {
+    } finally { 
       setLoading(false);
     }
   }

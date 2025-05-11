@@ -37,6 +37,7 @@
     "next-auth": "^4.24.7",
     "next-intl": "^3.26.3",
     "nextjs": "^0.0.3",
+    "pg": "^8.15.6",
     "quill": "^2.0.3",
     "random-bigint": "^0.0.1",
     "react": "^18",

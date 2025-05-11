@@ -1,18 +1,22 @@
-import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
+import { connectToDatabase } from "../../../../utils/db/db";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
+  const client = await connectToDatabase();
   const { commentId } = await request.json()
   try {
-      const deleteUserQuery = await sql`
-      DELETE FROM comment
-      WHERE id = ${commentId} 
-    `;
+      await client.query(
+        'DELETE FROM comment WHERE id = $1',
+        [commentId]
+      );
     return NextResponse.json({ result: "ok" })
 
   } catch (error) {
     console.error('Delete Comment Error:', error);
     return NextResponse.json({ result: "" })
+  }
+  finally { 
+    client.release(); // This is critical
   }
 }
 

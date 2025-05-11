@@ -1,25 +1,25 @@
-import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
-
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; 
+import { connectToDatabase } from "../../../../utils/db/db";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
+  const client = await connectToDatabase();
   const { eventId, id } = await request.json()
   try {
-    const insertUserQuery = await sql`
-    DELETE FROM inscription_user
-    WHERE "user" = ${id} AND event = ${eventId}
-    `;
-    const updateEventQuery = await sql`
-    UPDATE event
-    SET inscriptions = (SELECT COUNT(*) FROM inscription_user WHERE event = ${eventId})
-    WHERE id = ${eventId}
-    `;
-    return NextResponse.json({ result: "ok" })
-
+    await client.query(
+      'DELETE FROM inscription_user WHERE "user" = $1 AND event = $2',
+      [id, eventId]
+    );
+    await client.query(
+      'UPDATE event SET inscriptions = (SELECT COUNT(*) FROM inscription_user WHERE event = $1) WHERE id = $1',
+      [eventId]
+    );
+    return NextResponse.json({ result: "ok" });
   } catch (error) {
     console.error('Register Error:', error);
-    return NextResponse.json({ result: "" })
+    return NextResponse.json({ result: "" });
+  } 
+  finally { 
+    client.release();
   }
 }
+

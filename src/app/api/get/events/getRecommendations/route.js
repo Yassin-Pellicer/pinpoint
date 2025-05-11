@@ -1,7 +1,8 @@
-import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
+import { connectToDatabase } from "../../../../../utils/db/db";
+import { NextResponse } from "next/server";
 
 export async function GET(request) {
+  const client = await connectToDatabase();
   try {
     const { searchParams } = new URL(request.url);
 
@@ -20,13 +21,13 @@ export async function GET(request) {
     const minLng = userLon - deltaLng;
     const maxLng = userLon + deltaLng;
 
-    const result = await sql`
+    const result = await client.query(`
       SELECT *
       FROM "event"
-      WHERE position_lat > ${minLat}
-        AND position_lat < ${maxLat}
-        AND position_lng > ${minLng}
-        AND position_lng < ${maxLng}
+      WHERE position_lat > $1
+        AND position_lat < $2
+        AND position_lng > $3
+        AND position_lng < $4
       AND (
         ("start" IS NULL AND "end" IS NULL)
         OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
@@ -35,15 +36,15 @@ export async function GET(request) {
       )
       ORDER BY RANDOM()
       LIMIT 5
-    `;
+    `, [minLat, maxLat, minLng, maxLng]);
 
     const eventIds = result.rows.map(event => event.id);
 
-    const tagsQuery = await sql`
+    const tagsQuery = await client.query(`
       SELECT *
       FROM "event_tags"
-      WHERE event_id = ANY(${eventIds})
-    `;
+      WHERE event_id = ANY($1)
+    `, [eventIds]);
 
     const eventsWithMarkers = result.rows?.map((event) => {
       const eventTags = tagsQuery.rows.filter((tag) => tag.event_id === event.id);
@@ -62,5 +63,8 @@ export async function GET(request) {
 
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+  finally { 
+    client.release(); // This is critical
   }
 }

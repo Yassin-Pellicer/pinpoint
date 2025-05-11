@@ -20,8 +20,6 @@ export default function Create() {
   const { location, editMode } = useMapContext();
   const { checkpoints } = useCheckpoints();
 
-  useEffect(() => {console.log(editMode)}, [editMode])
-
   const [selectedButton, setSelectedButton] = useState(
     checkpoints.length === 0 ? "simple" : "course"
   );

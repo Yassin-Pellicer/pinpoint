@@ -1,19 +1,21 @@
-import { sql } from '@vercel/postgres';
+import { connectToDatabase } from "../../../../utils/db/db";
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; 
-
 export async function POST(request) {
-  const { eventId, id } = await request.json()
+  const { eventId, id } = await request.json();
+  const client = await connectToDatabase();
   try {
-    const insertUserQuery = await sql`
-    INSERT INTO bookmarks ("user", event)
-    VALUES (${id}, ${eventId})
-    `;
-    return NextResponse.json({ result: "ok" })
+    await client.query(
+      'INSERT INTO bookmarks ("user", event) VALUES ($1, $2)', 
+    [id, eventId]);
+    return NextResponse.json({ result: "ok" });
 
   } catch (error) {
-    return NextResponse.json({ result: "ko" })
+    return NextResponse.json({ result: "ko" });
+  }
+  finally { 
+    client.release(); // This is critical
   }
 }
+
+

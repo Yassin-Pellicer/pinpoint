@@ -1,17 +1,15 @@
-import { sql } from '@vercel/postgres';
+import { connectToDatabase } from '../../../../../utils/db/db';
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; 
-
 export async function GET(_request, { params }) {
+  const client = await connectToDatabase();
   try {
     const { id } = params;
     
-    const query = await sql`
-      SELECT ROUND(AVG(rating), 2) AS avg_rating
-      FROM "rating"
-      WHERE event = ${id}`;
+    const query = await client.query(
+      'SELECT ROUND(AVG(rating), 2) AS avg_rating FROM "rating" WHERE event = $1',
+      [id]
+    );
 
     const response = NextResponse.json({ result: "ok", rating: query.rows[0].avg_rating });
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -23,4 +21,8 @@ export async function GET(_request, { params }) {
     console.error('Error:', error);
     return NextResponse.json({ result: "ko" });
   }
+  finally { 
+    client.release(); // This is critical
+  }
 }
+

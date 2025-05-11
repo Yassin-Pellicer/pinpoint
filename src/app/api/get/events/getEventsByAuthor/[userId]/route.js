@@ -1,26 +1,22 @@
-import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
-
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; 
+import { connectToDatabase } from "../../../../../../utils/db/db";
+import { NextResponse } from "next/server";
 
 export async function GET(_request, { params }) {
+  const client = await connectToDatabase();
   const userId = parseInt(params.userId);
 
   try {
-    const result = await sql`
-      SELECT e.*
-      FROM event e
-      WHERE e.author = ${userId}
-    `;
+    const result = await client.query(
+      'SELECT e.* FROM event e WHERE e.author = $1',
+      [userId]
+    );
 
     const eventIds = result.rows.map((event) => event.id);
 
-    const tagsQuery = await sql`
-      SELECT *
-      FROM "event_tags"
-      WHERE event_id = ANY(${eventIds})
-    `;
+    const tagsQuery = await client.query(
+      'SELECT * FROM "event_tags" WHERE event_id = ANY($1)',
+      [eventIds]
+    );
 
     const eventsWithMarkers =
       result.rows?.map((event) => {
@@ -45,4 +41,8 @@ export async function GET(_request, { params }) {
       { status: 500 }
     );
   }
+  finally { 
+    client.release(); // This is critical
+  }
 }
+

@@ -8,19 +8,14 @@ import { getCheckInscription } from "../../../hooks/main/get/getCheckInscription
 
 const mainInscribedBox = ({ event }) => {
   const [isInscribed, setIsInscribed] = useState(null);
-  const { user, triggerFetchInscriptions } = useSession();
+  const { user } = useSession();
   const { setModifiedEvent } = useMapContext();
   const [people, setPeople] = useState(Number(event.inscriptions));
 
   useEffect(() => {
     if (user) {
       getCheckInscription(user.id, event.id).then((response) => {
-        console.log("Fetched inscriptions", response);
-        if (response.isInscribed) {
-          setIsInscribed(true);
-        } else {
-          setIsInscribed(false);
-        }
+        setIsInscribed(response.isInscribed);
       })
     }
   }, [user?.id]);
