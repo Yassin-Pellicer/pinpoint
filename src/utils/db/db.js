@@ -12,8 +12,6 @@ const pool =
     database: process.env.DB_NAME,
     ssl: { rejectUnauthorized: false },
     max: 1,
-    idleTimeoutMillis: 10000,
-    connectionTimeoutMillis: 5000,
   });
 
 if (!globalForPg.pgPool) {

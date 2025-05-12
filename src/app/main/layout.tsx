@@ -46,14 +46,11 @@ export default function Layout({ children }) {
     <div className="flex flex-row">
       <div className="flex flex-col overflow-auto shrink-0 h-screen overflow-x-clip w-[525px] z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)]">
         <div className="flex flex-col sticky top-0 z-[100] bg-white">
-          <div className="flex flex-row  justify-center p-2 bg-white-500 w-full h-fit items-center align-center">
-            <div className="w-[24%] flex items-center justify-center">
-              <Logo />
-            </div>
+          <div className="flex flex-row mt-2 mb-2 justify-center p-2 bg-white-500 w-full h-fit items-center align-center">
             <input
               type="text"
-              className="border-[1px] mx-4 border-gray-500 rounded-lg px-4 py-2 w-full text-xs"
-              placeholder={"🔍 Escribe para buscar eventos"}
+              className="border-[1px] border-gray-500 rounded-full ml-2 px-4 py-2 w-full text-xs"
+              placeholder={"Escribe para buscar eventos"}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -63,17 +60,17 @@ export default function Layout({ children }) {
                 e.preventDefault();
               }}
               className="font-bold bg-blue-500 border-gray-400 text-sm text-white
-                text-white-500 rounded-lg px-2 h-[34px] hover:bg-blue-500
+                text-white-500 rounded-2xl hover:bg px-2 h-[34px] hover:bg-blue-500
                 border-[1px] hover:text-white w-fit
-                transition duration-300 mr-2"
+                transition duration-300 mr-2 ml-4"
             >
               Tags
             </button>
             <button
               className="font-bold bg-blue-500 border-gray-400 text-sm text-white
-                text-white-500 rounded-lg px-2 h-[34px] hover:bg-blue-500
+                text-white-500 rounded-2xl px-2 h-[34px] hover:bg-blue-500
                 border-[1px] hover:text-white w-fit
-                transition duration-300"
+                transition duration-300 mr-4"
             >
               <i className="material-icons text-white text-xl">lock</i>
             </button>

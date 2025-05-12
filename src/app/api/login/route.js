@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
 export async function POST(request) {
-  const client = connectToDatabase();
+  const client = await connectToDatabase();
   const { email, password, remember } = await request.json();
   try {
     const query = await client.query('SELECT * FROM "user" WHERE "email" = $1', [email]);
