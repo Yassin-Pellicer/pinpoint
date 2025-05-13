@@ -18,12 +18,16 @@ import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 
 export default function Create() {
   const { location, editMode } = useMapContext();
-  const { checkpoints } = useCheckpoints();
+  const { checkpoints, setCheckpoints } = useCheckpoints();
 
   const [selectedButton, setSelectedButton] = useState(
     checkpoints.length === 0 ? "simple" : "course"
   );
   const t = useTranslations("Create");
+
+  useEffect(() => {
+    setCheckpoints([]);
+  }, []);
 
   if (!location) {
     return <LoadingScreen />;
@@ -31,54 +35,62 @@ export default function Create() {
 
   return (
     <div className="flex flex-row">
-      <div className="flex flex-col overflow-auto bg-blue-500 w-[550px] shrink-0 h-screen px-6">
+      <div className="flex flex-col overflow-auto bg-blue-500 w-[550px] shrink-0 h-screen">
         {/* Event type */}
         {!editMode && (
-          <div className="mb-6 mt-6 rounded-2xl bg-white p-6">
-            <h1 className="font-bold text-3xl mb-2 tracking-tight ">
-              {t("type")}
-            </h1>
-            <div className="flex justify-between mt-6 flex-row">
-              <button
-                className={` border border-black  rounded-2xl p-2 hover:bg-blue-500
+          <>
+            <div className="h-auto bg-white border-b-[1px] border-gray-300">
+              <div className="relative p-5 z-10">
+                <div className="flex flex-row items-center ">
+                  <h1 className="text-2xl tracking-tighter font-bold text-black">
+                    Elige el tipo de evento
+                  </h1>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col bg-white p-6 border-b-[1px] border-gray-300">
+              <div className="flex justify-between flex-row">
+                <button
+                  className={` border border-black  rounded-2xl p-2 hover:bg-blue-500
                  hover:border-blue-500 hover:text-white transition-colors duration-100 font-bold tracking-tighter text-md ${
                    selectedButton === "simple"
                      ? "bg-blue-500 border-blue-500 text-white "
                      : "bg-transparent text-black"
                  }`}
-                onClick={() => {
-                  if (selectedButton === "simple") return;
-                  setSelectedButton("simple");
-                }}
-              >
-                {t("simple")}
-              </button>
-              <button
-                className={`border border-black rounded-2xl p-2 hover:bg-blue-500
+                  onClick={() => {
+                    if (selectedButton === "simple") return;
+                    setSelectedButton("simple");
+                  }}
+                >
+                  {t("simple")}
+                </button>
+                <button
+                  className={`border border-black rounded-2xl p-2 hover:bg-blue-500
                  hover:border-blue-500 hover:text-white transition-colors duration-100 font-bold tracking-tighter text-md ${
                    selectedButton === "course"
                      ? " bg-blue-500 border-blue-500 text-white "
                      : "bg-transparent text-black"
                  }`}
-                onClick={() => {
-                  if (selectedButton === "course") return;
-                  setSelectedButton("course");
-                }}
-              >
-                {t("course")}
-              </button>
+                  onClick={() => {
+                    if (selectedButton === "course") return;
+                    setSelectedButton("course");
+                  }}
+                >
+                  {t("course")}
+                </button>
+              </div>
+              <p className="text-sm mt-4">
+                {t.rich("description", {
+                  b: (chunks) => <b>{chunks}</b>,
+                })}
+              </p>
             </div>
-            <p className="text-sm mt-4">
-              {t.rich("description", {
-                b: (chunks) => <b>{chunks}</b>,
-              })}
-            </p>
-          </div>
+          </>
         )}
 
         {editMode && (
-          <div className="mb-6 mt-6 rounded-2xl bg-green-400 p-6">
-            <h1 className="font-bold text-3xl mb-2 tracking-tight ">
+          <div className="flex flex-col bg- p-6 border-b border-gray-300 border-[1px]">
+            <h1 className="font-bold text-green-500 text-3xl mb-2 tracking-tight ">
               Estás en modo edición.
             </h1>
             <p className="text-sm mt-4">

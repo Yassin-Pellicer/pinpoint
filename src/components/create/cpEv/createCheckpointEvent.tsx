@@ -1,4 +1,12 @@
-import { Slider, FormControl, FormControlLabel, Switch, Snackbar, Alert, Typography } from "@mui/material";
+import {
+  Slider,
+  FormControl,
+  FormControlLabel,
+  Switch,
+  Snackbar,
+  Alert,
+  Typography,
+} from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import CpList from "./createCheckpointList";
@@ -11,12 +19,12 @@ import { createEventHook } from "../../../hooks/create/addEventHook";
 import { addTagsHook } from "../../../hooks/create/addTagsHook";
 import { useCheckpoints } from "../../../utils/context/ContextCheckpoint";
 import { addCheckpointsHook } from "../../../hooks/create/addCheckpointsHook";
-import SnackbarContent from '@mui/material/SnackbarContent';
-import { useRouter } from 'next/navigation';
+import SnackbarContent from "@mui/material/SnackbarContent";
+import { useRouter } from "next/navigation";
 import Logo from "../../ui/logo";
 import Counter from "../../ui/counter";
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import TextField from '@mui/material/TextField';
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import TextField from "@mui/material/TextField";
 import { useSession } from "../../../utils/context/ContextSession";
 
 const CheckpointEvent = () => {
@@ -50,11 +58,11 @@ const CheckpointEvent = () => {
     end,
     setEnd,
     date,
-    setDate
+    setDate,
   } = useEvent();
 
   const t = useTranslations("Create");
-  const tagsTrans= useTranslations("Tags");
+  const tagsTrans = useTranslations("Tags");
 
   const [loading, setLoading] = useState(false);
   const [openCp, setOpenCp] = useState(false);
@@ -95,7 +103,7 @@ const CheckpointEvent = () => {
         setSnackbarMessage(t("successNotif"));
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
-        
+
         router.push("/main/home");
       }
     } catch (error) {
@@ -239,7 +247,7 @@ const CheckpointEvent = () => {
           </div>
         )}
 
-<div className="h-auto rounded-2xl mt-3 bg-gray-300 relative transition duration-100 overflow-hidden">
+        <div className="h-auto rounded-2xl mt-3 bg-gray-300 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div className="relative p-4 z-10">
               <div className="flex flex-row items-center justify-between">
@@ -272,7 +280,10 @@ const CheckpointEvent = () => {
                       Hora de Inicio
                     </h1>
                     <button
-                      onClick={(e) => {e.preventDefault(); setStart(null)}}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setStart(null);
+                      }}
                       style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                       className="flex items-center justify-center ml-auto"
                     >
@@ -321,7 +332,10 @@ const CheckpointEvent = () => {
                       Hora de Fin
                     </h1>
                     <button
-                      onClick={(e) => {e.preventDefault(); setEnd(null)}}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setEnd(null);
+                      }}
                       style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                       className="flex items-center justify-center ml-auto"
                     >
@@ -340,15 +354,13 @@ const CheckpointEvent = () => {
                         );
                         setSnackbarSeverity("error");
                         setSnackbarOpen(true);
-                      } 
-                      else if (newValue > end && end) {
+                      } else if (newValue > end && end) {
                         setSnackbarMessage(
                           "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
                         );
                         setSnackbarSeverity("error");
                         setSnackbarOpen(true);
-                      }
-                      else {
+                      } else {
                         setEnd(newValue);
                       }
                     }}
@@ -368,53 +380,56 @@ const CheckpointEvent = () => {
               </div>
 
               <div className="flex mt-4 flex-col">
-                  <div
+                <div
+                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  className="flex flex-row mb-2 items-center"
+                >
+                  <i className="material-icons text-white text-2xl mr-2">
+                    timer
+                  </i>
+                  <h1 className="text-white text-2xl tracking-tighter font-bold">
+                    Fecha y hora del evento*
+                  </h1>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setDate(null);
+                    }}
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    className="flex flex-row mb-2 items-center"
+                    className="flex items-center justify-center ml-auto"
                   >
-                    <i className="material-icons text-white text-2xl mr-2">
-                      timer
-                    </i>
-                    <h1 className="text-white text-2xl tracking-tighter font-bold">
-                      Fecha y hora del evento*
-                    </h1>
-                    <button
-                      onClick={(e) => {e.preventDefault(); setDate(null)}}
-                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                      className="flex items-center justify-center ml-auto"
-                    >
-                      <i className="material-icons text-white">refresh</i>
-                    </button>
-                  </div>
-                  <DateTimePicker
-                    label="Seleccione fecha y hora"
-                    format="dd/MM/yyyy HH:mm"
-                    value={new Date(date)}
-                    onChange={(newValue) => {
-                      if (!newValue) return;
-                      if (newValue < end && end) {
-                        setSnackbarMessage(
-                          "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
-                        );
-                        setSnackbarSeverity("error");
-                        setSnackbarOpen(true);
-                      } else {
-                        setDate(newValue);
-                      }
-                    }}
-                    slotProps={{
-                      textField: {
-                        InputProps: {
-                          readOnly: true,
-                          style: { fontSize: "0.875rem" },
-                        },
-                        InputLabelProps: {
-                          style: { fontSize: "0.875rem" },
-                        },
-                      },
-                    }}
-                  />
+                    <i className="material-icons text-white">refresh</i>
+                  </button>
                 </div>
+                <DateTimePicker
+                  label="Seleccione fecha y hora"
+                  format="dd/MM/yyyy HH:mm"
+                  value={new Date(date)}
+                  onChange={(newValue) => {
+                    if (!newValue) return;
+                    if (newValue < end && end) {
+                      setSnackbarMessage(
+                        "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
+                      );
+                      setSnackbarSeverity("error");
+                      setSnackbarOpen(true);
+                    } else {
+                      setDate(newValue);
+                    }
+                  }}
+                  slotProps={{
+                    textField: {
+                      InputProps: {
+                        readOnly: true,
+                        style: { fontSize: "0.875rem" },
+                      },
+                      InputLabelProps: {
+                        style: { fontSize: "0.875rem" },
+                      },
+                    },
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

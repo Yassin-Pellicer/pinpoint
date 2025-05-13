@@ -92,7 +92,7 @@ const SimpleEvent = () => {
   };
 
   return (
-    <div className="mb-6 rounded-2xl bg-[#ffffff] px-2 pt-6">
+    <div className="bg-white">
       {loading && (
         <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
           <div className="animate-spin rounded-full h-[400px] w-[400px] border-b-8 border-white m-auto" />
@@ -121,13 +121,15 @@ const SimpleEvent = () => {
         </Alert>
       </Snackbar>
 
-      <form className="flex flex-col px-3 w-full" onSubmit={handleSubmit}>
-        <div className="flex flex-row items-center justify-between text-black">
-          <h1 className="text-3xl tracking-tight font-bold">
-            {t("Details.creation")}
-          </h1>
-          {isPublic && <i className="material-icons">public</i>}
-          {!isPublic && <i className="material-icons">lock</i>}
+      <form className="flex flex-col w-full" onSubmit={handleSubmit}>
+        <div className="h-auto bg-white  overflow-hidden border-b-[1px] border-gray-300">
+          <div className="relative p-5 z-10">
+            <div className="flex flex-row items-center ">
+              <h1 className="text-2xl tracking-tighter font-bold text-black">
+                Imagen de tu evento
+              </h1>
+            </div>
+          </div>
         </div>
 
         <input
@@ -138,17 +140,17 @@ const SimpleEvent = () => {
           onChange={(e) => fileURL(e, (url) => setBanner(url))}
         />
         <label htmlFor="image">
-          <div className="flex flex-col justify-center items-center mt-4 mb-4">
+          <div className="flex flex-col justify-center items-center">
             {banner ? (
-              <div className="cursor-pointer relative flex justify-end items-center w-full h-15 mb-2 rounded-2xl overflow-hidden border border-gray-400">
+              <div className="cursor-pointer relative flex justify-end items-center w-full h-15 overflow-hidden border-b border-gray-300">
                 <img
                   src={banner}
-                  className="w-full h-full object-cover rounded-2xl"
+                  className="w-full h-full object-cover"
                   alt="banner"
                 />
               </div>
             ) : (
-              <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 mb-2 rounded-2xl p-14 bg-[#e6e6e6] border border-gray-400 hover:bg-[#d6d6d6] transition duration-200">
+              <div className="flex flex-col cursor-pointer justify-center items-center w-full h-15 p-14 bg-[#e6e6e6] border-b border-gray-300 hover:bg-[#d6d6d6] transition duration-200">
                 <i className="text-gray-400 material-icons mr-1 text-[150px] select-none">
                   add_photo_alternate
                 </i>
@@ -160,17 +162,29 @@ const SimpleEvent = () => {
           </div>
         </label>
 
-        <label className="font-bold">{t("Details.title")}</label>
+        <div className="h-auto bg-white overflow-hidden border-b-[1px] border-gray-300">
+            <div className="flex flex-row items-center p-5 z-10">
+              <h1 className="text-2xl tracking-tighter font-bold text-black">
+                {t("Details.title")}
+              </h1>
+            </div>
+        </div>
+
         <input
           type="text"
           value={name}
+          placeholder="Escribe tu Título aquí..."
           onChange={(e) => {
             setName(e.target.value);
           }}
-          className="border border-black rounded p-1 mb-3"
+          className="border-b-[1px] bg-gray-100 border-gray-300 px-6 py-2 text-lg hover:bg-gray-200 transition duration-200"
         />
 
-        <label className="font-bold">{t("Details.description")}</label>
+            <div className="flex flex-row items-center p-5 z-10 ">
+              <h1 className="text-2xl tracking-tighter font-bold text-black">
+                {t("Details.description")}
+              </h1>
+            </div>
         <Quill
           value={description}
           onChange={setDescription}
@@ -182,8 +196,8 @@ const SimpleEvent = () => {
             setOpenTags(!openTags);
             e.preventDefault();
           }}
-          className="font-bold bg-transparent border-l-[1px] border-r-[1px] mt-[18px] border-b-[1px] text-sm border-gray-400 
-          text-black rounded-b-2xl p-2 mb-3 hover:bg-blue-500
+          className="font-bold bg-transparent mt-[16px] border-b-[1px] text-sm border-gray-300 
+          text-black p-2 hover:bg-blue-500
           hover:border-blue-500 hover:text-white 
           transition duration-300"
         >
@@ -192,7 +206,7 @@ const SimpleEvent = () => {
 
         {tags.length > 0 && (
           <div>
-            <div className="flex flex-wrap w-full gap-2 my-2">
+            <div className="flex flex-wrap w-full gap-2">
               {tags.map((tag) => (
                 <div
                   key={tag.tag_id}
@@ -206,28 +220,15 @@ const SimpleEvent = () => {
             </div>
           </div>
         )}
-
-        <div className="h-auto rounded-2xl mt-3 bg-gray-300 relative transition duration-100 overflow-hidden">
+            <div className="flex flex-row items-center p-5 z-10 border-b-[1px] border-gray-200 ">
+              <h1 className="text-2xl tracking-tighter font-bold text-black">
+                Vigencia y Fecha
+              </h1>
+            </div>
+        <div className="h-auto bg-gray-300 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div className="relative p-4 z-10">
-              <div className="flex flex-row items-center justify-between">
-                <div className="flex items-center">
-                  <i
-                    className="material-icons text-white text-4xl mr-2"
-                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                  >
-                    date_range
-                  </i>
-                  <h1
-                    className="text-2xl tracking-tighter font-bold text-white"
-                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                  >
-                    Vigencia del evento
-                  </h1>
-                </div>
-              </div>
-
-              <div className="grid mt-2 grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col">
                   <div
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
@@ -237,10 +238,13 @@ const SimpleEvent = () => {
                       timer
                     </i>
                     <h1 className="text-white tracking-tigher font-bold">
-                      Hora de Inicio
+                      Inicio de vigencia
                     </h1>
                     <button
-                      onClick={(e) => {e.preventDefault(); setStart(null)}}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setStart(null);
+                      }}
                       style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                       className="flex items-center justify-center ml-auto"
                     >
@@ -286,10 +290,13 @@ const SimpleEvent = () => {
                       timer_off
                     </i>
                     <h1 className="text-white tracking-tigher font-bold">
-                      Hora de Fin
+                      Fin de vigencia
                     </h1>
                     <button
-                      onClick={(e) => {e.preventDefault(); setEnd(null)}}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setEnd(null);
+                      }}
                       style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                       className="flex items-center justify-center ml-auto"
                     >
@@ -308,15 +315,13 @@ const SimpleEvent = () => {
                         );
                         setSnackbarSeverity("error");
                         setSnackbarOpen(true);
-
                       } else if (newValue > end && end) {
                         setSnackbarMessage(
                           "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
                         );
                         setSnackbarSeverity("error");
                         setSnackbarOpen(true);
-                      }
-                      else {
+                      } else {
                         setEnd(newValue);
                       }
                     }}
@@ -336,59 +341,62 @@ const SimpleEvent = () => {
               </div>
 
               <div className="flex mt-4 flex-col">
-                  <div
+                <div
+                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  className="flex flex-row mb-2 items-center"
+                >
+                  <i className="material-icons text-white text-2xl mr-2">
+                    timer
+                  </i>
+                  <h1 className="text-white text-lg tracking-tighter font-bold">
+                    Fecha y hora del evento*
+                  </h1>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setDate(null);
+                    }}
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    className="flex flex-row mb-2 items-center"
+                    className="flex items-center justify-center ml-auto"
                   >
-                    <i className="material-icons text-white text-2xl mr-2">
-                      timer
-                    </i>
-                    <h1 className="text-white text-2xl tracking-tighter font-bold">
-                      Fecha y hora del evento*
-                    </h1>
-                    <button
-                      onClick={(e) => {e.preventDefault(); setDate(null)}}
-                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                      className="flex items-center justify-center ml-auto"
-                    >
-                      <i className="material-icons text-white">refresh</i>
-                    </button>
-                  </div>
-                  <DateTimePicker
-                    label="Seleccione fecha y hora"
-                    format="dd/MM/yyyy HH:mm"
-                    value={new Date(date)}
-                    onChange={(newValue) => {
-                      if (!newValue) return;
-                      if (newValue < end && end) {
-                        setSnackbarMessage(
-                          "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
-                        );
-                        setSnackbarSeverity("error");
-                        setSnackbarOpen(true);
-                      } else {
-                        setDate(newValue);
-                      }
-                    }}
-                    slotProps={{
-                      textField: {
-                        InputProps: {
-                          readOnly: true,
-                          style: { fontSize: "0.875rem" },
-                        },
-                        InputLabelProps: {
-                          style: { fontSize: "0.875rem" },
-                        },
-                      },
-                    }}
-                  />
+                    <i className="material-icons text-white">refresh</i>
+                  </button>
                 </div>
+                <DateTimePicker
+                  label="Seleccione fecha y hora"
+                  format="dd/MM/yyyy HH:mm"
+                  value={new Date(date)}
+                  onChange={(newValue) => {
+                    if (!newValue) return;
+                    if (newValue < end && end) {
+                      setSnackbarMessage(
+                        "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
+                      );
+                      setSnackbarSeverity("error");
+                      setSnackbarOpen(true);
+                    } else {
+                      setDate(newValue);
+                    }
+                  }}
+                  slotProps={{
+                    textField: {
+                      InputProps: {
+                        readOnly: true,
+                        style: { fontSize: "0.875rem" },
+                      },
+                      InputLabelProps: {
+                        style: { fontSize: "0.875rem" },
+                      },
+                    },
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
 
         <div
-          className={`h-auto rounded-2xl mt-6 ${
+          className={`h-auto ${
             !enableInscription
               ? "bg-gray-400"
               : "bg-blue-500 hover:bg-blue-600 transition duration-100"
@@ -396,7 +404,7 @@ const SimpleEvent = () => {
         >
           <div className="relative select-none flex flex-row h-[150px] items-center justify-center">
             <div
-              className="bg-no-repeat bg-center bg-cover absolute right-[-40px] top-[-15px] bottom-0 w-1/2 transform"
+              className="bg-no-repeat bg-center bg-cover absolute right-[-40px] top-[-5px] bottom-0 w-1/2 transform"
               style={{
                 backgroundImage: "url('/img/checklist.png')",
                 transform: "rotate(5deg)",
@@ -438,7 +446,7 @@ const SimpleEvent = () => {
           </div>
         </div>
 
-        <div className="h-auto rounded-t-2xl mt-6 bg-gray-300 relative transition duration-100 overflow-hidden">
+        <div className="h-auto bg-gray-300 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div className="relative p-4 z-10">
               <div className="flex flex-row items-center justify-between">
@@ -474,7 +482,7 @@ const SimpleEvent = () => {
           </div>
         </div>
 
-        <div className="h-auto rounded-b-2xl bg-gray-200 relative transition duration-100 overflow-hidden">
+        <div className="h-auto bg-gray-200 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div className="relative p-4 z-10">
               {isPublic ? (
@@ -504,8 +512,8 @@ const SimpleEvent = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="h-auto rounded-2xl mt-6 bg-gray-300 relative transition duration-100 overflow-hidden">
+        <div className="grid grid-cols-2">
+          <div className="h-auto border-r-[1px] border-gray-400 bg-gray-300 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">
               <div className="relative p-4 z-10">
                 <div className="flex flex-row items-center justify-between">
@@ -537,7 +545,7 @@ const SimpleEvent = () => {
             </div>
           </div>
 
-          <div className="h-auto rounded-2xl mt-6 bg-gray-300 relative transition duration-100 overflow-hidden">
+          <div className="h-auto bg-gray-300 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">
               <div className="relative p-4 z-10">
                 <div className="flex flex-row items-center justify-between">
@@ -574,8 +582,8 @@ const SimpleEvent = () => {
           <button
             className={
               "flex justify-center font-caveat font-bold " +
-              "align-center w-full items-center text-3xl " +
-              "bg-blue-500 text-white py-2 px-4 rounded-lg " +
+              "align-center w-full items-center text-5xl " +
+              "bg-blue-500 text-white py-6 px-4 " +
               "hover:bg-blue-600 focus:outline-none " +
               "focus:ring-opacity-50"
             }
@@ -584,11 +592,7 @@ const SimpleEvent = () => {
             {loading ? t("loading") : t("upload")}
           </button>
         </div>
-        <div className="flex justify-center mt-5">
-          <h1 className="text-center"></h1>
-        </div>
       </form>
-
       <Tags open={openTags} setOpen={setOpenTags} />
     </div>
   );

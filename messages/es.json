@@ -86,8 +86,8 @@
       "creation": "Crea tu Evento",
       "internet": "Los eventos con puntos de control requieren acceso a la red y datos móviles para ser fácilmente accesibles, y proporcionar la mejor experiencia para los buscadores. Las actividades de este tipo <b>sólo pueden ser progresadas por usuarios conectados a internet, o por usuarios que pre-carguen su búsqueda.</b>",
       "internetSimple": "Los eventos simples requieren acceso a la red y datos móviles para ser fácilmente accesibles, y proporcionar la mejor experiencia para los buscadores. Las actividades de este tipo <b>sólo pueden ser progresadas por usuarios conectados a internet, o por usuarios que pre-carguen su búsqueda.</b>",
-      "title": "Título del evento:",
-      "description": "Descripción del evento:",
+      "title": "Título del evento",
+      "description": "Descripción del evento",
       "difficulty": "Dificultad: ",
       "checkpoints": "Editar y Reordenar Checkpoints",
       "qr": {
