@@ -24,6 +24,8 @@ const SimpleEvent = () => {
     setIsPublic,
     banner,
     setBanner,
+    qr,
+    setQr,
     tags,
     enableComments,
     setEnableComments,
@@ -163,11 +165,11 @@ const SimpleEvent = () => {
         </label>
 
         <div className="h-auto bg-white overflow-hidden border-b-[1px] border-gray-300">
-            <div className="flex flex-row items-center p-5 z-10">
-              <h1 className="text-2xl tracking-tighter font-bold text-black">
-                {t("Details.title")}
-              </h1>
-            </div>
+          <div className="flex flex-row items-center p-5 z-10">
+            <h1 className="text-2xl tracking-tighter font-bold text-black">
+              {t("Details.title")}
+            </h1>
+          </div>
         </div>
 
         <input
@@ -180,11 +182,11 @@ const SimpleEvent = () => {
           className="border-b-[1px] bg-gray-100 border-gray-300 px-6 py-2 text-lg hover:bg-gray-200 transition duration-200"
         />
 
-            <div className="flex flex-row items-center p-5 z-10 ">
-              <h1 className="text-2xl tracking-tighter font-bold text-black">
-                {t("Details.description")}
-              </h1>
-            </div>
+        <div className="flex flex-row items-center p-5 z-10 ">
+          <h1 className="text-2xl tracking-tighter font-bold text-black">
+            {t("Details.description")}
+          </h1>
+        </div>
         <Quill
           value={description}
           onChange={setDescription}
@@ -220,11 +222,11 @@ const SimpleEvent = () => {
             </div>
           </div>
         )}
-            <div className="flex flex-row items-center p-5 z-10 border-b-[1px] border-gray-200 ">
-              <h1 className="text-2xl tracking-tighter font-bold text-black">
-                Vigencia y Fecha
-              </h1>
-            </div>
+        <div className="flex flex-row items-center p-5 z-10 border-b-[1px] border-gray-200 ">
+          <h1 className="text-2xl tracking-tighter font-bold text-black">
+            Vigencia y Fecha
+          </h1>
+        </div>
         <div className="h-auto bg-gray-300 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div className="relative p-4 z-10">
@@ -511,6 +513,67 @@ const SimpleEvent = () => {
             </div>
           </div>
         </div>
+
+        {true && (
+          <>
+            <div className="h-auto bg-gray-300 relative transition duration-100 overflow-hidden">
+              <div className="relative h-full">
+                <div className="relative p-4 z-10">
+                  <div className="flex flex-row items-center justify-between">
+                    <div className="flex items-center">
+                      <i
+                        className="material-icons text-white text-4xl mr-2"
+                        style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      >
+                        {!qr ? "tour" : "qr_code"}
+                      </i>
+                      <h1
+                        className="text-2xl tracking-tighter font-bold text-white"
+                        style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      >
+                        {!qr ? t("Details.tour.title") : t("Details.qr.title")}
+                      </h1>
+                    </div>
+                    <FormControl>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={qr}
+                            onChange={(e) => setQr(e.target.checked)}
+                            name="qr"
+                            color="primary"
+                          />
+                        }
+                        label={""}
+                      />
+                    </FormControl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="h-auto bg-gray-200 relative transition duration-100 overflow-hidden">
+              <div className="relative h-full">
+                <div className="relative p-4 z-10">
+                  {!qr ? (
+                    <p className="text-sm mt-1 mb-2">
+                      {t.rich("Details.tour.description", {
+                        b: (chunks) => <b>{chunks}</b>,
+                      })}
+                    </p>
+                  ) : (
+                    <>
+                      <p className="text-sm mt-1 mb-2">
+                        {t.rich("Details.qr.description", {
+                          b: (chunks) => <b>{chunks}</b>,
+                        })}
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="grid grid-cols-2">
           <div className="h-auto border-r-[1px] border-gray-400 bg-gray-300 relative transition duration-100 overflow-hidden">
