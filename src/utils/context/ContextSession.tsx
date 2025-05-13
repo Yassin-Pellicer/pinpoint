@@ -29,15 +29,15 @@ interface SessionContextType {
   setLink: (link: string | null) => void;
   memberSince: Date | null;
   setMemberSince: (memberSince: Date | null) => void;
+  createType: string | null;
+  setCreateType(string: string | null): void;
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-
-  const [fetchInscriptions, setFetchInscriptions] = useState(false);
-  const [fetchBookmarks, setFetchBookmarks] = useState(false);
+  const[createType, setCreateType] = useState<string | null>("simple");
 
   useEffect(() => {
     const fetchSessionFromCookies = async () => {
@@ -99,41 +99,6 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     });
   };
 
-  const setComments = (comments: Comment[]) => {
-    setUser((prev) => {
-      if (!prev) return prev;
-      return { ...prev, comments };
-    });
-  };
-
-  const setRatings = (ratings: Rating[]) => {
-    setUser((prev) => {
-      if (!prev) return prev;
-      return { ...prev, ratings };
-    });
-  };
-
-  const setCreatedEvents = (createdEvents: Event[]) => {
-    setUser((prev) => {
-      if (!prev) return prev;
-      return { ...prev, createdEvents };
-    });
-  };
-
-  const setBookmarks = (bookmarks: Event[]) => {
-    setUser((prev) => {
-      if (!prev) return prev;
-      return { ...prev, bookmarks };
-    });
-  };
-
-  const setInscriptions = (inscriptions: Event[]) => {
-    setUser((prev) => {
-      if (!prev) return prev;
-      return { ...prev, inscriptions };
-    });
-  };
-
   const setLink = (link: string) => {
     setUser((prev) => {
       if (!prev) return prev;
@@ -171,6 +136,8 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         setLink,
         memberSince: user?.memberSince,
         setMemberSince,
+        createType,
+        setCreateType
       }}
     >
       {children}

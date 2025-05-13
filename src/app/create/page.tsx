@@ -3,10 +3,7 @@
 import "react-quill/dist/quill.snow.css";
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import CheckpointEvent from "../../components/create/cpEv/createCheckpointEvent";
-import SimpleEvent from "../../components/create/simpleEv/createSimpleEvent";
-import MapComponentCP from "../../components/create/cpEv/createCheckpointMap";
-import MapComponentSimple from "../../components/create/simpleEv/createSimpleMap";
+import CreateEvent from "../../components/create/createEvent";
 
 import { useMapContext } from "../../utils/context/ContextMap";
 
@@ -15,13 +12,16 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import LoadingScreen from "../../components/ui/loadingScreen";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
+import createTypography from "@mui/material/styles/createTypography";
+import { useSession } from "../../utils/context/ContextSession";
 
 export default function Create() {
   const { location, editMode } = useMapContext();
   const { checkpoints, setCheckpoints } = useCheckpoints();
+  const { setCreateType, createType} = useSession(); 
 
   const [selectedButton, setSelectedButton] = useState(
-    checkpoints.length === 0 ? "simple" : "course"
+    checkpoints.length === 0 ? "simple" : "checkpoints"
   );
   const t = useTranslations("Create");
 
@@ -34,8 +34,7 @@ export default function Create() {
   }
 
   return (
-    <div className="flex flex-row">
-      <div className="flex flex-col overflow-auto bg-blue-500 w-[550px] shrink-0 h-screen">
+    <div className="flex flex-col">
         {/* Event type */}
         {!editMode && (
           <>
@@ -60,6 +59,7 @@ export default function Create() {
                   onClick={() => {
                     if (selectedButton === "simple") return;
                     setSelectedButton("simple");
+                    setCreateType("simple");
                   }}
                 >
                   {t("simple")}
@@ -67,13 +67,14 @@ export default function Create() {
                 <button
                   className={`border border-black rounded-2xl p-2 hover:bg-blue-500
                  hover:border-blue-500 hover:text-white transition-colors duration-100 font-bold tracking-tighter text-md ${
-                   selectedButton === "course"
+                   selectedButton === "checkpoints"
                      ? " bg-blue-500 border-blue-500 text-white "
                      : "bg-transparent text-black"
                  }`}
                   onClick={() => {
-                    if (selectedButton === "course") return;
-                    setSelectedButton("course");
+                    if (selectedButton === "checkpoints") return;
+                    setSelectedButton("checkpoints");
+                    setCreateType("checkpoints");
                   }}
                 >
                   {t("course")}
@@ -103,16 +104,8 @@ export default function Create() {
         {/* Event Creation */}
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <CssBaseline />
-          {selectedButton === "course" ? <CheckpointEvent /> : <SimpleEvent />}
+          <CreateEvent/>
         </LocalizationProvider>
-      </div>
-
-      {/* Map */}
-      {selectedButton === "course" ? (
-        <MapComponentCP />
-      ) : (
-        <MapComponentSimple />
-      )}
     </div>
   );
 }

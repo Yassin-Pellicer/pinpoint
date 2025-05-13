@@ -10,19 +10,22 @@ import "react-quill/dist/quill.snow.css";
 import "leaflet-geosearch/dist/geosearch.css";
 import "leaflet/dist/leaflet.css";
 
-import { SearchControl } from "../../../utils/funcs/searchControl";
-import CreateEvents from "./createSimpleEventMarkers";
+import { SearchControl } from "../../utils/funcs/searchControl";
+import CreateEventsSimple from "./simpleEv/createSimpleEventMarkers";
+import CreateEventsCp from "./cpEv/createCheckpointEventMarkers";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useEffect, useState } from "react";
-import { useMapContext } from "../../../utils/context/ContextMap";
+import { useMapContext } from "../../utils/context/ContextMap";
+import { useSession } from "../../utils/context/ContextSession";
 
 const center: [number, number] = [51.505, -0.09]; 
 
 export default function MapComponent() {
 
   const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
+  const {createType} = useSession();
   
   const [center, setCenter] = useState<[number, number] | null>(() => {
     const savedCenter = sessionStorage.getItem("map-center");
@@ -33,7 +36,7 @@ export default function MapComponent() {
     <MapContainer
       zoom={zoom}    
       maxZoom={18}
-      center={location}
+      center={[40.4168, -3.7038]}
       doubleClickZoom={false}
       worldCopyJump={true}
       maxBoundsViscosity={0}
@@ -59,7 +62,11 @@ export default function MapComponent() {
 
       <SearchControl />
 
-      <CreateEvents />
+      {createType === "simple" ? (
+        <CreateEventsSimple />
+      ) : (
+        <CreateEventsCp />
+      )}
 
     </MapContainer>
   );

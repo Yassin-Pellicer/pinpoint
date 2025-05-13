@@ -5,7 +5,6 @@ import MainMap from "../../components/main/mainMap";
 import { useSession } from "../../utils/context/ContextSession";
 import { getUserHook } from "../../hooks/general/getUserHook";
 import { useMapContext } from "../../utils/context/ContextMap";
-import Logo from "../../components/ui/logo_btn";
 import EventCarouselList from "../../components/main/mainEventList";
 import { useTranslations } from "next-intl";
 import Tags from "../../components/create/tags";
@@ -18,7 +17,7 @@ export default function Layout({ children }) {
   const [openTags, setOpenTags] = useState(false);
   const tagsTrans = useTranslations("Tags");
 
-    const router = useRouter();
+  const router = useRouter();
 
   const { filterTags, search, searchResults, setSearch, loadSearchEvents, selectedEvent } =
     useMapContext();
