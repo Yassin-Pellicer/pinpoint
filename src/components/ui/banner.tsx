@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 import fileURL from "../../utils/funcs/createUrlImage";
 import { addUserHook } from "../../hooks/general/addUserHook";
+import { useRouter } from "next/navigation";
 
 export default function Banner({ user }) {
   const [propUser, setPropUser] = useState({ ...user });
   const [userCopy, setUserCopy] = useState({ ...user });
   const [editable, setEditable] = useState(false);
+
+  const router = useRouter();
 
   const setUsername = (username) => setUserCopy({ ...userCopy, username });
   const setDescription = (description) =>
@@ -24,7 +27,7 @@ export default function Banner({ user }) {
       alert("El nombre de usuario ya existe. Intenta seleccionar otro");
       setEditable(true);
     } else {
-      setPropUser({ ...userCopy }); 
+      setPropUser({ ...userCopy });
       setEditable(false);
     }
   };
@@ -35,7 +38,7 @@ export default function Banner({ user }) {
   }, [user]);
 
   const handleCancel = () => {
-    setUserCopy({ ...propUser }); 
+    setUserCopy({ ...propUser });
     setEditable(false);
   };
 
@@ -48,8 +51,9 @@ export default function Banner({ user }) {
               <div className="cursor-pointer relative flex justify-end items-center w-full h-[200px] overflow-hidden">
                 <img
                   src={propUser.banner}
-                  className="w-full h-[200px] object-cover"
+                  className="w-full h-[200px] object-cover cursor-pointer"
                   alt="banner"
+                  onClick={() => router.push(`/main/user/${propUser.id}`)}
                 />
               </div>
             ) : (
@@ -66,7 +70,8 @@ export default function Banner({ user }) {
                 <img
                   src={propUser.profilePicture}
                   alt="Profile Picture"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover cursor-pointer"
+                  onClick={() => router.push(`/main/user/${propUser.id}`)}
                 />
               ) : (
                 <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">

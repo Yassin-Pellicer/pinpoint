@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Tag } from "../../utils/classes/Tag";
 import { useState, useEffect } from "react";
 
-const BottomSheet = ({ open, setOpen }) => {
+const BottomSheet = ({ open, setOpen, filterMode }) => {
   const t = useTranslations("Tags");
   const { setFilterTags } = useMapContext();
 
@@ -20,7 +20,9 @@ const BottomSheet = ({ open, setOpen }) => {
       }, {});
       
       setSelectedTags(updatedSelectedTags);
-      setFilterTags(Tag.tags.filter((tag) => updatedSelectedTags[tag.tag_id]));
+      if (filterMode) {
+        setFilterTags(Tag.tags.filter((tag) => updatedSelectedTags[tag.tag_id]));
+      }
   }, [open]);
 
   const handleTagSelection = (tagName) => {
@@ -28,14 +30,15 @@ const BottomSheet = ({ open, setOpen }) => {
       const updatedTags = { ...prevSelectedTags, [tagName]: !prevSelectedTags[tagName] };
       
       const selected = Tag.tags.filter((tag) => updatedTags[tag.tag_id]);
-      setFilterTags(selected);
+      if (filterMode) {
+        setFilterTags(selected);
+      }
       setTags(selected);
   
       return updatedTags;
     });
   };
   
-
   return (
     <SwipeableDrawer
       anchor="bottom"
@@ -45,47 +48,51 @@ const BottomSheet = ({ open, setOpen }) => {
       variant="persistent"
       PaperProps={{
         style: {
-          maxWidth: "549px",
+          maxWidth: "525px",
           height: "100%",
           marginRight: "auto",
-          marginLeft: "1px",
           zIndex: 100,
           overflowY: "scroll",
-          backgroundColor: "#3F7DEA",
         },
       }}
     >
-      <div style={{ paddingLeft: 20, paddingRight: 20 }}>
+      <div>
         <div
-          style={{ cursor: "pointer", marginTop: "20px" }}
           onClick={() => {
             setOpen(false);
             setTags(Tag.tags.filter((tag) => selectedTags[tag.tag_id]));
           }}
-          className="cursor-pointer flex justify-center"
+          className="cursor-pointer flex justify-center p-6"
         >
           <img
             src="/svg/arrow.svg"
             alt="Close Drawer"
-            className="cursor-pointer scale-[1] p-2 mb-4"
+            className="cursor-pointer scale-[1]"
           />
         </div>
       </div>
-
-      <div className="bg-white p-6 mx-6 mb-6 rounded-2xl">
-        <h3 className="text-2xl font-bold mb-4">{t("title")}</h3>
-        <div className="flex justify-center mb-4">{t("description")}</div>
-        <div className="flex flex-wrap w-full gap-2">
+      <div className="h-auto bg-white mb-2 relative transition duration-100 overflow-hidden border-[1px] border-gray-300">
+        <div className="relative p-5 z-10">
+          <div className="flex flex-row items-center ">
+            <h1 className="text-2xl tracking-tighter font-bold text-black">
+              {t("title")}
+            </h1>
+          </div>
+        </div>
+      </div>
+      <div className="bg-white p-6 pt-0 mb-6 rounded-2xl">
+        <div className="grid grid-cols-2 w-full mt-4 gap-2">
           {Tag.tags.map((tag, index) => (
             <button
               key={tag.tag_id || index}
               onClick={() => handleTagSelection(tag.tag_id)}
-              className={`rounded-md w-fit p-[10px] py-2 text-center tracking-tight text-black ${
+              className={`flex rounded-md w-full p-[10px] py-2 text-center font-bold tracking-tight items-center text-black ${
                 selectedTags[tag.tag_id]
-                  ? "bg-[#3F7DEA] font-bold tracking-tight text-white"
-                  : "border border-black"
+                  ? "bg-[#3F7DEA] tracking-tight text-white"
+                  : "border border-black hover:text-white hover:bg-blue-500"
               }`}
             >
+              <i className="material-icons mr-2">{tag.icon}</i>{" "}
               {t(`${tag.tag_id}`)}
             </button>
           ))}

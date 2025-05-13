@@ -69,14 +69,14 @@ export default function SwiperComponent( {event} ) {
             {isInscribed ? (
               <button
                 onClick={handleDeleteInscription}
-                className="w-full font-bold font-white p-1 hover:bg-red-500 mt-2 rounded-2xl border-[1px] border-black transition duration-100"
+                className="w-full font-bold p-1 hover:text-white hover:bg-red-500 mt-2 rounded-2xl border-[1px] border-black transition duration-100"
               >
                 Desinscribirme
               </button>
             ) : (
               <button
                 onClick={handleUploadInscription}
-                className="w-full font-extrabold font-white p-1 hover:bg-green-600 mt-2 rounded-2xl border-[1px] border-white transition duration-100"
+                className="w-full font-extrabold text-black p-1 hover:text-white hover:bg-green-600 mt-2 border-black rounded-2xl border-[1px] transition duration-100"
               >
                 Inscribirme
               </button>

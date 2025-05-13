@@ -18,10 +18,11 @@ import CpList from "../../../../components/main/mainCheckpointList";
 import { getEventById } from "../../../../hooks/main/get/getEventsHook";
 import { getUserHook } from "../../../../hooks/general/getUserHook";
 import Banner from "../../../../components/ui/banner";
+import { Tag } from "../../../../utils/classes/Tag";
 
 const eventInfo = () => {
   const { setSelectedEvent, setEditMode } = useMapContext();
-  const { checkpoints } = useCheckpoints();
+  const { checkpoints, setCheckpoints } = useCheckpoints();
   const { user } = useSession();
 
   const [loading, setLoading] = useState(true);
@@ -110,7 +111,6 @@ const eventInfo = () => {
               <></>
             )}
           </div>
-
           <div className="p-6 bg-blue-500 text-white cursor-default transition">
             <div className="flex flex-row ">
               <div className="flex flex-row w-full">
@@ -130,7 +130,7 @@ const eventInfo = () => {
                   <div className="flex flex-col gap-4">
                     {event.date && (
                       <p className="text-white font-bold text-2xl tracking-tighter">
-                          Este evento tendrá lugar el{" "}
+                        Este evento tendrá lugar el{" "}
                         {formatDisplay(new Date(event.date))}
                       </p>
                     )}
@@ -212,6 +212,7 @@ const eventInfo = () => {
                 onClick={() => {
                   setLoading(true);
                   setEvent(event);
+                  setCheckpoints(checkpoints);
                   setEditMode(true);
                   router.push("/create");
                 }}
@@ -225,11 +226,8 @@ const eventInfo = () => {
               </button>
             )}
           </div>
-
           {event.end && <EventTimeDisplay event={event} listMode={false} />}
-
           <InscribedBox event={event}></InscribedBox>
-
           <div className="grid grid-cols-2">
             <BookmarkBox event={event}></BookmarkBox>
 
@@ -260,7 +258,6 @@ const eventInfo = () => {
               </div>
             </div>
           </div>
-
           <div className="overflow-hidden">
             <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-b-[1px] border-gray-300">
               <div className="relative p-5 z-10">
@@ -290,37 +287,28 @@ const eventInfo = () => {
               </div>
             )}
           </div>
-
           {event.tags.length > 0 && (
-            <div className="h-auto bg-white pb-6 px-6 pt-3 relative transition duration-100 overflow-hidden">
+            <div className="h-auto bg-white px-6 py-5 relative transition duration-100 border-t-[1px] border-gray-300 overflow-hidden">
               <div>
                 <div className="flex flex-wrap w-full gap-2">
                   {event.tags.map((tag) => (
                     <div
                       key={tag.tag_id}
-                      className={`rounded-full w-fit px-2 py-1 text-center
-                          text-white bg-[#3F7DEA] font-bold tracking-tight"
-                          }`}
+                      className={`rounded-full w-fit px-2 py-1 text-center select-none text-white bg-[#3F7DEA] font-bold tracking-tight"}`}
                     >
-                      <p className="text-xs">{tagsTrans(`${tag.tag_id}`)}</p>
+                      <p className="text-xs">
+                        <i className="material-icons text-xs mr-1">
+                          {Tag.tags.find((ot) => ot.tag_id === tag.tag_id)
+                            ?.icon || tag.icon}
+                        </i>
+                        {tagsTrans(`${tag.tag_id}`)}
+                      </p>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
           )}
-
-          <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-[1px] border-gray-300">
-            <div className="relative p-5 z-10">
-              <div className="flex flex-row items-center ">
-                <h1 className="text-2xl tracking-tighter font-bold text-black">
-                  Evento creado por...
-                </h1>
-              </div>
-            </div>
-          </div>
-          <Banner user={user}></Banner>
-
           {checkpoints && checkpoints.length > 0 && (
             <>
               <div className="h-auto bg-blue-300 relative transition duration-100 overflow-hidden">
@@ -356,7 +344,17 @@ const eventInfo = () => {
               </div>
               <CpList />
             </>
-          )}
+          )}{" "}
+          <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-[1px] border-gray-300">
+            <div className="relative p-5 z-10">
+              <div className="flex flex-row items-center ">
+                <h1 className="text-2xl tracking-tighter font-bold text-black">
+                  Evento creado por...
+                </h1>
+              </div>
+            </div>
+          </div>
+          <Banner user={user}></Banner>
           <CommentBox></CommentBox>
         </div>
       )}

@@ -18,20 +18,21 @@ import { useSession } from "../../utils/context/ContextSession";
 export default function Create() {
   const { location, editMode } = useMapContext();
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { setCreateType, createType} = useSession(); 
+  const { setCreateType, createType } = useSession(); 
 
-  const [selectedButton, setSelectedButton] = useState(
-    checkpoints.length === 0 ? "simple" : "checkpoints"
-  );
-  const t = useTranslations("Create");
+  const [selectedButton, setSelectedButton] = useState("simple");
 
   useEffect(() => {
-    setCheckpoints([]);
-  }, []);
+    if (checkpoints.length === 0) {
+      setSelectedButton("simple");
+      setCreateType("simple");
+    } else {
+      setSelectedButton("checkpoints");
+      setCreateType("checkpoints");
+    }
+  }, [checkpoints]);
 
-  if (!location) {
-    return <LoadingScreen />;
-  }
+  const t = useTranslations("Create");
 
   return (
     <div className="flex flex-col">
@@ -90,11 +91,11 @@ export default function Create() {
         )}
 
         {editMode && (
-          <div className="flex flex-col bg- p-6 border-b border-gray-300 border-[1px]">
-            <h1 className="font-bold text-green-500 text-3xl mb-2 tracking-tight ">
-              Estás en modo edición.
+          <div className="flex flex-col border-b border-gray-300 border-[1px]">
+            <h1 className="font-bold text-white bg-green-700 p-4 text-3xl tracking-tight ">
+              Estás en modo edición
             </h1>
-            <p className="text-sm mt-4">
+            <p className="p-6 text-sm">
               Al editar un evento no puedes cambiar su tipo. Volver a la página
               principal dejará el evento intacto.
             </p>

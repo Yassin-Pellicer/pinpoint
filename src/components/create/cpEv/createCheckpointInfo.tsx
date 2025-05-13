@@ -68,25 +68,32 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
   };
 
   const cpInfo = (
-    <form className="flex flex-col px-3 w-full"
-    tabIndex={-1}
-    onFocus={handleFocus}
-    onBlur={handleBlur}
+    <form
+      className="flex flex-col w-full rounded-xl"
+      tabIndex={-1}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     >
-      <label className="font-bold">
-        {t("name")}
-      </label>
+      <div className="h-auto bg-white overflow-hidden border-b-[1px] border-gray-300">
+        <div className="flex flex-row items-center p-2 z-10">
+          <h1 className="text-lg tracking-tighter font-bold text-black">
+            {t("name")}
+          </h1>
+        </div>
+      </div>
       <input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="border border-black rounded p-1 mb-3"
+        className="border-b-[1px] bg-gray-100 border-gray-300 px-6 py-2 text-md hover:bg-gray-200 transition duration-200"
         placeholder="Checkpoint"
       />
       <div className="flex flex-col mb-14">
-        <label className="text-md mb-1 font-bold"> 
-          {t("description")}
-        </label>
+        <div className="flex flex-row bg-gray-200 items-center p-2 z-10 ">
+          <h1 className="text-lg tracking-tighter font-bold text-black">
+            {t("description")}
+          </h1>
+        </div>
         <Quill
           key={index}
           style={{ height: "125px" }}
@@ -94,22 +101,22 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
           onChange={(value) => setDescription(value)}
         />
       </div>
-      
+
       <button
         onClick={(e) => {
           e.preventDefault();
           removeCheckpoints(index);
         }}
-        className="font-bold mt-4 bg-transparent border-2 text-sm border-black text-black rounded-xl p-2 hover:bg-red-600 hover:border-red-600 hover:text-white transition duration-150 mb-4"
+        className="font-bold bg-transparent text-sm rounded-b-xl text-black  p-2 hover:bg-red-600 hover:border-red-600 hover:text-white transition duration-150"
       >
-         {t("remove")}
+        {t("remove")}
       </button>
     </form>
   );
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row px-4 items-center">
         <div
           onClick={() => setFocusedCheckpoint(checkpoints[index])}
           className="flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full cursor-pointer"
@@ -141,8 +148,8 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
       </div>
 
       {mode == "edit" && (
-        <div className="mt-4 w-full h-fit rounded-2xl bg-[#e6e6e6] m-auto px-2 pt-4">
-          <div className="overflow-auto flex flex-col px-3 w-full">
+        <div className="mt-4 w-full h-fit bg-[#e6e6e6] m-auto rounded-b-xl">
+          <div className="overflow-auto flex flex-col w-full">
             <div className="flex flex-col justify-center">
               <input
                 accept="image/*"
@@ -151,16 +158,16 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
                 hidden
                 onChange={handleImageUpload}
               />
-              <label htmlFor={imageInputId} className="w-full mt-2 mb-4">
+              <label htmlFor={imageInputId} className="w-full">
                 {checkpoints[index].banner ? (
-                  <div className="cursor-pointer relative flex justify-end items-center w-full h-15 mb-2 rounded-2xl overflow-hidden">
+                  <div className="cursor-pointer relative flex justify-end items-center w-full h-15 overflow-hidden">
                     <img
                       src={checkpoints[index].banner}
-                      className="w-full h-full object-cover rounded-xl"
+                      className="w-full h-full object-cover"
                       alt="banner"
                     />
                     <p
-                      className="absolute bottom-8 w-full text-center font-caveat text-white text-2xl tracking-tighter select-none"
+                      className="absolute w-full text-center font-caveat text-white text-2xl tracking-tighter select-none"
                       style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)" }}
                     >
                       {t("pic")}
@@ -169,7 +176,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
                 ) : (
                   <div
                     className="flex flex-col cursor-pointer justify-center items-center w-full h-fit
-                    mb-2 rounded-2xl px-14 py-12 bg-[#e6e6e6] border border-gray-400 hover:bg-[#d6d6d6] transition duration-200"
+                    px-14 py-12 bg-[#e6e6e6] border-b border-gray-400 hover:bg-[#d6d6d6] transition duration-200"
                   >
                     <i className="text-gray-400 material-icons mr-1 text-[120px] select-none">
                       add_photo_alternate

@@ -11,7 +11,7 @@ const pool =
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     ssl: { rejectUnauthorized: false },
-    max: 1,
+    max: 10,
   });
 
 if (!globalForPg.pgPool) {

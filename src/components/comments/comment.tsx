@@ -5,7 +5,7 @@ import ProfilePopup from "../profile/profilePopup";
 import { useSession } from "../../utils/context/ContextSession";
 import { useRouter } from "next/navigation";
 
-export default function Comment({ comment }) {
+export default function Comment({ comment, refresh, setRefresh }) {
 
   const { user } = useSession();
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function Comment({ comment }) {
   
   return (
     <div
-    className="flex flex-row transition-padding p-4 border-t-[1px] border-gray-300 bg-gray-200 cursor-default"
+    className="flex flex-row transition-padding p-4 border-t-[1px] border-gray-300 bg-white cursor-default"
   >
     <div
       onClick={() => {
@@ -32,18 +32,21 @@ export default function Comment({ comment }) {
     <div className="w-full">
       <div className="flex items-center flex-row w-full justify-between">
         <div className="flex flex-col align-center">
-          <h2 className="text-lg font-bold tracking-tight">
+          <h2
+            className="text-lg hover:underline cursor-pointer font-bold tracking-tight"
+            onClick={() => router.push(`/main/user/${comment.user}`)}
+          >
             @{comment.username}
           </h2>
           {comment.rating !== null && (
             <div>
-              <div className="flex">
+              <div className="flex mt-[-5px]">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <i
                     key={i}
-                    className={`material-icons text-md cursor-pointer ${
+                    className={`material-icons text-sm cursor-pointer ${
                       i <= comment.rating
-                        ? "text-white hover:text-gray-200"
+                        ? "text-yellow-400 hover:text-yellow-300"
                         : "text-gray-400 hover:text-gray-500"
                     }`}
                     style={{
@@ -73,6 +76,7 @@ export default function Comment({ comment }) {
             <i
               className="material-icons text-xl ml-4 text-gray-600 transition duration-300 hover:cursor-pointer hover:text-red-500"
               onClick={() => {
+                setRefresh(!refresh);
                 handleDeleteComment(comment.id);
               }}
             >
@@ -81,7 +85,7 @@ export default function Comment({ comment }) {
           )}
         </div>
       </div>
-      <p className="text-md mt-2 tracking-tighter">
+              <p className="text-sm text-gray-600 tracking-tight pb-2">
         {comment.content}
       </p>
     </div>

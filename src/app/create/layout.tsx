@@ -26,8 +26,8 @@ export default function Layout({ children }) {
   return (
     <div className="flex flex-row overflow-x-hidden">
       <div className="flex flex-col overflow-auto shrink-0 h-screen overflow-x-clip w-[525px] z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)]">
-        <div className="flex flex-col sticky top-0 z-[100] bg-white">
-            <div className=" bg-white grid grid-cols-3">
+        <div className="flex flex-col sticky top-0 z-50 bg-white">
+            <div className=" bg-white grid grid-cols-3 border-b-[1px] border-gray-300">
               <button
                 onClick={() => router.back()}
                 className="bg-white h-full hover:bg-gray-200 shadow-2xl border-r-[1px] border-gray-400"

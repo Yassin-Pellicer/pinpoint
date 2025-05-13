@@ -1,4 +1,4 @@
-import { connectToDatabase, disconnectFromDatabase } from "../../../../../../utils/db/db";
+import { connectToDatabase, disconnectFromDatabase } from "../../../../utils/db/db";
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {

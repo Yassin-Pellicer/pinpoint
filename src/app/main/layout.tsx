@@ -10,6 +10,9 @@ import { useTranslations } from "next-intl";
 import Tags from "../../components/create/tags";
 import debounce from "lodash.debounce";
 import { useRouter, usePathname } from "next/navigation";
+import { useEvent } from "../../utils/context/ContextEvent";
+import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
+import { Event } from "../../utils/classes/Event";
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
@@ -19,8 +22,24 @@ export default function Layout({ children }) {
 
   const router = useRouter();
 
-  const { filterTags, search, searchResults, setSearch, loadSearchEvents, selectedEvent } =
-    useMapContext();
+  const {
+    filterTags,
+    search,
+    searchResults,
+    setSearch,
+    loadSearchEvents,
+    selectedEvent,
+    setEditMode,
+    setFilterTags,
+  } = useMapContext();
+
+  const { setEvent } = useEvent();
+  const { setCheckpoints } = useCheckpoints();
+
+  const handleTagSelection = (tagId) => {
+    const selected = filterTags.filter((tag) => tag.tag_id !== tagId);
+    setFilterTags(selected);
+  };
 
   useEffect(() => {
     const handler = debounce(async () => {
@@ -37,7 +56,10 @@ export default function Layout({ children }) {
       const userRes = await getUserHook(data.id);
       setUser(userRes.user);
     };
-
+    setEditMode(false);
+    setEvent(new Event());
+    setCheckpoints([]);
+    setFilterTags([]);
     fetchSessionFromCookies();
   }, []);
 
@@ -74,15 +96,19 @@ export default function Layout({ children }) {
               <i className="material-icons text-white text-xl">lock</i>
             </button>
           </div>
-          <div className=" px-2                                                                                                                                                                                                                                                                      ">
+          <div className=" px-2 mb-2                                                                                                                                                                                                                                                                   ">
             {filterTags.length > 0 && (
               <div className="flex flex-wrap w-full mb-2 gap-2">
                 {filterTags.map((tag) => (
                   <div
                     key={tag.tag_id}
-                    className={`rounded-full w-fit px-2 py-1 text-center text-white bg-[#3F7DEA] font-bold tracking-tight"}`}
+                    onClick={() => handleTagSelection(tag.tag_id)}
+                    className={`rounded-full cursor-pointer w-fit px-2 py-1 text-center select-none text-white bg-[#3F7DEA] font-bold tracking-tight"}`}
                   >
-                    <p className="text-xs">{tagsTrans(`${tag.tag_id}`)}</p>
+                    <p className="text-xs">
+                      <i className="material-icons text-xs mr-1">{tag.icon}</i>
+                      {tagsTrans(`${tag.tag_id}`)}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -93,28 +119,26 @@ export default function Layout({ children }) {
               <EventCarouselList events={searchResults} />
             </div>
           )}
-            <div className=" bg-white grid grid-cols-3">
-              <button
-                onClick={() => router.back()}
-                className="bg-white h-full hover:bg-gray-200 shadow-2xl border-r-[1px] border-gray-400"
-              >
-                <i className="material-icons text-black text-xl">arrow_back</i>
-              </button>
-              <button
-                onClick={() => router.push("/main/home")}
-                className="bg-white h-full hover:bg-gray-200 shadow-2xl border-r-[1px] border-gray-400"
-              >
-                <i className="material-icons text-black text-xl">home</i>
-              </button>
-              <button
-                onClick={() => router.forward()}
-                className="bg-white h-full hover:bg-gray-200 shadow-2xl"
-              >
-                <i className="material-icons text-black text-xl">
-                  arrow_forward
-                </i>
-              </button>
-            </div>
+          <div className=" bg-white grid grid-cols-3 border-b-[1px] border-gray-300">
+            <button
+              onClick={() => router.back()}
+              className="bg-white h-full hover:bg-gray-200 shadow-2xl border-r-[1px] border-gray-400"
+            >
+              <i className="material-icons text-black text-xl">arrow_back</i>
+            </button>
+            <button
+              onClick={() => router.push("/main/home")}
+              className="bg-white h-full hover:bg-gray-200 shadow-2xl border-r-[1px] border-gray-400"
+            >
+              <i className="material-icons text-black text-xl">home</i>
+            </button>
+            <button
+              onClick={() => router.forward()}
+              className="bg-white h-full hover:bg-gray-200 shadow-2xl"
+            >
+              <i className="material-icons text-black text-xl">arrow_forward</i>
+            </button>
+          </div>
         </div>
 
         {children}
@@ -126,7 +150,7 @@ export default function Layout({ children }) {
             <span className="material-icons text-3xl">menu</span>
           </button>
         </div>
-        <Tags open={openTags} setOpen={setOpenTags} />
+        <Tags open={openTags} setOpen={setOpenTags} filterMode={true} />
 
         <Menu open={open} setOpen={setOpen} />
       </div>

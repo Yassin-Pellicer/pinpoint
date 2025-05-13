@@ -72,7 +72,7 @@ const evView = () => {
     }
   }, [router, selectedEvent, map]);
 
-  const filteredEvents = !selectedEvent || checkpoints.length === 0 ? events : [];
+  const filteredEvents = !selectedEvent || checkpoints?.length === 0 ? events : [];
 
   return (
     <>

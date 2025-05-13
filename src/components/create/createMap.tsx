@@ -33,42 +33,45 @@ export default function MapComponent() {
   });
 
   return (
-    <MapContainer
-      zoom={zoom}    
-      maxZoom={18}
-      center={[40.4168, -3.7038]}
-      doubleClickZoom={false}
-      worldCopyJump={true}
-      maxBoundsViscosity={0}
-      className="h-screen w-full z-10"
-    >
-      <LayersControl position="bottomleft">
-        <LayersControl.BaseLayer name="CartoDB Positron" checked>
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://carto.com/attributions">CartoDB</a>'
-          />
-        </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="OpenStreetMap">
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-          />
-        </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="Google Satellite">
-          <TileLayer url="https://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}" />
-        </LayersControl.BaseLayer>
-      </LayersControl>
+    <>
+      {location && (
+        <MapContainer
+          zoom={zoom}
+          maxZoom={18}
+          center={location}
+          doubleClickZoom={false}
+          worldCopyJump={true}
+          maxBoundsViscosity={0}
+          className="h-screen w-full z-10"
+        >
+          <LayersControl position="bottomleft">
+            <LayersControl.BaseLayer name="CartoDB Positron" checked>
+              <TileLayer
+                url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://carto.com/attributions">CartoDB</a>'
+              />
+            </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer name="OpenStreetMap">
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+              />
+            </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer name="Google Satellite">
+              <TileLayer url="https://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}" />
+            </LayersControl.BaseLayer>
+          </LayersControl>
 
-      <SearchControl />
+          <SearchControl />
 
-      {createType === "simple" ? (
-        <CreateEventsSimple />
-      ) : (
-        <CreateEventsCp />
+          {createType === "simple" ? (
+            <CreateEventsSimple />
+          ) : (
+            <CreateEventsCp />
+          )}
+        </MapContainer>
       )}
-
-    </MapContainer>
+    </>
   );
 }
 

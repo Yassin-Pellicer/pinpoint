@@ -34,6 +34,11 @@ body {
   background-color: #3b82f6 !important;
   border: none !important;
   box-shadow: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-direction: column !important;
+  padding-right: 1px;
 }
 
 .custom-popup .leaflet-popup-content {

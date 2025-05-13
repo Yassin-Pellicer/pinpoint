@@ -1,7 +1,13 @@
 "use client";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { useCheckpoints } from "../../../utils/context/ContextCheckpoint";
-import { closestCenter, closestCorners, DndContext, pointerWithin, rectIntersection } from "@dnd-kit/core";
+import {
+  closestCenter,
+  closestCorners,
+  DndContext,
+  pointerWithin,
+  rectIntersection,
+} from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
@@ -14,7 +20,13 @@ import CheckpointInfo from "./createCheckpointInfo";
 import { useEffect, useState } from "react";
 
 const BottomSheet = ({ open, setOpen }) => {
-  const { checkpoints, setCheckpoints, focusedCheckpoint, setFocusedCheckpoint, } = useCheckpoints();
+  const {
+    checkpoints,
+    setCheckpoints,
+    focusedCheckpoint,
+    setFocusedCheckpoint,
+    setOrder,
+  } = useCheckpoints();
   const t = useTranslations("CpList");
 
   const handleDragEnd = (event) => {
@@ -27,10 +39,11 @@ const BottomSheet = ({ open, setOpen }) => {
 
       const newCheckpoints = arrayMove(checkpoints, oldIndex, newIndex);
 
-      newCheckpoints.forEach((element, index) => {
-        element.order = index + 1;
+      newCheckpoints.forEach((element, idx) => {
+        element.order = idx + 1;
       });
 
+      console.log(newCheckpoints);
       setCheckpoints(newCheckpoints);
       setFocusedCheckpoint(newCheckpoints[newIndex]);
     }
@@ -51,7 +64,7 @@ const BottomSheet = ({ open, setOpen }) => {
           paddingLeft: "16px",
           paddingRight: "16px",
           margin: "8px 0",
-          background: "#d6d6d6",
+          background: "#e1e1e1",
           borderRadius: "4px",
           cursor: "default",
         }}
@@ -61,8 +74,8 @@ const BottomSheet = ({ open, setOpen }) => {
           key={index}
           id={id}
           index={index}
-          mode="list" 
-          closeMap={undefined}        
+          mode="list"
+          closeMap={undefined}
         />
         <div className="flex justify-center">
           <img
@@ -85,40 +98,67 @@ const BottomSheet = ({ open, setOpen }) => {
       variant="persistent"
       PaperProps={{
         style: {
-          maxWidth: "35rem",
+          maxWidth: "525px",
           height: "100%",
           marginRight: "auto",
-          marginLeft: "1px",
           zIndex: 100,
           overflowY: "scroll",
-          backgroundColor: "#3F7DEA",
-        }
+        },
       }}
     >
-      <div style={{ paddingLeft: 20, paddingRight: 20 }}>
+      <div>
         <div
           style={{ cursor: "pointer", marginTop: "20px" }}
           onClick={() => setOpen(false)}
           className="cursor-pointer flex justify-center"
         >
-          <img src="/svg/arrow.svg" alt="Close Drawer" className="cursor-pointer scale-[1] p-2 mb-4" />
+          <img
+            src="/svg/arrow.svg"
+            alt="Close Drawer"
+            className="cursor-pointer scale-[1] p-2 mb-4"
+          />
         </div>
       </div>
 
-      {checkpoints.length === 0 ? (
-        <div className="bg-white p-6 mx-6 mb-6 rounded-2xl">
-          <h3 className="text-2xl font-bold mb-4">{t("title")}</h3>
-          <div className="flex justify-center">{t("empty")}</div>
+      {checkpoints?.length === 0 ? (
+        <div className="bg-white">
+          <div className="h-auto bg-white mb-2 relative transition duration-100 overflow-hidden border-[1px] border-gray-300">
+            <div className="relative p-5 z-10">
+              <div className="flex flex-row items-center ">
+                <h1 className="text-2xl tracking-tighter font-bold text-black">
+                  {t("title")}
+                </h1>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="bg-white p-6 mx-6 mb-6 rounded-2xl">
-          <h3 className="text-2xl font-bold mb-4">{t("title")}</h3>
+        <div className="bg-white">
+          <div className="h-auto bg-white mb-2 relative transition duration-100 overflow-hidden border-[1px] border-gray-300">
+            <div className="relative p-5 z-10">
+              <div className="flex flex-row items-center ">
+                <h1 className="text-2xl tracking-tighter font-bold text-black">
+                  {t("title")}
+                </h1>
+              </div>
+            </div>
+          </div>
           <div className="relative mt-4 flex flex-col overflow-y-auto">
-            <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-              <SortableContext items={checkpoints} strategy={verticalListSortingStrategy}>
+            <DndContext
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={checkpoints}
+                strategy={verticalListSortingStrategy}
+              >
                 <div className="flex flex-col">
                   {checkpoints.map((checkpoint, index) => (
-                    <DraggableCheckpoint index={index} key={`${checkpoint.id}-${index}`} id={checkpoint.id} />
+                    <DraggableCheckpoint
+                      index={index}
+                      key={`${checkpoint.id}-${index}`}
+                      id={checkpoint.id}
+                    />
                   ))}
                 </div>
               </SortableContext>

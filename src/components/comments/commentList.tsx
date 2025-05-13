@@ -21,13 +21,11 @@ const List = ({refresh, setRefresh}) => {
       .finally(() => setLoading(false));
   }, [selectedEvent.id, refresh]);
 
-
-
   return (
     <>
       {!loading && comments.length > 0 && (
         <>
-          <div className="mt-6 h-auto bg-blue-400 relative transition duration-100 overflow-hidden">
+          <div className="h-auto bg-blue-400 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">
               <div className="relative p-5 z-10">
                 <div className="flex flex-row items-center">
@@ -51,6 +49,8 @@ const List = ({refresh, setRefresh}) => {
             <CommentTag
               key={comment.id}
               comment={comment}
+              refresh={refresh}
+              setRefresh={setRefresh}
             />
           ))}
         </>

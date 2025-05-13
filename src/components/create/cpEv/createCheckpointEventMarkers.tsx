@@ -143,7 +143,7 @@ const PlaceCP = () => {
           }}
         >
           <Popup offset={[10, -40]} className="custom-popup" maxWidth={550}>
-            <div className="px-6 w-[500px] rounded-l-xl m-2 p-2 pt-4 pb-6 bg-[#ffffff] h-fit">
+            <div className="w-[500px] rounded-xl pt-4 bg-[#ffffff] h-fit">
               <CheckpointInfo
                 key={index}
                 id={cp.id}

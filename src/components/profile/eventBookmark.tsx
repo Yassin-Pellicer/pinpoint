@@ -71,14 +71,14 @@ export default function SwiperComponent( {event} ) {
             {isBookmarked ? (
               <button
                 onClick={handleDeleteBookmark}
-                className="w-full font-bold font-white p-1 hover:bg-red-500 mt-2 rounded-2xl border-[1px] border-black transition duration-100"
+                className="w-full font-bold p-1 hover:text-white hover:bg-red-500 mt-2 rounded-2xl border-[1px] border-black transition duration-100"
               >
                 Eliminar marcador
               </button>
             ) : (
               <button
                 onClick={handleUploadBookmark}
-                className="w-full font-extrabold font-white p-1 hover:bg-green-600 mt-2 rounded-2xl border-[1px] border-white transition duration-100"
+                className="w-full font-extrabold text-black p-1 hover:text-white hover:bg-green-600 mt-2 border-black rounded-2xl border-[1px] transition duration-100"
               >
                 Añadir marcador
               </button>

@@ -1,4 +1,14 @@
-import { Slider, FormControl, FormControlLabel, Switch, Snackbar, Alert, Box, Modal, Typography } from "@mui/material";
+import {
+  Slider,
+  FormControl,
+  FormControlLabel,
+  Switch,
+  Snackbar,
+  Alert,
+  Box,
+  Modal,
+  Typography,
+} from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import Tags from "./tags";
@@ -6,13 +16,15 @@ import dynamic from "next/dynamic";
 import { useEvent } from "../../utils/context/ContextEvent";
 import fileURL from "../../utils/funcs/createUrlImage";
 import { createEventHook } from "../../hooks/create/addEventHook";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import Logo from "../ui/logo";
 import Counter from "../ui/counter";
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { useSession } from "../../utils/context/ContextSession";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import CpList from "./cpEv/createCheckpointList";
+import { addCheckpointsHook } from "../../hooks/create/addCheckpointsHook";
+import { Tag } from "../../utils/classes/Tag";
 const SimpleEvent = () => {
   const {
     event,
@@ -41,8 +53,8 @@ const SimpleEvent = () => {
     setEnd,
     date,
     setDate,
+    setTags
   } = useEvent();
-
   const [loading, setLoading] = useState(false);
   const [openTags, setOpenTags] = useState(false);
 
@@ -50,7 +62,7 @@ const SimpleEvent = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("error");
   const { user, createType } = useSession();
-  
+
   const router = useRouter();
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const [openCp, setOpenCp] = useState(false);
@@ -63,15 +75,20 @@ const SimpleEvent = () => {
     []
   );
 
+  const handleTagSelection = (tagId) => {
+    const selected = tags.filter((tag) => tag.tag_id !== tagId);
+    setTags(selected);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    let data = event;
     if (createType === "simple") {
-      event.checkpoints = [];
-      event.qr = false;
+      data.qr = false;
     }
     try {
-      const result = await createEventHook(event, user.id);
+      const result = await createEventHook(data, user.id);
       if (result.status === 400) {
         if (result.message === "name") {
           setSnackbarMessage(t("nameNotif"));
@@ -82,10 +99,9 @@ const SimpleEvent = () => {
           setSnackbarSeverity("error");
           setSnackbarOpen(true);
         }
-      } else {
-        setSnackbarMessage(t("successNotif"));
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
+      } else if (createType === "checkpoints") {
+        await addCheckpointsHook({ eventId: result.id, data: checkpoints });
+        router.push("/main/event/" + result.id);
       }
     } catch (error) {
       console.error(error);
@@ -198,6 +214,7 @@ const SimpleEvent = () => {
 
         <button
           onClick={(e) => {
+
             setOpenTags(!openTags);
             e.preventDefault();
           }}
@@ -229,12 +246,16 @@ const SimpleEvent = () => {
             <div className="px-4 mt-3 pb-3 flex flex-wrap w-full gap-2 border-b-[1px] border-gray-300">
               {tags.map((tag) => (
                 <div
+                  onClick={() => handleTagSelection(tag.tag_id)}
                   key={tag.tag_id}
-                  className={`rounded-full w-fit px-2 py-1 text-center
+                  className={`rounded-full select-none cursor-pointer w-fit px-2 py-1 text-center
                text-white bg-[#3F7DEA] font-bold tracking-tight"
             }`}
                 >
-                  <p className="text-xs">{tagsTrans(`${tag.tag_id}`)}</p>
+                  <p className="text-xs">
+                    <i className="material-icons text-xs mr-1">{tag.icon}</i>
+                    {tagsTrans(`${tag.tag_id}`)}
+                  </p>
                 </div>
               ))}
             </div>
@@ -675,11 +696,10 @@ const SimpleEvent = () => {
           </button>
         </div>
       </form>
-            <CpList open={openCp} setOpen={setOpenCp} />
-      <Tags open={openTags} setOpen={setOpenTags} />
+      <CpList open={openCp} setOpen={setOpenCp} />
+      <Tags open={openTags} setOpen={setOpenTags} filterMode={false} />
     </div>
   );
 };
 
 export default SimpleEvent;
-
