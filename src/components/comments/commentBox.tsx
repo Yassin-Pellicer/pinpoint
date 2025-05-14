@@ -14,22 +14,20 @@ const commentBox = () => {
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(0);
   const [assignRating, setAssignRating] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const { selectedEvent } = useMapContext();
 
   const handleUploadComment = async (e: React.FormEvent) => {
     let comment = null;
-    if (assignRating)
-      comment = new Comment(
-        content,
-        user.id,
-        user.username,
-        new Date(),
-        rating
-      );
-    else
-      comment = new Comment(content, user.id, user.username, new Date(), null);
-
+    comment = new Comment(
+      content,
+      user.id,
+      user.username,
+      new Date(),
+      assignRating ? rating : null,
+      isPrivate
+    );
     if (comment.content == "") {
       return;
     } else {
@@ -152,7 +150,7 @@ const commentBox = () => {
                       style={{ resize: "none", height: "100px" }}
                     />
 
-                    <div className="grid grid-cols-2">
+                    <div className="grid grid-cols-3">
                       <button
                         onClick={(e) => {
                           e.preventDefault();
@@ -165,6 +163,22 @@ const commentBox = () => {
                       transition duration-300"
                       >
                         Publish Comment
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsPrivate(!isPrivate);
+                        }}
+                        className="font-bold bg-gray-200 border-b-[1px] text-sm border-gray-400 
+                      text-black p-2 hover:bg-blue-500
+                      hover:border-blue-500 hover:text-white 
+                      transition duration-300"
+                      >
+                        {!isPrivate ? (
+                          <i className="material-icons text-sm">visibility</i>
+                        ) : (
+                          <i className="material-icons text-sm">visibility_off</i>
+                        )}
                       </button>
                       {selectedEvent?.enableRatings && (
                         <button

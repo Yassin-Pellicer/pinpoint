@@ -16,26 +16,10 @@ export default function Comment({ comment, refresh, setRefresh }) {
   };
   
   return (
-    <div className="flex flex-row transition-padding p-4 border-t-[1px] border-gray-300 bg-white cursor-default">
-      <div
-        onClick={() => {
-          router.push(`/main/user/${comment.user}`);
-        }}
-      >
-        <ProfilePopup
-          id={comment.user}
-          profilePicture={comment.profilePicture}
-        ></ProfilePopup>
-      </div>
+    <div className="flex flex-row cursor-default pl-14 mt-2">
       <div className="w-full">
         <div className="flex items-center flex-row w-full justify-between">
           <div className="flex flex-col align-center">
-            <h2
-              className="text-lg hover:underline cursor-pointer font-bold tracking-tight"
-              onClick={() => router.push(`/main/user/${comment.user}`)}
-            >
-              @{comment.username}
-            </h2>
             {comment.rating !== null && (
               <div>
                 <div className="flex mt-[-5px]">

@@ -7,9 +7,9 @@ export async function POST(request) {
 
   try {
       await client.query(`
-      INSERT INTO comment (content, "user", posted_at, rating, event)
-      VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4)
-    `, [comment.content, userId, comment.rating, eventId]);
+      INSERT INTO comment (content, "user", posted_at, rating, event, isprivate)
+      VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4, $5)
+    `, [comment.content, userId, comment.rating, eventId, comment.isprivate]);
     return NextResponse.json({ result: "ok" })
 
   } catch (error) {
@@ -17,6 +17,6 @@ export async function POST(request) {
     return NextResponse.json({ result: "" })
   }
   finally { 
-    client.release(); // This is critical
+    client.release(); 
   }
 }

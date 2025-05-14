@@ -23,7 +23,7 @@ export async function POST(request) {
       );
       if (checkUserQuery.rows.length === 0) {
         const insertUserQuery = await client.query(
-          'INSERT INTO rating ("user", rating, event) VALUES ($1, $2, $3)',
+          'INSERT INTO rating ("user", rating, event, date) VALUES ($1, $2, $3, NOW())',
           [id, rating, eventId]
         );
 
@@ -33,7 +33,7 @@ export async function POST(request) {
         );
       } else {
         const updateUserQuery = await client.query(
-          'UPDATE rating SET rating = $1 WHERE event = $2 AND "user" = $3',
+          'UPDATE rating SET rating = $1, date = NOW() WHERE event = $2 AND "user" = $3',
           [rating, eventId, id]
         );
 

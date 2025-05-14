@@ -10,6 +10,8 @@ import { getEventsByAuthor, getEventsByBookmark, getEventsByInscription } from "
 import { getUserHook } from "../../../../hooks/general/getUserHook";
 import { useMapContext } from "../../../../utils/context/ContextMap";
 import EventCarouselList  from "../../../../components/main/mainEventList";
+import ActivityList from "../../../../components/profile/activityList";
+import { getActivities } from "../../../../hooks/main/get/getActivities";
 
 const ProfileTabs = () => {
   const { id } = useParams();
@@ -20,6 +22,7 @@ const ProfileTabs = () => {
   const [createdEvents, setCreatedEvents] = useState([]);
   const [inscriptions, setInscriptions] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -41,6 +44,11 @@ const ProfileTabs = () => {
 
       getEventsByAuthor(user.id).then((response) => {
         setCreatedEvents(response.events);
+      });
+
+      getActivities(user.id).then((response) => {
+        console.log(response.activities);
+        setActivities(response.activities);
       });
     }
   }, [user]);
@@ -72,7 +80,7 @@ const ProfileTabs = () => {
       name: "Actividad",
       icon: "comment",
       description: "Revisa y edita los eventos que has creado.",
-      component: <EventCarouselList events={createdEvents} />
+      component: <ActivityList activities={activities} />
     },
   ];
 
