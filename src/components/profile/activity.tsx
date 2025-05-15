@@ -19,9 +19,11 @@ export default function SwiperComponent( {activity, profileView} ) {
       onClick={(e) => {
         router.push(`/main/event/${activity.event}`);
       }}
-      className="flex-col bg-gray-100 text-black w-full h-fit flex hover:bg-gray-200 p-4 border-gray-300 border-[1px]"
+      className={`flex-col text-black w-full h-fit flex hover:bg-gray-200 p-4 border-gray-300 border-[1px] ${activity.type === "event" ? "bg-blue-100" : "bg-gray-100"}`}
     >
-      {profileView && (
+      {activity.type == "rating" && (
+        <>
+              {profileView && (
         <div className="flex flex-row items-center align-center">
           {activity.banner && (
             <div className="overflow-hidden bg-white rounded-full w-[30px] h-[30px] mr-6">
@@ -33,13 +35,11 @@ export default function SwiperComponent( {activity, profileView} ) {
             </div>
           )}
           <p className="italic text-sm text-gray-600">
-            @{user.username} ha{" "}
-            {activity.type == "rating" ? "puntuado" : "comentado"}{" "}
+            @{user.username} ha puntuado
             {activity.name.slice(0, 20) + "..."}
           </p>
         </div>
       )}
-      {activity.type == "rating" && (
         <div className="flex flex-col px-14">
           <p className="text-md mr-5 text-black tracking-tighter">
             {activity.name.slice(0, 50) + "..."}
@@ -68,9 +68,27 @@ export default function SwiperComponent( {activity, profileView} ) {
             ))}
           </div>
         </div>
+        </>
       )}
       {activity.type == "comment" && (
         <>
+         {profileView && (
+        <div className="flex flex-row items-center align-center">
+          {activity.banner && (
+            <div className="overflow-hidden bg-white rounded-full w-[30px] h-[30px] mr-6">
+              <img
+                src={activity.banner}
+                alt="example"
+                className="w-full h-full object-cover mr-6"
+              />
+            </div>
+          )}
+          <p className="italic text-sm text-gray-600">
+            @{user.username} ha comentado en{""}
+            {activity.name.slice(0, 20) + "..."}
+          </p>
+        </div>
+      )}
           <p className="text-md mr-5 pl-14 text-black tracking-tighter">
             {activity.name.slice(0, 50) + "..."}
           </p>
@@ -81,6 +99,33 @@ export default function SwiperComponent( {activity, profileView} ) {
           ></Comment>
         </>
       )}
+      {activity.type == "event" && (
+        <>
+         {profileView && (
+        <div className="flex flex-row items-center align-center">
+          {activity.banner && (
+            <div className="overflow-hidden bg-white rounded-full w-[80px] shrink-0 h-[80px] mr-8">
+              <img
+                src={activity.banner}
+                alt="example"
+                className="w-full h-full object-cover mr-6"
+              />
+            </div>
+          )}
+          <div className="flex flex-col">
+            <p className="italic text-gray-600">
+              @{user.username} ha publicado un nuevo evento... 
+            </p>
+            <p className="text-xl mr-5 text-black tracking-tighter">
+              {activity.name.slice(0, 50) + "..."}
+            </p>
+          </div>
+        </div>
+      )}
+
+        </>
+        )
+      }
     </div>
   );
 }

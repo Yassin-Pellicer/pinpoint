@@ -80,14 +80,13 @@ const commentBox = () => {
             </div>
           </div>
 
-          <div className="rounded-b-2xl pt-3 bg-white cursor-default transition">
+          <div className="rounded-b-2xl pt-6 bg-white cursor-default transition">
             <div className="flex flex-col select-none">
-              <div className="flex px-6 flex-row">
+              <div className="flex px-6 flex-row align-center mb-3">
                 <ProfilePopup
                   id={user?.id}
                   profilePicture={user?.profilePicture}
                 ></ProfilePopup>
-
                 <div className="flex flex-col">
                   {" "}
                   <h2 className="text-xl font-bold mr-5 flex flex-col">
@@ -96,7 +95,7 @@ const commentBox = () => {
                   {selectedEvent?.enableRatings && (
                     <div>
                       <div className="flex flex-row">
-                        <div className="flex flex-row">
+                        <div className="flex flex-row mb-4">
                           {[1, 2, 3, 4, 5].map((i) => (
                             <i
                               key={i}
@@ -139,10 +138,10 @@ const commentBox = () => {
                 </div>
               </div>
               {selectedEvent?.enableComments && (
-                <div className="flex flex-row mt-2">
+                <div className="flex flex-row ">
                   <div className="flex w-full flex-col">
                     <textarea
-                      className="bg-white p-3 border mt-2 border-gray-400 focus:outline-none text-xs h-[100px] resize-none"
+                      className="bg-white p-3 border border-gray-400 focus:outline-none text-xs h-[100px] resize-none"
                       placeholder="Escribe un comentario..."
                       value={content}
                       onChange={(e) => setContent(e.target.value)}

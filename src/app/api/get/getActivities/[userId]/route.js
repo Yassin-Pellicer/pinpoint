@@ -19,13 +19,23 @@ export async function GET(_request, { params }) {
       ORDER BY "date" ASC
     `, [userId]);
 
+    const queryEvents = await client.query(`
+      SELECT e.banner, e.name, e.id as "event", e.creationtime
+      FROM event e
+      WHERE e.author = $1
+      ORDER BY "date" ASC
+    `, [userId]);
+
     const comments = queryComments.rows;
     const ratings = queryRatings.rows;
+    const events = queryEvents.rows;
 
     const activities = [
       ...comments.map(comment => ({ ...comment, type: "comment" })),
-      ...ratings.map(rating => ({ ...rating, type: "rating" }))
-    ].sort((a, b) => new Date(b.posted_at || b.date) - new Date(a.posted_at || a.date));
+      ...ratings.map(rating => ({ ...rating, type: "rating" })),
+      ...events.map(event => ({ ...event, type: "event" }))
+    ].sort((a, b) => new Date(b.posted_at || b.date ||b.creationtime) - new Date(a.posted_at || a.date || a.creationtime));
+
     return NextResponse.json({ result: "ok", activities });
   } catch (error) {
     console.error('Database query error:', error);
