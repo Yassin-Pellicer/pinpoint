@@ -43,7 +43,7 @@ const profile = ({open, setOpen, user}) => {
           </i>
         </button>
 
-        <Banner user={user}></Banner>
+        <Banner userProp={user}></Banner>
 
         <div className=" mt-4">
           <div className="h-auto rounded-t-2xl bg-blue-400 relative transition duration-100 overflow-hidden">

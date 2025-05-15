@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import fileURL from "../../utils/funcs/createUrlImage";
 import { addUserHook } from "../../hooks/general/addUserHook";
 import { useRouter } from "next/navigation";
+import { useSession } from "../../utils/context/ContextSession";
 
-export default function Banner({ user }) {
-  const [propUser, setPropUser] = useState({ ...user });
-  const [userCopy, setUserCopy] = useState({ ...user });
+export default function Banner({ userProp }) {
+  const [propUser, setPropUser] = useState({ ...userProp });
+  const [userCopy, setUserCopy] = useState({ ...userProp });
   const [editable, setEditable] = useState(false);
+
+  const {user} = useSession();
 
   const router = useRouter();
 
@@ -33,9 +36,9 @@ export default function Banner({ user }) {
   };
 
   useEffect(() => {
-    setPropUser({ ...user });
-    setUserCopy({ ...user });
-  }, [user]);
+    setPropUser({ ...userProp });
+    setUserCopy({ ...userProp });
+  }, [userProp]);
 
   const handleCancel = () => {
     setUserCopy({ ...propUser });
@@ -53,7 +56,7 @@ export default function Banner({ user }) {
                   src={propUser.banner}
                   className="w-full h-[200px] object-cover cursor-pointer"
                   alt="banner"
-                  onClick={() => router.push(`/main/user/${propUser.id}`)}
+                  onClick={() => router.push(`/main/userProp/${propUser.id}`)}
                 />
               </div>
             ) : (
@@ -71,7 +74,7 @@ export default function Banner({ user }) {
                   src={propUser.profilePicture}
                   alt="Profile Picture"
                   className="w-full h-full object-cover cursor-pointer"
-                  onClick={() => router.push(`/main/user/${propUser.id}`)}
+                  onClick={() => router.push(`/main/userProp/${propUser.id}`)}
                 />
               ) : (
                 <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">
@@ -88,15 +91,19 @@ export default function Banner({ user }) {
                 </h2>
               </div>
               <div className="flex flex-row gap-2">
-                <button
-                  onClick={() => setEditable(true)}
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
-                >
-                  <i className="material-icons text-lg">edit</i>
-                </button>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-[40px] mt-4 px-4 rounded-full">
-                  Seguir
-                </button>
+                {user?.id === userProp?.id && (
+                  <button
+                    onClick={() => setEditable(true)}
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
+                  >
+                    <i className="material-icons text-lg">edit</i>
+                  </button>
+                )}
+                {user?.id !== userProp?.id && (
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-[40px] mt-4 px-4 rounded-full">
+                    Seguir
+                  </button>
+                )}
               </div>
             </div>
             <div className="flex flex-col justify-between w-full py-2">
@@ -220,9 +227,11 @@ export default function Banner({ user }) {
                   >
                     <i className="material-icons text-lg">check</i>
                   </button>
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-[40px] mt-4 px-4 rounded-full">
-                    Seguir
-                  </button>
+                  {userProp.id !== user.id && (
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-[40px] mt-4 px-4 rounded-full">
+                      Seguir
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col justify-between w-full py-2">

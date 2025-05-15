@@ -99,7 +99,7 @@ const ProfileTabs = () => {
         </div>
       )}
 
-      {user && <Banner user={user} />}
+      {user && <Banner userProp={user} />}
 
       <div className="flex justify-around border-b border-gray-200 bg-white z-30 -mt-6">
         {tabData.map((tab) => (

@@ -16,13 +16,19 @@ export default function Comment({ comment, refresh, setRefresh }) {
   };
   
   return (
-    <div className="flex flex-row cursor-default pl-14 mt-2">
+    <div className="flex flex-row cursor-default pl-14">
       <div className="w-full">
         <div className="flex items-center flex-row w-full justify-between">
           <div className="flex flex-col align-center">
+            <div className="flex flex-col">
+              {" "}
+              <h2 className="text-md font-bold mr-5 flex flex-col">
+                @{user?.username || "username"}
+              </h2>
+            </div>
             {comment.rating !== null && (
               <div>
-                <div className="flex mt-[-5px]">
+                <div className="flex">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <i
                       key={i}

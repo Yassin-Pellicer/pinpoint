@@ -23,7 +23,7 @@ export async function GET(_request, { params }) {
       SELECT e.banner, e.name, e.id as "event", e.creationtime
       FROM event e
       WHERE e.author = $1
-      ORDER BY "date" ASC
+      ORDER BY "creationtime" ASC
     `, [userId]);
 
     const comments = queryComments.rows;
@@ -31,12 +31,24 @@ export async function GET(_request, { params }) {
     const events = queryEvents.rows;
 
     const activities = [
-      ...comments.map(comment => ({ ...comment, type: "comment" })),
-      ...ratings.map(rating => ({ ...rating, type: "rating" })),
-      ...events.map(event => ({ ...event, type: "event" }))
-    ].sort((a, b) => new Date(b.posted_at || b.date ||b.creationtime) - new Date(a.posted_at || a.date || a.creationtime));
+      ...comments.map((comment) => ({
+        ...comment,
+        type: "comment",
+        activityDate: new Date(comment.posted_at),
+      })),
+      ...ratings.map((rating) => ({
+        ...rating,
+        type: "rating",
+        activityDate: new Date(rating.posted_at || rating.date),
+      })),
+      ...events.map((event) => ({
+        ...event,
+        type: "event",
+        activityDate: new Date(event.date || event.posted_at || event.creationtime),
+      })),
+    ].sort((a, b) => b.activityDate - a.activityDate);
 
-    return NextResponse.json({ result: "ok", activities });
+return NextResponse.json({ result: "ok", activities });
   } catch (error) {
     console.error('Database query error:', error);
     return NextResponse.json({ result: "ko" });
