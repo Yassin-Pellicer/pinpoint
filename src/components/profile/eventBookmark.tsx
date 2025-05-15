@@ -8,7 +8,7 @@ import { addBookmarkHook } from "../../hooks/main/add/addBookmarkHook";
 import { useMapContext } from "../../utils/context/ContextMap";
 import { useRouter } from "next/navigation";
 
-export default function SwiperComponent( {event} ) {
+export default function SwiperComponent( {event, userProp} ) {
   const { user } = useSession();
   const router = useRouter();
   const { setModifiedEvent } = useMapContext();
@@ -16,13 +16,13 @@ export default function SwiperComponent( {event} ) {
   const [isBookmarked, setIsBookmarked] = useState(true);
 
   const handleUploadBookmark = async () => {
-    const response = await addBookmarkHook(event.id, user.id);
+    const response = await addBookmarkHook(event.id, userProp.id);
     setModifiedEvent(event);
     setIsBookmarked(true);
   };
 
   const handleDeleteBookmark = async () => {
-    const response = await deleteBookmarkHook(event.id, user.id);
+    const response = await deleteBookmarkHook(event.id, userProp.id);
     setModifiedEvent(event);
     setIsBookmarked(false);
   };
@@ -66,7 +66,7 @@ export default function SwiperComponent( {event} ) {
           </div>
         </div>
 
-        {
+        { user.id === userProp.id &&
           <div className="flex flex-row justify-end items-center w-full">
             {isBookmarked ? (
               <button

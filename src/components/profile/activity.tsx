@@ -9,8 +9,7 @@ import { useMapContext } from "../../utils/context/ContextMap";
 import { useRouter } from "next/navigation";
 import Comment from "../comments/commentActivity";
 
-export default function SwiperComponent( {activity, profileView} ) {
-  const { user } = useSession();
+export default function SwiperComponent( {activity, profileView, userProp} ) {
   const router = useRouter();
   const { setModifiedEvent } = useMapContext();
   
@@ -45,7 +44,7 @@ export default function SwiperComponent( {activity, profileView} ) {
                     : ""}
                 </p>
                 <p className="italic text-sm text-gray-600">
-                  @{user.username} ha puntuado...
+                  @{userProp?.username} ha puntuado...
                 </p>
               </div>
             </div>
@@ -100,7 +99,7 @@ export default function SwiperComponent( {activity, profileView} ) {
                     : ""}
                 </p>
                 <p className="italic text-sm text-gray-600">
-                  @{user.username} ha comentado en...
+                  @{userProp?.username} ha comentado en...
                 </p>
               </div>
             </div>
@@ -135,7 +134,7 @@ export default function SwiperComponent( {activity, profileView} ) {
                     : ""}
                 </p>
                 <p className="italic text-sm text-gray-600">
-                  @{user.username} ha publicado un nuevo evento...
+                  @{userProp?.username} ha publicado un nuevo evento...
                 </p>
                 <p className="text-xl mr-5 font-bold text-black tracking-tighter">
                   {activity.name.slice(0, 50) + "..."}

@@ -66,21 +66,21 @@ const ProfileTabs = () => {
       name: "Inscripciones",
       icon: "list",
       description: "Eventos a los que estás inscrito.",
-      component: <EventInscriptions events={inscriptions} />
+      component: <EventInscriptions events={inscriptions} userProp={user} />
     },
     {
       id: "bookmarks",
       name: "Marcadores",
       icon: "bookmark",
       description: "Eventos que has guardado para más tarde.",
-      component: <EventBookmarkList events={bookmarks} />
+      component: <EventBookmarkList events={bookmarks} userProp={user} />
     },
     {
       id: "comments",
       name: "Actividad",
       icon: "comment",
       description: "Revisa y edita los eventos que has creado.",
-      component: <ActivityList activities={activities} />
+      component: <ActivityList activities={activities} userProp={user} />
     },
   ];
 

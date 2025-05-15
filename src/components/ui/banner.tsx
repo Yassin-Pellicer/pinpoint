@@ -56,7 +56,7 @@ export default function Banner({ userProp }) {
                   src={propUser.banner}
                   className="w-full h-[200px] object-cover cursor-pointer"
                   alt="banner"
-                  onClick={() => router.push(`/main/userProp/${propUser.id}`)}
+                  onClick={() => router.push(`/main/user/${propUser.id}`)}
                 />
               </div>
             ) : (
@@ -74,7 +74,7 @@ export default function Banner({ userProp }) {
                   src={propUser.profilePicture}
                   alt="Profile Picture"
                   className="w-full h-full object-cover cursor-pointer"
-                  onClick={() => router.push(`/main/userProp/${propUser.id}`)}
+                  onClick={() => router.push(`/main/user/${propUser.id}`)}
                 />
               ) : (
                 <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">

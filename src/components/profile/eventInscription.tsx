@@ -7,19 +7,19 @@ import { deleteInscriptionHook } from "../../hooks/main/delete/deleteInscription
 import { useMapContext } from "../../utils/context/ContextMap";
 import { useRouter } from "next/navigation";
 
-export default function SwiperComponent( {event} ) {
+export default function SwiperComponent( {event, userProp} ) {
   const { user } = useSession();
   const router = useRouter();
   const { setSelectedEvent, setModifiedEvent } = useMapContext();
   const [isInscribed, setIsInscribed] = useState(true);
 
   const handleUploadInscription = async () => {
-    const response = await addInscriptionHook(event.id, user.id);
+    const response = await addInscriptionHook(event.id, userProp.id);
     setIsInscribed(true);
   };
 
   const handleDeleteInscription = async () => {
-    const response = await deleteInscriptionHook(event.id, user.id);
+    const response = await deleteInscriptionHook(event.id, userProp.id);
     setIsInscribed(false);
   };
 
@@ -64,7 +64,7 @@ export default function SwiperComponent( {event} ) {
           </div>
         </div>
 
-        {
+        { userProp?.id === user.id &&
           <div className="flex flex-row justify-end items-center w-full">
             {isInscribed ? (
               <button

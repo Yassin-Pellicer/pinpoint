@@ -6,7 +6,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import EventInscription from "./eventInscription";
 
-export default function SwiperComponent( {events} ) {
+export default function SwiperComponent( {events, userProp} ) {
   return (
     <div className="flex flex-col">
       {events?.map((event, index) => (
@@ -14,7 +14,7 @@ export default function SwiperComponent( {events} ) {
           key={index}
           className="flex justify-center items-center select-none cursor-pointer"
         >
-          <EventInscription event={event} />
+          <EventInscription event={event} userProp={userProp}/>
         </div>
       ))}
     </div>

@@ -23,6 +23,7 @@ export default function Create() {
   const [selectedButton, setSelectedButton] = useState("simple");
 
   useEffect(() => {
+    if(!editMode) setCheckpoints([]);
     if (checkpoints.length === 0) {
       setSelectedButton("simple");
       setCreateType("simple");
@@ -30,7 +31,7 @@ export default function Create() {
       setSelectedButton("checkpoints");
       setCreateType("checkpoints");
     }
-  }, [checkpoints]);
+  }, []);
 
   const t = useTranslations("Create");
 
