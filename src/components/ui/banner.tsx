@@ -5,11 +5,13 @@ import fileURL from "../../utils/funcs/createUrlImage";
 import { addUserHook } from "../../hooks/general/addUserHook";
 import { useRouter } from "next/navigation";
 import { useSession } from "../../utils/context/ContextSession";
+import { isFollowedByHook, deleteFollowerHook, addFollowerHook } from "../../hooks/general/followersHook";
 
 export default function Banner({ userProp }) {
   const [propUser, setPropUser] = useState({ ...userProp });
   const [userCopy, setUserCopy] = useState({ ...userProp });
   const [editable, setEditable] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(null);
 
   const {user} = useSession();
 
@@ -35,10 +37,34 @@ export default function Banner({ userProp }) {
     }
   };
 
+  const handleIsFollowed = () => {
+    isFollowedByHook(userProp.id, user.id).then((response) => {
+      console.log(response);
+      setIsFollowed(response.follows);
+    });
+  }
+
   useEffect(() => {
     setPropUser({ ...userProp });
     setUserCopy({ ...userProp });
   }, [userProp]);
+
+  useEffect(() => {
+    if(user && userProp) handleIsFollowed();
+  }, [user]);
+
+  const handleFollow = () => {
+    console.log(isFollowed);
+    if (isFollowed) {
+      deleteFollowerHook(user.id, userProp.id).then(() => {
+        handleIsFollowed();
+      });
+    } else {
+      addFollowerHook(user.id, userProp.id).then(() => {
+        handleIsFollowed();
+      });
+    }
+  };
 
   const handleCancel = () => {
     setUserCopy({ ...propUser });
@@ -99,9 +125,14 @@ export default function Banner({ userProp }) {
                     <i className="material-icons text-lg">edit</i>
                   </button>
                 )}
-                {user?.id !== userProp?.id && (
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-[40px] mt-4 px-4 rounded-full">
-                    Seguir
+                {user?.id !== userProp?.id && isFollowed !== null && (
+                  <button
+                    onClick={handleFollow}
+                    className={`${
+                      isFollowed ? "bg-red-500 hover:bg-red-700" : "bg-blue-500 hover:bg-blue-700"
+                    } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
+                  >
+                    {isFollowed ? "Unfollow" : "Seguir"}
                   </button>
                 )}
               </div>
@@ -193,22 +224,6 @@ export default function Banner({ userProp }) {
                   hidden
                   onChange={(e) => fileURL(e, (url) => setProfilePicture(url))}
                 />
-                <label
-                  htmlFor="imageProfile"
-                  className="w-full h-full flex items-center justify-center"
-                >
-                  {userCopy.profilePicture ? (
-                    <img
-                      src={userCopy.profilePicture}
-                      alt="Profile Picture"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <i className="text-gray-400 material-icons mt-8 text-[150px] select-none cursor-pointer">
-                      person
-                    </i>
-                  )}
-                </label>
               </div>
             </div>
 
@@ -228,8 +243,15 @@ export default function Banner({ userProp }) {
                     <i className="material-icons text-lg">check</i>
                   </button>
                   {userProp.id !== user.id && (
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold h-[40px] mt-4 px-4 rounded-full">
-                      Seguir
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log("GOLA")
+                        handleFollow();
+                      }}
+                      className={`bg-${isFollowed ? "red-500 hover:red-700" : "blue-500 hover:blue-700"} text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
+                    >
+                      {isFollowed ? "Dejar de seguir" : "Seguir"}
                     </button>
                   )}
                 </div>
