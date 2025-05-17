@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Menu from "../../components/home/menu";
 import MainMap from "../../components/main/mainMap";
 import { useSession } from "../../utils/context/ContextSession";
@@ -9,14 +9,15 @@ import EventCarouselList from "../../components/main/mainEventList";
 import { useTranslations } from "next-intl";
 import Tags from "../../components/create/tags";
 import debounce from "lodash.debounce";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEvent } from "../../utils/context/ContextEvent";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import { Event } from "../../utils/classes/Event";
+import ProfilePopup from "../../components/profile/profilePopup";
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
-  const { setUser } = useSession();
+  const { setUser, user } = useSession();
   const [openTags, setOpenTags] = useState(false);
   const tagsTrans = useTranslations("Tags");
 
@@ -67,7 +68,22 @@ export default function Layout({ children }) {
     <div className="flex flex-row">
       <div className="flex flex-col overflow-auto shrink-0 h-screen overflow-x-clip w-[525px] z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)]">
         <div className="flex flex-col sticky top-0 z-[100] bg-white">
-          <div className="flex flex-row mt-2 mb-2 justify-center p-2 bg-white-500 w-full h-fit items-center align-center">
+          <div className="flex flex-row mt-2 justify-center p-2 bg-white-500 w-full h-fit items-center align-center">
+          <div
+            className="flex w-[35px] h-[35px] mr-2 border-[1px] border-gray-300 rounded-full shrink-0 overflow-hidden cursor-pointer"
+            onClick={() => router.push(`/main/user/${user?.id}`)}
+          >
+            {user?.profilePicture ? (
+              <ProfilePopup
+                id={user.id}
+                profilePicture={user.profilePicture}
+              ></ProfilePopup>
+            ) : (
+              <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">
+                person
+              </i>
+            )}
+          </div>
             <input
               type="text"
               className="border-[1px] border-gray-500 rounded-full ml-2 px-4 py-2 w-full text-xs"
@@ -98,7 +114,7 @@ export default function Layout({ children }) {
           </div>
           <div className=" px-2 mb-2                                                                                                                                                                                                                                                                   ">
             {filterTags.length > 0 && (
-              <div className="flex flex-wrap w-full mb-2 gap-2">
+              <div className="flex flex-wrap w-full mb-2 mt-1 gap-2">
                 {filterTags.map((tag) => (
                   <div
                     key={tag.tag_id}
@@ -119,7 +135,7 @@ export default function Layout({ children }) {
               <EventCarouselList events={searchResults} />
             </div>
           )}
-          <div className=" bg-white grid grid-cols-3 border-b-[1px] border-gray-300">
+          <div className=" bg-white grid grid-cols-3 border-y-[1px] border-gray-300">
             <button
               onClick={() => router.back()}
               className="bg-white h-full hover:bg-gray-200 shadow-2xl border-r-[1px] border-gray-400"

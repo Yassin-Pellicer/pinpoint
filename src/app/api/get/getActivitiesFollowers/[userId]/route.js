@@ -7,28 +7,26 @@ export async function GET(_request, { params }) {
     const { userId } = params;
     const queryComments = await client.query(`
       SELECT c.*, e.name, e.banner, u.username, u.id as "userId"
-      FROM comment c
-      JOIN event e ON e.id = c.event
-      JOIN "user" u ON c."user" = u.id
-      WHERE c."user" = $1
-      ORDER BY "posted_at" ASC
+      FROM comment c, event e, "user" u
+      WHERE c."user" IN (SELECT follower FROM followers WHERE followed = $1) AND e.id = c.event AND c."user" = u.id
+      ORDER BY "posted_at" DESC
+      LIMIT 10
     `, [userId]);
 
     const queryRatings = await client.query(`
       SELECT r.*, e.name, e.banner, u.username, u.id as "userId"
-      FROM rating r
-      JOIN event e ON e.id = r.event
-      JOIN "user" u ON r."user" = u.id
-      WHERE r."user" = $1
-      ORDER BY "date" ASC
+      FROM rating r, event e, "user" u
+      WHERE r."user" IN (SELECT follower FROM followers WHERE followed = $1) AND e.id = r.event AND r."user" = u.id
+      ORDER BY "date" DESC
+      LIMIT 10
     `, [userId]);
 
     const queryEvents = await client.query(`
       SELECT e.banner, e.name, e.id as "event", e.creationtime, u.username, u.id as "userId"
-      FROM event e
-      JOIN "user" u ON e.author = u.id
-      WHERE e.author = $1
-      ORDER BY "creationtime" ASC
+      FROM event e, "user" u
+      WHERE e.author IN (SELECT follower FROM followers WHERE followed = $1) AND e.author = u.id
+      ORDER BY "creationtime" DESC
+      LIMIT 10
     `, [userId]);
 
     const comments = queryComments.rows;

@@ -5,17 +5,23 @@ import { deleteInscriptionHook } from "../../../hooks/main/delete/deleteInscript
 import { addInscriptionHook } from "../../../hooks/main/add/addInscriptionHook";
 import { useMapContext } from "../../../utils/context/ContextMap";
 import { getCheckInscription } from "../../../hooks/main/get/getCheckInscriptionHook";
+import UserList from "../../main/userInscribedList";
+import { getInscribedUsers } from "../../../hooks/main/get/getInscribedUsers";
 
 const mainInscribedBox = ({ event }) => {
   const [isInscribed, setIsInscribed] = useState(null);
   const { user } = useSession();
   const { setModifiedEvent } = useMapContext();
   const [people, setPeople] = useState(Number(event.inscriptions));
+  const [inscribedUsers, setInscribedUsers] = useState([]);
 
   useEffect(() => {
     if (user) {
       getCheckInscription(user.id, event.id).then((response) => {
         setIsInscribed(response.isInscribed);
+      })
+      getInscribedUsers(event.id).then((response) => {
+        setInscribedUsers(response.inscriptions);
       })
     }
   }, [user?.id]);
@@ -38,7 +44,7 @@ const mainInscribedBox = ({ event }) => {
 
   return (
     <>
-      {event.enableInscription && (
+      {event.enableInscription && user && (
         <div
           className={`h-auto ${
             isInscribed ? "bg-green-500" : "bg-amber-400"
@@ -129,6 +135,20 @@ const mainInscribedBox = ({ event }) => {
               )}
             </div>
           </div>
+        </div>
+      )}
+      {event.enableInscription && user && user.id === event.author && (
+        <div>
+          {event.capacity > 1 && (
+            <div className="relative p-5 z-10">
+              <div className="flex flex-row items-center ">
+                <h1 className="text-2xl tracking-tighter font-bold text-black">
+                  Inscritos al evento
+                </h1>
+              </div>
+            </div>
+          )}
+          <UserList users={inscribedUsers} />
         </div>
       )}
     </>

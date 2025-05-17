@@ -17,7 +17,7 @@ import CommentBox from "../../../../components/comments/commentBox";
 import CpList from "../../../../components/main/mainCheckpointList";
 import { getEventById } from "../../../../hooks/main/get/getEventsHook";
 import { getUserHook } from "../../../../hooks/general/getUserHook";
-import Banner from "../../../../components/ui/banner";
+import Banner from "../../../../components/profile/banner";
 import { Tag } from "../../../../utils/classes/Tag";
 
 const eventInfo = () => {
@@ -234,7 +234,7 @@ const eventInfo = () => {
             <div className="h-auto bg-green-400 relative hover:cursor-pointer hover:bg-green-600 transition duration-100">
               <div className="relative h-full">
                 <div
-                  className="bg-no-repeat bg-center bg-cover absolute right-2 top-[-50px] bottom-0 w-1/2 transform"
+                  className="bg-no-repeat bg-center bg-cover absolute top-[-50px] right-2 bottom-0 w-1/2 transform select-none pointer-events-none"
                   style={{
                     backgroundImage: "url('/img/printer.png')",
                     transform: "rotate(5deg)",

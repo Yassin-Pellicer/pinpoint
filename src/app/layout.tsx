@@ -17,13 +17,13 @@ export default async function RootLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <MapProvider>
-            <EventProvider>
-              <CheckpointsProvider>
-                <SessionProvider>{children}</SessionProvider>
-              </CheckpointsProvider>
-            </EventProvider>
-          </MapProvider>
+          <SessionProvider>
+            <MapProvider>
+              <EventProvider>
+                <CheckpointsProvider>{children}</CheckpointsProvider>
+              </EventProvider>
+            </MapProvider>
+          </SessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

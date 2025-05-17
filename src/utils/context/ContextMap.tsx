@@ -3,6 +3,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Tag } from "../classes/Tag";
 import { Event } from "../classes/Event";
 import { getEventsDynamic, getEventsSearch, getRecommendations } from "../../hooks/main/get/getEventsHook";
+import { getActivitiesFollowers } from "../../hooks/main/get/getActivitiesFollowers";
+import { useSession } from "./ContextSession";
+import { getActivitiesGlobal } from "../../hooks/main/get/getActivitiesGlobal";
 
 interface MapContextType {
   events: Event[];
@@ -30,6 +33,10 @@ interface MapContextType {
   loadEvents: () => Promise<void>;
   loadSearchEvents: (tags: Tag[], searchTerm: string) => Promise<void>;
   loadRecommendations: () => Promise<void>;
+  userActivityFeed: any[];
+  setUserActivityFeed: (userActivityFeed: any[]) => void;
+  globalActivityFeed: any[];
+  setGlobalActivityFeed: (globalActivityFeed: any[]) => void;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -46,6 +53,10 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [modifiedEvent, setModifiedEvent] = useState<Event | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [userActivityFeed, setUserActivityFeed ] = useState([]);
+  const [globalActivityFeed, setGlobalActivityFeed ] = useState([]);
+
+  const {user} = useSession();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -60,6 +71,28 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
   }, []);
+
+  useEffect(() => {
+    if (user?.id != null) {
+      getActivitiesFollowers(user.id).then((response) => {
+        setGlobalActivityFeed((prev) => [
+          ...prev,
+          ...response.activities.filter(
+            (activity) => !prev.some((a) => a.id === activity.id)
+          ),
+        ]);
+      });
+
+      getActivitiesGlobal().then((response) => {
+        setUserActivityFeed((prev) => [
+          ...prev,
+          ...response.activities.filter(
+            (activity) => !prev.some((a) => a.id === activity.id)
+          ),
+        ]);
+      });
+    }
+  }, [user]);
 
   const loadEvents = async () => {
     const response = await getEventsDynamic(location?.[0], location?.[1], zoom,
@@ -124,6 +157,10 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         setModifiedEvent,
         editMode,
         setEditMode,
+        userActivityFeed,
+        setUserActivityFeed,
+        globalActivityFeed,
+        setGlobalActivityFeed
       }}
     >
       {children}

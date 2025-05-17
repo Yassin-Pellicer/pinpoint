@@ -66,6 +66,24 @@ export async function POST(request) {
         [id]
       );
       if (checkIdQuery.rowCount > 0) {
+        if (enableInscription) {
+          const checkInscriptionsQuery = await client.query(
+            "SELECT COUNT(*) FROM inscription_user WHERE event = $1",
+            [id]
+          );
+          const inscriptions = checkInscriptionsQuery.rows[0].count;
+          if (capacity && capacity < inscriptions) {
+            return NextResponse.json({
+              result: "error",
+              message: "capacity",
+              status: 400,
+            });
+          }
+        } else {
+          await client.query("DELETE FROM inscription_user WHERE event = $1", [
+            id,
+          ]);
+        }
         await client.query(
           `
           UPDATE event 

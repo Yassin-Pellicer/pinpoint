@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Tags from "./tags";
 import dynamic from "next/dynamic";
 import { useEvent } from "../../utils/context/ContextEvent";
@@ -80,6 +80,13 @@ const SimpleEvent = () => {
     setTags(selected);
   };
 
+  useEffect(() => {
+    if (tags != null) {
+      const selected = Tag.tags.filter((tag) => tags[tag.tag_id]);
+      setTags(selected);
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -101,8 +108,8 @@ const SimpleEvent = () => {
         }
       } else if (createType === "checkpoints") {
         await addCheckpointsHook({ eventId: result.id, data: checkpoints });
-        router.push("/main/event/" + result.id);
       }
+      router.push("/main/event/" + result.id);
     } catch (error) {
       console.error(error);
       setSnackbarMessage("Something went wrong!");

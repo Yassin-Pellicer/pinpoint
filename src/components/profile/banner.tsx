@@ -6,11 +6,14 @@ import { addUserHook } from "../../hooks/general/addUserHook";
 import { useRouter } from "next/navigation";
 import { useSession } from "../../utils/context/ContextSession";
 import { isFollowedByHook, deleteFollowerHook, addFollowerHook } from "../../hooks/general/followersHook";
+import Follows from "./follows";
 
 export default function Banner({ userProp }) {
   const [propUser, setPropUser] = useState({ ...userProp });
   const [userCopy, setUserCopy] = useState({ ...userProp });
   const [editable, setEditable] = useState(false);
+  const [openFollows, setOpenFollows] = useState(false);
+  const [typeFollows, setTypeFollows] = useState("");
   const [isFollowed, setIsFollowed] = useState(null);
 
   const {user} = useSession();
@@ -171,11 +174,17 @@ export default function Banner({ userProp }) {
                 </div>
               </div>
               <div className="flex flex-row">
-                <p className="text-sm text-gray-600 mr-2">
+                <p
+                  className="text-sm text-gray-600 mr-2 cursor-pointer"
+                  onClick={() => {setOpenFollows(true); setTypeFollows("following")}}
+                >
                   <span className="font-bold">Siguiendo:</span>{" "}
                   {propUser.following || 0}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p
+                  className="text-sm text-gray-600 cursor-pointer"
+                  onClick={() => {setOpenFollows(true); setTypeFollows("followers")}}
+                >
                   <span className="font-bold">Seguidores:</span>{" "}
                   {propUser.followers || 0}
                 </p>
@@ -184,7 +193,7 @@ export default function Banner({ userProp }) {
           </div>
         </div>
       )}
-
+      <Follows open={openFollows} setOpen={setOpenFollows} setType={setTypeFollows} type={typeFollows}></Follows>
       {editable && (
         <div className="bg-white">
           <div className="relative w-full">

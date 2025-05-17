@@ -6,10 +6,10 @@ export async function GET(_request, { params }) {
   try {
     const { userId } = params;
     const query = await client.query(
-      'SELECT * FROM "user" WHERE id IN (SELECT * FROM followers WHERE follower = $1)',
+      'SELECT id, "profilePicture", username, description FROM "user"  WHERE id IN (SELECT followed FROM followers WHERE follower = $1)',
       [userId]
     );
-    return NextResponse.json({ followers: query.rows[0] });
+    return NextResponse.json({ followers: Array.isArray(query.rows) ? query.rows : [query.rows] });
   } catch (error) {
     console.log('Database query error:', error);
     return NextResponse.json({ result: "ko" });

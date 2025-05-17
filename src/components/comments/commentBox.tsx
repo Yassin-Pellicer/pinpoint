@@ -83,10 +83,18 @@ const commentBox = () => {
           <div className="rounded-b-2xl pt-6 bg-white cursor-default transition">
             <div className="flex flex-col select-none">
               <div className="flex px-6 flex-row align-center mb-3">
-                <ProfilePopup
-                  id={user?.id}
-                  profilePicture={user?.profilePicture}
-                ></ProfilePopup>
+                <div className="flex w-[50px] h-[50px] mr-2 border-[1px] border-gray-300 rounded-full shrink-0 overflow-hidden cursor-pointer">
+                  {user?.profilePicture ? (
+                    <ProfilePopup
+                      id={user.id}
+                      profilePicture={user.profilePicture}
+                    ></ProfilePopup>
+                  ) : (
+                    <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">
+                      person
+                    </i>
+                  )}
+                </div>
                 <div className="flex flex-col">
                   {" "}
                   <h2 className="text-xl font-bold mr-5 flex flex-col">
@@ -176,7 +184,9 @@ const commentBox = () => {
                         {!isPrivate ? (
                           <i className="material-icons text-sm">visibility</i>
                         ) : (
-                          <i className="material-icons text-sm">visibility_off</i>
+                          <i className="material-icons text-sm">
+                            visibility_off
+                          </i>
                         )}
                       </button>
                       {selectedEvent?.enableRatings && (

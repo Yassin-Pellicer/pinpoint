@@ -9,7 +9,7 @@ import { useMapContext } from "../../utils/context/ContextMap";
 import { useRouter } from "next/navigation";
 import Comment from "../comments/commentActivity";
 
-export default function SwiperComponent( {activity, profileView, userProp} ) {
+export default function SwiperComponent( {activity} ) {
   const router = useRouter();
   const { setModifiedEvent } = useMapContext();
   
@@ -26,7 +26,6 @@ export default function SwiperComponent( {activity, profileView, userProp} ) {
     >
       {activity.type == "rating" && (
         <>
-          {profileView && (
             <div className="flex flex-row items-center align-center">
               {activity.banner && (
                 <div className="overflow-hidden bg-white rounded-full w-[30px] h-[30px] mr-6">
@@ -43,12 +42,17 @@ export default function SwiperComponent( {activity, profileView, userProp} ) {
                     ? new Date(activity.activityDate).toLocaleString()
                     : ""}
                 </p>
-                <p className="italic text-sm text-gray-600">
-                  @{userProp?.username} ha puntuado...
+                <p
+                  className="italic text-sm text-gray-600 hover:underline cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/main/user/${activity?.userId}`);
+                  }}
+                >
+                  @{activity?.username} ha puntuado...
                 </p>
               </div>
             </div>
-          )}
           <div className="flex flex-col px-14">
             <p className="text-md mr-5 text-black tracking-tighter">
               {activity.name.slice(0, 50) + "..."}
@@ -81,7 +85,6 @@ export default function SwiperComponent( {activity, profileView, userProp} ) {
       )}
       {activity.type == "comment" && (
         <>
-          {profileView && (
             <div className="flex flex-row items-center align-center">
               {activity.banner && (
                 <div className="overflow-hidden bg-white rounded-full w-[30px] h-[30px] mr-6">
@@ -98,12 +101,17 @@ export default function SwiperComponent( {activity, profileView, userProp} ) {
                     ? new Date(activity.activityDate).toLocaleString()
                     : ""}
                 </p>
-                <p className="italic text-sm text-gray-600">
-                  @{userProp?.username} ha comentado en...
+                <p
+                  className="italic text-sm text-gray-600 hover:underline cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/main/user/${activity?.userId}`);
+                  }}
+                >
+                  @{activity?.username} ha comentado...
                 </p>
               </div>
             </div>
-          )}
           <p className="text-md mr-5 pl-14 text-black tracking-tighter">
             {activity.name.slice(0, 50) + "..."}
           </p>
@@ -116,7 +124,6 @@ export default function SwiperComponent( {activity, profileView, userProp} ) {
       )}
       {activity.type == "event" && (
         <>
-          {profileView && (
             <div className="flex flex-row items-center align-center">
               {activity.banner && (
                 <div className="overflow-hidden bg-white rounded-full w-[80px] shrink-0 h-[80px] mr-8">
@@ -133,15 +140,20 @@ export default function SwiperComponent( {activity, profileView, userProp} ) {
                     ? new Date(activity.activityDate).toLocaleString()
                     : ""}
                 </p>
-                <p className="italic text-sm text-gray-600">
-                  @{userProp?.username} ha publicado un nuevo evento...
+                <p
+                  className="italic text-sm text-gray-600 hover:underline cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/main/user/${activity?.userId}`);
+                  }}
+                >
+                  @{activity?.username} ha publicado un nuevo evento...
                 </p>
                 <p className="text-xl mr-5 font-bold text-black tracking-tighter">
                   {activity.name.slice(0, 50) + "..."}
                 </p>
               </div>
             </div>
-          )}
         </>
       )}
     </div>

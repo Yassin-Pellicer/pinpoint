@@ -1,35 +1,31 @@
-import { connectToDatabase } from '../../../../../utils/db/db';
+import { connectToDatabase } from '../../../../utils/db/db';
 import { NextResponse } from 'next/server';
 
-export async function GET(_request, { params }) {
+export async function GET(_request) {
   const client = await connectToDatabase();
   try {
-    const { userId } = params;
     const queryComments = await client.query(`
-      SELECT c.*, e.name, e.banner, u.username, u.id as "userId"
-      FROM comment c
-      JOIN event e ON e.id = c.event
-      JOIN "user" u ON c."user" = u.id
-      WHERE c."user" = $1
-      ORDER BY "posted_at" ASC
-    `, [userId]);
+      SELECT c.*, e.name, e.banner, u.username, u.id as "userId" 
+      FROM comment c, event e, "user" u
+      WHERE c."user" = u.id AND e.id = c.event AND c."user" = u.id
+      ORDER BY RANDOM()
+      LIMIT 10
+    `,);
 
     const queryRatings = await client.query(`
       SELECT r.*, e.name, e.banner, u.username, u.id as "userId"
-      FROM rating r
-      JOIN event e ON e.id = r.event
-      JOIN "user" u ON r."user" = u.id
-      WHERE r."user" = $1
-      ORDER BY "date" ASC
-    `, [userId]);
-
+      FROM rating r, event e, "user" u
+      WHERE r."user" = u.id AND e.id = r.event AND r."user" = u.id
+      ORDER BY RANDOM()
+      LIMIT 10
+    `,);
     const queryEvents = await client.query(`
       SELECT e.banner, e.name, e.id as "event", e.creationtime, u.username, u.id as "userId"
-      FROM event e
-      JOIN "user" u ON e.author = u.id
-      WHERE e.author = $1
-      ORDER BY "creationtime" ASC
-    `, [userId]);
+      FROM event e, "user" u
+      WHERE e.author = u.id AND e.author = u.id
+      ORDER BY RANDOM()
+      LIMIT 10
+    `,)
 
     const comments = queryComments.rows;
     const ratings = queryRatings.rows;

@@ -1,44 +1,33 @@
 "use client";
 
 import "react-quill/dist/quill.snow.css";
-import React, { useState, useMemo, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import React, { useEffect, useRef } from "react";
 
 import { useMapContext } from "../../../utils/context/ContextMap";
 import EventCarousel from "../../../components/main/mainEventCarousel";
 import { useSession } from "../../../utils/context/ContextSession";
 
-import { CssBaseline, setRef } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useRouter } from "next/navigation";
+import Feed from "../../../components/main/feed";
+
 
 export default function Create() {
+  
   const {
     selectedEvent,
     location,
     zoom,
-    filterTags,
-    search,
-    searchResults,
     recommendations,
     modifiedEvent,
     loadEvents,
-    loadSearchEvents,
-    loadRecommendations,
-    setSearch,
   } = useMapContext();
 
   const { user } = useSession();
-
-  const [openTags, setOpenTags] = useState(false);
-  const { username, setUser } = useSession();
   const { setSelectedEvent } = useMapContext();
-
   const router = useRouter();
-
-  const t = useTranslations("Main");
-  const tagsTrans = useTranslations("Tags");
 
   useEffect(() => {
     setSelectedEvent(null);
@@ -47,7 +36,6 @@ export default function Create() {
   useEffect(() => {
     loadEvents();
   }, [zoom, location, modifiedEvent, selectedEvent]);
-
 
   useEffect(() => {
     if (!selectedEvent) {
@@ -130,25 +118,18 @@ export default function Create() {
             <div className="relative p-5 z-10">
               <div className="flex flex-row items-center">
                 <i
-                  className="material-icons text-white text-7xl mr-5"
+                  className="material-icons text-white text-4xl mr-5"
                   style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                 >
                   star
                 </i>
                 <h1
-                  className="text-5xl tracking-tighter font-caveat font-bold text-white"
+                  className="text-2xl tracking-tighter font-bold text-white"
                   style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                 >
                   Eventos recomendados
                 </h1>
               </div>
-              <p
-                className="text-md tracking-tighter font-bold text-white"
-                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.5)" }}
-              >
-                Explora eventos que podrían interesarte, basados en tu ubicación
-                y preferencias.
-              </p>
             </div>
           </div>
         </div>
@@ -161,6 +142,10 @@ export default function Create() {
           </>
         )}
         <EventCarousel events={recommendations} />
+      </div>
+
+      <div className="mt-6">
+        <Feed></Feed>
       </div>
 
       <div className="grid gap-4">

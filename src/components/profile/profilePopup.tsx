@@ -27,7 +27,7 @@ export default function MouseHoverPopover({id, profilePicture}) {
       <div
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-        className="flex w-[60px] h-[60px] mr-5 shrink-0 rounded-full overflow-hidden items-center justify-center bg-gray-300"
+        className="flex w-full h-full mr-5 shrink-0 rounded-full overflow-hidden items-center justify-center bg-gray-300"
       >
         {profilePicture ? (
           <img

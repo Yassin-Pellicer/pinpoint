@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import EventCarousel from "../../../../components/profile/profileEventCarousel";
 import EventBookmarkList from "../../../../components/profile/eventBookmarkList";
 import EventInscriptions from "../../../../components/profile/eventInscriptionList";
-import Banner from "../../../../components/ui/banner";
+import Banner from "../../../../components/profile/banner";
 import { useEffect, useState } from "react";
 import { getEventsByAuthor, getEventsByBookmark, getEventsByInscription } from "../../../../hooks/main/get/getEventsHook";
 import { getUserHook } from "../../../../hooks/general/getUserHook";
@@ -80,7 +80,7 @@ const ProfileTabs = () => {
       name: "Actividad",
       icon: "comment",
       description: "Revisa y edita los eventos que has creado.",
-      component: <ActivityList activities={activities} userProp={user} />
+      component: <ActivityList activities={activities}/>
     },
   ];
 
