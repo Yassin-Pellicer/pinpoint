@@ -22,6 +22,7 @@ export async function POST(request) {
       end,
       date,
       tags,
+      code,
     } = await request.json();
 
     if (!name) {
@@ -143,6 +144,52 @@ export async function POST(request) {
           );
         }
 
+        if (isPublic) {
+          await client.query(
+            `
+            DELETE FROM locked_event
+            WHERE event = $1
+          `,
+            [id]
+          );
+        } else {
+          const query = await client.query(
+            `
+            SELECT password FROM locked_event WHERE event = $1
+          `,
+            [id]
+          );
+          if (query.rows.length === 0 || query.rows[0].password !== code) {
+            await client.query(
+              `
+              DELETE FROM unlocked_event
+              WHERE event = $1
+            `,
+              [id]
+            );
+
+            await client.query(
+              `
+              INSERT INTO unlocked_event ("user", event, password)
+              VALUES ($1, $2, $3)
+            `,
+              [author, id, code]
+            );
+          }
+          await client.query(
+            `
+          DELETE FROM locked_event WHERE event = $1
+          `,
+            [id]
+          );
+          await client.query(
+            `
+          INSERT INTO locked_event (event, password)
+          VALUES ($1, $2)
+          `,
+            [id, code]
+          );
+        }
         return NextResponse.json({ id, result: "ok" });
       }
     }
@@ -195,6 +242,24 @@ export async function POST(request) {
       );
     }
 
+    if (!isPublic) {
+      await client.query(
+        `
+        INSERT INTO locked_event (event, password)
+        VALUES ($1, $2)
+      `,
+        [insertedId, code]
+      );
+
+      await client.query(
+        `
+        INSERT INTO unlocked_event ("user", event, password)
+        VALUES ($1, $2, $3)
+      `,
+        [author, insertedId, code]
+      );
+    }
+
     return NextResponse.json({ result: "ok", id: insertedId, created: true });
   } catch (error) {
     console.error("Event Operation Error:", error);
@@ -203,9 +268,7 @@ export async function POST(request) {
       message: "Internal server error",
       status: 500,
     });
-  }
-  finally { 
+  } finally {
     client.release(); // This is critical
   }
 }
-

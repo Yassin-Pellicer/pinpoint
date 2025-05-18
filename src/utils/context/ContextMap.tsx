@@ -96,7 +96,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loadEvents = async () => {
     const response = await getEventsDynamic(location?.[0], location?.[1], zoom,
-       events.filter((event) => event.id !== selectedEvent?.id && event.id !== modifiedEvent?.id)
+       events.filter((event) => event.id !== selectedEvent?.id && event.id !== modifiedEvent?.id), user?.id
     );
     if (response.events) {
       const updatedMap = new Map(
@@ -111,7 +111,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const loadSearchEvents = async (tags, searchTerm) => {
-    const response = await getEventsSearch(tags, searchTerm);
+    const response = await getEventsSearch(tags, searchTerm, user?.id);
     if (response.events) {
       setSearchResults(response.events);
       const newEventIds = new Set(events.map((event) => event.id));

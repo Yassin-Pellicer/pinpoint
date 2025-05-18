@@ -14,6 +14,7 @@ import { useEvent } from "../../utils/context/ContextEvent";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import { Event } from "../../utils/classes/Event";
 import ProfilePopup from "../../components/profile/profilePopup";
+import { addUnlockedEvent } from "../../hooks/general/privateEventsHook";
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
@@ -104,12 +105,18 @@ export default function Layout({ children }) {
               Tags
             </button>
             <button
-              className="font-bold bg-blue-500 border-gray-400 text-sm text-white
-                text-white-500 rounded-2xl px-2 h-[34px] hover:bg-blue-500
+            onClick={(e) => {
+              e.preventDefault();
+              addUnlockedEvent(user.id, search);
+            }}
+              className={`font-bold bg-blue-500 border-gray-400 text-sm text-white
+                text-white-500 rounded-2xl px-2 h-[34px] ${search.trim() !== "" ? "hover:bg-green-500" : "hover:bg-blue-600"}
                 border-[1px] hover:text-white w-fit
-                transition duration-300 mr-4"
+                transition duration-300 mr-4`}
             >
-              <i className="material-icons text-white text-xl">lock</i>
+              <i className="material-icons text-white text-xl">
+                {search.trim() !== "" ? "lock_open" : "lock"}
+              </i>
             </button>
           </div>
           <div className=" px-2 mb-2                                                                                                                                                                                                                                                                   ">

@@ -14,6 +14,9 @@ export async function GET(_request, { params }) {
       FROM event e
       JOIN bookmarks b ON e.id = b.event
       WHERE b.user = $1
+AND ("isPublic" = true
+        OR ("isPublic" = false AND id IN (SELECT event FROM unlocked_event WHERE "user" = $1))
+        )
     `,
       [userId]
     );

@@ -20,9 +20,11 @@ const mainInscribedBox = ({ event }) => {
       getCheckInscription(user.id, event.id).then((response) => {
         setIsInscribed(response.isInscribed);
       })
-      getInscribedUsers(event.id).then((response) => {
-        setInscribedUsers(response.inscriptions);
-      })
+      if (event.enableInscription && user && user.id === event.author){
+        getInscribedUsers(event.id).then((response) => {
+          setInscribedUsers(response.inscriptions);
+        })
+      }
     }
   }, [user?.id]);
 
@@ -139,7 +141,7 @@ const mainInscribedBox = ({ event }) => {
       )}
       {event.enableInscription && user && user.id === event.author && (
         <div>
-          {event.capacity > 1 && (
+          {inscribedUsers.length > 1 && (
             <div className="relative p-5 z-10">
               <div className="flex flex-row items-center ">
                 <h1 className="text-2xl tracking-tighter font-bold text-black">

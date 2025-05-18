@@ -7,7 +7,9 @@ export async function GET(_request, { params }) {
 
   try {
     const result = await client.query(
-      'SELECT e.* FROM event e WHERE e.author = $1',
+      `SELECT e.* FROM event e WHERE e.author = $1 AND ("isPublic" = true
+        OR ("isPublic" = false AND id IN (SELECT event FROM unlocked_event WHERE "user" = $1))
+        )`,
       [userId]
     );
 

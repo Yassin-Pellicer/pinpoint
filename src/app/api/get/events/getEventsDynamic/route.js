@@ -5,15 +5,20 @@ export async function GET(request) {
   const client = await connectToDatabase();
   try {
     const { searchParams } = new URL(request.url);
+    console.log(searchParams);
 
     const userLat = parseFloat(searchParams.get("lat"));
     const userLon = parseFloat(searchParams.get("lon"));
     const zoomLevel = parseInt(searchParams.get("zoomLevel"));
+    let userId = parseInt(searchParams.get("userId"));
     const events = searchParams
       .get("event_ids")
       .split(",")
       .map(Number)
       .filter((n) => !isNaN(n));
+
+    console.log(userId);
+    if (isNaN(userId)) userId = -1;
 
     const earthRadius = 6371;
     const maxDistance = zoomLevel < 10 ? 5000 : 500;
@@ -35,15 +40,18 @@ export async function GET(request) {
         AND position_lng > $3
         AND position_lng < $4
         AND id NOT IN (${eventIds})
-    AND (
-      ("start" IS NULL AND "end" IS NULL)
-      OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
-      OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
-      OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
-    )
+        AND ("isPublic" = true
+        OR ("isPublic" = false AND id IN (SELECT event FROM unlocked_event WHERE "user" = $5))
+        )
+      AND (
+        ("start" IS NULL AND "end" IS NULL)
+        OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
+        OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
+        OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+      )
       ORDER BY 
-        (position_lat - $5) * (position_lat - $5) + 
-        (position_lng - $6) * (position_lng - $6)
+        (position_lat - $6) * (position_lat - $6) + 
+        (position_lng - $7) * (position_lng - $7)
       LIMIT 50
     `;
 
@@ -52,6 +60,7 @@ export async function GET(request) {
       maxLat,
       minLng,
       maxLng,
+      userId,
       userLat,
       userLon,
     ]);
@@ -81,10 +90,9 @@ export async function GET(request) {
 
     return NextResponse.json({ events: eventsWithMarkers });
   } catch (error) {
+    console.error("Database query error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-  finally { 
+  } finally {
     client.release();
   }
 }
-

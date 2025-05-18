@@ -7,7 +7,7 @@ export async function GET(_request) {
     const queryComments = await client.query(`
       SELECT c.*, e.name, e.banner, u.username, u.id as "userId" 
       FROM comment c, event e, "user" u
-      WHERE c."user" = u.id AND e.id = c.event AND c."user" = u.id
+      WHERE c."user" = u.id AND e.id = c.event AND e."isPublic" = true
       ORDER BY RANDOM()
       LIMIT 10
     `,);
@@ -15,14 +15,14 @@ export async function GET(_request) {
     const queryRatings = await client.query(`
       SELECT r.*, e.name, e.banner, u.username, u.id as "userId"
       FROM rating r, event e, "user" u
-      WHERE r."user" = u.id AND e.id = r.event AND r."user" = u.id
+      WHERE r."user" = u.id AND e.id = r.event AND e."isPublic" = true
       ORDER BY RANDOM()
       LIMIT 10
     `,);
     const queryEvents = await client.query(`
       SELECT e.banner, e.name, e.id as "event", e.creationtime, u.username, u.id as "userId"
       FROM event e, "user" u
-      WHERE e.author = u.id AND e.author = u.id
+      WHERE e.author = u.id AND e."isPublic" = true
       ORDER BY RANDOM()
       LIMIT 10
     `,)

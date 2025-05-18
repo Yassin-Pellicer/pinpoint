@@ -56,7 +56,8 @@ export const getEventsDynamic = async (
   userLat?: number,
   userLon?: number,
   zoomLevel?: number,
-  events?: any[]
+  events?: any[],
+  userId?: number
 ) => {
   const queryParams = new URLSearchParams();
 
@@ -64,6 +65,7 @@ export const getEventsDynamic = async (
   queryParams.append("lon", String(userLon));
   queryParams.append("zoomLevel", String(zoomLevel));
   queryParams.append("event_ids", events.map((event) => event.id).join(","));
+  queryParams.append("userId", String(userId));
 
   const res = await fetch(`/api/get/events/getEventsDynamic?${queryParams.toString()}`, {
     method: "GET",
@@ -75,10 +77,11 @@ export const getEventsDynamic = async (
   return await res.json();
 };
 
-export const getEventsSearch = async (tags?: Tag[], search?: string) => {
+export const getEventsSearch = async (tags?: Tag[], search?: string, userId?: number) => {
   const queryParams = new URLSearchParams();
   queryParams.append("tags", tags.map((tag) => tag.tag_id).join(","));
   queryParams.append("search", search);
+  queryParams.append("userId", String(userId));
   
   const res = await fetch(`/api/get/events/getEventsSearch?${queryParams.toString()}`, {
     method: "GET",
@@ -93,11 +96,13 @@ export const getEventsSearch = async (tags?: Tag[], search?: string) => {
 export const getRecommendations = async (
   userLat?: number,
   userLon?: number,
+  userId?: number
 ) => {
   const queryParams = new URLSearchParams();
 
   queryParams.append("lat", String(userLat));
   queryParams.append("lon", String(userLon));
+  queryParams.append("userId", String(userId));
 
   const res = await fetch(`/api/get/events/getRecommendations?${queryParams.toString()}`, {
     method: "GET",

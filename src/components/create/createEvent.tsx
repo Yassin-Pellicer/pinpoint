@@ -25,6 +25,8 @@ import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import CpList from "./cpEv/createCheckpointList";
 import { addCheckpointsHook } from "../../hooks/create/addCheckpointsHook";
 import { Tag } from "../../utils/classes/Tag";
+import Quill from "react-quill";
+import { getEventCode } from "../../hooks/general/privateEventsHook";
 const SimpleEvent = () => {
   const {
     event,
@@ -53,6 +55,8 @@ const SimpleEvent = () => {
     setEnd,
     date,
     setDate,
+    code,
+    setCode,
     setTags
   } = useEvent();
   const [loading, setLoading] = useState(false);
@@ -70,11 +74,6 @@ const SimpleEvent = () => {
   const t = useTranslations("Create");
   const tagsTrans = useTranslations("Tags");
 
-  const Quill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
-    []
-  );
-
   const handleTagSelection = (tagId) => {
     const selected = tags.filter((tag) => tag.tag_id !== tagId);
     setTags(selected);
@@ -87,6 +86,27 @@ const SimpleEvent = () => {
     }
   }, []);
 
+  const generateRandomAsciiCode = (length: number) => {
+    let result = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  };
+
+  useEffect(() => {
+    getEventCode(event.id).then((res) => {
+      console.log(res);
+      if (!res || res.code === "") {
+        setCode(generateRandomAsciiCode(20));
+      } else {
+        setCode(res.code);
+      }
+    })
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -95,7 +115,7 @@ const SimpleEvent = () => {
       data.qr = false;
     }
     try {
-      const result = await createEventHook(data, user.id);
+      const result = await createEventHook(data, user.id, code);
       if (result.status === 400) {
         if (result.message === "name") {
           setSnackbarMessage(t("nameNotif"));
@@ -542,13 +562,27 @@ const SimpleEvent = () => {
                 </p>
               ) : (
                 <>
-                  <label className="text-sm font-bold mb-1">
-                    Introduce tu código de invitación:
-                  </label>
+                  <div className="flex flex-row items-center justify-between">
+                    <label className="text-sm font-bold mb-1">
+                      Este es tu código de invitación:
+                    </label>
+                    <button
+                      className="hover:bg-gray-300 transition duration-100 rounded-full p-1"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCode(generateRandomAsciiCode(20))
+                      }}
+                    >
+                      <i className="material-icons text-black text-xl">
+                        refresh
+                      </i>
+                    </button>
+                  </div>
                   <input
                     type="text"
-                    value={""}
+                    value={code}
                     className="border w-full mt-2 border-black rounded p-1 mb-1"
+                    readOnly
                   />
                   <p className="text-sm mt-1 mb-2">
                     {t.rich("Details.private.description", {

@@ -12,6 +12,9 @@ export async function GET(_request, { params }) {
       FROM event e
       JOIN inscription_user iu  ON e.id = iu.event
       WHERE iu.user = $1
+AND ("isPublic" = true
+        OR ("isPublic" = false AND id IN (SELECT event FROM unlocked_event WHERE "user" = $1))
+        )
     `,
       [userId]
     );

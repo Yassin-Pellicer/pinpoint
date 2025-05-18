@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/app/layout.js"  ],
+, "src/app/layout.js", "src/app/middleware.js"  ],
   "exclude": [
     "node_modules"
   ]

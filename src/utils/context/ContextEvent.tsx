@@ -44,12 +44,15 @@ interface EventContextType {
   setEnd: (end: Date) => void; 
   date: Date;
   setDate: (date: Date) => void;
+  code : string;
+  setCode: (code: string) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
 export const EventProvider = ({ children }: { children: React.ReactNode }) => {
   const [event, setEvent] = useState<Event>(new Event());
+  const [code, setCode] = useState<string>("");
 
   const setName = (name: string) => {
     setEvent((prev) => ({ ...prev, name }));
@@ -169,7 +172,9 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         end: event.end,
         setEnd,
         date: event.date,
-        setDate
+        setDate,
+        code,
+        setCode
       }}
     >
       {children}

@@ -19,13 +19,15 @@ import { getEventById } from "../../../../hooks/main/get/getEventsHook";
 import { getUserHook } from "../../../../hooks/general/getUserHook";
 import Banner from "../../../../components/profile/banner";
 import { Tag } from "../../../../utils/classes/Tag";
+import { getPermission } from "../../../../hooks/general/privateEventsHook";
 
 const eventInfo = () => {
   const { setSelectedEvent, setEditMode } = useMapContext();
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { user } = useSession();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingEvent, setLoadingEvent] = useState(true);
   const { setEvent } = useEvent();
   const [event, setCurrentEvent] = useState(null);
   const [author, setAuthor] = useState(null);
@@ -36,23 +38,46 @@ const eventInfo = () => {
   const eventId = params.id;
 
   useEffect(() => {
-    setLoading(true);
-    getEventById(Number(eventId))
-      .then((response) => {
-        setSelectedEvent(response.event);
-        setCurrentEvent(response.event);
-      })
-      .finally(() => setLoading(false));
-  }, [eventId]);
-
-  useEffect(() => {
-    if (event) {
-      getUserHook(Number(event.author)).then((response) => {
-        setAuthor(response.user);
-      });
+    const fetchEvent = async () => {
+      setLoadingEvent(true);
+      const response = await getEventById(Number(eventId));
+      setSelectedEvent(response.event);
+      setCurrentEvent(response.event);
+    };
+  
+    if (eventId) {
+      fetchEvent();
     }
-  }, [event]);
-
+  }, [eventId]);
+  
+  useEffect(() => {
+    const fetchAuthorAndPermission = async () => {
+      if (!event) return;
+  
+      const authorResponse = await getUserHook(Number(event.author));
+      setAuthor(authorResponse.user);
+  
+      if (!event.isPublic && user) {
+        const permissionResponse = await getPermission(Number(eventId));
+        const hasPermission = permissionResponse.users?.some(
+          (u) => u.user === user.id
+        );
+  
+        if (!hasPermission) {
+          router.push("/main/home");
+          return;
+        }
+      }
+      setLoadingEvent(false);
+    };
+  
+    if (event && user) {
+      fetchAuthorAndPermission()
+    } else if (event?.isPublic) {
+      setLoadingEvent(false);
+    }
+  }, [event, user]);
+  
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
@@ -68,7 +93,7 @@ const eventInfo = () => {
 
   return (
     <>
-      {!event && (
+      {(!event || loadingEvent) && (
         <div className="flex flex-col">
           <div className="bg-gray-300 w-full h-[350px] flex flex-col p-4 items-center justify-center text-white">
             <div className="animate-spin rounded-full h-[100px] w-[100px] border-b-4 border-white"></div>
@@ -96,7 +121,7 @@ const eventInfo = () => {
         </div>
       )}
 
-      {event && (
+      {!loadingEvent && event && (
         <div>
           <div className="relative justify-center w-full">
             {event.banner ? (
