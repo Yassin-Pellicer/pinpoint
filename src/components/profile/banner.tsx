@@ -41,10 +41,12 @@ export default function Banner({ userProp }) {
   };
 
   const handleIsFollowed = () => {
-    isFollowedByHook(userProp.id, user.id).then((response) => {
-      console.log(response);
-      setIsFollowed(response.follows);
-    });
+    if(user) {
+      isFollowedByHook(userProp.id, user.id).then((response) => {
+        console.log(response);
+        setIsFollowed(response.follows);
+      });
+    }
   }
 
   useEffect(() => {

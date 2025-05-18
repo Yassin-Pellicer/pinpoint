@@ -9,7 +9,6 @@ import { useEvent } from "../../../../utils/context/ContextEvent";
 import { useParams } from "next/navigation";
 
 import Quill from "react-quill";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import EventTimeDisplay from "../../../../components/ui/date";
 import BookmarkBox from "../../../../components/ui/main/mainBookmarkBox";
 import InscribedBox from "../../../../components/ui/main/mainInscriptionBox";
@@ -44,25 +43,26 @@ const eventInfo = () => {
       setSelectedEvent(response.event);
       setCurrentEvent(response.event);
     };
-  
+
     if (eventId) {
       fetchEvent();
     }
   }, [eventId]);
-  
+
   useEffect(() => {
     const fetchAuthorAndPermission = async () => {
       if (!event) return;
-  
+
       const authorResponse = await getUserHook(Number(event.author));
+      console.log(authorResponse);
       setAuthor(authorResponse.user);
-  
+
       if (!event.isPublic && user) {
         const permissionResponse = await getPermission(Number(eventId));
         const hasPermission = permissionResponse.users?.some(
           (u) => u.user === user.id
         );
-  
+
         if (!hasPermission) {
           router.push("/main/home");
           return;
@@ -70,14 +70,14 @@ const eventInfo = () => {
       }
       setLoadingEvent(false);
     };
-  
-    if (event && user) {
-      fetchAuthorAndPermission()
+
+    if (event) {
+      fetchAuthorAndPermission();
     } else if (event?.isPublic) {
       setLoadingEvent(false);
     }
   }, [event, user]);
-  
+
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
@@ -141,7 +141,7 @@ const eventInfo = () => {
               <div className="flex flex-row w-full">
                 <h1
                   className={`text-3xl tracking-tighter font-extrabold mb-2 text-white ${
-                    event.banner ? "" : "pt-12"
+                    event.banner ? "" : ""
                   }`}
                   style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
                 >

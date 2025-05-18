@@ -66,7 +66,7 @@ export default function SwiperComponent( {event, userProp} ) {
           </div>
         </div>
 
-        { user.id === userProp.id &&
+        { user?.id === userProp.id &&
           <div className="flex flex-row justify-end items-center w-full">
             {isBookmarked ? (
               <button
