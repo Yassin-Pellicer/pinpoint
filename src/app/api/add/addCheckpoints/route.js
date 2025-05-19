@@ -1,11 +1,20 @@
 import { connectToDatabase } from "../../../../utils/db/db";
 import { NextResponse } from 'next/server';
+import cookie from 'cookie';
+import jwt from 'jsonwebtoken';
 
 export async function POST(request) {
   const { eventId, data } = await request.json()
+  const token = cookie.parse(request.headers.cookie).token;
+  const session = jwt.verify(token, process.env.SESSION_SECRET);
   const client = await connectToDatabase();
 
   try {
+    const event = await client.query('SELECT author FROM event WHERE id = $1', [eventId]);
+    if (event.rows[0].author !== session.id) {
+      return NextResponse.json({ result: "invalid user. The user that edits the event must be the author" });
+    }
+
     await client.query('DELETE FROM checkpoint WHERE event = $1', [eventId]);
 
     for (const checkpoint of data) {
@@ -26,7 +35,7 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Register Error:', error);
-    return NextResponse.json({ result: "" });
+    return NextResponse.json({ result: "ko" });
   }
   finally { 
     client.release(); // This is critical

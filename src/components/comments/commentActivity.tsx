@@ -5,7 +5,7 @@ import ProfilePopup from "../profile/profilePopup";
 import { useSession } from "../../utils/context/ContextSession";
 import { useRouter } from "next/navigation";
 
-export default function Comment({ comment, refresh, setRefresh }) {
+export default function Comment({ comment, refresh }) {
 
   const { user } = useSession();
   const router = useRouter();
@@ -69,7 +69,6 @@ export default function Comment({ comment, refresh, setRefresh }) {
               <i
                 className="material-icons text-xl ml-4 text-gray-600 transition duration-300 hover:cursor-pointer hover:text-red-500"
                 onClick={() => {
-                  setRefresh(!refresh);
                   handleDeleteComment(comment.id);
                 }}
               >

@@ -118,7 +118,6 @@ export default function SwiperComponent( {activity} ) {
           <Comment
             comment={activity}
             refresh={undefined}
-            setRefresh={undefined}
           ></Comment>
         </>
       )}

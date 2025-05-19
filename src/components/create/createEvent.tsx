@@ -27,6 +27,8 @@ import { addCheckpointsHook } from "../../hooks/create/addCheckpointsHook";
 import { Tag } from "../../utils/classes/Tag";
 import Quill from "react-quill";
 import { getEventCode } from "../../hooks/general/privateEventsHook";
+import { deleteEventHook } from "../../hooks/main/delete/deleteEventHook";
+import { useMapContext } from "../../utils/context/ContextMap";
 const SimpleEvent = () => {
   const {
     event,
@@ -69,6 +71,7 @@ const SimpleEvent = () => {
 
   const router = useRouter();
   const { checkpoints, setCheckpoints } = useCheckpoints();
+  const { editMode } = useMapContext();
   const [openCp, setOpenCp] = useState(false);
 
   const t = useTranslations("Create");
@@ -115,7 +118,8 @@ const SimpleEvent = () => {
       data.qr = false;
     }
     try {
-      const result = await createEventHook(data, user.id, code);
+      const resultPromise = createEventHook(data, user.id, code);
+      const result = await resultPromise;
       if (result.status === 400) {
         if (result.message === "name") {
           setSnackbarMessage(t("nameNotif"));
@@ -129,7 +133,11 @@ const SimpleEvent = () => {
       } else if (createType === "checkpoints") {
         await addCheckpointsHook({ eventId: result.id, data: checkpoints });
       }
-      router.push("/main/event/" + result.id);
+      if (result) {
+        await resultPromise;
+        console.log(result);
+        router.push("/main/event/" + result.id);
+      }
     } catch (error) {
       console.error(error);
       setSnackbarMessage("Something went wrong!");
@@ -735,6 +743,22 @@ const SimpleEvent = () => {
           >
             {loading ? t("loading") : t("upload")}
           </button>
+        </div>
+        <div className="flex justify-center">
+          {editMode && (
+            <button
+              className={
+                "flex justify-center font-caveat font-bold " +
+                "align-center w-full items-center text-2xl " +
+                "bg-red-500 text-white py-4 px-4 " +
+                "hover:bg-red-600 focus:outline-none " +
+                "focus:ring-opacity-50"
+              }
+              onClick={() => deleteEventHook(event.id)}
+            >
+              Eliminar evento
+            </button>
+          )}
         </div>
       </form>
       <CpList open={openCp} setOpen={setOpenCp} />

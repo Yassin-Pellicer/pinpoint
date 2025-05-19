@@ -1,8 +1,22 @@
 import { connectToDatabase } from "../../../../utils/db/db";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+import cookie from 'cookie';
 
 export async function POST(request) {
   const client = await connectToDatabase();
+
+  const cookies = cookie.parse(request.headers.get('cookie') || '');
+  const token = cookies.session;
+  let decodedId;
+
+  try {
+    const decoded = jwt.verify(token, process.env.SESSION_SECRET);
+    decodedId = decoded.id;
+  } catch (error) {
+    console.log(error)
+    return NextResponse.json({ result: "ko", message: "Invalid session" });
+  }
 
   try {
     let {
@@ -24,6 +38,14 @@ export async function POST(request) {
       tags,
       code,
     } = await request.json();
+
+    if (author !== decodedId) {
+      return NextResponse.json({
+        result: "error",
+        message: "invalid user. The user that edits the event must be the author",
+        status: 401,
+      });
+    }
 
     if (!name) {
       return NextResponse.json({
@@ -272,3 +294,4 @@ export async function POST(request) {
     client.release(); // This is critical
   }
 }
+

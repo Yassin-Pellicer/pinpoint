@@ -10,7 +10,7 @@ export async function POST(request) {
   }
 
   try {
-    verify(sessionCookie, 'secret');
+    verify(sessionCookie, process.env.SESSION_SECRET);
 
     const serializedCookie = cookie.serialize('session', '', {
       httpOnly: true,

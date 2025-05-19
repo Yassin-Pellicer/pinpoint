@@ -1,8 +1,19 @@
 import { connectToDatabase } from "../../../../utils/db/db";
 import { NextResponse } from 'next/server';
 
+import cookie from 'cookie';
+import jwt from 'jsonwebtoken';
+
 export async function POST(request) {
-  const { eventId, id, rating } = await request.json()
+  const cookies = cookie.parse(request.headers.get('cookie') || '');
+  const { eventId, rating } = await request.json()
+  const token = cookies.session;
+  try {
+    const decoded = jwt.verify(token, process.env.SESSION_SECRET);
+    id = decoded.id;
+  } catch (error) {
+    return NextResponse.json({ result: "ko", message: "Invalid session" });
+  }
   const client = await connectToDatabase();
   try {
     if (rating === 0 || rating === null) {
@@ -53,4 +64,5 @@ export async function POST(request) {
     client.release(); // This is critical
   }
 }
+
 
