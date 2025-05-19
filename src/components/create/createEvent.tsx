@@ -29,6 +29,7 @@ import Quill from "react-quill";
 import { getEventCode } from "../../hooks/general/privateEventsHook";
 import { deleteEventHook } from "../../hooks/main/delete/deleteEventHook";
 import { useMapContext } from "../../utils/context/ContextMap";
+import { Event } from "../../utils/classes/Event";
 const SimpleEvent = () => {
   const {
     event,
@@ -71,7 +72,7 @@ const SimpleEvent = () => {
 
   const router = useRouter();
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { editMode } = useMapContext();
+  const { editMode, setEvents } = useMapContext();
   const [openCp, setOpenCp] = useState(false);
 
   const t = useTranslations("Create");
@@ -136,6 +137,7 @@ const SimpleEvent = () => {
       if (result) {
         await resultPromise;
         console.log(result);
+        setModifiedEvent(event)
         router.push("/main/event/" + result.id);
       }
     } catch (error) {
@@ -744,7 +746,8 @@ const SimpleEvent = () => {
             {loading ? t("loading") : t("upload")}
           </button>
         </div>
-        <div className="flex justify-center">
+      </form>
+      <div className="flex justify-center">
           {editMode && (
             <button
               className={
@@ -754,13 +757,16 @@ const SimpleEvent = () => {
                 "hover:bg-red-600 focus:outline-none " +
                 "focus:ring-opacity-50"
               }
-              onClick={() => deleteEventHook(event.id)}
+              onClick={async () => {
+
+                await deleteEventHook(event.id);
+                router.push("/main/home");
+              }}
             >
               Eliminar evento
             </button>
           )}
         </div>
-      </form>
       <CpList open={openCp} setOpen={setOpenCp} />
       <Tags open={openTags} setOpen={setOpenTags} filterMode={false} />
     </div>
