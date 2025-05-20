@@ -72,7 +72,7 @@ const SimpleEvent = () => {
 
   const router = useRouter();
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { editMode, setEvents } = useMapContext();
+  const { editMode, setEvents, events } = useMapContext();
   const [openCp, setOpenCp] = useState(false);
 
   const t = useTranslations("Create");
@@ -137,7 +137,6 @@ const SimpleEvent = () => {
       if (result) {
         await resultPromise;
         console.log(result);
-        setModifiedEvent(event)
         router.push("/main/event/" + result.id);
       }
     } catch (error) {
@@ -758,7 +757,7 @@ const SimpleEvent = () => {
                 "focus:ring-opacity-50"
               }
               onClick={async () => {
-
+                setEvents(events.filter((eventParam) => eventParam.id !== event?.id))
                 await deleteEventHook(event.id);
                 router.push("/main/home");
               }}

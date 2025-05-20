@@ -3,23 +3,21 @@ import { NextResponse } from 'next/server';
 import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; 
-
 export async function POST(request) {
   const client = await connectToDatabase();
 
   const cookies = cookie.parse(request.headers.get('cookie') || '');
   const token = cookies.session;
-  
+ let id; 
   try {
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
-    follower = decoded.id;
+    id = decoded.id;
+    console.log("HPLA;LASDASD ", id);
   } catch (error) {
     return NextResponse.json({ result: "ko", message: "Invalid session" });
   }
 
-  const { eventId, id } = await request.json()
+  const { eventId } = await request.json()
   try {
     const checkUserQuery = await client.query(
       'SELECT inscriptions, capacity FROM event WHERE id = $1',
