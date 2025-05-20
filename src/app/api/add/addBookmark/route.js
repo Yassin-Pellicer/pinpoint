@@ -1,11 +1,11 @@
 import { connectToDatabase } from "../../../../utils/db/db";
-import { NextResponse } from 'next/server';
-import cookie from 'cookie';
-import jwt from 'jsonwebtoken';
+import { NextResponse } from "next/server";
+import cookie from "cookie";
+import jwt from "jsonwebtoken";
 
 export async function POST(request) {
   const { eventId } = await request.json();
-  const cookies = cookie.parse(request.headers.get('cookie') || '');
+  const cookies = cookie.parse(request.headers.get("cookie") || "");
   const token = cookies.session;
   let id;
 
@@ -19,17 +19,13 @@ export async function POST(request) {
   const client = await connectToDatabase();
   try {
     await client.query(
-      'INSERT INTO bookmarks ("user", event) VALUES ($1, $2)', 
+      'INSERT INTO bookmarks ("user", event) VALUES ($1, $2)',
       [id, eventId]
     );
     return NextResponse.json({ result: "ok" });
-
   } catch (error) {
     return NextResponse.json({ result: "ko" });
-  }
-  finally { 
+  } finally {
     client.release();
   }
 }
-
-

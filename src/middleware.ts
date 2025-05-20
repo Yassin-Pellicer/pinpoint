@@ -6,7 +6,6 @@ const secret = new TextEncoder().encode(process.env.SESSION_SECRET);
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("session")?.value;
-  console.log(request.nextUrl.pathname);
 
   if (!token) {
     if (
@@ -20,7 +19,6 @@ export async function middleware(request: NextRequest) {
       await jwtVerify(token, secret);
       return NextResponse.next();
     } catch (error) {
-      console.log(error);
       return NextResponse.json({ auth: false }, { status: 401 });
     }
   }

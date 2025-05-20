@@ -736,7 +736,7 @@ const SimpleEvent = () => {
             className={
               "flex justify-center font-caveat font-bold " +
               "align-center w-full items-center text-5xl " +
-              "bg-blue-500 text-white py-6 px-4 " +
+              "bg-blue-500 text-white py-4 px-4 " +
               "hover:bg-blue-600 focus:outline-none " +
               "focus:ring-opacity-50"
             }
@@ -750,7 +750,7 @@ const SimpleEvent = () => {
           {editMode && (
             <button
               className={
-                "flex justify-center font-caveat font-bold " +
+                "flex justify-center font-bold " +
                 "align-center w-full items-center text-2xl " +
                 "bg-red-500 text-white py-4 px-4 " +
                 "hover:bg-red-600 focus:outline-none " +

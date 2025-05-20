@@ -1,12 +1,12 @@
 import { connectToDatabase } from "../../../../utils/db/db";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import cookie from 'cookie';
+import cookie from "cookie";
 
 export async function POST(request) {
   const client = await connectToDatabase();
 
-  const cookies = cookie.parse(request.headers.get('cookie') || '');
+  const cookies = cookie.parse(request.headers.get("cookie") || "");
   const token = cookies.session;
   let decodedId;
 
@@ -14,7 +14,7 @@ export async function POST(request) {
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
     decodedId = decoded.id;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return NextResponse.json({ result: "ko", message: "Invalid session" });
   }
 
@@ -42,7 +42,8 @@ export async function POST(request) {
     if (author !== decodedId) {
       return NextResponse.json({
         result: "error",
-        message: "invalid user. The user that edits the event must be the author",
+        message:
+          "invalid user. The user that edits the event must be the author",
         status: 401,
       });
     }
@@ -165,7 +166,6 @@ export async function POST(request) {
             [id, tag.name]
           );
         }
-
         if (isPublic) {
           await client.query(
             `
@@ -175,29 +175,6 @@ export async function POST(request) {
             [id]
           );
         } else {
-          const query = await client.query(
-            `
-            SELECT password FROM locked_event WHERE event = $1
-          `,
-            [id]
-          );
-          if (query.rows.length === 0 || query.rows[0].password !== code) {
-            await client.query(
-              `
-              DELETE FROM unlocked_event
-              WHERE event = $1
-            `,
-              [id]
-            );
-
-            await client.query(
-              `
-              INSERT INTO unlocked_event ("user", event, password)
-              VALUES ($1, $2, $3)
-            `,
-              [author, id, code]
-            );
-          }
           await client.query(
             `
           DELETE FROM locked_event WHERE event = $1
@@ -211,11 +188,17 @@ export async function POST(request) {
           `,
             [id, code]
           );
+          await client.query(
+            `
+              INSERT INTO unlocked_event ("user", event, password)
+              VALUES ($1, $2, $3)
+            `,
+            [author, id, code]
+          );
         }
         return NextResponse.json({ id, result: "ok" });
       }
     }
-
     const insertQuery = await client.query(
       `
       INSERT INTO event (
