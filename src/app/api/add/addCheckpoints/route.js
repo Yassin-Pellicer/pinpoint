@@ -30,6 +30,11 @@ export async function POST(request) {
         'INSERT INTO checkpoint (name, event, position_lat, position_lng, description, banner, "order", address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
         [checkpoint.name, eventId, checkpoint.marker.position[0], checkpoint.marker.position[1], checkpoint.description, checkpoint.banner, checkpoint.order, fullAddress]
       );
+
+      await client.query(
+        'INSERT INTO qr_checkpoint (checkpoint, code) VALUES ($1, $2)',
+        [checkpoint.id, Array(40).fill(null).map(() => (Math.random() * 36).toString(36)[Math.floor(Math.random() * 36)]).join('')]
+      )
     }
     return NextResponse.json({ result: "ok" });
 

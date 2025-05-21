@@ -7,12 +7,15 @@ import { Checkpoint } from "../../utils/classes/Checkpoint";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import { useMapContext } from "../../utils/context/ContextMap";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 import fileURL from "../../utils/funcs/createUrlImage";
 import { useEvent } from "../../utils/context/ContextEvent";
 import { getCheckpointsHook } from "../../hooks/main/get/getCheckpointsHook";
 import { getRatingHook } from "../../hooks/main/get/getRatingHook";
+import { usePathname } from "next/navigation";
+import { getCheckpointByCode } from "../../hooks/main/get/getCheckpointByCodeHook";
 
 const cpView = () => {
   const map = useMap();
@@ -27,6 +30,8 @@ const cpView = () => {
     useMapContext();
   const { event, setEvent, setMarker } = useEvent();
   const { selectedEvent } = useMapContext();
+  const pathname = usePathname();
+  const { checkpointCode } = useParams();
 
   const t = useTranslations("CpInfo");
 
@@ -81,7 +86,9 @@ const cpView = () => {
   }, [focusedCheckpoint, map]);
 
   useEffect(() => {
+    console.log("AOKISMDOIASDIAMSDIMASD");
     getCheckpointsHook(selectedEvent?.id).then((res) => {
+      console.log(res);
       if (res) setCheckpoints(res.checkpoints);
     });
     getRatingHook(selectedEvent?.id).then((res) => {});

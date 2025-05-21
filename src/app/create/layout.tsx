@@ -1,27 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Menu from "../../components/home/menu";
-import MainMap from "../../components/main/mainMap";
-import { useSession } from "../../utils/context/ContextSession";
-import { getUserHook } from "../../hooks/general/getUserHook";
-import { useMapContext } from "../../utils/context/ContextMap";
-import EventCarouselList from "../../components/main/mainEventList";
-import { useTranslations } from "next-intl";
-import Tags from "../../components/create/tags";
-import debounce from "lodash.debounce";
 import { useRouter, usePathname } from "next/navigation";
 import CreateMap from "../../components/create/createMap";
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
-  const { setUser } = useSession();
-  const [openTags, setOpenTags] = useState(false);
-  const tagsTrans = useTranslations("Tags");
 
   const router = useRouter();
-
-  const { filterTags, search, searchResults, setSearch, loadSearchEvents, selectedEvent } =
-    useMapContext();
 
   return (
     <div className="flex flex-row overflow-x-hidden">
