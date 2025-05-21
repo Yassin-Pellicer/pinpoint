@@ -37,7 +37,6 @@ export async function POST(request) {
       [event, userId, password]
     );
 
-    console.log(`Event ${event} unlocked for user ${userId}`);
     return NextResponse.json({ result: "ok" });
   } catch (error) {
     console.error(error);

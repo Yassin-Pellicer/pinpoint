@@ -9,12 +9,9 @@ export async function POST(request) {
   const token = cookies.session;
   let userId;
 
-  console.log("Received request to delete event");
-
   try {
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
     userId = decoded.id;
-    console.log("Token verified, user ID:", userId);
   } catch (error) {
     console.error("Token verification failed:", error);
     return NextResponse.json({ result: "ko", message: "Invalid session" });
@@ -22,13 +19,11 @@ export async function POST(request) {
 
   try {
     let { id } = await request.json();
-    console.log("Event ID to delete:", id);
 
     const checkEventQuery = await client.query(
       'SELECT * FROM event WHERE id = $1 AND author = $2',
       [id, userId]
     );
-    console.log("Check event query result:", checkEventQuery.rows);
 
     if (checkEventQuery.rows.length === 0) {
       console.warn("Event not found or not authorized for user ID:", userId);
@@ -39,7 +34,6 @@ export async function POST(request) {
       'DELETE FROM event WHERE id = $1',
       [id]
     );
-    console.log("Event deleted successfully, ID:", id);
     return NextResponse.json({ result: "ok", deleted: true });
 
   } catch (error) {
@@ -51,7 +45,6 @@ export async function POST(request) {
     });
   } finally {
     client.release(); // This is critical
-    console.log("Database client released");
   }
 }
 

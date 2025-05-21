@@ -5,7 +5,6 @@ export async function GET(request) {
   const client = await connectToDatabase();
   try {
     const { searchParams } = new URL(request.url);
-    console.log(searchParams);
 
     const userLat = parseFloat(searchParams.get("lat"));
     const userLon = parseFloat(searchParams.get("lon"));
@@ -17,7 +16,6 @@ export async function GET(request) {
       .map(Number)
       .filter((n) => !isNaN(n));
 
-    console.log(userId);
     if (isNaN(userId)) userId = -1;
 
     const earthRadius = 6371;

@@ -16,7 +16,6 @@ export default function SwiperComponent( {userProp} ) {
   const { selectedEvent } = useMapContext();
 
   const handleInscription = async () => {
-    console.log("triggered")
     if (isInscribed) {
       const response = await deleteInscriptionHook(selectedEvent.id, userProp.id);
     } else {

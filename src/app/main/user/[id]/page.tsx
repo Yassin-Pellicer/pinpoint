@@ -47,7 +47,6 @@ const ProfileTabs = () => {
       });
 
       getActivities(user.id).then((response) => {
-        console.log(response.activities);
         setActivities(response.activities);
       });
     }

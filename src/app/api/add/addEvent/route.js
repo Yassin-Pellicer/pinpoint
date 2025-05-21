@@ -14,7 +14,6 @@ export async function POST(request) {
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
     decodedId = decoded.id;
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ result: "ko", message: "Invalid session" });
   }
 

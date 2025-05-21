@@ -1,20 +1,21 @@
 import { connectToDatabase } from "../../../../../../utils/db/db";
 import { NextResponse } from "next/server";
-import cookie from "cookie";
-import jwt from "jsonwebtoken";
 
 export async function GET(request, { params }) {
   const client = await connectToDatabase();
   try {
-    const { id, cp } = params;
+    const { cp } = params;
 
     let query;
+    console.log("cp param:", cp);
 
     query = await client.query(
-      'SELECT c.* FROM "checkpoint" c, qr_checkpoint qr WHERE qr.checkpoint = c.id AND c.event = $1 AND qr.code = $2 ORDER BY "order" LIMIT 1',
-      [id, cp]
+      'SELECT c.* FROM "checkpoint" c, qr_checkpoint qr WHERE qr.checkpoint = c.id AND qr.code = $1 ORDER BY "order" LIMIT 1',
+      [cp]
     );
+
     const checkpoints = query.rows;
+    console.log("Checkpoints:", checkpoints);
 
     const response = NextResponse.json({
       result: "ok",
@@ -34,4 +35,3 @@ export async function GET(request, { params }) {
     client.release();
   }
 }
-

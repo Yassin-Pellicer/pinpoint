@@ -102,7 +102,6 @@ const SimpleEvent = () => {
 
   useEffect(() => {
     getEventCode(event.id).then((res) => {
-      console.log(res);
       if (!res || res.code === "") {
         setCode(generateRandomAsciiCode(20));
       } else {
@@ -136,7 +135,6 @@ const SimpleEvent = () => {
       }
       if (result) {
         await resultPromise;
-        console.log(result);
         router.push("/main/event/" + result.id);
       }
     } catch (error) {

@@ -20,6 +20,5 @@ if (!globalForPg.pgPool) {
 
 export const connectToDatabase = async () => {
   const client = await pool.connect();
-  console.log(`Connected clients: ${pool.totalCount}`);
   return client;
 };

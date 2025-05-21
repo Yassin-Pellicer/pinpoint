@@ -11,7 +11,6 @@ export async function GET(_request, { params }) {
     );
     return NextResponse.json({ followers: Array.isArray(query.rows) ? query.rows : [query.rows] });
   } catch (error) {
-    console.log('Database query error:', error);
     return NextResponse.json({ result: "ko" });
   }
   finally { 

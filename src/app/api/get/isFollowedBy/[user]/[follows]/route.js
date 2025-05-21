@@ -6,7 +6,6 @@ export async function GET(_request, { params }) {
 
   try {
     const { user, follows } = params;
-    console.log(`Checking if ${follows} follows ${user}`);
 
     const query = await client.query(
       'SELECT 1 FROM followers WHERE follower = $1 AND followed = $2',

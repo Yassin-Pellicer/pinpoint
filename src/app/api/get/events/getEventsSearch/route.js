@@ -14,7 +14,6 @@ export async function GET(request) {
         .map(Number)
         .filter((n) => !isNaN(n))
       : [];
-    console.log(userId);
     if (isNaN(userId)) userId = -1;
     let result;
 

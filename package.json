@@ -46,6 +46,7 @@
     "react-draggable": "^4.4.6",
     "react-leaflet": "^4.2.1",
     "react-leaflet-markercluster": "^4.2.1",
+    "react-qrcode-logo": "^3.0.0",
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.1.5",
     "swiper": "^11.2.2"

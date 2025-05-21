@@ -31,7 +31,7 @@ const cpView = () => {
   const { event, setEvent, setMarker } = useEvent();
   const { selectedEvent } = useMapContext();
   const pathname = usePathname();
-  const { checkpointCode } = useParams();
+  const { cp } = useParams();
 
   const t = useTranslations("CpInfo");
 
@@ -62,20 +62,13 @@ const cpView = () => {
     });
 
   useEffect(() => {
-    if (focusedCheckpoint && map) {
-      map.flyTo(
-        [
-          focusedCheckpoint.marker.position[0] + 0.0007,
-          focusedCheckpoint.marker.position[1],
-        ],
-        18,
-        { animate: true, duration: 0.5 }
+    if (map && checkpoints?.length) {
+      const bounds = L.latLngBounds(
+        checkpoints.map(cp => cp.marker.position)
       );
+      map.flyToBounds(bounds, { animate: true, duration: 0.5 });
       map.eachLayer((layer) => {
-        if (
-          layer instanceof L.Marker &&
-          layer.getLatLng().equals(focusedCheckpoint.marker.position)
-        ) {
+        if (layer instanceof L.Marker) {
           layer.openPopup();
         }
       });
@@ -83,14 +76,20 @@ const cpView = () => {
     const zoom = map.getZoom();
     setZoom(zoom);
     setFocusedCheckpoint(null);
-  }, [focusedCheckpoint, map]);
+  }, [checkpoints, map]);
 
   useEffect(() => {
-    console.log("AOKISMDOIASDIAMSDIMASD");
-    getCheckpointsHook(selectedEvent?.id).then((res) => {
-      console.log(res);
-      if (res) setCheckpoints(res.checkpoints);
-    });
+    if (!pathname.startsWith("/main/checkpoint")) {
+      getCheckpointsHook(selectedEvent?.id).then((res) => {
+        if (res) setCheckpoints(res.checkpoints);
+      });
+    }
+    else {
+      getCheckpointByCode(selectedEvent?.id, cp as string).then((res) => {
+        console.log(res);
+        if (res) setCheckpoints(res.checkpoints);
+      });
+    }
     getRatingHook(selectedEvent?.id).then((res) => {});
   }, [selectedEvent]);
 

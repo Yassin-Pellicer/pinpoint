@@ -5,13 +5,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import UserList from "./user";
-import { useEffect } from "react";
 
 export default function SwiperComponent( {users} ) {
-
-useEffect(() => {
-  console.log(users);
-}, [users]);
 
   return (
     <div className="flex flex-col">

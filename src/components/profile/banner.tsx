@@ -43,7 +43,6 @@ export default function Banner({ userProp }) {
   const handleIsFollowed = () => {
     if(user) {
       isFollowedByHook(userProp.id, user.id).then((response) => {
-        console.log(response);
         setIsFollowed(response.follows);
       });
     }
@@ -59,7 +58,6 @@ export default function Banner({ userProp }) {
   }, [user]);
 
   const handleFollow = () => {
-    console.log(isFollowed);
     if (isFollowed) {
       deleteFollowerHook(user.id, userProp.id).then(() => {
         handleIsFollowed();
@@ -257,7 +255,6 @@ export default function Banner({ userProp }) {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        console.log("GOLA")
                         handleFollow();
                       }}
                       className={`bg-${isFollowed ? "red-500 hover:red-700" : "blue-500 hover:blue-700"} text-white font-bold h-[40px] mt-4 px-4 rounded-full`}

@@ -19,9 +19,10 @@ import { getUserHook } from "../../../../hooks/general/getUserHook";
 import Banner from "../../../../components/profile/banner";
 import { Tag } from "../../../../utils/classes/Tag";
 import { getPermission } from "../../../../hooks/general/privateEventsHook";
+import { se } from "date-fns/locale";
 
 const eventInfo = () => {
-  const { setSelectedEvent, setEditMode } = useMapContext();
+  const { setSelectedEvent, setEditMode, selectedEvent } = useMapContext();
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { user } = useSession();
 
@@ -54,7 +55,6 @@ const eventInfo = () => {
       if (!event) return;
 
       const authorResponse = await getUserHook(Number(event.author));
-      console.log(authorResponse);
       setAuthor(authorResponse.user);
 
       if (!event.isPublic && user) {

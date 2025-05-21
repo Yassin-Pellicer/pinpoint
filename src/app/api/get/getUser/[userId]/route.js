@@ -11,7 +11,6 @@ export async function GET(_request, { params }) {
     );
     return NextResponse.json({ user: query.rows[0] });
   } catch (error) {
-    console.log('Database query error:', error);
     return NextResponse.json({ result: "ko" });
   }
   finally { 

@@ -23,7 +23,7 @@ const List = ({refresh, setRefresh}) => {
 
   return (
     <>
-      {!loading && comments.length > 0 && selectedEvent.enableComments && (
+      {!loading && comments && selectedEvent.enableComments && (
         <>
           <div className="h-auto bg-blue-400 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">

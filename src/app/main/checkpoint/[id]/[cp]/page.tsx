@@ -1,6 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMapContext } from "../../../../../utils/context/ContextMap";
 import { useCheckpoints } from "../../../../../utils/context/ContextCheckpoint";
@@ -19,6 +19,7 @@ import { getUserHook } from "../../../../../hooks/general/getUserHook";
 import Banner from "../../../../../components/profile/banner";
 import { Tag } from "../../../../../utils/classes/Tag";
 import { getPermission } from "../../../../../hooks/general/privateEventsHook";
+import { QRCode } from 'react-qrcode-logo';
 
 const eventInfo = () => {
   const { setSelectedEvent, setEditMode } = useMapContext();
@@ -33,6 +34,7 @@ const eventInfo = () => {
 
   const params = useParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   const eventId = params.id;
   const checkpointId = params.cp;
@@ -55,7 +57,6 @@ const eventInfo = () => {
       if (!event) return;
 
       const authorResponse = await getUserHook(Number(event.author));
-      console.log(authorResponse);
       setAuthor(authorResponse.user);
 
       if (!event.isPublic && user) {
@@ -233,44 +234,23 @@ const eventInfo = () => {
               </div>
             </div>
           </div>
-
           {checkpoints && checkpoints.length > 0 && (
-            <>
-              <div className="h-auto bg-blue-300 relative transition duration-100 overflow-hidden">
-                <div className="relative h-full">
-                  <div
-                    className="bg-no-repeat bg-center bg-cover absolute right-0 top-0 bottom-0 w-1/2 h-3/4 transform rotate-[5deg] z-0 m-5"
-                    style={{
-                      backgroundImage: "url('/img/recommended.png')",
-                    }}
-                  ></div>
-
-                  <div className="relative p-5 z-10">
-                    <div className="flex flex-row items-center">
-                      <i
-                        className="material-icons text-white text-4xl mr-2"
-                        style={{
-                          textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
-                        }}
-                      >
-                        tour
-                      </i>
-                      <h1
-                        className="text-2xl tracking-tighter font-bold text-white"
-                        style={{
-                          textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
-                        }}
-                      >
-                        Checkpoints
-                      </h1>
-                    </div>
-                  </div>
+            <div className="flex flex-col">
+              <div className="ml-3 w-full pl-6 h-fit m-auto flex flex-row p-4 py-8">
+                <div className="w-2 min-h-full pl-1 bg-blue-400 rounded-l-md mr-10"></div>
+                <div className="rounded-3xl border-blue-500 border-4 items-center p-4">
+                  <QRCode
+                    value={`${process.env.NEXT_PUBLIC_BASEURL}${pathname}`}
+                    size={300}
+                    qrStyle="fluid"
+                    logoImage="/svg/logo_btn.svg"
+                    logoWidth={125}
+                  />
                 </div>
               </div>
               <CpList />
-            </>
+            </div>
           )}{" "}
-
           <div className="overflow-hidden">
             <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-b-[1px] border-gray-300">
               <div className="relative p-5 z-10">

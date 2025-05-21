@@ -17,13 +17,11 @@ export default function SwiperComponent( {userProp} ) {
 
   const handleIsFollowed = () => {
     isFollowedByHook(userProp.id, user.id).then((response) => {
-      console.log(response);
       setIsFollowed(response.follows);
     });
   }
 
   const handleFollow = () => {
-    console.log(isFollowed);
     if (isFollowed) {
       deleteFollowerHook(user.id, userProp.id).then(() => {
         handleIsFollowed();

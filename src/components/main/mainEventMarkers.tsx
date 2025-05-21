@@ -8,16 +8,17 @@ import { useTranslations } from "next-intl";
 import { useMapContext } from "../../utils/context/ContextMap";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import Logo from "../ui/logo";
-import { useRouter } from "next/navigation";
-
+import { usePathname, useRouter } from "next/navigation";
+import { Event } from "../../utils/classes/Event";
 const evView = () => {
   const map = useMap();
   const router = useRouter();
   const t = useTranslations("SimplePopup");
   const tagsTrans = useTranslations("Tags");
+  const pathname = usePathname();
 
   const { events, selectedEvent, setSelectedEvent } = useMapContext();
-  const { checkpoints } = useCheckpoints();
+  const { checkpoints, setCheckpoints } = useCheckpoints();
 
   const { location, setLocation, zoom, setZoom, originalLocation } =
     useMapContext();
@@ -58,7 +59,7 @@ const evView = () => {
   });
 
   useEffect(() => {
-    if (router && selectedEvent && map) {
+    if (selectedEvent && checkpoints?.length === 0) {
       map.flyTo(
         [
           selectedEvent.marker.position[0] + 0.0007,
@@ -70,9 +71,17 @@ const evView = () => {
       const zoom = map.getZoom();
       setZoom(zoom);
     }
-  }, [router, selectedEvent, map]);
+  }, [selectedEvent, map]);
 
-  const filteredEvents = !selectedEvent || checkpoints?.length === 0 ? events : [];
+  const [filteredEvents, setFilteredEvents] = useState<Event[] | null>(null);
+
+  useEffect(() => {
+    if (pathname.startsWith("/main/checkpoint")) {
+      setFilteredEvents(null);
+    } else {
+      setFilteredEvents(!selectedEvent || checkpoints?.length === 0 ? events : []);
+    }
+  }, [pathname, selectedEvent, checkpoints, events]);
 
   return (
     <>

@@ -43,7 +43,6 @@ const BottomSheet = ({ open, setOpen }) => {
         element.order = idx + 1;
       });
 
-      console.log(newCheckpoints);
       setCheckpoints(newCheckpoints);
       setFocusedCheckpoint(newCheckpoints[newIndex]);
     }
