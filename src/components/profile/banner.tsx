@@ -193,7 +193,7 @@ export default function Banner({ userProp }) {
           </div>
         </div>
       )}
-      <Follows open={openFollows} setOpen={setOpenFollows} setType={setTypeFollows} type={typeFollows}></Follows>
+      <Follows open={openFollows} setOpen={setOpenFollows} setType={setTypeFollows} type={typeFollows} user={userProp}></Follows>
       {editable && (
         <div className="bg-white">
           <div className="relative w-full">

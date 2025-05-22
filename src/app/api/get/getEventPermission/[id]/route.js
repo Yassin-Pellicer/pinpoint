@@ -1,32 +1,64 @@
-import { connectToDatabase } from '../../../../../utils/db/db';
+import { connectToDatabase } from "../../../../../utils/db/db";
 import { NextResponse } from "next/server";
-import bcrypt from 'bcrypt';
+import cookie from "cookie";
+import jwt from "jsonwebtoken";
 
-export async function GET(_request, { params }) {
+export async function GET(request, { params }) {
   const client = await connectToDatabase();
 
-  const id = parseInt(params.id);
-  if (isNaN(id)) {
-    return NextResponse.json({ result: "ok", code: "" });
+  const cookies = cookie.parse(request.headers.get("cookie") || "");
+  const token = cookies.session;
+
+  let userId;
+
+  try {
+    const decoded = jwt.verify(token, process.env.SESSION_SECRET);
+    userId = decoded.id;
+  } catch (error) {
+    userId = null;
   }
+
+  const eventId = parseInt(params.id);
 
   try {
     const result = await client.query(
-      `SELECT "user" FROM unlocked_event WHERE event = $1`,
-      [id]
+      `SELECT "isPublic" FROM event WHERE id = $1`,
+      [eventId]
     );
 
-    return NextResponse.json({ users: Array.isArray(result.rows) ? result.rows : [result.rows] });
-
+    if (!result.rows) {
+      return NextResponse.json({ result: false });
+    } else {
+      if (userId) {
+        if (result.rows[0].isPublic) {
+          return NextResponse.json({ result: true });
+        } else {
+          const unlockedEventResult = await client.query(
+            `SELECT "user" FROM unlocked_event WHERE event = $1 AND "user" = $2`,
+            [eventId, userId]
+          );
+          if (!unlockedEventResult.rows) {
+            return NextResponse.json({ result: false });
+          } else {
+            return NextResponse.json({ result: true });
+          }
+        }
+      } else {
+        if (result.rows[0].isPublic) {
+          return NextResponse.json({ result: true });
+        } else {
+          return NextResponse.json({ result: false });
+        }
+      }
+    }
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { result: "ko", error: error.message },
       { status: 500 }
     );
-  } 
-  finally { 
-    client.release(); // This is critical
+  } finally {
+    client.release();
   }
 }
 

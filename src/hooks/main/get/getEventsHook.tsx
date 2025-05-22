@@ -1,6 +1,7 @@
 import { Tag } from "../../../utils/classes/Tag";
 
 export const getEventById = async (id?: number) => {
+
   const res = await fetch(`/api/get/events/getEvent/${id}`, {
     method: "GET",
     headers: {

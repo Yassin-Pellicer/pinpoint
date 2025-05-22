@@ -19,7 +19,7 @@ import { getUserHook } from "../../../../../hooks/general/getUserHook";
 import Banner from "../../../../../components/profile/banner";
 import { Tag } from "../../../../../utils/classes/Tag";
 import { getPermission } from "../../../../../hooks/general/privateEventsHook";
-import { QRCode } from 'react-qrcode-logo';
+import { QRCode } from "react-qrcode-logo";
 
 const eventInfo = () => {
   const { setSelectedEvent, setEditMode } = useMapContext();
@@ -40,45 +40,21 @@ const eventInfo = () => {
   const checkpointId = params.cp;
 
   useEffect(() => {
-    const fetchEvent = async () => {
-      setLoadingEvent(true);
-      const response = await getEventById(Number(eventId));
-      setSelectedEvent(response.event);
-      setCurrentEvent(response.event);
-    };
-
-    if (eventId) {
-      fetchEvent();
-    }
-  }, [eventId]);
-
-  useEffect(() => {
-    const fetchAuthorAndPermission = async () => {
-      if (!event) return;
-
-      const authorResponse = await getUserHook(Number(event.author));
-      setAuthor(authorResponse.user);
-
-      if (!event.isPublic && user) {
-        const permissionResponse = await getPermission(Number(eventId));
-        const hasPermission = permissionResponse.users?.some(
-          (u) => u.user === user.id
-        );
-
-        if (!hasPermission) {
-          router.push("/main/home");
-          return;
-        }
+    setLoadingEvent(true);
+    getPermission(Number(eventId)).then((response) => {
+      if (!response.result) {
+        router.push("/main/home");
+        return;
+      } else {
+        getEventById(Number(eventId)).then((finalEvent) => {
+          setSelectedEvent(finalEvent.event);
+          setEvent(finalEvent.event);
+          setCurrentEvent(finalEvent.event);
+          setLoadingEvent(false);
+        });
       }
-      setLoadingEvent(false);
-    };
-
-    if (event) {
-      fetchAuthorAndPermission();
-    } else if (event?.isPublic) {
-      setLoadingEvent(false);
-    }
-  }, [event, user]);
+    });
+  }, []);
 
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");

@@ -28,7 +28,7 @@ export default function Banner({ userProp }) {
           </div>
           <div className="relative flex align-center items-center flex-row w-full mb-4">
             <div className="flex flex-row px-6 transform z-20">
-              <div className="flex w-[90px] h-[90px] rounded-full overflow-hidden border-4 items-center justify-center bg-gray-300 border-white">
+              <div className="flex w-[70px] h-[70px] mt-4 rounded-full overflow-hidden border-4 items-center justify-center bg-gray-300 border-white">
                 {propUser.profilePicture ? (
                   <ProfilePopup
                     id={propUser.id}

@@ -36,7 +36,7 @@ const bookmarkBox = ({ event }) => {
       className={`h-auto overflow-hidden ${
         isBookmarked
           ? "bg-orange-500"
-          : "bg-blue-500"
+          : "bg-cyan-600"
       } relative hover:cursor-pointer transition duration-100`}
       onClick={() =>
         isBookmarked

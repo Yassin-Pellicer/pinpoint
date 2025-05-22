@@ -19,7 +19,6 @@ import { getUserHook } from "../../../../hooks/general/getUserHook";
 import Banner from "../../../../components/profile/banner";
 import { Tag } from "../../../../utils/classes/Tag";
 import { getPermission } from "../../../../hooks/general/privateEventsHook";
-import { se } from "date-fns/locale";
 
 const eventInfo = () => {
   const { setSelectedEvent, setEditMode, selectedEvent } = useMapContext();
@@ -38,46 +37,24 @@ const eventInfo = () => {
   const eventId = params.id;
 
   useEffect(() => {
-    const fetchEvent = async () => {
-      setLoadingEvent(true);
-      const response = await getEventById(Number(eventId));
-      setSelectedEvent(response.event);
-      setCurrentEvent(response.event);
-    };
-
-    if (eventId) {
-      fetchEvent();
-    }
-  }, [eventId]);
-
-  useEffect(() => {
-    const fetchAuthorAndPermission = async () => {
-      if (!event) return;
-
-      const authorResponse = await getUserHook(Number(event.author));
-      setAuthor(authorResponse.user);
-
-      if (!event.isPublic && user) {
-        const permissionResponse = await getPermission(Number(eventId));
-        const hasPermission = permissionResponse.users?.some(
-          (u) => u.user === user.id
-        );
-
-        if (!hasPermission) {
-          router.push("/main/home");
-          return;
-        }
+    setLoadingEvent(true);
+    getPermission(Number(eventId)).then((response) => {
+      if(!response.result) {
+        router.push("/main/home");
+        return;
       }
-      setLoadingEvent(false);
-    };
-
-    if (event) {
-      fetchAuthorAndPermission();
-    } else if (event?.isPublic) {
-      setLoadingEvent(false);
-    }
-  }, [event, user]);
-
+      getEventById(Number(eventId)).then((finalEvent) => {
+        getUserHook(finalEvent.event.author).then((user) => {
+          setSelectedEvent(finalEvent.event);
+          setEvent(finalEvent.event);
+          setCurrentEvent(finalEvent.event);
+          setLoadingEvent(false);    
+          setAuthor(user.user);
+        })
+      });    
+    })
+  }, []);
+  
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
@@ -254,7 +231,7 @@ const eventInfo = () => {
           {event.end && <EventTimeDisplay event={event} listMode={false} />}
           <InscribedBox event={event}></InscribedBox>
           <div className="grid grid-cols-2">
-            <BookmarkBox event={event}></BookmarkBox>
+            {user != null && <BookmarkBox event={event}></BookmarkBox>}
 
             <div className="h-auto bg-green-400 relative hover:cursor-pointer hover:bg-green-600 transition duration-100">
               <div className="relative h-full">

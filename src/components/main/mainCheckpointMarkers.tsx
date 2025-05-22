@@ -62,11 +62,11 @@ const cpView = () => {
     });
 
   useEffect(() => {
-    if (map && checkpoints?.length) {
+    if (checkpoints?.length) {
       const bounds = L.latLngBounds(
         checkpoints.map(cp => cp.marker.position)
       );
-      map.flyToBounds(bounds, { animate: true, duration: 0.5 });
+      map.flyToBounds(bounds, { maxZoom: 18, animate: true, duration: 0.5 });
       map.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
           layer.openPopup();
@@ -76,7 +76,7 @@ const cpView = () => {
     const zoom = map.getZoom();
     setZoom(zoom);
     setFocusedCheckpoint(null);
-  }, [checkpoints, map]);
+  }, [selectedEvent]);
 
   useEffect(() => {
     if (!pathname.startsWith("/main/checkpoint")) {
@@ -118,7 +118,13 @@ const cpView = () => {
               mouseout: (e) => e.target.closePopup(),
             }}
           >
-            <Popup offset={[10, -30]} className="custom-popup" maxWidth={300}>
+            <Popup
+              offset={[10, -30]}
+              className="custom-popup"
+              maxWidth={300}
+              autoPan={false}
+              autoPanPadding={[10, 10]}
+            >
               <div className="flex flex-col w-[275px]">
                 {cp.banner ? (
                   <img

@@ -65,7 +65,7 @@ export default function Comment({ comment, refresh }) {
             <p className="text-sm mr-0 ml-auto tracking-tighter">
               {new Date(comment.posted_at).toLocaleDateString()}
             </p>
-            {comment.user === user.id && (
+            {comment.user === user?.id && (
               <i
                 className="material-icons text-xl ml-4 text-gray-600 transition duration-300 hover:cursor-pointer hover:text-red-500"
                 onClick={() => {

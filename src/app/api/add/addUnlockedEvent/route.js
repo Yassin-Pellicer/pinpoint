@@ -37,7 +37,7 @@ export async function POST(request) {
       [event, userId, password]
     );
 
-    return NextResponse.json({ result: "ok" });
+    return NextResponse.json({ result: "ok", event });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ result: "error", message: error.message });

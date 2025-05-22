@@ -1,16 +1,16 @@
 import { connectToDatabase } from "../../../../../../utils/db/db";
 import { NextResponse } from "next/server";
 
-export async function GET(_request, { params }) {
+export async function GET(request, { params }) {
   const client = await connectToDatabase();
 
   const id = parseInt(params.id);
 
   try {
-    const result = await client.query(
-      "SELECT e.* FROM event e WHERE e.id = $1",
-      [id]
-    );
+    let result;
+    result = await client.query("SELECT e.* FROM event e WHERE e.id = $1", [
+      id,
+    ]);
 
     const eventIds = result.rows.map((event) => event.id);
 
@@ -42,9 +42,7 @@ export async function GET(_request, { params }) {
       { result: "ko", error: error.message },
       { status: 500 }
     );
-  } 
-  finally { 
-    
+  } finally {
     client.release(); // This is critical
   }
 }

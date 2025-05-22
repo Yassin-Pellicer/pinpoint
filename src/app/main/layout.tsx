@@ -107,7 +107,10 @@ export default function Layout({ children }) {
             <button
             onClick={(e) => {
               e.preventDefault();
-              addUnlockedEvent(user.id, search);
+              addUnlockedEvent(user.id, search).then((res) => {
+                console.log(res)
+                router.push(`/main/event/${res.event}`);
+              });
             }}
               className={`font-bold bg-blue-500 border-gray-400 text-sm text-white
                 text-white-500 rounded-2xl px-2 h-[34px] ${search.trim() !== "" ? "hover:bg-green-500" : "hover:bg-blue-600"}

@@ -59,7 +59,8 @@ const evView = () => {
   });
 
   useEffect(() => {
-    if (selectedEvent && checkpoints?.length === 0) {
+    setCheckpoints([]);
+    if (selectedEvent) {
       map.flyTo(
         [
           selectedEvent.marker.position[0] + 0.0007,
@@ -71,7 +72,7 @@ const evView = () => {
       const zoom = map.getZoom();
       setZoom(zoom);
     }
-  }, [selectedEvent, map]);
+  }, [selectedEvent]);
 
   const [filteredEvents, setFilteredEvents] = useState<Event[] | null>(null);
 

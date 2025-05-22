@@ -73,18 +73,18 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
+    getActivitiesGlobal().then((response) => {
+      setUserActivityFeed((prev) => [
+        ...prev,
+        ...response.activities.filter(
+          (activity) => !prev.some((a) => a.id === activity.id)
+        ),
+      ]);
+    });
+
     if (user?.id != null) {
       getActivitiesFollowers(user.id).then((response) => {
         setGlobalActivityFeed((prev) => [
-          ...prev,
-          ...response.activities.filter(
-            (activity) => !prev.some((a) => a.id === activity.id)
-          ),
-        ]);
-      });
-
-      getActivitiesGlobal().then((response) => {
-        setUserActivityFeed((prev) => [
           ...prev,
           ...response.activities.filter(
             (activity) => !prev.some((a) => a.id === activity.id)

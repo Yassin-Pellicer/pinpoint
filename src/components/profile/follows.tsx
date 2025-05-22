@@ -9,14 +9,13 @@ import { User } from "../../utils/classes/User";
 import { getFollowersHook, getFollowingHook } from "../../hooks/general/followersHook";
 import { useSession } from "../../utils/context/ContextSession";
 
-const BottomSheet = ({ open, setOpen, type, setType}) => {
+const BottomSheet = ({ open, setOpen, type, setType, user}) => {
   const t = useTranslations("Tags");
   const [users, setUsers] = useState([]);
 
-  const {user} = useSession();
 
   useEffect(() => {
-    if(type != "")
+    if(type != "" && user)
     {
       if (type === "following") {
         getFollowingHook(user.id).then((res) => {
@@ -28,7 +27,7 @@ const BottomSheet = ({ open, setOpen, type, setType}) => {
         })
       }
     }
-  }, [type])
+  }, [type, user])
 
   return (
     <SwipeableDrawer
