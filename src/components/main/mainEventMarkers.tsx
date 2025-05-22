@@ -59,7 +59,6 @@ const evView = () => {
   });
 
   useEffect(() => {
-    setCheckpoints([]);
     if (selectedEvent) {
       map.flyTo(
         [

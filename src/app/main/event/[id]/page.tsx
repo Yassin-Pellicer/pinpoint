@@ -99,7 +99,7 @@ const eventInfo = () => {
       )}
 
       {!loadingEvent && event && (
-        <div>
+        <div className="printable">
           <div className="relative justify-center w-full">
             {event.banner ? (
               <div className="relative flex justify-end items-center w-full h-15 overflow-hidden border-t border-x border-gray-400">

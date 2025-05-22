@@ -100,3 +100,32 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 1cm;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .print-layout {
+    column-count: 2;
+    column-gap: 3rem;
+    font-family: sans-serif;
+  }
+
+  .print-layout > * {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  /* Optional: Hide buttons, nav, etc. */
+  .no-print {
+    display: none !important;
+  }
+}
