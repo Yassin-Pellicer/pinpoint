@@ -221,6 +221,7 @@ const eventInfo = () => {
                     qrStyle="fluid"
                     logoImage="/svg/logo_btn.svg"
                     logoWidth={125}
+                    logoHeight={50}
                   />
                 </div>
               </div>
