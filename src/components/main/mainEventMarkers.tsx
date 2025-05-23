@@ -102,7 +102,6 @@ const evView = () => {
           
           eventHandlers={{
             click: () => {
-              setSelectedEvent(event);
               router.push(`/main/event/${event.id}`);
             },
             mouseover: (e) => {

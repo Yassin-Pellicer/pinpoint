@@ -76,7 +76,7 @@ const cpView = () => {
     const zoom = map.getZoom();
     setZoom(zoom);
     setFocusedCheckpoint(null);
-  }, [selectedEvent]);
+  }, [checkpoints]);
 
   useEffect(() => {
     if (!pathname.startsWith("/main/checkpoint")) {

@@ -21,7 +21,6 @@ export default function SwiperComponent( {events} ) {
             router.push("/main/event/" + event.id);
             setSearch("");
             setFilterTags([])
-            setSelectedEvent(event);
             e.stopPropagation();
           }}
         >

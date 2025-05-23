@@ -27,7 +27,7 @@ export default function SwiperComponent({events}) {
             <div
               className="flex justify-center items-center select-none cursor-pointer"
               onClick={(e) => {
-                setSelectedEvent(event);
+                router.push("/main/event/" + event.id);
                 e.stopPropagation();
               }}
             >

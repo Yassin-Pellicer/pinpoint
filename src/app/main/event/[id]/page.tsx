@@ -357,7 +357,7 @@ const eventInfo = () => {
             </div>
           </div>
           <Banner userProp={author}></Banner>
-          <CommentBox></CommentBox>
+          {user && <CommentBox></CommentBox>}
         </div>
       )}
     </>

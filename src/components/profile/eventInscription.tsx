@@ -38,7 +38,6 @@ export default function SwiperComponent( {event, userProp} ) {
         <div
           onClick={(e) => {
             router.push(`/main/event/${event.id}`);
-            setSelectedEvent(event);
             setModifiedEvent(event);
             e.stopPropagation();
           }}
