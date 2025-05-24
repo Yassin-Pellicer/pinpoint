@@ -75,7 +75,7 @@ const Menu = ({ open, setOpen }) => {
             maxWidth: "500px",
             height: "100%",
             backgroundColor: "rgb(59, 130, 246)",
-            zIndex: 20,
+            zIndex: 2000,
           },
         }}
       >

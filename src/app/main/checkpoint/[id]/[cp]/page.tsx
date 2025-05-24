@@ -204,7 +204,7 @@ const eventInfo = () => {
                 <div className="rounded-3xl border-blue-500 border-4 items-center p-4 my-8">
                   <QRCode
                     value={`${process.env.NEXT_PUBLIC_BASEURL}${pathname}`}
-                    size={400}
+                    size={(typeof window !== "undefined" ? window.innerWidth * 0.7 : 400)}
                     qrStyle="fluid"
                     logoImage="/svg/logo_btn.svg"
                     logoWidth={125}

@@ -65,25 +65,33 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <div className="flex flex-row">
-      <div className="flex flex-col overflow-auto shrink-0 h-screen overflow-x-clip w-[525px] z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)]">
+    <div className="flex flex-col-reverse lg:flex-row h-full">
+      <div className="flex flex-col shrink-0 overflow-x-clip lg:w-[525px] rounded-t-full w-full z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)]">
+            <div className="lg:hidden flex justify-center items-center h-full">
+              <div
+                className="w-full h-[50px] bg-blue-500 flex justify-center items-center cursor-pointer"
+                onClick={() => window.scrollTo({ top: 500, behavior: "smooth" })}
+              >
+                <i className="material-icons text-white">arrow_upward</i>
+              </div>
+            </div>
         <div className="flex flex-col sticky top-0 z-[100] bg-white">
-          <div className="flex flex-row mt-2 justify-center p-2 bg-white-500 w-full h-fit items-center align-center">
-          <div
-            className="flex w-[35px] h-[35px] mr-2 border-[1px] border-gray-300 rounded-full shrink-0 overflow-hidden cursor-pointer"
-            onClick={() => router.push(`/main/user/${user?.id}`)}
-          >
-            {user?.profilePicture ? (
-              <ProfilePopup
-                id={user.id}
-                profilePicture={user.profilePicture}
-              ></ProfilePopup>
-            ) : (
-              <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">
-                person
-              </i>
-            )}
-          </div>
+          <div className="flex flex-row mt-2 justify-center p-2 bg-white-500   w-full h-fit items-center align-center">
+            <div
+              className="flex w-[35px] h-[35px] mr-2 border-[1px] border-gray-300 rounded-full shrink-0 overflow-hidden cursor-pointer"
+              onClick={() => router.push(`/main/user/${user?.id}`)}
+            >
+              {user?.profilePicture ? (
+                <ProfilePopup
+                  id={user.id}
+                  profilePicture={user.profilePicture}
+                ></ProfilePopup>
+              ) : (
+                <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">
+                  person
+                </i>
+              )}
+            </div>
             <input
               type="text"
               className="border-[1px] border-gray-500 rounded-full ml-2 px-4 py-2 w-full text-xs"
@@ -104,15 +112,19 @@ export default function Layout({ children }) {
               Tags
             </button>
             <button
-            onClick={(e) => {
-              e.preventDefault();
-              addUnlockedEvent(user.id, search).then((res) => {
-                console.log(res)
-                router.push(`/main/event/${res.event}`);
-              });
-            }}
+              onClick={(e) => {
+                e.preventDefault();
+                addUnlockedEvent(user.id, search).then((res) => {
+                  console.log(res);
+                  router.push(`/main/event/${res.event}`);
+                });
+              }}
               className={`font-bold bg-blue-500 border-gray-400 text-sm text-white
-                text-white-500 rounded-2xl px-2 h-[34px] ${search.trim() !== "" ? "hover:bg-green-500" : "hover:bg-blue-600"}
+                text-white-500 rounded-2xl px-2 h-[34px] ${
+                  search.trim() !== ""
+                    ? "hover:bg-green-500"
+                    : "hover:bg-blue-600"
+                }
                 border-[1px] hover:text-white w-fit
                 transition duration-300 mr-4`}
             >
@@ -179,7 +191,9 @@ export default function Layout({ children }) {
 
         <Menu open={open} setOpen={setOpen} />
       </div>
-      <MainMap />
+      <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[calc(100vh-200px)]">
+        <MainMap />
+      </div>
     </div>
   );
 }
