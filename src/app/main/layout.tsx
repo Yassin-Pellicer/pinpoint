@@ -30,7 +30,6 @@ export default function Layout({ children }) {
     searchResults,
     setSearch,
     loadSearchEvents,
-    selectedEvent,
     setEditMode,
     setFilterTags,
   } = useMapContext();

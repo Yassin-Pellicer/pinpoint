@@ -51,7 +51,7 @@ const commentBox = () => {
   return (
     <>
       {(selectedEvent?.enableRatings || selectedEvent?.enableComments) && (
-        <>
+        <div className="no-print">
           <div className="h-auto bg-blue-400 relative transition duration-100 overflow-hidden">
             <div className="relative h-full">
               <div
@@ -81,7 +81,7 @@ const commentBox = () => {
           </div>
 
           <div className="rounded-b-2xl pt-6 bg-white cursor-default transition">
-            <div className="flex flex-col select-none">
+            <div className="flex flex-col select-none no-print">
               <div className="flex px-6 flex-row align-center mb-3">
                 <div className="flex w-[50px] h-[50px] mr-2 border-[1px] border-gray-300 rounded-full shrink-0 overflow-hidden cursor-pointer">
                   {user?.profilePicture ? (
@@ -212,7 +212,7 @@ const commentBox = () => {
             </div>
             <CommentList refresh={refresh} setRefresh={setRefresh} />
           </div>
-        </>
+        </div>
       )}
     </>
   );

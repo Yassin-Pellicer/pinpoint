@@ -1,9 +1,8 @@
 "use client";
-import { useState, useEffect, use } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import { useTranslations } from "next-intl";
-import fileURL from "../../utils/funcs/createUrlImage";
 
 const Quill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -29,9 +28,9 @@ const CheckpointInfo = ({ id, index }) => {
         className="flex flex-row"
         onClick={() => setFocusedCheckpoint(checkpoints[index])}
       >
-        <div className="flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full cursor-pointer">
+        <div className="flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 shrink-0 text-white rounded-full cursor-pointer">
           <h1 className="flex text-xl font-extrabold cursor-pointer">
-            {index + 1}
+            {checkpoints[index].order}
           </h1>
         </div>
         <div className="max-w-[300px] cursor-pointer">

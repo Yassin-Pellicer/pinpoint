@@ -1,21 +1,24 @@
 import { connectToDatabase } from "../../../../utils/db/db";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import cookie from 'cookie';
+import cookie from "cookie";
 
 export async function POST(request) {
   const { followed } = await request.json();
   const cookies = cookie.parse(request.headers.get("cookie") || "");
   const token = cookies.session;
 
+  console.log("add follower", { followed, token });
+
+  let follower;
+
   try {
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
     follower = decoded.id;
   } catch (error) {
+    console.error("Invalid session", error);
     return NextResponse.json({ result: "ko", message: "Invalid session" });
   }
-
-  let follower;
 
   const client = await connectToDatabase();
 
@@ -26,8 +29,9 @@ export async function POST(request) {
     );
     return NextResponse.json({ result: "ok" });
   } catch (error) {
+    console.error("Error adding follower", error);
     return NextResponse.json({ result: "ko" });
   } finally {
-    client.release(); // This is critical
+    client.release();
   }
 }

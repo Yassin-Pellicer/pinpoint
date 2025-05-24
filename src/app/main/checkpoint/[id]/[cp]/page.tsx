@@ -9,14 +9,8 @@ import { useEvent } from "../../../../../utils/context/ContextEvent";
 import { useParams } from "next/navigation";
 
 import Quill from "react-quill";
-import EventTimeDisplay from "../../../../../components/ui/date";
-import BookmarkBox from "../../../../../components/ui/main/mainBookmarkBox";
-import InscribedBox from "../../../../../components/ui/main/mainInscriptionBox";
-import CommentBox from "../../../../../components/comments/commentBox";
 import CpList from "../../../../../components/main/mainCheckpointList";
 import { getEventById } from "../../../../../hooks/main/get/getEventsHook";
-import { getUserHook } from "../../../../../hooks/general/getUserHook";
-import Banner from "../../../../../components/profile/banner";
 import { Tag } from "../../../../../utils/classes/Tag";
 import { getPermission } from "../../../../../hooks/general/privateEventsHook";
 import { QRCode } from "react-qrcode-logo";
@@ -24,20 +18,15 @@ import { QRCode } from "react-qrcode-logo";
 const eventInfo = () => {
   const { setSelectedEvent, setEditMode } = useMapContext();
   const { checkpoints, setCheckpoints } = useCheckpoints();
-  const { user } = useSession();
-
-  const [loading, setLoading] = useState(false);
   const [loadingEvent, setLoadingEvent] = useState(true);
   const { setEvent } = useEvent();
   const [event, setCurrentEvent] = useState(null);
-  const [author, setAuthor] = useState(null);
 
   const params = useParams();
   const router = useRouter();
   const pathname = usePathname();
 
   const eventId = params.id;
-  const checkpointId = params.cp;
 
   useEffect(() => {
     setLoadingEvent(true);
@@ -211,20 +200,17 @@ const eventInfo = () => {
             </div>
           </div>
           {checkpoints && checkpoints.length > 0 && (
-            <div className="flex flex-col">
-              <div className="ml-3 w-full pl-6 h-fit m-auto flex flex-row p-4 py-8">
-                <div className="w-2 min-h-full pl-1 bg-blue-400 rounded-l-md mr-10"></div>
-                <div className="rounded-3xl border-blue-500 border-4 items-center p-4">
+            <div className="w-full justify-center items-center h-fit m-auto flex flex-col">
+                <div className="rounded-3xl border-blue-500 border-4 items-center p-4 my-8">
                   <QRCode
                     value={`${process.env.NEXT_PUBLIC_BASEURL}${pathname}`}
-                    size={300}
+                    size={400}
                     qrStyle="fluid"
                     logoImage="/svg/logo_btn.svg"
                     logoWidth={125}
                     logoHeight={50}
                   />
                 </div>
-              </div>
               <CpList />
             </div>
           )}{" "}

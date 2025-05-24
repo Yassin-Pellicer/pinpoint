@@ -134,7 +134,7 @@ export default function EventTimeDisplay({event, listMode}) {
             </div>
           </div>}
 
-          {!listMode && <div className="mt-4">
+          {!listMode && <div className="mt-4 no-print">
             <div className="flex justify-between items-center mb-1">
               <span className="text-xs font-medium text-white">
                 Tiempo restante
@@ -156,7 +156,7 @@ export default function EventTimeDisplay({event, listMode}) {
             </div>
           </div>}
           
-          {listMode && <div className="">
+          {listMode && <div className="no-print">
 
             <div className="w-full bg-gray-200 rounded-full mt-4 h-2.5">
               <div

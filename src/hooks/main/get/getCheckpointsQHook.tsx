@@ -1,6 +1,6 @@
-export const getCheckpointsHook = async (id?: number) => {
+export const getCheckpointsQRHook = async (id?: number) => {
 
-  const res = await fetch(`/api/get/getCheckpoints/${id}`, {
+  const res = await fetch(`/api/get/getCheckpointsQR/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

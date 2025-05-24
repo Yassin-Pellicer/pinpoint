@@ -43,6 +43,7 @@ export default function Banner({ userProp }) {
   const handleIsFollowed = () => {
     if(user) {
       isFollowedByHook(userProp.id, user.id).then((response) => {
+        console.log(response);
         setIsFollowed(response.follows);
       });
     }
@@ -77,7 +78,7 @@ export default function Banner({ userProp }) {
   return (
     <>
       {!editable && (
-        <div className="relative w-full mb-6">
+        <div className="relative w-full mb-6 no-print">
           <div className="flex flex-col justify-center items-center">
             {propUser.banner ? (
               <div className="cursor-pointer relative flex justify-end items-center w-full h-[200px] overflow-hidden">

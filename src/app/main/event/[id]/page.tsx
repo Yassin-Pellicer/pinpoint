@@ -1,12 +1,13 @@
 "use client";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMapContext } from "../../../../utils/context/ContextMap";
 import { useCheckpoints } from "../../../../utils/context/ContextCheckpoint";
 import { useSession } from "../../../../utils/context/ContextSession";
 import { useEvent } from "../../../../utils/context/ContextEvent";
 import { useParams } from "next/navigation";
+import { useReactToPrint } from "react-to-print";
 
 import Quill from "react-quill";
 import EventTimeDisplay from "../../../../components/ui/date";
@@ -14,6 +15,7 @@ import BookmarkBox from "../../../../components/ui/main/mainBookmarkBox";
 import InscribedBox from "../../../../components/ui/main/mainInscriptionBox";
 import CommentBox from "../../../../components/comments/commentBox";
 import CpList from "../../../../components/main/mainCheckpointList";
+import CpQRList from "../../../../components/main/mainCheckpointQRList";
 import { getEventById } from "../../../../hooks/main/get/getEventsHook";
 import { getUserHook } from "../../../../hooks/general/getUserHook";
 import Banner from "../../../../components/profile/banner";
@@ -34,12 +36,17 @@ const eventInfo = () => {
   const params = useParams();
   const router = useRouter();
 
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+  });
+
   const eventId = params.id;
 
   useEffect(() => {
     setLoadingEvent(true);
     getPermission(Number(eventId)).then((response) => {
-      if(!response.result) {
+      if (!response.result) {
         router.push("/main/home");
         return;
       }
@@ -48,13 +55,13 @@ const eventInfo = () => {
           setSelectedEvent(finalEvent.event);
           setEvent(finalEvent.event);
           setCurrentEvent(finalEvent.event);
-          setLoadingEvent(false);    
+          setLoadingEvent(false);
           setAuthor(user.user);
-        })
-      });    
-    })
+        });
+      });
+    });
   }, []);
-  
+
   const t = useTranslations("Main");
   const tagsTrans = useTranslations("Tags");
 
@@ -99,8 +106,8 @@ const eventInfo = () => {
       )}
 
       {!loadingEvent && event && (
-        <div className="printable">
-          <div className="relative justify-center w-full">
+        <div className="print-container" ref={componentRef}>
+          <div className="relative justify-center">
             {event.banner ? (
               <div className="relative flex justify-end items-center w-full h-15 overflow-hidden border-t border-x border-gray-400">
                 <img
@@ -218,7 +225,7 @@ const eventInfo = () => {
                   setEditMode(true);
                   router.push("/create");
                 }}
-                className="mt-4 w-full font-extrabold text-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100 flex justify-center items-center h-10"
+                className="no-print mt-4 w-full font-extrabold text-white p-1 hover:bg-blue-400 rounded-2xl border-[1px] border-white transition duration-100 flex justify-center items-center h-10"
               >
                 {loading ? (
                   <div className="animate-spin h-4 w-4 border-4 border-white border-t-transparent rounded-full"></div>
@@ -230,10 +237,13 @@ const eventInfo = () => {
           </div>
           {event.end && <EventTimeDisplay event={event} listMode={false} />}
           <InscribedBox event={event}></InscribedBox>
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 no-print">
             {user != null && <BookmarkBox event={event}></BookmarkBox>}
 
-            <div className="h-auto bg-green-400 relative hover:cursor-pointer hover:bg-green-600 transition duration-100">
+            <div
+              onClick={handlePrint}
+              className="no-print h-auto bg-green-400 relative hover:cursor-pointer hover:bg-green-600 transition duration-100"
+            >
               <div className="relative h-full">
                 <div
                   className="bg-no-repeat bg-center bg-cover absolute top-[-50px] right-2 bottom-0 w-1/2 transform select-none pointer-events-none"
@@ -345,9 +355,11 @@ const eventInfo = () => {
                 </div>
               </div>
               <CpList />
+
+              <CpQRList id={event.id} />
             </>
           )}{" "}
-          <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-[1px] border-gray-300">
+          <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-[1px] border-gray-300 no-print">
             <div className="relative p-5 z-10">
               <div className="flex flex-row items-center ">
                 <h1 className="text-2xl tracking-tighter font-bold text-black">

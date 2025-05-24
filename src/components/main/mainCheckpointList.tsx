@@ -14,7 +14,7 @@ const cpList = () => {
           <div
             key={checkpoint.id || `checkpoint-${index}`}
             className={
-              "p-4 pb-5 bg-white border-[1px] border-gray-300 cursor-default transition duration-100 ease-in-out"
+              "print-32 p-4 pb-5 bg-white border-[1px] border-gray-300 cursor-default transition duration-100 ease-in-out"
             }
           >
             <CheckpointInfo id={checkpoint.id} index={index} />

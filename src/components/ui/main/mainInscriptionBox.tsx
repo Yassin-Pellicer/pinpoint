@@ -48,7 +48,7 @@ const mainInscribedBox = ({ event }) => {
     <>
       {event.enableInscription && user && (
         <div
-          className={`h-auto ${
+          className={`no-print h-auto ${
             isInscribed ? "bg-green-500" : "bg-amber-400"
           } relative hover:cursor-pointer transition duration-100`}
         >
@@ -140,9 +140,9 @@ const mainInscribedBox = ({ event }) => {
         </div>
       )}
       {event.enableInscription && user && user.id === event.author && (
-        <div>
+        <div className="no-print">
           {inscribedUsers.length > 1 && (
-            <div className="relative p-5 z-10">
+            <div className="no-print relative p-5 z-10">
               <div className="flex flex-row items-center ">
                 <h1 className="text-2xl tracking-tighter font-bold text-black">
                   Inscritos al evento
