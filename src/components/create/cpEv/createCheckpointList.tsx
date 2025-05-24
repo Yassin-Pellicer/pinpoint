@@ -119,7 +119,7 @@ const BottomSheet = ({ open, setOpen }) => {
         </div>
       </div>
 
-      {checkpoints?.length === 0 ? (
+      {checkpoints == undefined ? (
         <div className="bg-white">
           <div className="h-auto bg-white mb-2 relative transition duration-100 overflow-hidden border-[1px] border-gray-300">
             <div className="relative p-5 z-10">
@@ -152,7 +152,7 @@ const BottomSheet = ({ open, setOpen }) => {
                 strategy={verticalListSortingStrategy}
               >
                 <div className="flex flex-col">
-                  {checkpoints.map((checkpoint, index) => (
+                  {checkpoints?.map((checkpoint, index) => (
                     <DraggableCheckpoint
                       index={index}
                       key={`${checkpoint.id}-${index}`}

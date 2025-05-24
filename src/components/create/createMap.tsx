@@ -1,77 +1,22 @@
-"use client"; 
+"use client";
+import dynamic from 'next/dynamic';
 
-import {
-  MapContainer,
-  TileLayer,
-  LayersControl,
-} from "react-leaflet";
-
-import "react-quill/dist/quill.snow.css";
-import "leaflet-geosearch/dist/geosearch.css";
-import "leaflet/dist/leaflet.css";
-
-import { SearchControl } from "../../utils/funcs/searchControl";
-import CreateEventsSimple from "./simpleEv/createSimpleEventMarkers";
-import CreateEventsCp from "./cpEv/createCheckpointEventMarkers";
-
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-import { useEffect, useState } from "react";
-import { useMapContext } from "../../utils/context/ContextMap";
-import { useSession } from "../../utils/context/ContextSession";
-
-const center: [number, number] = [51.505, -0.09]; 
+// Dynamically import the map component with no SSR
+const DynamicMapContainer = dynamic(
+  () => import('./mapContainerComponent'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="h-screen w-full flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading map...</p>
+        </div>
+      </div>
+    )
+  }
+);
 
 export default function MapComponent() {
-
-  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
-  const {createType} = useSession();
-  
-  const [center, setCenter] = useState<[number, number] | null>(() => {
-    const savedCenter = sessionStorage.getItem("map-center");
-    return savedCenter ? JSON.parse(savedCenter) : null;
-  });
-
-  return (
-    <>
-      {location && (
-        <MapContainer
-          zoom={zoom}
-          maxZoom={18}
-          center={location}
-          doubleClickZoom={false}
-          worldCopyJump={true}
-          maxBoundsViscosity={0}
-          className="h-screen w-full z-10"
-        >
-          <LayersControl position="bottomleft">
-            <LayersControl.BaseLayer name="CartoDB Positron" checked>
-              <TileLayer
-                url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://carto.com/attributions">CartoDB</a>'
-              />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer name="OpenStreetMap">
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-              />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer name="Google Satellite">
-              <TileLayer url="https://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}" />
-            </LayersControl.BaseLayer>
-          </LayersControl>
-
-          <SearchControl />
-
-          {createType === "simple" ? (
-            <CreateEventsSimple />
-          ) : (
-            <CreateEventsCp />
-          )}
-        </MapContainer>
-      )}
-    </>
-  );
+  return <DynamicMapContainer />;
 }
-

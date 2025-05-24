@@ -120,7 +120,7 @@ const evView = () => {
         >
           <Popup
             offset={[13, -30]}
-            className="custom-popup"
+            className="custom-popup pointer-events-none select-none"
             maxWidth={250}
             autoClose={false}
             closeOnClick={false}
@@ -167,14 +167,18 @@ const evView = () => {
                     </>
                   )}
                 </div>
-                <div className="flex justify-between items-center">
-                  <p className="text-white text-sm tracking-tighter font-bold">
-                    Click for more details
-                  </p>
-                  <div className="flex space-x-2 text-white">
-                    <i className="material-icons">public</i>
-                    <i className="material-icons">qr_code</i>
-                    <i className="material-icons">tour</i>
+                <div className="flex items-center justify-end">
+                  <div className="text-white flex space-x-2">
+                    {event.isPublic ? (
+                      <i className="material-icons">public</i>
+                    ) : (
+                      <i className="material-icons">lock</i>
+                    )}
+                    {event.qr ? (
+                      <i className="material-icons">qr_code</i>
+                    ) : (
+                      <i className="material-icons">tour</i>
+                    )}
                   </div>
                 </div>
               </div>

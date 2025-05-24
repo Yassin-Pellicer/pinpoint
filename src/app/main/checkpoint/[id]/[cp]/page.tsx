@@ -1,4 +1,6 @@
 "use client";
+export const dynamic = 'force-dynamic'; // 👈 tells Next.js this page is dynamic
+
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -200,18 +202,18 @@ const eventInfo = () => {
             </div>
           </div>
           {checkpoints && checkpoints.length > 0 && (
-            <div className="w-full justify-center items-center h-fit m-auto flex flex-col">
-                <div className="rounded-3xl border-blue-500 border-4 items-center p-4 my-8">
-                  <QRCode
-                    value={`${process.env.NEXT_PUBLIC_BASEURL}${pathname}`}
-                    size={(typeof window !== "undefined" ? window.innerWidth * 0.7 : 400)}
-                    qrStyle="fluid"
-                    logoImage="/svg/logo_btn.svg"
-                    logoWidth={125}
-                    logoHeight={50}
-                  />
-                </div>
-              <CpList />
+      <div className="rounded-3xl border-blue-500 border-4 items-center p-4 mx-8 my-4 mt-8 flex justify-center">
+        <div className="w-full max-w-[400px]">
+                <QRCode
+                  value={`${process.env.NEXT_PUBLIC_BASEURL}${pathname}`}
+                  size={400} 
+            style={{ width: "100%", height: "auto" }} // Responsive sizing
+            qrStyle="fluid"
+            logoImage="/svg/logo_btn.svg"
+            logoWidth={125}
+            logoHeight={50}
+                />
+              </div>
             </div>
           )}{" "}
           <div className="overflow-hidden">

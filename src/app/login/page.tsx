@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic'; // 👈 tells Next.js this page is dynamic
 
 import Link from "next/link";
 import Logo from "../../components/ui/logo";

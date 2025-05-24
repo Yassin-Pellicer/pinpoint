@@ -133,7 +133,7 @@ const SimpleEvent = () => {
       } else if (createType === "checkpoints") {
         await addCheckpointsHook({ eventId: result.id, data: checkpoints });
       }
-      if (result) {
+      if (result.id) {
         await resultPromise;
         router.push("/main/event/" + result.id);
       }

@@ -1,73 +1,30 @@
-"use client"; 
-import {
-  MapContainer,
-  TileLayer,
-  LayersControl,
-} from "react-leaflet";
-
-import "react-quill/dist/quill.snow.css";
-import "leaflet-geosearch/dist/geosearch.css";
-import "leaflet/dist/leaflet.css";
-
-import { SearchControl } from "../../utils/funcs/searchControl";
-import { useEffect, useState } from "react";
-
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+"use client";
+import dynamic from 'next/dynamic';
 import { useMapContext } from "../../utils/context/ContextMap";
-import EventsMap from "./mainEventMarkers";
-import CheckpointMap from "./mainCheckpointMarkers";
+import { useEffect } from "react";
+
+// Dynamically import the map component with no SSR
+const DynamicMapContainer = dynamic(
+  () => import('./mapContainerComponent'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="h-screen w-full flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading map...</p>
+        </div>
+      </div>
+    )
+  }
+);
 
 export default function MapComponent() {
-
-  const { location, setLocation, zoom, setZoom, originalLocation, loadEvents, modifiedEvent, selectedEvent } = useMapContext();
-
+  const { loadEvents, modifiedEvent, selectedEvent, zoom, location } = useMapContext();
+  
   useEffect(() => {
     loadEvents();
   }, [zoom, location, modifiedEvent, selectedEvent]);
 
-  return (
-    <MapContainer
-      zoom={zoom}
-      maxZoom={25}
-      center={location}
-      doubleClickZoom={false}
-      className="h-screen w-full z-10"
-      style={{ outline: "none" }}
-      worldCopyJump={true}
-      maxBoundsViscosity={0}
-    >
-      <LayersControl position="bottomleft">
-        <LayersControl.BaseLayer name="CartoDB Positron" checked>
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://carto.com/attributions">CartoDB</a>'
-            maxNativeZoom={20}
-            maxZoom={25}
-          />
-        </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="OpenStreetMap">
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; OpenStreetMap contributors'
-            maxNativeZoom={20}
-            maxZoom={25}
-          />
-        </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="Google Satellite">
-          <TileLayer
-            url="https://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-            maxNativeZoom={22}
-            maxZoom={25}
-          />
-        </LayersControl.BaseLayer>
-      </LayersControl>
-
-      <SearchControl />
-      <EventsMap />
-      <CheckpointMap />
-      
-    </MapContainer>
-  );
+  return <DynamicMapContainer />;
 }
-

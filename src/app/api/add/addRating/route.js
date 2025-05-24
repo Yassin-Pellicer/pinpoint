@@ -7,11 +7,14 @@ import jwt from 'jsonwebtoken';
 export async function POST(request) {
   const cookies = cookie.parse(request.headers.get('cookie') || '');
   const { eventId, rating } = await request.json()
+  console.log('rating request', { eventId, rating, session: cookies.session });
   const token = cookies.session;
+  let id;
   try {
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
     id = decoded.id;
   } catch (error) {
+    console.error('Invalid session', error);
     return NextResponse.json({ result: "ko", message: "Invalid session" });
   }
   const client = await connectToDatabase();
@@ -54,6 +57,7 @@ export async function POST(request) {
         );
       }
     }
+    console.log('rating updated');
     return NextResponse.json({ result: "ok" })
 
   } catch (error) {
@@ -64,5 +68,4 @@ export async function POST(request) {
     client.release(); // This is critical
   }
 }
-
 

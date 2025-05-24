@@ -50,17 +50,17 @@ export default function SwiperComponent( {event, userProp} ) {
             {event.name}
           </h1>
         </div>
-        <div className="flex flex-row justify-between align-center items-center w-full">
+        <div className="flex flex-row justify-between align-center gap-8 items-center w-full">
           <p className="text-xs w-full">{event.address}</p>
           <div className="flex flex-row items-center">
             <div className="flex items-center">
-              <i className="material-icons text-md">
-                {event.isPublic ? "lock" : "public"}
+              <i className="material-icons text-sm">
+                {!event.isPublic ? "lock" : "public"}
               </i>
             </div>
             {event.qr && (
-              <div className="flex items-center ml-4">
-                <i className="material-icons text-md ml-4">qr_code</i>
+              <div className="flex items-center">
+                <i className="material-icons text-sm ml-2">qr_code</i>
               </div>
             )}
           </div>

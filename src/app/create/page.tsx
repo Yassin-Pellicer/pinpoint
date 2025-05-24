@@ -1,30 +1,52 @@
 "use client";
+import dynamic from "next/dynamic";
 
 import "react-quill/dist/quill.snow.css";
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import CreateEvent from "../../components/create/createEvent";
+// Remove the direct import and use dynamic import instead
+// import CreateEvent from "../../components/create/createEvent";
 
 import { useMapContext } from "../../utils/context/ContextMap";
 
 import { CssBaseline } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"; // Add this import
 import LoadingScreen from "../../components/ui/loadingScreen";
 import { useCheckpoints } from "../../utils/context/ContextCheckpoint";
 import createTypography from "@mui/material/styles/createTypography";
 import { useSession } from "../../utils/context/ContextSession";
+import { useEvent } from "../../utils/context/ContextEvent";
+import { Event } from "../../utils/classes/Event";
+
+// Dynamically import CreateEvent with no SSR
+const DynamicCreateEvent = dynamic(
+  () => import("../../components/create/createEvent"),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+          <p className="text-gray-600 text-sm">Loading event creator...</p>
+        </div>
+      </div>
+    )
+  }
+);
 
 export default function Create() {
+  
   const { location, editMode } = useMapContext();
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { setCreateType, createType } = useSession(); 
+  const { setEvent } = useEvent();
 
   const [selectedButton, setSelectedButton] = useState("simple");
 
   useEffect(() => {
-    if(!editMode) setCheckpoints([]);
-    if (checkpoints.length === 0) {
+    if(!editMode) { setCheckpoints([]); setEvent(new Event()); }
+    if (checkpoints?.length == 0 || !checkpoints || checkpoints === undefined) {
       setSelectedButton("simple");
       setCreateType("simple");
     } else {
@@ -96,17 +118,13 @@ export default function Create() {
             <h1 className="font-bold text-white bg-green-700 p-4 text-3xl tracking-tight ">
               Estás en modo edición
             </h1>
-            <p className="p-6 text-sm">
-              Al editar un evento no puedes cambiar su tipo. Volver a la página
-              principal dejará el evento intacto.
-            </p>
           </div>
         )}
 
         {/* Event Creation */}
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <CssBaseline />
-          <CreateEvent/>
+          <DynamicCreateEvent/>
         </LocalizationProvider>
     </div>
   );

@@ -1,4 +1,5 @@
-import { connectToDatabase } from "../../../../../../utils/db/db";
+import { connectToDatabase } from "../../../../utils/db/db";
+import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import cookie from 'cookie';
 

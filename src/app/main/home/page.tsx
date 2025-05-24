@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic'; // Tells Next.js this page is dynamic
 
 import "react-quill/dist/quill.snow.css";
 import React, { useEffect, useRef } from "react";
@@ -124,3 +125,4 @@ export default function Create() {
     </>
   );
 }
+

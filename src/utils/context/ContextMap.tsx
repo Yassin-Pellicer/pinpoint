@@ -37,6 +37,8 @@ interface MapContextType {
   setUserActivityFeed: (userActivityFeed: any[]) => void;
   globalActivityFeed: any[];
   setGlobalActivityFeed: (globalActivityFeed: any[]) => void;
+  showMap?: boolean;
+  setShowMap?: (show: boolean) => void;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -55,6 +57,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [editMode, setEditMode] = useState(false);
   const [userActivityFeed, setUserActivityFeed ] = useState([]);
   const [globalActivityFeed, setGlobalActivityFeed ] = useState([]);
+  const [showMap, setShowMap] = useState(true);
 
   const {user} = useSession();
 
@@ -160,7 +163,9 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         userActivityFeed,
         setUserActivityFeed,
         globalActivityFeed,
-        setGlobalActivityFeed
+        setGlobalActivityFeed,
+        showMap,
+        setShowMap,
       }}
     >
       {children}

@@ -264,7 +264,12 @@ export async function POST(request) {
       );
     }
 
-    return NextResponse.json({ result: "ok", id: insertedId, created: true });
+    return NextResponse.json({
+      result: "ok",
+      id: insertedId,
+      created: true,
+      status: 200,
+    });
   } catch (error) {
     console.error("Event Operation Error:", error);
     return NextResponse.json({
@@ -276,4 +281,3 @@ export async function POST(request) {
     client.release(); // This is critical
   }
 }
-

@@ -8,7 +8,7 @@ import EventDate from "../ui/date"; // Adjust the path as needed
 import { useMapContext } from "../../utils/context/ContextMap";
 import { useRouter } from "next/navigation";
 
-export default function SwiperComponent( {events} ) {
+export default function SwiperComponent({ events }) {
   const { setSelectedEvent, setSearch, setFilterTags } = useMapContext();
   const router = useRouter();
   return (
@@ -20,11 +20,11 @@ export default function SwiperComponent( {events} ) {
           onClick={(e) => {
             router.push("/main/event/" + event.id);
             setSearch("");
-            setFilterTags([])
+            setFilterTags([]);
             e.stopPropagation();
           }}
         >
-    <div className="bg-gray-100 text-black w-full h-fit flex items-center align-center hover:bg-gray-200 flex-row p-4 border-gray-300 border-[1px]">
+          <div className="bg-gray-100 text-black w-full h-fit flex items-center align-center hover:bg-gray-200 flex-row p-4 border-gray-300 border-[1px]">
             {event.banner && (
               <div className="overflow-hidden bg-white rounded-full w-[100px] h-[80px]">
                 <img
@@ -78,20 +78,20 @@ export default function SwiperComponent( {events} ) {
                 )}
                 <div className="flex flex-row items-center">
                   <div className="flex items-center">
-                    <i className="material-icons text-md">
-                      {event.isPublic ? "lock" : "public"}
+                    <i className="material-icons text-sm">
+                      {!event.isPublic ? "lock" : "public"}
                     </i>
                   </div>
                   {event.qr && (
-                    <div className="flex items-center ml-4">
-                      <i className="material-icons text-md ml-4">qr_code</i>
+                    <div className="flex items-centerm">
+                      <i className="material-icons text-sm ml-2">qr_code</i>
                     </div>
                   )}
                 </div>
               </div>
               {event.start && event.end && (
-              <EventDate event={event} listMode={true} />
-            )}
+                <EventDate event={event} listMode={true} />
+              )}
             </div>{" "}
           </div>
         </div>
