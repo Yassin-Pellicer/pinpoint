@@ -22,8 +22,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: '/leaflet/marker-shadow.png',
 });
 
-const defaultCenter: [number, number] = [51.505, -0.09]; 
-
 export default function MapContainerComponent() {
   const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
   const { createType } = useSession();

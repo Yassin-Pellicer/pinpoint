@@ -63,6 +63,14 @@ export async function POST(request) {
       });
     }
 
+    if (end && start && new Date(end).getTime() < new Date(start).getTime()) {
+      return NextResponse.json({
+        result: "error",
+        message: "time",
+        status: 400,
+      });
+    }
+
     start = start ? new Date(start).toISOString() : new Date().toISOString();
     end = end ? new Date(end).toISOString() : null;
 

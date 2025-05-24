@@ -40,12 +40,12 @@ export default function Create() {
   const { location, editMode } = useMapContext();
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { setCreateType, createType } = useSession(); 
-  const { setEvent } = useEvent();
+  const { setEvent, setDate } = useEvent();
 
   const [selectedButton, setSelectedButton] = useState("simple");
 
   useEffect(() => {
-    if(!editMode) { setCheckpoints([]); setEvent(new Event()); }
+    if(!editMode) { setCheckpoints([]); setEvent(new Event()); setDate(new Date()); }
     if (checkpoints?.length == 0 || !checkpoints || checkpoints === undefined) {
       setSelectedButton("simple");
       setCreateType("simple");

@@ -12,7 +12,6 @@ import {
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import Tags from "./tags";
-import dynamic from "next/dynamic";
 import { useEvent } from "../../utils/context/ContextEvent";
 import fileURL from "../../utils/funcs/createUrlImage";
 import { createEventHook } from "../../hooks/create/addEventHook";
@@ -29,7 +28,6 @@ import Quill from "react-quill";
 import { getEventCode } from "../../hooks/general/privateEventsHook";
 import { deleteEventHook } from "../../hooks/main/delete/deleteEventHook";
 import { useMapContext } from "../../utils/context/ContextMap";
-import { Event } from "../../utils/classes/Event";
 const SimpleEvent = () => {
   const {
     event,
@@ -60,7 +58,7 @@ const SimpleEvent = () => {
     setDate,
     code,
     setCode,
-    setTags
+    setTags,
   } = useEvent();
   const [loading, setLoading] = useState(false);
   const [openTags, setOpenTags] = useState(false);
@@ -92,7 +90,8 @@ const SimpleEvent = () => {
 
   const generateRandomAsciiCode = (length: number) => {
     let result = "";
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -107,7 +106,7 @@ const SimpleEvent = () => {
       } else {
         setCode(res.code);
       }
-    })
+    });
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -248,7 +247,6 @@ const SimpleEvent = () => {
 
         <button
           onClick={(e) => {
-
             setOpenTags(!openTags);
             e.preventDefault();
           }}
@@ -427,46 +425,46 @@ const SimpleEvent = () => {
                   <h1 className="text-white text-lg tracking-tighter font-bold">
                     Fecha y hora del evento*
                   </h1>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setDate(null);
+                 <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setDate(null);
+                      }}
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      className="flex items-center justify-center ml-auto"
+                    >
+                      <i className="material-icons text-white">refresh</i>
+                    </button>
+                  </div>
+                  <DateTimePicker
+                    label="Seleccione fecha y hora"
+                    format="dd/MM/yyyy HH:mm"
+                    value={date}
+                    onChange={(newValue) => {
+                      if (!newValue) return;
+                      if (end && newValue > end) {
+                        setSnackbarMessage(
+                          "La fecha de inicio no puede ser posterior a la de fin!"
+                        );
+                        setSnackbarSeverity("error");
+                        setSnackbarOpen(true);
+                      } else {
+                        setDate(newValue);
+                      }
                     }}
-                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    className="flex items-center justify-center ml-auto"
-                  >
-                    <i className="material-icons text-white">refresh</i>
-                  </button>
+                    slotProps={{
+                      textField: {
+                        InputProps: {
+                          readOnly: true,
+                          style: { fontSize: "0.875rem" },
+                        },
+                        InputLabelProps: {
+                          style: { fontSize: "0.875rem" },
+                        },
+                      },
+                    }}
+                  />
                 </div>
-                <DateTimePicker
-                  label="Seleccione fecha y hora"
-                  format="dd/MM/yyyy HH:mm"
-                  value={new Date(date)}
-                  onChange={(newValue) => {
-                    if (!newValue) return;
-                    if (newValue < end && end) {
-                      setSnackbarMessage(
-                        "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
-                      );
-                      setSnackbarSeverity("error");
-                      setSnackbarOpen(true);
-                    } else {
-                      setDate(newValue);
-                    }
-                  }}
-                  slotProps={{
-                    textField: {
-                      InputProps: {
-                        readOnly: true,
-                        style: { fontSize: "0.875rem" },
-                      },
-                      InputLabelProps: {
-                        style: { fontSize: "0.875rem" },
-                      },
-                    },
-                  }}
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -577,7 +575,7 @@ const SimpleEvent = () => {
                       className="hover:bg-gray-300 transition duration-100 rounded-full p-1"
                       onClick={(e) => {
                         e.preventDefault();
-                        setCode(generateRandomAsciiCode(20))
+                        setCode(generateRandomAsciiCode(20));
                       }}
                     >
                       <i className="material-icons text-black text-xl">
@@ -745,25 +743,27 @@ const SimpleEvent = () => {
         </div>
       </form>
       <div className="flex justify-center">
-          {editMode && (
-            <button
-              className={
-                "flex justify-center font-bold " +
-                "align-center w-full items-center text-2xl " +
-                "bg-red-500 text-white py-4 px-4 " +
-                "hover:bg-red-600 focus:outline-none " +
-                "focus:ring-opacity-50"
-              }
-              onClick={async () => {
-                setEvents(events.filter((eventParam) => eventParam.id !== event?.id))
-                await deleteEventHook(event.id);
-                router.push("/main/home");
-              }}
-            >
-              Eliminar evento
-            </button>
-          )}
-        </div>
+        {editMode && (
+          <button
+            className={
+              "flex justify-center font-bold " +
+              "align-center w-full items-center text-2xl " +
+              "bg-red-500 text-white py-4 px-4 " +
+              "hover:bg-red-600 focus:outline-none " +
+              "focus:ring-opacity-50"
+            }
+            onClick={async () => {
+              setEvents(
+                events.filter((eventParam) => eventParam.id !== event?.id)
+              );
+              await deleteEventHook(event.id);
+              router.push("/main/home");
+            }}
+          >
+            Eliminar evento
+          </button>
+        )}
+      </div>
       <CpList open={openCp} setOpen={setOpenCp} />
       <Tags open={openTags} setOpen={setOpenTags} filterMode={false} />
     </div>
