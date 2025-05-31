@@ -6,6 +6,11 @@ import { EventProvider } from '../utils/context/ContextEvent';
 import { MapProvider } from '../utils/context/ContextMap';
 import { SessionProvider } from '../utils/context/ContextSession';
 
+export const metadata = {
+  title: 'Your App Title',
+  description: 'Your App Description',
+};
+
 export default async function RootLayout({
   children
 }: {
@@ -13,8 +18,10 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale();
   const messages = await getMessages();
+
   return (
     <html lang={locale}>
+      <title>Pinpoint</title>
       <body>
         <NextIntlClientProvider messages={messages}>
           <SessionProvider>
