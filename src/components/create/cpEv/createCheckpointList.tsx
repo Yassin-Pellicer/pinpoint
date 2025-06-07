@@ -5,6 +5,11 @@ import {
   closestCenter,
   closestCorners,
   DndContext,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   pointerWithin,
   rectIntersection,
 } from "@dnd-kit/core";
@@ -28,6 +33,17 @@ const BottomSheet = ({ open, setOpen }) => {
     setOrder,
   } = useCheckpoints();
   const t = useTranslations("CpList");
+
+  const sensors = useSensors(
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    }),
+    useSensor(PointerSensor),
+    useSensor(MouseSensor)
+  );
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -144,6 +160,7 @@ const BottomSheet = ({ open, setOpen }) => {
           </div>
           <div className="relative mt-4 flex flex-col overflow-y-auto">
             <DndContext
+              sensors={sensors}
               collisionDetection={closestCenter}
               onDragEnd={handleDragEnd}
             >
@@ -151,7 +168,7 @@ const BottomSheet = ({ open, setOpen }) => {
                 items={checkpoints}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="flex flex-col">
+                <div className="flex flex-col touch-drag-container">
                   {checkpoints?.map((checkpoint, index) => (
                     <DraggableCheckpoint
                       index={index}

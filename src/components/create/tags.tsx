@@ -5,40 +5,53 @@ import { useTranslations } from "next-intl";
 import { Tag } from "../../utils/classes/Tag";
 import { useState, useEffect } from "react";
 
-const BottomSheet = ({ open, setOpen, filterMode }) => {
+const BottomSheet = ({ open, setOpen, filterMode, createMode }) => {
   const t = useTranslations("Tags");
-  const { setFilterTags } = useMapContext();
+  const { setFilterTags, filterTags } = useMapContext();
 
   const { event, tags, setTags } = useEvent();
 
-  const [selectedTags, setSelectedTags] = useState({});
+  const [selectedTags, setSelectedTags] = useState(
+    filterMode ? { ...filterTags } : {}
+  );
 
   useEffect(() => {
+    if (filterMode) {
+      const updatedSelectedTags = Tag.tags.reduce((acc, tag) => {
+        acc[tag.tag_id] = filterTags.some((t) => t.tag_id === tag.tag_id);
+        return acc;
+      }, {});
+
+      setSelectedTags(updatedSelectedTags);
+      setFilterTags(Tag.tags.filter((tag) => updatedSelectedTags[tag.tag_id]));
+    }
+    if (createMode) {
       const updatedSelectedTags = Tag.tags.reduce((acc, tag) => {
         acc[tag.tag_id] = tags.some((t) => t.tag_id === tag.tag_id);
         return acc;
       }, {});
-      
+
       setSelectedTags(updatedSelectedTags);
-      if (filterMode) {
-        setFilterTags(Tag.tags.filter((tag) => updatedSelectedTags[tag.tag_id]));
-      }
+    }
   }, [open]);
 
   const handleTagSelection = (tagName) => {
-    setSelectedTags((prevSelectedTags) => {
-      const updatedTags = { ...prevSelectedTags, [tagName]: !prevSelectedTags[tagName] };
-      
-      const selected = Tag.tags.filter((tag) => updatedTags[tag.tag_id]);
-      if (filterMode) {
-        setFilterTags(selected);
-      }
+    let prevSelectedTags = { ...selectedTags };
+    const updatedTags = {
+      ...prevSelectedTags,
+      [tagName]: !prevSelectedTags[tagName],
+    };
+
+    const selected = Tag.tags.filter((tag) => updatedTags[tag.tag_id]);
+    if (filterMode) {
+      setFilterTags(selected);
+    } else {
       setTags(selected);
-  
-      return updatedTags;
-    });
+    }
+
+    setSelectedTags(updatedTags);
   };
-  
+
   return (
     <SwipeableDrawer
       anchor="bottom"

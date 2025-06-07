@@ -2,7 +2,6 @@
 export const dynamic = 'force-dynamic'; // 👈 tells Next.js this page is dynamic
 
 import { useState } from "react";
-import Menu from "../../components/home/menu";
 import { useRouter, usePathname } from "next/navigation";
 import CreateMap from "../../components/create/createMap";
 
@@ -32,16 +31,6 @@ export default function Layout({ children }) {
         </div>
 
         {children}
-        <div className="fixed mt-2 mr-2 top-0 right-0 z-50">
-          <button
-            className="px-2 pt-1 text-gray-200 hover:text-white transition-colors rounded-xl bg-blue-500"
-            onClick={() => setOpen((prev) => !prev)}
-          >
-            <span className="material-icons text-3xl">menu</span>
-          </button>
-        </div>
-
-        <Menu open={open} setOpen={setOpen} />
       </div>
         <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[70vh]">
           <CreateMap />

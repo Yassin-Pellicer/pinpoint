@@ -5,8 +5,13 @@ import fileURL from "../../utils/funcs/createUrlImage";
 import { addUserHook } from "../../hooks/general/addUserHook";
 import { useRouter } from "next/navigation";
 import { useSession } from "../../utils/context/ContextSession";
-import { isFollowedByHook, deleteFollowerHook, addFollowerHook } from "../../hooks/general/followersHook";
+import {
+  isFollowedByHook,
+  deleteFollowerHook,
+  addFollowerHook,
+} from "../../hooks/general/followersHook";
 import Follows from "./follows";
+import { closeSession } from "../../hooks/auth/closeSession/closeSession";
 
 export default function Banner({ userProp }) {
   const [propUser, setPropUser] = useState({ ...userProp });
@@ -16,16 +21,14 @@ export default function Banner({ userProp }) {
   const [typeFollows, setTypeFollows] = useState("");
   const [isFollowed, setIsFollowed] = useState(null);
 
-  const {user} = useSession();
+  const { user } = useSession();
 
   const router = useRouter();
 
   const setUsername = (username) => setUserCopy({ ...userCopy, username });
-  const setDescription = (description) =>
-    setUserCopy({ ...userCopy, description });
+  const setDescription = (description) => setUserCopy({ ...userCopy, description });
   const setBanner = (banner) => setUserCopy({ ...userCopy, banner });
-  const setProfilePicture = (profilePicture) =>
-    setUserCopy({ ...userCopy, profilePicture });
+  const setProfilePicture = (profilePicture) => setUserCopy({ ...userCopy, profilePicture });
   const setLink = (link) => setUserCopy({ ...userCopy, link });
 
   const handleSubmit = async (e) => {
@@ -41,12 +44,12 @@ export default function Banner({ userProp }) {
   };
 
   const handleIsFollowed = () => {
-    if(user) {
+    if (user) {
       isFollowedByHook(userProp.id, user.id).then((response) => {
         setIsFollowed(response.follows);
       });
     }
-  }
+  };
 
   useEffect(() => {
     setPropUser({ ...userProp });
@@ -54,7 +57,7 @@ export default function Banner({ userProp }) {
   }, [userProp]);
 
   useEffect(() => {
-    if(user && userProp) handleIsFollowed();
+    if (user && userProp) handleIsFollowed();
   }, [user]);
 
   const handleFollow = () => {
@@ -72,6 +75,15 @@ export default function Banner({ userProp }) {
   const handleCancel = () => {
     setUserCopy({ ...propUser });
     setEditable(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await closeSession();
+      router.push("/");
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
   };
 
   return (
@@ -120,19 +132,32 @@ export default function Banner({ userProp }) {
                 </h2>
               </div>
               <div className="flex flex-row gap-2">
+
                 {user?.id === userProp?.id && (
-                  <button
-                    onClick={() => setEditable(true)}
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
-                  >
-                    <i className="material-icons text-lg">edit</i>
-                  </button>
+                  <div className="gap-2 flex flex-row flex-end">
+                    <button
+                      onClick={() => handleLogout() }
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
+                      title="Cerrar Sesión"
+                    >
+                      <i className="material-icons text-lg">logout</i>
+                    </button>
+
+                    <button
+                      onClick={() => setEditable(true)}
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
+                    >
+                      <i className="material-icons text-lg">edit</i>
+                    </button>
+                  </div>
                 )}
                 {user?.id !== userProp?.id && isFollowed !== null && (
                   <button
                     onClick={handleFollow}
                     className={`${
-                      isFollowed ? "bg-red-500 hover:bg-red-700" : "bg-blue-500 hover:bg-blue-700"
+                      isFollowed
+                        ? "bg-red-500 hover:bg-red-700"
+                        : "bg-blue-500 hover:bg-blue-700"
                     } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
                   >
                     {isFollowed ? "Unfollow" : "Seguir"}
@@ -176,14 +201,20 @@ export default function Banner({ userProp }) {
               <div className="flex flex-row">
                 <p
                   className="text-sm text-gray-600 mr-2 cursor-pointer"
-                  onClick={() => {setOpenFollows(true); setTypeFollows("following")}}
+                  onClick={() => {
+                    setOpenFollows(true);
+                    setTypeFollows("following");
+                  }}
                 >
                   <span className="font-bold">Siguiendo:</span>{" "}
                   {propUser.following || 0}
                 </p>
                 <p
                   className="text-sm text-gray-600 cursor-pointer"
-                  onClick={() => {setOpenFollows(true); setTypeFollows("followers")}}
+                  onClick={() => {
+                    setOpenFollows(true);
+                    setTypeFollows("followers");
+                  }}
                 >
                   <span className="font-bold">Seguidores:</span>{" "}
                   {propUser.followers || 0}
@@ -193,7 +224,15 @@ export default function Banner({ userProp }) {
           </div>
         </div>
       )}
-      <Follows open={openFollows} setOpen={setOpenFollows} setType={setTypeFollows} type={typeFollows} user={userProp}></Follows>
+
+      <Follows
+        open={openFollows}
+        setOpen={setOpenFollows}
+        setType={setTypeFollows}
+        type={typeFollows}
+        user={userProp}
+      ></Follows>
+
       {editable && (
         <div className="bg-white">
           <div className="relative w-full">
@@ -233,10 +272,23 @@ export default function Banner({ userProp }) {
                   hidden
                   onChange={(e) => fileURL(e, (url) => setProfilePicture(url))}
                 />
+                <label htmlFor="imageProfile">
+                  {userCopy.profilePicture ? (
+                    <img
+                      src={userCopy.profilePicture}
+                      alt="Profile Picture"
+                      className="w-full h-full object-cover cursor-pointer"
+                    />
+                  ) : (
+                    <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">
+                      person
+                    </i>
+                  )}
+                </label>
               </div>
             </div>
 
-            <div className="flex flex-col justify-between w-full px-6 pb-6 h-[fit] z-10 bg-gray-300">
+            <div className="flex flex-col justify-between w-full px-6 pb-6 h-[fit] z-10 bg-white">
               <div className="flex flex-row justify-end">
                 <div className="flex flex-row gap-2">
                   <button
@@ -257,7 +309,11 @@ export default function Banner({ userProp }) {
                         e.stopPropagation();
                         handleFollow();
                       }}
-                      className={`bg-${isFollowed ? "red-500 hover:red-700" : "blue-500 hover:blue-700"} text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
+                      className={`bg-${
+                        isFollowed
+                          ? "red-500 hover:red-700"
+                          : "blue-500 hover:blue-700"
+                      } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
                     >
                       {isFollowed ? "Dejar de seguir" : "Seguir"}
                     </button>

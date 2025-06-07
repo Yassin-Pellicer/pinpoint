@@ -152,6 +152,13 @@ input[type=number] {
     line-height: 0;
   }
 }
+/* On the container or draggable items */
+.touch-drag-container,
+.draggable-item {
+  touch-action: none; /* Prevents browser gestures blocking drag */
+  -webkit-user-select: none; /* Prevent text selection on drag */
+  user-select: none;
+}
 
 
 

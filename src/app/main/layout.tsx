@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Menu from "../../components/home/menu";
 import MainMap from "../../components/main/mainMap";
 import { useSession } from "../../utils/context/ContextSession";
 import { getUserHook } from "../../hooks/general/getUserHook";
@@ -86,7 +85,9 @@ export default function Layout({ children }) {
             <div className="flex items-center gap-3 px-4 py-2 bg-blue-200 shadow-lg rounded-full w-full max-w-3xl mx-auto">
               <div
                 className="w-10 h-10 rounded-full overflow-hidden border shrink-0 border-gray-300 cursor-pointer"
-                onClick={() => router.push(`/main/user/${user?.id}`)}
+                onClick={() =>
+                  user ? router.push(`/main/user/${user.id}`) : router.push("/login")
+                }
               >
                 {user?.profilePicture ? (
                   <ProfilePopup
@@ -188,16 +189,7 @@ export default function Layout({ children }) {
           </div>
         </div>
         {children}
-        <div className="fixed mt-2 mr-2 top-0 right-0 z-50">
-          <button
-            className="px-2 pt-1 text-gray-200 hover:text-white transition-colors rounded-xl bg-blue-500"
-            onClick={() => setOpen((prev) => !prev)}
-          >
-            <span className="material-icons text-3xl">menu</span>
-          </button>
-        </div>
-        <Tags open={openTags} setOpen={setOpenTags} filterMode={true} />
-        <Menu open={open} setOpen={setOpen} />
+        <Tags open={openTags} setOpen={setOpenTags} filterMode={true} createMode={false}/>
       </div>
       {showMap && (
         <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[70vh]">

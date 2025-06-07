@@ -83,7 +83,11 @@ const SimpleEvent = () => {
 
   useEffect(() => {
     if (tags != null) {
-      const selected = Tag.tags.filter((tag) => tags[tag.tag_id]);
+      console.log(tags);
+      const selected = Tag.tags.filter((tag) =>
+        tags.some((t) => t.tag_id === tag.tag_id)
+      );
+      console.log(selected);
       setTags(selected);
     }
   }, []);
@@ -425,46 +429,46 @@ const SimpleEvent = () => {
                   <h1 className="text-white text-lg tracking-tighter font-bold">
                     Fecha y hora del evento*
                   </h1>
-                 <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setDate(null);
-                      }}
-                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                      className="flex items-center justify-center ml-auto"
-                    >
-                      <i className="material-icons text-white">refresh</i>
-                    </button>
-                  </div>
-                  <DateTimePicker
-                    label="Seleccione fecha y hora"
-                    format="dd/MM/yyyy HH:mm"
-                    value={date}
-                    onChange={(newValue) => {
-                      if (!newValue) return;
-                      if (end && newValue > end) {
-                        setSnackbarMessage(
-                          "La fecha de inicio no puede ser posterior a la de fin!"
-                        );
-                        setSnackbarSeverity("error");
-                        setSnackbarOpen(true);
-                      } else {
-                        setDate(newValue);
-                      }
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setDate(null);
                     }}
-                    slotProps={{
-                      textField: {
-                        InputProps: {
-                          readOnly: true,
-                          style: { fontSize: "0.875rem" },
-                        },
-                        InputLabelProps: {
-                          style: { fontSize: "0.875rem" },
-                        },
-                      },
-                    }}
-                  />
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    className="flex items-center justify-center ml-auto"
+                  >
+                    <i className="material-icons text-white">refresh</i>
+                  </button>
                 </div>
+                <DateTimePicker
+                  label="Seleccione fecha y hora"
+                  format="dd/MM/yyyy HH:mm"
+                  value={date}
+                  onChange={(newValue) => {
+                    if (!newValue) return;
+                    if (end && newValue > end) {
+                      setSnackbarMessage(
+                        "La fecha de inicio no puede ser posterior a la de fin!"
+                      );
+                      setSnackbarSeverity("error");
+                      setSnackbarOpen(true);
+                    } else {
+                      setDate(newValue);
+                    }
+                  }}
+                  slotProps={{
+                    textField: {
+                      InputProps: {
+                        readOnly: true,
+                        style: { fontSize: "0.875rem" },
+                      },
+                      InputLabelProps: {
+                        style: { fontSize: "0.875rem" },
+                      },
+                    },
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -765,7 +769,12 @@ const SimpleEvent = () => {
         )}
       </div>
       <CpList open={openCp} setOpen={setOpenCp} />
-      <Tags open={openTags} setOpen={setOpenTags} filterMode={false} />
+      <Tags
+        open={openTags}
+        setOpen={setOpenTags}
+        filterMode={false}
+        createMode={true}
+      />
     </div>
   );
 };

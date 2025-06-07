@@ -20,8 +20,8 @@ export default function Banner({ userProp }) {
           <div className="h-auto bg-white relative transition duration-100 overflow-hidden border-b-[1px] border-gray-300">
             <div className="relative p-6 pt-2 z-6">
               <div className="flex flex-row items-center ">
-                <h1 className="text-2xl tracking-tighter font-bold text-black">
-                  Bienvenido a pinpoint
+                <h1 className="text-4xl tracking-tighter font-bold mt-4 text-black">
+                  Bienvenido a Pinpoint
                 </h1>
               </div>
             </div>

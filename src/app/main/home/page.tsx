@@ -51,6 +51,7 @@ export default function Create() {
   return (
     <>
       <div>
+      {user && <Banner userProp={user}></Banner>}
         <div className="h-auto bg-blue-400 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div
@@ -86,10 +87,12 @@ export default function Create() {
             </div>
           </>
         )}
-        <EventCarousel events={recommendations} />
+      <div className="mb-6">
+          <EventCarousel events={recommendations} />
+        </div>
       </div>
-      {user && <Banner userProp={user}></Banner>}
-        <Feed></Feed>
+
+      <Feed></Feed>
 
       <div className="grid gap-4">
         <div className="h-fit bg-blue-500 relative hover:cursor-pointer hover:bg-blue-600 transition duration-100">
