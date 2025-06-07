@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  const client = connectToDatabase();
+  const client = await connectToDatabase();
   const body = await request.json();
   const { username, email, password } = body;
   const hashPassword = await bcrypt.hash(password, 10);
@@ -20,7 +20,7 @@ export async function POST(request) {
     return NextResponse.json({ result: "user_exists" });
   }
   finally { 
-    client.release(); // This is critical
+    client.release(); 
   }
 }
 
