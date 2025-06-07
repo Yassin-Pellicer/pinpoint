@@ -51,7 +51,7 @@ export default function Create() {
   return (
     <>
       <div>
-      {user && <Banner userProp={user}></Banner>}
+      {user && <Banner></Banner>}
         <div className="h-auto bg-blue-400 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div
