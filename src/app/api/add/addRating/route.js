@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 export async function POST(request) {
   const cookies = cookie.parse(request.headers.get('cookie') || '');
   const { eventId, rating } = await request.json()
-  console.log('rating request', { eventId, rating, session: cookies.session });
   const token = cookies.session;
   let id;
   try {
@@ -57,7 +56,6 @@ export async function POST(request) {
         );
       }
     }
-    console.log('rating updated');
     return NextResponse.json({ result: "ok" })
 
   } catch (error) {

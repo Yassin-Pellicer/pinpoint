@@ -86,7 +86,6 @@ const cpView = () => {
     }
     else {
       getCheckpointByCode(selectedEvent?.id, cp as string).then((res) => {
-        console.log(res);
         if (res) setCheckpoints(res.checkpoints);
       });
     }

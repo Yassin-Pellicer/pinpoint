@@ -123,7 +123,6 @@ export default function Layout({ children }) {
                 onClick={(e) => {
                   e.preventDefault();
                   addUnlockedEvent(user.id, search).then((res) => {
-                    console.log(res);
                     router.push(`/main/event/${res.event}`);
                   });
                 }}

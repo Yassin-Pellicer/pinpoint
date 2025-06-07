@@ -8,8 +8,6 @@ export async function POST(request) {
   const cookies = cookie.parse(request.headers.get("cookie") || "");
   const token = cookies.session;
 
-  console.log("add follower", { followed, token });
-
   let follower;
 
   try {

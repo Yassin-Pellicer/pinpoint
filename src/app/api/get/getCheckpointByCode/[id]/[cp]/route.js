@@ -7,7 +7,6 @@ export async function GET(request, { params }) {
     const { cp } = params;
 
     let query;
-    console.log("cp param:", cp);
 
     query = await client.query(
       'SELECT c.* FROM "checkpoint" c, qr_checkpoint qr WHERE qr.checkpoint = c.id AND qr.code = $1 ORDER BY "order" LIMIT 1',
@@ -15,7 +14,6 @@ export async function GET(request, { params }) {
     );
 
     const checkpoints = query.rows;
-    console.log("Checkpoints:", checkpoints);
 
     const response = NextResponse.json({
       result: "ok",

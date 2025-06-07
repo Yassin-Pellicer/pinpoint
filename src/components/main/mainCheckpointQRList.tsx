@@ -11,7 +11,6 @@ const cpList = ({id}) => {
 
   useEffect(() => {
     getCheckpointsQRHook(id).then((data) => {
-      console.log(data);
       setCheckpointsQR(data.checkpoints || []);
     })
   }, [])

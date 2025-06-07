@@ -43,7 +43,6 @@ export default function Banner({ userProp }) {
   const handleIsFollowed = () => {
     if(user) {
       isFollowedByHook(userProp.id, user.id).then((response) => {
-        console.log(response);
         setIsFollowed(response.follows);
       });
     }
