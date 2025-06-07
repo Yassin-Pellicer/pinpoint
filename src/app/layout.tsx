@@ -7,8 +7,8 @@ import { MapProvider } from '../utils/context/ContextMap';
 import { SessionProvider } from '../utils/context/ContextSession';
 
 export const metadata = {
-  title: 'Your App Title',
-  description: 'Your App Description',
+  title: 'Pinpoint',
+  description: 'Pinpoint',
 };
 
 export default async function RootLayout({
