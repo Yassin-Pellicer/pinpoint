@@ -20,6 +20,6 @@ export async function GET(_request, { params }) {
     );
   }
   finally { 
-    client.release(); // This is critical
+    client.release(); 
   }
 }

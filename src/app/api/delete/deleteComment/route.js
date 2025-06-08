@@ -38,7 +38,7 @@ export async function POST(request) {
     return NextResponse.json({ result: "" })
   }
   finally { 
-    client.release(); // This is critical
+    client.release(); 
   }
 }
 

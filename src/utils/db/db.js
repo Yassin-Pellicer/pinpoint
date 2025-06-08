@@ -28,7 +28,6 @@ function initPool() {
 
 /**
  * Connects to the PostgreSQL database.
- * @returns {Promise<import("pg").Client>} Resolves with a connected client.
  */
 
 export async function connectToDatabase() {

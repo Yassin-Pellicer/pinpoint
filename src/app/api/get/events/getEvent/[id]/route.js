@@ -43,6 +43,6 @@ export async function GET(request, { params }) {
       { status: 500 }
     );
   } finally {
-    client.release(); // This is critical
+    client.release(); 
   }
 }

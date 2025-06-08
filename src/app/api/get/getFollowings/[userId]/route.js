@@ -14,7 +14,7 @@ export async function GET(_request, { params }) {
     return NextResponse.json({ result: "ko" });
   }
   finally { 
-    client.release(); // This is critical
+    client.release(); 
   }
 }
 

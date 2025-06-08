@@ -82,6 +82,6 @@ export async function GET(request) {
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   } finally {
-    client.release(); // This is critical
+    client.release(); 
   }
 }

@@ -286,6 +286,6 @@ export async function POST(request) {
       status: 500,
     });
   } finally {
-    client.release(); // This is critical
+    client.release(); 
   }
 }

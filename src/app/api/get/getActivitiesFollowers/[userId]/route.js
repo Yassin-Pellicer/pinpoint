@@ -68,6 +68,6 @@ export async function GET(_request, { params }) {
     console.error("Database query error:", error);
     return NextResponse.json({ result: "ko" });
   } finally {
-    client.release(); // This is critical
+    client.release(); 
   }
 }

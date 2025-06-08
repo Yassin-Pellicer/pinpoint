@@ -55,7 +55,7 @@ AND ("isPublic" = true
     );
   }
   finally { 
-    client.release(); // This is critical
+    client.release(); 
   }
 }
 

@@ -39,7 +39,7 @@ export async function POST(request) {
     });
   }
   finally { 
-    client.release(); // This is critical
+    client.release(); 
   }
 }
 

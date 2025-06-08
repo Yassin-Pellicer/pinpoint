@@ -59,6 +59,6 @@ return NextResponse.json({ result: "ok", activities });
     return NextResponse.json({ result: "ko" });
   }
   finally { 
-    client.release(); // This is critical
+    client.release(); 
   }
 }
