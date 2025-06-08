@@ -1,5 +1,7 @@
 import { connectToDatabase } from '../../../../utils/db/db';
 import { NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0; 
 
 export async function GET(_request) {
   const client = await connectToDatabase();
