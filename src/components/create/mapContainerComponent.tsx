@@ -1,9 +1,5 @@
 "use client";
-import {
-  MapContainer,
-  TileLayer,
-  LayersControl,
-} from "react-leaflet";
+import { MapContainer, TileLayer, LayersControl } from "react-leaflet";
 import "react-quill/dist/quill.snow.css";
 import "leaflet-geosearch/dist/geosearch.css";
 import "leaflet/dist/leaflet.css";
@@ -17,17 +13,18 @@ import { useMapContext } from "../../utils/context/ContextMap";
 import { useSession } from "../../utils/context/ContextSession";
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: '/leaflet/marker-icon-2x.png',
-  iconUrl: '/leaflet/marker-icon.png',
-  shadowUrl: '/leaflet/marker-shadow.png',
+  iconRetinaUrl: "/leaflet/marker-icon-2x.png",
+  iconUrl: "/leaflet/marker-icon.png",
+  shadowUrl: "/leaflet/marker-shadow.png",
 });
 
 export default function MapContainerComponent() {
-  const { location, setLocation, zoom, setZoom, originalLocation } = useMapContext();
+  const { location, setLocation, zoom, setZoom, originalLocation } =
+    useMapContext();
   const { createType } = useSession();
-  
+
   const [center, setCenter] = useState<[number, number] | null>(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedCenter = sessionStorage.getItem("map-center");
       return savedCenter ? JSON.parse(savedCenter) : null;
     }
@@ -45,6 +42,11 @@ export default function MapContainerComponent() {
           worldCopyJump={true}
           maxBoundsViscosity={0}
           className="h-screen w-full z-10"
+          zoomSnap={window.innerWidth <= 768 ? 0.25 : 1}
+          zoomDelta={window.innerWidth <= 768 ? 0.5 : 1}
+          wheelPxPerZoomLevel={window.innerWidth <= 768 ? 30 : 60}
+          zoomAnimation={true}
+          zoomAnimationThreshold={2}
         >
           <LayersControl position="bottomleft">
             <LayersControl.BaseLayer name="CartoDB Positron" checked>

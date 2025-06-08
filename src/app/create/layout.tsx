@@ -32,7 +32,7 @@ export default function Layout({ children }) {
 
         {children}
       </div>
-        <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[70vh]">
+        <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[90vh]">
           <CreateMap />
         </div>
     </div>
