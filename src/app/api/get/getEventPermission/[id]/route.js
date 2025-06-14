@@ -4,6 +4,8 @@ import cookie from "cookie";
 import jwt from "jsonwebtoken";
 
 export async function GET(request, { params }) {
+  console.log("DEBUG: getEventPermission", params, request.headers.get("cookie"));
+
   const client = await connectToDatabase();
 
   const cookies = cookie.parse(request.headers.get("cookie") || "");
@@ -37,7 +39,8 @@ export async function GET(request, { params }) {
             `SELECT "user" FROM unlocked_event WHERE event = $1 AND "user" = $2`,
             [eventId, userId]
           );
-          if (!unlockedEventResult.rows) {
+          console.log("DEBUG: unlockedEventResult", unlockedEventResult.rows);
+          if (!unlockedEventResult.rows.length > 0) {
             return NextResponse.json({ result: false });
           } else {
             return NextResponse.json({ result: true });
@@ -52,7 +55,7 @@ export async function GET(request, { params }) {
       }
     }
   } catch (error) {
-    console.error(error);
+    console.error("DEBUG: error", error);
     return NextResponse.json(
       { result: "ko", error: error.message },
       { status: 500 }
