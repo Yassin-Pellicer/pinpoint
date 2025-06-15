@@ -108,7 +108,7 @@ export default function SwiperComponent() {
   );
 
   return (
-    <div className="w-[1600px] h-[1000px]">
+    <div className="w-full h-fit">
       <Swiper
         theme="dark"
         navigation={true}

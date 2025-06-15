@@ -8,13 +8,12 @@ import { signupHook } from "../../hooks/auth/signup/signupHook";
 import { useRouter } from "next/navigation";
 
 export default function Signup() {
-
-  const [email, setEmail]                 = useState("");
-  const [username, setUsername]           = useState("");
-  const [password, setPassword]           = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-  const [loading, setLoading]             = useState(false);
-  const [errorMessage, setErrorMessage]   = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
   const t = useTranslations("Signup");
@@ -34,7 +33,7 @@ export default function Signup() {
       return;
     }
     if (password.length < 8) {
-      setErrorMessage(t("passwordTooShort"))
+      setErrorMessage(t("passwordTooShort"));
       setLoading(false);
       return;
     }
@@ -46,7 +45,12 @@ export default function Signup() {
     }
 
     try {
-      const result = await signupHook({ email, username, password, passwordCheck});
+      const result = await signupHook({
+        email,
+        username,
+        password,
+        passwordCheck,
+      });
       if (result.result === "user_exists") {
         setErrorMessage(t("userExists"));
       } else {
@@ -54,22 +58,22 @@ export default function Signup() {
       }
     } catch (error) {
       setErrorMessage(t("exception"));
-    } finally { 
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="flex flex-row">
       {/* Form */}
       <div
         className="justify-center flex flex-col 
-      items-center 2xl:align-center bg-[#737eff] w-[50vw] h-[100vh]"
+      items-center 2xl:align-center bg-[#737eff] md:w-[50vw] h-[100vh] w-[100vw]"
       >
         <Link href="/">
           <Logo />
         </Link>
-        <form className="flex mt-8 flex-col w-1/2" onSubmit={handleSubmit}>
+        <form className="flex mt-8 flex-col w-3/4" onSubmit={handleSubmit}>
           <h1 className="text-5xl font-extrabold tracking-tighter mb-4 text-white">
             {t("title")}
           </h1>
@@ -82,7 +86,7 @@ export default function Signup() {
               </div>
             </div>
           )}
-          
+
           <label className="font-semibold flex text-white">
             <i className="material-icons mr-1">person</i>
             {t("user")}
@@ -107,7 +111,10 @@ export default function Signup() {
             type="text"
             value={email}
             onClick={() => setErrorMessage("")}
-            onChange={(e) => { setErrorMessage(""); setEmail(e.target.value)} }
+            onChange={(e) => {
+              setErrorMessage("");
+              setEmail(e.target.value);
+            }}
             className="rounded p-2 mt-1 mb-4 w-full"
           />
 
@@ -117,9 +124,12 @@ export default function Signup() {
           </label>
           <input
             type="password"
-            value={password}            
+            value={password}
             onClick={() => setErrorMessage("")}
-            onChange={(e) =>{ setErrorMessage(""); setPassword(e.target.value)} }
+            onChange={(e) => {
+              setErrorMessage("");
+              setPassword(e.target.value);
+            }}
             className="rounded p-2 mt-1 mb-4 w-full"
           />
 
@@ -131,7 +141,10 @@ export default function Signup() {
             type="password"
             value={passwordCheck}
             onClick={() => setErrorMessage("")}
-            onChange={(e) => { setErrorMessage(""); setPasswordCheck(e.target.value)} }
+            onChange={(e) => {
+              setErrorMessage("");
+              setPasswordCheck(e.target.value);
+            }}
             className="rounded p-2 mt-1 mb-10 w-full"
           />
 
@@ -148,7 +161,7 @@ export default function Signup() {
             {t("forgot")}
           </p>
           <Link
-            href="//login"
+            href="/login"
             className="justify-center text-center font-caveat 
           text-4xl tracking-tighter mt-2 underline text-white"
           >
@@ -160,7 +173,7 @@ export default function Signup() {
       {/* Login Video */}
       <div
         className="justify-center flex flex-col 
-      items-center 2xl:align-center bg-[#737eff] w-[50vw] h-[100vh]"
+      items-center 2xl:align-center bg-[#737eff] md:w-[50vw] w-[0vw] h-[100vh]"
       >
         <video className="w-full h-full object-cover" autoPlay loop muted>
           <source src="/videos/authvideo.mp4" type="video/mp4" />

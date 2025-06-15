@@ -79,6 +79,13 @@ const cpView = () => {
   }, [checkpoints]);
 
   useEffect(() => {
+    if (focusedCheckpoint) {
+        map.flyTo(focusedCheckpoint.marker.position, 18, { animate: true, duration: 0.5 });
+      }
+    }
+  , [focusedCheckpoint]);
+
+  useEffect(() => {
     if (!pathname.startsWith("/main/checkpoint")) {
       getCheckpointsHook(selectedEvent?.id).then((res) => {
         if (res) setCheckpoints(res.checkpoints);
@@ -102,7 +109,7 @@ const cpView = () => {
     const zoom = map.getZoom();
     setZoom(zoom);
   });
-
+  
   return (
     <>
       {selectedEvent &&

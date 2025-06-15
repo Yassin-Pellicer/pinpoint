@@ -54,13 +54,13 @@ export default function Login() {
       {/* Form */}
       <div
         className="justify-center flex flex-col 
-      items-center 2xl:align-center bg-[#737eff] w-[50vw] h-[100vh]"
+      items-center 2xl:align-center bg-[#737eff] md:w-[50vw] h-[100vh] w-[100vw]"
       >
         <Link href="/">
           <Logo />
         </Link>
 
-        <form className="flex mt-8 flex-col w-1/2" onSubmit={handleSubmit}>
+        <form className="flex mt-8 flex-col w-3/4" onSubmit={handleSubmit}>
           <h1 className="text-5xl font-extrabold tracking-tighter mb-6 text-white">
             {t("title")}
           </h1>
@@ -141,7 +141,7 @@ export default function Login() {
       {/* Login Video */}
       <div
         className="justify-center flex flex-col 
-      items-center 2xl:align-center bg-[#737eff] w-[50vw] h-[100vh]"
+      items-center 2xl:align-center bg-[#737eff] md:w-[50vw] w-[0vw] h-[100vh]"
       >
         <video className="w-full h-full object-cover" autoPlay loop muted>
           <source src="/videos/authvideo.mp4" type="video/mp4" />

@@ -74,14 +74,10 @@ export default function Layout({ children }) {
               className="w-full h-[40px] bg-white flex justify-center items-center cursor-pointer"
               onClick={() => window.scrollTo({ top: 500, behavior: "smooth" })}
             >
-              {!showMap ? (
-                <i className="material-icons text-white">map</i>
-              ) : (
-                <div className="w-1/4 h-[5px] mt-4 bg-gray-300 rounded-md"></div>
-              )}
+                <div className="w-1/4 h-[5px] bg-gray-300 rounded-md"></div>
             </div>
           </div>
-          <div className="flex flex-row mt-2 justify-center p-2 px-2 bg-white-500 w-full h-fit items-center align-center">
+          <div className="flex flex-row justify-center md:py-4 pb-2 px-2 bg-white-500 w-full h-fit items-center align-center">
             <div className="flex items-center gap-3 px-4 py-2 bg-blue-200 shadow-lg rounded-full w-full max-w-3xl mx-auto">
               <div
                 className="w-10 h-10 rounded-full overflow-hidden border shrink-0 border-gray-300 cursor-pointer"
@@ -192,7 +188,7 @@ export default function Layout({ children }) {
         <Tags open={openTags} setOpen={setOpenTags} filterMode={true} createMode={false}/>
       </div>
       {showMap && (
-        <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[85vh]">
+        <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[80vh]">
           <MainMap />
         </div>
       )}

@@ -11,19 +11,11 @@ export default function Header() {
         <Logo />{" "}
       </div>
       <div className="flex flex-row sm:mt-0 mt-4">
-        <Link
-          href="/login"
-          className="mr-4 bg-transparent border w-fit h-fit text-3xl tracking-tight font-caveat font-extrabold pr-3
-         border-white text-white rounded-2xl p-2 cursor-pointer hover:bg-blue-600 hover:text-white transition duration-200"
-        >
-          {t("auth.login")}
+        <Link href="/login" className="mr-4 ">
+        <i className="material-icons mr-4 text-4xl">login</i>
         </Link>
-        <Link
-          href="/signup"
-          className="bg-transparent border w-fit text-3xl tracking-tight font-caveat font-extrabold pr-3
-         border-white text-white rounded-2xl p-2 cursor-pointer hover:bg-blue-600 hover:text-white transition duration-200"
-        >
-          {t("auth.signup")}
+        <Link href="/signup">
+          <i className="material-icons mr-4 text-4xl">person_add</i>
         </Link>
       </div>
     </header>
