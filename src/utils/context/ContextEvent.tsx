@@ -54,6 +54,10 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
   const [event, setEvent] = useState<Event>(new Event());
   const [code, setCode] = useState<string>("");
 
+  useEffect(() => {
+    localStorage.setItem("event", JSON.stringify(event));
+  }, [event]);
+
   const setName = (name: string) => {
     setEvent((prev) => ({ ...prev, name }));
   };

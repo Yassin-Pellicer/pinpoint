@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Checkpoint } from "../classes/Checkpoint";
 
 interface CheckpointsContextType {
@@ -21,6 +21,10 @@ const CheckpointsContext = createContext<CheckpointsContextType | undefined>(und
 export const CheckpointsProvider = ({ children }: { children: React.ReactNode }) => {
   const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
   const [focusedCheckpoint, setFocusedCheckpoint] = useState<Checkpoint | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem("checkpoints", JSON.stringify(checkpoints));
+  }, [checkpoints]);
 
   const setId = (id: number, checkpointId: number) => {
     setCheckpoints((prev) =>

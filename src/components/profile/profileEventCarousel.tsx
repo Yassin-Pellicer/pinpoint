@@ -26,7 +26,7 @@ export default function SwiperComponent({events}) {
       if (res) setCheckpoints(res.checkpoints);
       setLoading(false);
     }).finally(() => {
-      setEditMode(true);
+      localStorage.setItem('editMode', 'true');
       router.push("/create")
     });
   }

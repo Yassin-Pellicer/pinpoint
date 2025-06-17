@@ -32,6 +32,8 @@ export default function Create() {
   const router = useRouter();
 
   useEffect(() => {
+    localStorage.removeItem('event');
+    localStorage.removeItem('checkpoints');
     setSelectedEvent(null);
   }, []);
 

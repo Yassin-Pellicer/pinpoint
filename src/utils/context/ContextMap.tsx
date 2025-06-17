@@ -58,7 +58,6 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [userActivityFeed, setUserActivityFeed ] = useState([]);
   const [globalActivityFeed, setGlobalActivityFeed ] = useState([]);
   const [showMap, setShowMap] = useState(true);
-
   const {user} = useSession();
 
   useEffect(() => {
