@@ -188,7 +188,7 @@ export default function Layout({ children }) {
         <Tags open={openTags} setOpen={setOpenTags} filterMode={true} createMode={false}/>
       </div>
       {showMap && (
-        <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[80vh]">
+        <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[80dvh]">
           <MainMap />
         </div>
       )}

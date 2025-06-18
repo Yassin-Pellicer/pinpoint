@@ -53,22 +53,27 @@ const BottomSheet = ({ open, setOpen, filterMode, createMode }) => {
   };
 
   return (
-    <SwipeableDrawer
-      anchor="bottom"
-      open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
-      variant="persistent"
-      PaperProps={{
-        style: {
-          maxWidth: "525px",
-          height: "100%",
-          marginRight: "auto",
-          zIndex: 100,
-          overflowY: "scroll",
-        },
-      }}
-    >
+<SwipeableDrawer
+  anchor="bottom"
+  open={open}
+  onOpen={() => setOpen(true)}
+  onClose={() => setOpen(false)}
+  variant="persistent"
+  PaperProps={{
+    sx: {
+      width: 'auto',
+      maxWidth: '525px',
+      height: '100dvh',
+      marginRight: 'auto',
+      zIndex: 100,
+      overflowY: 'auto', 
+      '@media (max-width:1024px)': {
+        width: '100vw',
+        maxWidth: 'none'
+      },
+    },
+  }}
+>
       <div>
         <div
           onClick={() => {

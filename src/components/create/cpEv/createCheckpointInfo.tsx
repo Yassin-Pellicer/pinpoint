@@ -147,8 +147,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
         </button>
       </div>
 
-      {mode == "edit" && (
-        <div className="mt-4 w-full h-fit bg-[#e6e6e6] m-auto rounded-b-xl">
+        <div className="mt-4 w-full h-fit bg-[#f3f3f3] m-auto rounded-b-xl">
           <div className="overflow-auto flex flex-col w-full">
             <div className="flex flex-col justify-center">
               <input
@@ -191,7 +190,6 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
           </div>
           {cpInfo}
         </div>
-      )}
     </div>
   );
 };

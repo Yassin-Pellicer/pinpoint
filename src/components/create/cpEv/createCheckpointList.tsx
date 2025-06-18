@@ -79,7 +79,7 @@ const BottomSheet = ({ open, setOpen }) => {
           paddingLeft: "16px",
           paddingRight: "16px",
           margin: "8px 0",
-          background: "#e1e1e1",
+          background: "#dddddd",
           borderRadius: "4px",
           cursor: "default",
         }}
@@ -112,12 +112,17 @@ const BottomSheet = ({ open, setOpen }) => {
       onClose={() => setOpen(false)}
       variant="persistent"
       PaperProps={{
-        style: {
+        sx: {
+          width: "auto",
           maxWidth: "525px",
-          height: "100%",
+          height: "100dvh",
           marginRight: "auto",
           zIndex: 100,
-          overflowY: "scroll",
+          overflowY: "auto",
+          "@media (max-width:1024px)": {
+            width: "100vw",
+            maxWidth: "none",
+          },
         },
       }}
     >
