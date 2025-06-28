@@ -78,10 +78,10 @@ const BottomSheet = ({ open, setOpen }) => {
           paddingTop: "16px",
           paddingLeft: "16px",
           paddingRight: "16px",
-          margin: "8px 0",
           background: "#dddddd",
           borderRadius: "4px",
           cursor: "default",
+          margin: "8px 16px",
         }}
         {...attributes}
       >

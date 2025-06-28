@@ -89,8 +89,8 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
         placeholder="Checkpoint"
       />
       <div className="flex flex-col mb-14">
-        <div className="flex flex-row bg-gray-200 items-center p-2 z-10 ">
-          <h1 className="text-lg tracking-tighter font-bold text-black">
+        <div className="flex flex-row bg-gray-200 items-center p-2 z-10 bg-white">
+          <h1 className="text-lg tracking-tighter font-bold text-black bg-white">
             {t("description")}
           </h1>
         </div>
@@ -115,7 +115,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col margin-x-8">
       <div className="flex flex-row px-4 items-center">
         <div
           onClick={() => setFocusedCheckpoint(checkpoints[index])}

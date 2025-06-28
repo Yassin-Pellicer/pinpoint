@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic"; // 👈 tells Next.js this page is dynam
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import CreateMap from "../../components/create/createMap";
+import GoHomePopup from "./goHomePopup";
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
@@ -20,18 +21,8 @@ export default function Layout({ children }) {
             <div className="w-1/4 h-[5px] bg-gray-300 rounded-md"></div>
           </div>
           <div className=" bg-white grid grid-cols-3 border-y-[1px] border-gray-300">
-            <button
-              onClick={() => router.back()}
-              className="bg-white h-full hover:bg-gray-200 shadow-2xl border-r-[1px] border-gray-400"
-            >
-              <i className="material-icons text-black text-xl">arrow_back</i>
-            </button>
-            <button
-              onClick={() => router.push("/main/home")}
-              className="bg-white h-full hover:bg-gray-200 shadow-2xl border-r-[1px] border-gray-400"
-            >
-              <i className="material-icons text-black text-xl">home</i>
-            </button>
+            <GoHomePopup type="back"></GoHomePopup>
+            <GoHomePopup type="home"></GoHomePopup>
           </div>
         </div>
 

@@ -28,6 +28,7 @@ import Quill from "react-quill";
 import { getEventCode } from "../../hooks/general/privateEventsHook";
 import { deleteEventHook } from "../../hooks/main/delete/deleteEventHook";
 import { useMapContext } from "../../utils/context/ContextMap";
+import DeleteEventButton from "./removeEventPopup";
 const SimpleEvent = () => {
   const {
     event,
@@ -748,24 +749,13 @@ const SimpleEvent = () => {
       </form>
       <div className="flex justify-center">
         {editMode && (
-          <button
-            className={
-              "flex justify-center font-bold " +
-              "align-center w-full items-center text-2xl " +
-              "bg-red-500 text-white py-4 px-4 " +
-              "hover:bg-red-600 focus:outline-none " +
-              "focus:ring-opacity-50"
-            }
-            onClick={async () => {
-              setEvents(
-                events.filter((eventParam) => eventParam.id !== event?.id)
-              );
-              await deleteEventHook(event.id);
-              router.push("/main/home");
-            }}
-          >
-            Eliminar evento
-          </button>
+<DeleteEventButton
+  event={event}
+  events={events}
+  setEvents={setEvents}
+  deleteEventHook={deleteEventHook}
+/>
+
         )}
       </div>
       <CpList open={openCp} setOpen={setOpenCp} />
