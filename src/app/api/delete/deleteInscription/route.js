@@ -1,7 +1,7 @@
 import { connectToDatabase } from "../../../../utils/db/db";
 import { NextResponse } from "next/server";
 import cookie from 'cookie';
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 export async function POST(request) {
   const client = await connectToDatabase();
