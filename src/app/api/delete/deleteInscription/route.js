@@ -61,6 +61,6 @@ export async function POST(request) {
     return NextResponse.json({ result: "ok" });
   } catch (error) {
     console.error('[DEBUG] Register Error:', error);
-    return NextResponse
+    return NextResponse.json({ result: "error" })
   }
 }

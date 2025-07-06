@@ -304,7 +304,6 @@ const SimpleEvent = () => {
             Fecha del evento
           </h1>
         </div>
-        {console.log(date)}
         <div className="h-auto bg-gray-300 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
             <div className="relative px-4 z-10">
