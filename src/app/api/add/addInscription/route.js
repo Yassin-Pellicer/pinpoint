@@ -8,16 +8,39 @@ export async function POST(request) {
 
   const cookies = cookie.parse(request.headers.get("cookie") || "");
   const token = cookies.session;
-  let id;
+
+  let decodedId;
   try {
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
-    id = decoded.id;
+    decodedId = decoded.id;
   } catch (error) {
     return NextResponse.json({ result: "ko", message: "Invalid session" });
   }
 
-  const { eventId } = await request.json();
+  const body = await request.json();
+  const { eventId, id: passedId } = body;
+
+  const id = passedId !== undefined && passedId !== null ? passedId : decodedId;
+
   try {
+    const checkVigencia = await client.query(`
+      SELECT *
+      FROM event
+      WHERE (
+        ("start" IS NULL AND "end" IS NULL)
+        OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
+        OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
+        OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+      ) AND id = $1
+    `, [eventId]);
+    if (checkVigencia.rows.length <= 0) {
+      return NextResponse.json({
+        result: "error",
+        message: "out of date",
+        status: 400,
+      });
+    }
+
     const checkUserQuery = await client.query(
       "SELECT inscriptions, capacity FROM event WHERE id = $1",
       [eventId]
@@ -31,6 +54,20 @@ export async function POST(request) {
         status: 400,
       });
     }
+
+    // ✅ OPCIONAL: chequea si ya existe para evitar duplicados
+    const checkExistingInscription = await client.query(
+      'SELECT 1 FROM inscription_user WHERE "user" = $1 AND event = $2',
+      [id, eventId]
+    );
+    if (checkExistingInscription.rows.length > 0) {
+      return NextResponse.json({
+        result: "error",
+        message: "already inscribed",
+        status: 400,
+      });
+    }
+
     await client.query(
       'INSERT INTO inscription_user ("user", event) VALUES ($1, $2)',
       [id, eventId]

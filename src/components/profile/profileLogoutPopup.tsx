@@ -30,7 +30,7 @@ export default function DeleteEventButton({ }) {
   return (
     <>
       <button
-        onClick={() => handleLogout()}
+        onClick={() => handleOpen()}
         className="bg-red-500 hover:bg-red-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
         title="Cerrar Sesión"
       >
@@ -49,7 +49,7 @@ export default function DeleteEventButton({ }) {
             Cancelar
           </Button>
           <Button onClick={handleLogout} color="error" variant="contained">
-            Cerrar sesión.
+            Cerrar sesión
           </Button>
         </DialogActions>
       </Dialog>

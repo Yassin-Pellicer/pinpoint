@@ -43,10 +43,7 @@ export async function GET(request) {
         OR ("isPublic" = false AND id IN (SELECT event FROM unlocked_event WHERE "user" = $5))
         )
       AND (
-        ("start" IS NULL AND "end" IS NULL)
-        OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
-        OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
-        OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+"date" >= NOW() OR "date" IS NULL
       )
       ORDER BY 
         (position_lat - $6) * (position_lat - $6) + 

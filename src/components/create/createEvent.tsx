@@ -301,164 +301,24 @@ const SimpleEvent = () => {
 
         <div className="flex flex-row items-center p-5 z-10 border-b-[1px] border-gray-300 ">
           <h1 className="text-2xl tracking-tighter font-bold text-black">
-            Vigencia y Fecha
+            Fecha del evento
           </h1>
         </div>
+        {console.log(date)}
         <div className="h-auto bg-gray-300 relative transition duration-100 overflow-hidden">
           <div className="relative h-full">
-            <div className="relative p-4 z-10">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col">
-                  <div
-                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    className="flex flex-row mb-2 items-center"
-                  >
-                    <i className="material-icons text-white text-2xl mr-2">
-                      timer
-                    </i>
-                    <h1 className="text-white tracking-tigher font-bold">
-                      Inicio de vigencia
-                    </h1>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setStart(null);
-                      }}
-                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                      className="flex items-center justify-center ml-auto"
-                    >
-                      <i className="material-icons text-white">refresh</i>
-                    </button>
-                  </div>
-                  <DateTimePicker
-                    label="Seleccione fecha y hora"
-                    format="dd/MM/yyyy HH:mm"
-                    value={new Date(start) && start}
-                    onChange={(newValue) => {
-                      if (!newValue) return;
-                      if (end && newValue > end) {
-                        setSnackbarMessage(
-                          "La fecha de inicio no puede ser posterior a la de fin!"
-                        );
-                        setSnackbarSeverity("error");
-                        setSnackbarOpen(true);
-                      } else {
-                        setStart(newValue);
-                      }
-                    }}
-                    slotProps={{
-                      textField: {
-                        InputProps: {
-                          readOnly: true,
-                          style: { fontSize: "0.875rem" },
-                        },
-                        InputLabelProps: {
-                          style: { fontSize: "0.875rem" },
-                        },
-                      },
-                    }}
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <div
-                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    className="flex flex-row mb-2 items-center"
-                  >
-                    <i className="material-icons text-white text-2xl mr-2">
-                      timer_off
-                    </i>
-                    <h1 className="text-white tracking-tigher font-bold">
-                      Fin de vigencia
-                    </h1>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setEnd(null);
-                      }}
-                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                      className="flex items-center justify-center ml-auto"
-                    >
-                      <i className="material-icons text-white">refresh</i>
-                    </button>
-                  </div>
-                  <DateTimePicker
-                    label="Seleccione fecha y hora"
-                    format="dd/MM/yyyy HH:mm"
-                    value={new Date(end) && end}
-                    onChange={(newValue) => {
-                      if (!newValue) return;
-                      if (start && newValue < start) {
-                        setSnackbarMessage(
-                          "La fecha de fin no puede ser anterior a la de inicio!"
-                        );
-                        setSnackbarSeverity("error");
-                        setSnackbarOpen(true);
-                      } else if (newValue > end && end) {
-                        setSnackbarMessage(
-                          "La fecha y hora del evento no pueden ocurrir antes que el fin de su vigencia."
-                        );
-                        setSnackbarSeverity("error");
-                        setSnackbarOpen(true);
-                      } else {
-                        setEnd(newValue);
-                      }
-                    }}
-                    slotProps={{
-                      textField: {
-                        InputProps: {
-                          readOnly: true,
-                          style: { fontSize: "0.875rem" },
-                        },
-                        InputLabelProps: {
-                          style: { fontSize: "0.875rem" },
-                        },
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="flex mt-4 flex-col">
-                <div
-                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                  className="flex flex-row mb-2 items-center"
-                >
-                  <i className="material-icons text-white text-2xl mr-2">
-                    timer
-                  </i>
-                  <h1 className="text-white text-lg tracking-tighter font-bold">
-                    Fecha y hora del evento*
-                  </h1>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setDate(null);
-                    }}
-                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-                    className="flex items-center justify-center ml-auto"
-                  >
-                    <i className="material-icons text-white">refresh</i>
-                  </button>
-                </div>
+            <div className="relative px-4 z-10">
+              <div className="flex mt-4 mb-4 flex-row">
                 <DateTimePicker
                   label="Seleccione fecha y hora"
                   format="dd/MM/yyyy HH:mm"
-                  value={date}
+                  value={date ? new Date(date) : undefined}
                   onChange={(newValue) => {
-                    if (!newValue) return;
-                    if (end && newValue > end) {
-                      setSnackbarMessage(
-                        "La fecha de inicio no puede ser posterior a la de fin!"
-                      );
-                      setSnackbarSeverity("error");
-                      setSnackbarOpen(true);
-                    } else {
-                      setDate(newValue);
-                    }
+                    setDate(newValue);
                   }}
                   slotProps={{
                     textField: {
+                      fullWidth: true,
                       InputProps: {
                         readOnly: true,
                         style: { fontSize: "0.875rem" },
@@ -469,17 +329,128 @@ const SimpleEvent = () => {
                     },
                   }}
                 />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setDate(undefined);
+                  }}
+                  style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                  className="flex items-center justify-center ml-4"
+                >
+                  <i className="material-icons text-white">refresh</i>
+                </button>
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-row items-center p-5 z-10 border-b-[1px] border-gray-300 ">
+          <h1 className="text-2xl tracking-tighter font-bold text-black">
+            Inscripción y vigencia
+          </h1>
+        </div>
+
+        <div className="h-auto bg-gray-300 relative transition duration-100 overflow-hidden">
+          <div className="relative h-full">
+            <div className="relative px-4 z-10">
+              {enableInscription &&
+                <div className="grid grid-cols-2 mt-4 mb-6 gap-4">
+                  <div className="flex flex-col">
+                    <div
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      className="flex flex-row mb-2 items-center"
+                    >
+                      <i className="material-icons text-white text-2xl mr-2">
+                        timer
+                      </i>
+                      <h1 className="text-white tracking-tigher text-sm font-bold">
+                        Inicio de vigencia
+                      </h1>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setStart(undefined);
+                        }}
+                        style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                        className="flex items-center justify-center ml-auto"
+                      >
+                        <i className="material-icons text-white">refresh</i>
+                      </button>
+                    </div>
+                    <DateTimePicker
+                      label="Seleccione fecha y hora"
+                      format="dd/MM/yyyy HH:mm"
+                      value={start ? new Date(start) : undefined}
+                      onChange={(newValue) => {
+                        setStart(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          InputProps: {
+                            readOnly: true,
+                            style: { fontSize: "0.875rem" },
+                          },
+                          InputLabelProps: {
+                            style: { fontSize: "0.875rem" },
+                          },
+                        },
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <div
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                      className="flex flex-row mb-2 items-center"
+                    >
+                      <i className="material-icons text-white text-2xl mr-2">
+                        timer_off
+                      </i>
+                      <h1 className="text-white tracking-tigher font-bold text-sm">
+                        Fin de vigencia
+                      </h1>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setEnd(undefined);
+                        }}
+                        style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                        className="flex items-center justify-center ml-auto"
+                      >
+                        <i className="material-icons text-white">refresh</i>
+                      </button>
+                    </div>
+                    <DateTimePicker
+                      label="Seleccione fecha y hora"
+                      format="dd/MM/yyyy HH:mm"
+                      value={end ? new Date(end) : undefined}
+                      onChange={(newValue) => {
+                        if (!newValue) return;
+                        setEnd(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          InputProps: {
+                            readOnly: true,
+                            style: { fontSize: "0.875rem" },
+                          },
+                          InputLabelProps: {
+                            style: { fontSize: "0.875rem" },
+                          },
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+              }
             </div>
           </div>
         </div>
 
         <div
-          className={`h-auto ${
-            !enableInscription
-              ? "bg-gray-400"
-              : "bg-blue-500 hover:bg-blue-600 transition duration-100"
-          } relative hover:cursor-pointer`}
+          className={`h-auto ${!enableInscription
+            ? "bg-gray-400"
+            : "bg-blue-500 hover:bg-blue-600 transition duration-100"
+            } relative hover:cursor-pointer`}
         >
           <div className="relative select-none flex flex-row h-[150px] items-center justify-center">
             <div
@@ -749,12 +720,12 @@ const SimpleEvent = () => {
       </form>
       <div className="flex justify-center">
         {editMode && (
-<DeleteEventButton
-  event={event}
-  events={events}
-  setEvents={setEvents}
-  deleteEventHook={deleteEventHook}
-/>
+          <DeleteEventButton
+            event={event}
+            events={events}
+            setEvents={setEvents}
+            deleteEventHook={deleteEventHook}
+          />
 
         )}
       </div>

@@ -29,10 +29,7 @@ AND ("isPublic" = true
         OR ("isPublic" = false AND id IN (SELECT event FROM unlocked_event WHERE "user" = $3))
         )
          AND (
-          ("start" IS NULL AND "end" IS NULL)
-          OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
-          OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
-          OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+"date" >= NOW()
         )
         GROUP BY e.id
         HAVING COUNT(DISTINCT et.tag_id) = $2
@@ -53,10 +50,7 @@ AND (e."isPublic" = true
         OR (e."isPublic" = false AND id IN (SELECT event FROM unlocked_event WHERE "user" = $2))
         )
         AND (
-          ("start" IS NULL AND "end" IS NULL)
-          OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
-          OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
-          OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+"date" >= NOW()
         )
       `,
         [searchQuery, userId]
@@ -73,10 +67,7 @@ AND (e."isPublic" = true
         OR (e."isPublic" = false AND id IN (SELECT event FROM unlocked_event WHERE "user" = $4))
         )
         AND (
-          ("start" IS NULL AND "end" IS NULL)
-          OR ("end" IS NOT NULL AND "start" IS NULL AND "end" > NOW())
-          OR ("start" IS NOT NULL AND "end" IS NULL AND "start" < NOW())
-          OR ("start" IS NOT NULL AND "end" IS NOT NULL AND "start" <= NOW() AND "end" >= NOW())
+"date" >= NOW()
         )
         AND (
           unaccent(lower(e.name)) LIKE unaccent(lower($2))

@@ -71,7 +71,7 @@ export async function POST(request) {
       });
     }
 
-    start = start ? new Date(start).toISOString() : new Date().toISOString();
+    start = start ? new Date(start).toISOString() : null;
     end = end ? new Date(end).toISOString() : null;
 
     if (capacity === 0) {

@@ -66,7 +66,12 @@ const cpView = () => {
       const bounds = L.latLngBounds(
         checkpoints.map(cp => cp.marker.position)
       );
-      map.flyToBounds(bounds, { maxZoom: 18, animate: true, duration: 0.5 });
+      map.flyToBounds(bounds, {
+        animate: true,
+        duration: 0.5,
+        padding: [200, 0],
+      });
+
       map.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
           layer.openPopup();
@@ -80,10 +85,10 @@ const cpView = () => {
 
   useEffect(() => {
     if (focusedCheckpoint) {
-        map.flyTo(focusedCheckpoint.marker.position, 18, { animate: true, duration: 0.5 });
-      }
+      map.flyTo(focusedCheckpoint.marker.position, 18, { animate: true, duration: 0.5 });
     }
-  , [focusedCheckpoint]);
+  }
+    , [focusedCheckpoint]);
 
   useEffect(() => {
     if (!pathname.startsWith("/main/checkpoint")) {
@@ -96,7 +101,7 @@ const cpView = () => {
         if (res) setCheckpoints(res.checkpoints);
       });
     }
-    getRatingHook(selectedEvent?.id).then((res) => {});
+    getRatingHook(selectedEvent?.id).then((res) => { });
   }, [selectedEvent]);
 
   map.on("dragend", () => {
@@ -109,7 +114,7 @@ const cpView = () => {
     const zoom = map.getZoom();
     setZoom(zoom);
   });
-  
+
   return (
     <>
       {selectedEvent &&

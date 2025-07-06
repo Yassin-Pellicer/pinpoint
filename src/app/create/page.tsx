@@ -39,7 +39,7 @@ export default function Create() {
   const { location, editMode, setEditMode } = useMapContext();
   const { checkpoints, setCheckpoints } = useCheckpoints();
   const { setCreateType, createType } = useSession();
-  const { setEvent, setDate } = useEvent();
+  const { setEvent, setDate, event } = useEvent();
 
   const [selectedButton, setSelectedButton] = useState("simple");
 
@@ -71,8 +71,6 @@ export default function Create() {
     } else {
       setCheckpoints([]);
     }
-
-    setDate(new Date());
   }, []);
 
   // Separate effect to respond to updated checkpoints
