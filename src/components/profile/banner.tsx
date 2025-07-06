@@ -12,6 +12,7 @@ import {
 } from "../../hooks/general/followersHook";
 import Follows from "./follows";
 import { closeSession } from "../../hooks/auth/closeSession/closeSession";
+import ProfileLogoutPopup from "./profileLogoutPopup";
 
 export default function Banner({ userProp }) {
   const [propUser, setPropUser] = useState({ ...userProp });
@@ -135,14 +136,7 @@ export default function Banner({ userProp }) {
 
                 {user?.id === userProp?.id && (
                   <div className="gap-2 flex flex-row flex-end">
-                    <button
-                      onClick={() => handleLogout() }
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
-                      title="Cerrar Sesión"
-                    >
-                      <i className="material-icons text-lg">logout</i>
-                    </button>
-
+                    <ProfileLogoutPopup></ProfileLogoutPopup>
                     <button
                       onClick={() => setEditable(true)}
                       className="bg-green-500 hover:bg-green-700 text-white font-bold h-[40px] mt-4 px-3 rounded-full"
@@ -154,11 +148,10 @@ export default function Banner({ userProp }) {
                 {user?.id !== userProp?.id && isFollowed !== null && (
                   <button
                     onClick={handleFollow}
-                    className={`${
-                      isFollowed
+                    className={`${isFollowed
                         ? "bg-red-500 hover:bg-red-700"
                         : "bg-blue-500 hover:bg-blue-700"
-                    } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
+                      } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
                   >
                     {isFollowed ? "Unfollow" : "Seguir"}
                   </button>
@@ -179,8 +172,8 @@ export default function Banner({ userProp }) {
                     Miembro desde{" "}
                     {propUser.memberSince
                       ? new Date(propUser.memberSince).toLocaleDateString(
-                          "es-ES"
-                        )
+                        "es-ES"
+                      )
                       : "N/A"}
                   </p>
                 </div>
@@ -309,11 +302,10 @@ export default function Banner({ userProp }) {
                         e.stopPropagation();
                         handleFollow();
                       }}
-                      className={`bg-${
-                        isFollowed
+                      className={`bg-${isFollowed
                           ? "red-500 hover:red-700"
                           : "blue-500 hover:blue-700"
-                      } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
+                        } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
                     >
                       {isFollowed ? "Dejar de seguir" : "Seguir"}
                     </button>

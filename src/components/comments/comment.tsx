@@ -25,8 +25,8 @@ export default function Comment({ comment, refresh, setRefresh }) {
         <div className="flex w-[50px] h-[50px] mr-2 border-[1px] border-gray-300 rounded-full shrink-0 overflow-hidden cursor-pointer">
           {user?.profilePicture ? (
             <ProfilePopup
-              id={user.id}
-              profilePicture={user.profilePicture}
+              id={comment.user}
+              profilePicture={comment.profilePicture}
             ></ProfilePopup>
           ) : (
             <i className="text-gray-400 material-icons text-center text-[150px] mt-8 select-none">
