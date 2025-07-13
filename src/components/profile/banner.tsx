@@ -110,7 +110,7 @@ export default function Banner({ userProp }) {
             )}
           </div>
           <div className="flex flex-row absolute ml-[75px] transform -translate-x-1/2 top-[130px] z-20">
-            <div className="flex w-[125px] h-[125px] rounded-full overflow-hidden border-4 items-center justify-center bg-gray-300 border-white">
+            <div className="flex w-[125px] h-[125px] rounded-full overflow-hidden border-2 items-center justify-center bg-gray-300 border-white">
               {propUser.profilePicture ? (
                 <img
                   src={propUser.profilePicture}
