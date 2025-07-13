@@ -236,7 +236,7 @@ const eventInfo = () => {
             )}
           </div>
           {(event.end || event.start ) && <EventTimeDisplay event={event} listMode={false} />}
-          <InscribedBox event={event}></InscribedBox>
+          {event.end && new Date(event.end) > new Date() && <InscribedBox event={event}></InscribedBox>}
           <div className="grid grid-cols-2 no-print">
             {user != null && <BookmarkBox event={event}></BookmarkBox>}
 

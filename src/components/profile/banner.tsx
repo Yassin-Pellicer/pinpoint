@@ -149,8 +149,8 @@ export default function Banner({ userProp }) {
                   <button
                     onClick={handleFollow}
                     className={`${isFollowed
-                        ? "bg-red-500 hover:bg-red-700"
-                        : "bg-blue-500 hover:bg-blue-700"
+                      ? "bg-red-500 hover:bg-red-700"
+                      : "bg-blue-500 hover:bg-blue-700"
                       } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
                   >
                     {isFollowed ? "Unfollow" : "Seguir"}
@@ -164,19 +164,19 @@ export default function Banner({ userProp }) {
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cum sociis natoque penatibus."}
               </p>
               <div className="flex flex-row mb-2 flex-wrap">
-                <div className="flex flex-row">
-                  <i className="material-icons text-gray-600 text-sm mr-1">
-                    calendar_today
-                  </i>
-                  <p className="text-sm italic text-gray-600 mr-4">
-                    Miembro desde{" "}
-                    {propUser.memberSince
-                      ? new Date(propUser.memberSince).toLocaleDateString(
-                        "es-ES"
-                      )
-                      : "N/A"}
-                  </p>
-                </div>
+                {propUser.memberSince &&
+                  <div className="flex flex-row">
+                    <i className="material-icons text-gray-600 text-sm mr-1">
+                      calendar_today
+                    </i>
+
+                    <p className="text-sm italic text-gray-600 mr-4">
+                      Miembro desde{" "}
+                      {new Date(propUser.memberSince).toLocaleDateString("es-ES")}
+                    </p>
+
+                  </div>
+                }
                 <div className="flex flex-row">
                   <i className="material-icons text-gray-600 text-sm mr-1">
                     link
@@ -303,8 +303,8 @@ export default function Banner({ userProp }) {
                         handleFollow();
                       }}
                       className={`bg-${isFollowed
-                          ? "red-500 hover:red-700"
-                          : "blue-500 hover:blue-700"
+                        ? "red-500 hover:red-700"
+                        : "blue-500 hover:blue-700"
                         } text-white font-bold h-[40px] mt-4 px-4 rounded-full`}
                     >
                       {isFollowed ? "Dejar de seguir" : "Seguir"}

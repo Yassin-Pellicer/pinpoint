@@ -69,7 +69,6 @@ const cpView = () => {
       map.flyToBounds(bounds, {
         animate: true,
         duration: 0.5,
-        padding: [200, 0],
       });
 
       map.eachLayer((layer) => {

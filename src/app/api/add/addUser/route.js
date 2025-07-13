@@ -32,7 +32,7 @@ export async function POST(request) {
   try {
     if (id === authId) {
       const updateUserQuery = await client.query(
-        'UPDATE "user" SET username = $1, "profilePicture" = $2, banner = $3, description = $4, link = $5 WHERE id = $6 RETURNING *;',
+        'UPDATE "user" SET username = $1, "profilePicture" = $2, banner = $3, description = $4, link = $5, "memberSince" = NOW() WHERE id = $6 RETURNING *;',
         [username, profilePicture, banner, description, link, id]
       );
       return NextResponse.json({ result: "ok" });

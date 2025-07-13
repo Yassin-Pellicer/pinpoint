@@ -57,8 +57,8 @@ export default function SwiperComponent({ userProp }) {
             {userProp.username || "username"}
           </h2>
           {userProp.description && (
-            <p className="text-sm text-gray-600 max-w-xs truncate">
-              {userProp.description}
+            <p className="text-sm text-gray-600">
+              {userProp.description?.split(" ").slice(0, 9).join(" ") + (userProp.description?.split(" ").length > 9 ? "..." : "")}
             </p>
           )}
         </div>

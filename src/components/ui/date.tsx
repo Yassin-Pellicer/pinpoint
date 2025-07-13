@@ -139,27 +139,38 @@ export default function EventTimeDisplay({ event, listMode }) {
           </div>
           }
 
-          {((!listMode && event.end && !event.start) || (!listMode && event.end && event.start)) && <div className="mt-4 no-print">
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-xs font-medium text-white">
-                Tiempo restante
-              </span>
-              <span className="text-xs font-medium text-white">
-                {progress}%
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className={`${progressColor} h-2.5 rounded-full transition-all duration-500 ease-in-out`}
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
+          <div className="mt-4 no-print">
+            {(!listMode && event.end && event.start) ?
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs font-medium text-white">
+                  Tiempo restante
+                </span>
+                <span className="text-xs font-medium text-white">
+                  {progress}%
+                </span>
+              </div>
+            :
+              ((new Date(event.end) <= new Date()) && <div className="flex justify-between items-center mb-1">
+                <span className="text-md font-medium text-white mb-2">
+                  Inscripción de evento finalizada
+                </span>
+              </div>)
+            }
+
+            {(!listMode && event.end && event.start) &&
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div
+                  className={`${progressColor} h-2.5 rounded-full transition-all duration-500 ease-in-out`}
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            }
             <div className="mt-2 text-center">
               <span className="text-sm font-bold text-white bg-blue-800 bg-opacity-40 px-3 py-1 rounded-full">
                 {timeLeftText}
               </span>
             </div>
-          </div>}
+          </div>
 
           {listMode && <div className="no-print">
 

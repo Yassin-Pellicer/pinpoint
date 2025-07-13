@@ -88,7 +88,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
         className="border-b-[1px] bg-gray-100 border-gray-300 px-6 py-2 text-md hover:bg-gray-200 transition duration-200"
         placeholder="Checkpoint"
       />
-      <div className="flex flex-col mb-14">
+      <div className="">
         <div className="flex flex-row bg-gray-200 items-center p-2 z-10 bg-white">
           <h1 className="text-lg tracking-tighter font-bold text-black bg-white">
             {t("description")}
@@ -96,7 +96,6 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
         </div>
         <Quill
           key={index}
-          style={{ height: "125px" }}
           value={description}
           onChange={(value) => setDescription(value)}
         />
@@ -119,7 +118,7 @@ const CheckpointInfo = ({ id, index, mode, closeMap}) => {
       <div className="flex flex-row px-4 items-center">
         <div
           onClick={() => setFocusedCheckpoint(checkpoints[index])}
-          className="flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full cursor-pointer"
+          className="flex items-center justify-center w-12 mr-4 h-12 bg-blue-400 text-white rounded-full cursor-pointer shrink-0"
         >
           <h1 className="flex text-xl font-extrabold cursor-pointer">
             {index + 1}

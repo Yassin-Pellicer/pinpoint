@@ -23,7 +23,7 @@ export default function MouseHoverPopover({id, profilePicture}) {
   const open = Boolean(anchorEl);
 
   return (
-    <div>
+    <div style={{ display: window.matchMedia("(pointer: coarse)").matches ? "none" : "initial" }}>
       <div
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}

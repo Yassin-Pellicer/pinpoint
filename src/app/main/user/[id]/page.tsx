@@ -100,7 +100,7 @@ const ProfileTabs = () => {
 
       {user && <Banner userProp={user} />}
 
-      <div className="flex justify-around border-b border-gray-200 bg-white z-30 -mt-6">
+      <div className="flex justify-around border-b border-gray-200 bg-white z-30 -mt-6 overflow-x-auto">
         {tabData.map((tab) => (
           <button
             key={tab.id}

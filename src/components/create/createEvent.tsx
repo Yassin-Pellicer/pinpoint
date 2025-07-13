@@ -247,7 +247,6 @@ const SimpleEvent = () => {
         <Quill
           value={description}
           onChange={setDescription}
-          style={{ height: "200px", marginBottom: "40px" }}
         />
 
         <button
@@ -255,7 +254,7 @@ const SimpleEvent = () => {
             setOpenTags(!openTags);
             e.preventDefault();
           }}
-          className="font-bold bg-transparent mt-[16px] border-b-[1px] text-sm border-gray-300 
+          className="font-bold bg-transparent border-b-[1px] text-sm border-gray-300 
           text-black p-2 hover:bg-blue-500
           hover:border-blue-500 hover:text-white 
           transition duration-300"

@@ -82,6 +82,8 @@ const BottomSheet = ({ open, setOpen }) => {
           borderRadius: "4px",
           cursor: "default",
           margin: "8px 16px",
+          touchAction: "auto",
+          scrollBehavior: "auto",
         }}
         {...attributes}
       >
@@ -97,7 +99,7 @@ const BottomSheet = ({ open, setOpen }) => {
             {...listeners}
             src="/svg/drag.svg"
             alt="Drag Handle"
-            className="cursor-grab h-[8%] w-[8%] rotate-90"
+            className="cursor-grab h-[8%] w-[8%] rotate-90 touch-none"
           />
         </div>
       </div>

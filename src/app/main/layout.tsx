@@ -15,6 +15,7 @@ import { Event } from "../../utils/classes/Event";
 import ProfilePopup from "../../components/profile/profilePopup";
 import { addUnlockedEvent } from "../../hooks/general/privateEventsHook";
 
+
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
   const { setUser, user } = useSession();
@@ -29,6 +30,7 @@ export default function Layout({ children }) {
     filterTags,
     search,
     searchResults,
+    selectedEvent,
     setSearch,
     loadSearchEvents,
     setEditMode,
@@ -65,16 +67,20 @@ export default function Layout({ children }) {
     fetchSessionFromCookies();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 500, behavior: "smooth" })
+  }, [selectedEvent])
+
   return (
     <div className="flex flex-col-reverse lg:flex-row h-full">
-      <div className="flex flex-col shrink-0 overflow-x-clip lg:w-[525px] w-full z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)]">
+      <div className="flex flex-col shrink-0 overflow-x-clip lg:w-[525px] w-full z-[100] bg-white shadow-[10px_0_75px_rgba(0,0,0,0.3)] min-h-[100vh]">
         <div className="flex flex-col sticky top-0 bottom-0 z-[100] bg-white">
           <div className="lg:hidden flex justify-center items-center h-full">
             <div
               className="w-full h-[40px] bg-white flex justify-center items-center cursor-pointer"
               onClick={() => window.scrollTo({ top: 500, behavior: "smooth" })}
             >
-                <div className="w-1/4 h-[5px] bg-gray-300 rounded-md"></div>
+              <div className="w-1/4 h-[5px] bg-gray-300 rounded-md"></div>
             </div>
           </div>
           <div className="flex flex-row justify-center md:py-4 pb-2 px-2 bg-white-500 w-full h-fit items-center align-center">
@@ -128,11 +134,10 @@ export default function Layout({ children }) {
                     ? "Desbloquear evento"
                     : "Bloquear búsqueda"
                 }
-                className={`flex items-center justify-center px-3 h-9 text-sm font-medium rounded-full border transition ${
-                  search.trim() !== ""
+                className={`flex items-center justify-center px-3 h-9 text-sm font-medium rounded-full border transition ${search.trim() !== ""
                     ? "bg-green-500 hover:bg-green-600"
                     : "bg-blue-500 hover:bg-blue-600"
-                } text-white`}
+                  } text-white`}
               >
                 <i className="material-icons text-white text-base">
                   {search.trim() !== "" ? "lock_open" : "lock"}
@@ -185,7 +190,7 @@ export default function Layout({ children }) {
           </div>
         </div>
         {children}
-        <Tags open={openTags} setOpen={setOpenTags} filterMode={true} createMode={false}/>
+        <Tags open={openTags} setOpen={setOpenTags} filterMode={true} createMode={false} />
       </div>
       {showMap && (
         <div className="sticky top-0 z-[50] w-full bg-white lg:h-screen h-[80dvh]">

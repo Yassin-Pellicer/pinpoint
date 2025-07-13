@@ -135,9 +135,14 @@ export default function SwiperComponent({ events }) {
             >
               <div className="bg-blue-500 w-full h-[400px] flex flex-col p-4 mb-9  text-white hover:bg-blue-600 transition-colors duration-250">
                 {event.banner && (
-                  <div className="flex items-center justify-center overflow-hidden rounded-t-2xl">
-                    <img src={event.banner} alt="" className="w-full " />
-                  </div>
+<div className="flex items-center justify-center overflow-hidden rounded-t-2xl w-full h-64">
+  <img 
+    src={event.banner} 
+    alt="" 
+    className="w-full h-full object-cover"
+  />
+</div>
+
                 )}
                 <div className="flex flex-row pt-4 ">
                   <div className="flex flex-row w-full">
