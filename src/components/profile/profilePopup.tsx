@@ -23,7 +23,7 @@ export default function MouseHoverPopover({id, profilePicture}) {
   const open = Boolean(anchorEl);
 
   return (
-    <div style={{ display: window.matchMedia("(pointer: coarse)").matches ? "none" : "initial" }}>
+    <div>
       <div
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
@@ -57,6 +57,7 @@ export default function MouseHoverPopover({id, profilePicture}) {
         }}
         onClose={handlePopoverClose}
         disableRestoreFocus
+        style={{ display: window.matchMedia("(pointer: coarse)").matches ? "none" : "initial" }}
       >
         <div className="w-[400px]" >
           <div className="relative w-full">

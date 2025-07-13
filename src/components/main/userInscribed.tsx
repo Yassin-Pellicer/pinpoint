@@ -50,10 +50,9 @@ export default function SwiperComponent( {userProp} ) {
               <h2 className="text-xl font-bold">
                 {userProp.username || "username"}
               </h2>
-              <p className="text-sm text-gray-600 mr-4 w-[260px] tracking-tight pb-2">
-                {userProp.description?.slice(0, 100) +
-                  (userProp.description?.length > 100 ? "..." : "")}
-              </p>
+            <p className="text-sm text-gray-600 mr-4">
+              {userProp.description?.split(" ").slice(0, 9).join(" ") + (userProp.description?.split(" ").length > 9 ? "..." : "")}
+            </p>
             </div>
           </div>
         </div>
